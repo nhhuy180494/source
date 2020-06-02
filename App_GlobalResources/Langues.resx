@@ -1,0 +1,2882 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="KERI" xml:space="preserve">
+    <value>KERI</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ConfirmPass" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="Forgot" xml:space="preserve">
+    <value>Forgot it?</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="KeepMe" xml:space="preserve">
+    <value>Keep me logged in</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="MyInfor" xml:space="preserve">
+    <value>My Information</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Tel" xml:space="preserve">
+    <value>Tel</value>
+  </data>
+  <data name="UseKERIAcc" xml:space="preserve">
+    <value>Use your KERI account</value>
+  </data>
+  <data name="ContactAdmin" xml:space="preserve">
+    <value>Please contact your Administrator for more informations.</value>
+  </data>
+  <data name="PleaseSelect" xml:space="preserve">
+    <value>Please Select...</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="InvalidLogin" xml:space="preserve">
+    <value>Please check your ID or password again.</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Writer" xml:space="preserve">
+    <value>Writer</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are you sure you want to delete? If you delete it, all information related to this content will be deleted.</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="LastLogin" xml:space="preserve">
+    <value>Last Login Date</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="RegistrationDate" xml:space="preserve">
+    <value>Registration Date</value>
+  </data>
+  <data name="EnableLockout" xml:space="preserve">
+    <value>Enable lockout</value>
+  </data>
+  <data name="EnableLogin" xml:space="preserve">
+    <value>Enable login</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="SaveIt" xml:space="preserve">
+    <value>Do you want to save it?</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ForgotPasswordConfirmation" xml:space="preserve">
+    <value>Forgot Password Confirmation</value>
+  </data>
+  <data name="ForgotYourPassword" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="PleaseCheckEmailToResetPassword" xml:space="preserve">
+    <value>Please check your email to reset your password.</value>
+  </data>
+  <data name="EmailDoesNotExist" xml:space="preserve">
+    <value>Email does not exist!</value>
+  </data>
+  <data name="PleaseCheckNewEmail" xml:space="preserve">
+    <value>Please check new email!</value>
+  </data>
+  <data name="ConfirmEmail" xml:space="preserve">
+    <value>Confirm Email</value>
+  </data>
+  <data name="LoginFailure" xml:space="preserve">
+    <value>Login Failure</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetPasswordConfirmation" xml:space="preserve">
+    <value>Reset Password Confirmation</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="VerifyPhoneNumber" xml:space="preserve">
+    <value>Verify Phone Number</value>
+  </data>
+  <data name="ClickHereToLogIn" xml:space="preserve">
+    <value>click here to log in.</value>
+  </data>
+  <data name="EmailLink" xml:space="preserve">
+    <value>Email link</value>
+  </data>
+  <data name="Please" xml:space="preserve">
+    <value>Please</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ResetYourPassword" xml:space="preserve">
+    <value>Reset your password.</value>
+  </data>
+  <data name="YourPasswordHasBeenReset" xml:space="preserve">
+    <value>Your password has been reset.</value>
+  </data>
+  <data name="ApplyForMembership" xml:space="preserve">
+    <value>Apply for membership</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>Community</value>
+  </data>
+  <data name="CreateCase" xml:space="preserve">
+    <value>Creating a Case</value>
+  </data>
+  <data name="DistributedPowerDesignSoftware" xml:space="preserve">
+    <value>Distributed Power Design Software</value>
+  </data>
+  <data name="DistributedPowerExplanation" xml:space="preserve">
+    <value>This solution is an engineering solution for determining optimum capacity of distribution power taking into account various elements such as investment cost, load pattern, and generation pattern.</value>
+  </data>
+  <data name="DistributedPowerSmart" xml:space="preserve">
+    <value>Korea Electrotechnology Research Institute Smart Distribution Research Center</value>
+  </data>
+  <data name="DistributedPowerDesignSoftwareHomepage" xml:space="preserve">
+    <value>Distributed Power Design Software Homepage</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="Introduction" xml:space="preserve">
+    <value>Introduction</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Notice</value>
+  </data>
+  <data name="PrivacyStatement" xml:space="preserve">
+    <value>Privacy Statement</value>
+  </data>
+  <data name="QnA" xml:space="preserve">
+    <value>FAQ</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Sign Up</value>
+  </data>
+  <data name="SignUpComplete" xml:space="preserve">
+    <value>Sign up is complete. It can be used after administrator approvals.</value>
+  </data>
+  <data name="UnauthorizedAccount" xml:space="preserve">
+    <value>Unauthorized account. Your administrator must approve it.</value>
+  </data>
+  <data name="Affiliation" xml:space="preserve">
+    <value>Affiliation</value>
+  </data>
+  <data name="BusinessField" xml:space="preserve">
+    <value>Business Field</value>
+  </data>
+  <data name="CompanyAddress" xml:space="preserve">
+    <value>Company Address</value>
+  </data>
+  <data name="CompanyOrPersonalHomepage" xml:space="preserve">
+    <value>Company or Personal Homepage</value>
+  </data>
+  <data name="DepartmentName" xml:space="preserve">
+    <value>Department Name</value>
+  </data>
+  <data name="ImageAttach" xml:space="preserve">
+    <value>Image Attachment</value>
+  </data>
+  <data name="InforManagement" xml:space="preserve">
+    <value>Information Management</value>
+  </data>
+  <data name="InputFieldsAreRequried" xml:space="preserve">
+    <value>Input fields are required.</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Job</value>
+  </data>
+  <data name="Nationality" xml:space="preserve">
+    <value>Nationality</value>
+  </data>
+  <data name="PleaseConfirmImageAndInput" xml:space="preserve">
+    <value>Please confirm the information of the image and input.</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="DateCreated" xml:space="preserve">
+    <value>Date Created</value>
+  </data>
+  <data name="InfringementRemedies" xml:space="preserve">
+    <value>Infringement Remedies</value>
+  </data>
+  <data name="PersonalIdentificationService" xml:space="preserve">
+    <value>Personal identification service</value>
+  </data>
+  <data name="ProgramIntroContent" xml:space="preserve">
+    <value>● The PV-ESS Demand Management Model Design Program is conducted in 7 steps as shown below.</value>
+  </data>
+  <data name="ProgramIntroduction" xml:space="preserve">
+    <value>Program Introduction</value>
+  </data>
+  <data name="QuestionTutorial" xml:space="preserve">
+    <value>If you have any inquiries about distributed power design software, please fill in the information below and we will respond in good faith.
+Thank you.</value>
+  </data>
+  <data name="SendMessage" xml:space="preserve">
+    <value>Send message</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="UnauthorizedCollectionOfEmail" xml:space="preserve">
+    <value>Unauthorized collection of e-mail</value>
+  </data>
+  <data name="Views" xml:space="preserve">
+    <value>Views</value>
+  </data>
+  <data name="Writing" xml:space="preserve">
+    <value>Writing</value>
+  </data>
+  <data name="AddAComment" xml:space="preserve">
+    <value>Add a comment</value>
+  </data>
+  <data name="BulletinBoard" xml:space="preserve">
+    <value>Bulletin Board</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="SelectModelToAddItem" xml:space="preserve">
+    <value>Select Model to add Item</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>View Details</value>
+  </data>
+  <data name="NewPass" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="Sortation" xml:space="preserve">
+    <value>Classification</value>
+  </data>
+  <data name="CaseRedirectMessage" xml:space="preserve">
+    <value>We will be opening soon.</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="InActive" xml:space="preserve">
+    <value>InActive</value>
+  </data>
+  <data name="LogUser" xml:space="preserve">
+    <value>Stop Account Selection</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="UnlogUser" xml:space="preserve">
+    <value>Using Selected Account</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Export To Excel</value>
+  </data>
+  <data name="Selection" xml:space="preserve">
+    <value>Selection</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="ValidatePasswordMessage" xml:space="preserve">
+    <value>Please enter at least 6 digits including numbers + letters + special characters.</value>
+  </data>
+  <data name="QnANotLoginMessage" xml:space="preserve">
+    <value>Please login and use.</value>
+  </data>
+  <data name="AccountStatus" xml:space="preserve">
+    <value>Account status</value>
+  </data>
+  <data name="BatteryEff" xml:space="preserve">
+    <value>Battery charge effect efficiency</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Manufacturer</value>
+  </data>
+  <data name="CycleCount" xml:space="preserve">
+    <value>SOH: After</value>
+  </data>
+  <data name="HowReg" xml:space="preserve">
+    <value>Registration Method</value>
+  </data>
+  <data name="ModelName" xml:space="preserve">
+    <value>Model Name</value>
+  </data>
+  <data name="OperDod" xml:space="preserve">
+    <value>Driving interlock</value>
+  </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>Product name</value>
+  </data>
+  <data name="RegUser" xml:space="preserve">
+    <value>Registrant</value>
+  </data>
+  <data name="ScoScopeMax" xml:space="preserve">
+    <value>Maximum SOC</value>
+  </data>
+  <data name="ScoScopeMin" xml:space="preserve">
+    <value>Minimum SOC</value>
+  </data>
+  <data name="DownloadForm" xml:space="preserve">
+    <value>Download Form</value>
+  </data>
+  <data name="HourDate" xml:space="preserve">
+    <value>Hour</value>
+  </data>
+  <data name="MonthDate" xml:space="preserve">
+    <value>Month Date</value>
+  </data>
+  <data name="NameOfSite" xml:space="preserve">
+    <value>NameOfSite</value>
+  </data>
+  <data name="UploadForm" xml:space="preserve">
+    <value>Upload Form</value>
+  </data>
+  <data name="WindSpeed" xml:space="preserve">
+    <value>Wind Speed</value>
+  </data>
+  <data name="WindSpeedHeight" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="YearDate" xml:space="preserve">
+    <value>YearDate</value>
+  </data>
+  <data name="RecCharges" xml:space="preserve">
+    <value>REC Charges</value>
+  </data>
+  <data name="UploadFile" xml:space="preserve">
+    <value>Upload File</value>
+  </data>
+  <data name="YearMonth" xml:space="preserve">
+    <value>YearMonth</value>
+  </data>
+  <data name="Successful" xml:space="preserve">
+    <value>It was saved.</value>
+  </data>
+  <data name="DistributedPowerExplanation2" xml:space="preserve">
+    <value>This solution is an engineering solution for determining optimum capacity of distribution power taking into account various elements such as investment cost, load pattern, and generation pattern.</value>
+  </data>
+  <data name="ProgramInformationDownload" xml:space="preserve">
+    <value>Program Information Downlaod</value>
+  </data>
+  <data name="ProgramIntroContent2" xml:space="preserve">
+    <value>●  The input for each step is as follows.</value>
+  </data>
+  <data name="ProgramIntroContent3" xml:space="preserve">
+    <value>① Enter basic information</value>
+  </data>
+  <data name="ProgramIntroContent4" xml:space="preserve">
+    <value>② Enter ESS information</value>
+  </data>
+  <data name="ProgramIntroContent5" xml:space="preserve">
+    <value>③ Load pattern calculation</value>
+  </data>
+  <data name="ProgramIntroContent6" xml:space="preserve">
+    <value>④ PV pattern calculation</value>
+  </data>
+  <data name="ProgramIntroContent7" xml:space="preserve">
+    <value>⑤ ESS Operational simulation</value>
+  </data>
+  <data name="ProgramIntroContent8" xml:space="preserve">
+    <value>⑥ ESS Economic analysis</value>
+  </data>
+  <data name="ProgramIntroContent9" xml:space="preserve">
+    <value>⑦ ESS Compare revenue by capacity</value>
+  </data>
+  <data name="RequestApprovalJoin1" xml:space="preserve">
+    <value>※ Request approval by mail following member registration.</value>
+  </data>
+  <data name="RequestApprovalJoin2" xml:space="preserve">
+    <value>※ giddk100414@keri.re.kr Park, Hyang-Ah Researcher</value>
+  </data>
+  <data name="TrailVersionDownload" xml:space="preserve">
+    <value>Trial Version SW Download</value>
+  </data>
+  <data name="BottomeInCarge" xml:space="preserve">
+    <value>Manager: Korea Electrotechnology Research Institute Smart Distribution Research Center Park, Hyang-Ah Researcher</value>
+  </data>
+  <data name="BottomEmailAdd" xml:space="preserve">
+    <value>Email: giddk100414@keri.re.kr</value>
+  </data>
+  <data name="BottomeTelNumber" xml:space="preserve">
+    <value>Phone number: +82-55-280-2438</value>
+  </data>
+  <data name="CHPbenefit" xml:space="preserve">
+    <value>CHP benefit&lt;br/&gt;[USD]</value>
+  </data>
+  <data name="ESSoperation" xml:space="preserve">
+    <value>ESS operation&lt;br/&gt;[USD]</value>
+  </data>
+  <data name="FCbenefit" xml:space="preserve">
+    <value>FC benefit&lt;br/&gt;[USD]</value>
+  </data>
+  <data name="Incentive1" xml:space="preserve">
+    <value>Incentive1&lt;br/&gt;[USD]</value>
+  </data>
+  <data name="Incentive2" xml:space="preserve">
+    <value>Incentive2&lt;br/&gt;[USD]</value>
+  </data>
+  <data name="Incentive3" xml:space="preserve">
+    <value>Incentive3</value>
+  </data>
+  <data name="InitialCost" xml:space="preserve">
+    <value>Initial Cost</value>
+  </data>
+  <data name="IRR" xml:space="preserve">
+    <value>IRR[%]</value>
+  </data>
+  <data name="MaintananceCost" xml:space="preserve">
+    <value>Maintenance Cost </value>
+  </data>
+  <data name="PaybackPeriod" xml:space="preserve">
+    <value>Payback period[year]</value>
+  </data>
+  <data name="PeakReduce" xml:space="preserve">
+    <value>Demand Charging Saving</value>
+  </data>
+  <data name="PVbenefit" xml:space="preserve">
+    <value>PV benefit&lt;br/&gt;[won]</value>
+  </data>
+  <data name="WTbenefit" xml:space="preserve">
+    <value>WT benefit</value>
+  </data>
+  <data name="AddNewRecord" xml:space="preserve">
+    <value>Add new record</value>
+  </data>
+  <data name="AmountSolar" xml:space="preserve">
+    <value>Amount Solar (MJ/m2)</value>
+  </data>
+  <data name="AmountSolarkWh" xml:space="preserve">
+    <value>Amount Solar (kWh/m2)</value>
+  </data>
+  <data name="AvgValue" xml:space="preserve">
+    <value>Avg Value</value>
+  </data>
+  <data name="CaseDate" xml:space="preserve">
+    <value>Case Date</value>
+  </data>
+  <data name="CaseName" xml:space="preserve">
+    <value>Case Name</value>
+  </data>
+  <data name="Co2Emiisions" xml:space="preserve">
+    <value>CO2 Emissions</value>
+  </data>
+  <data name="ComCode" xml:space="preserve">
+    <value>Com Code</value>
+  </data>
+  <data name="CommonSubType" xml:space="preserve">
+    <value>Common Sub Type</value>
+  </data>
+  <data name="CommonType" xml:space="preserve">
+    <value>Common Type</value>
+  </data>
+  <data name="ComName" xml:space="preserve">
+    <value>Com Name</value>
+  </data>
+  <data name="ComName2" xml:space="preserve">
+    <value>Com Name 2</value>
+  </data>
+  <data name="ComSubCode" xml:space="preserve">
+    <value>Com Sub Code</value>
+  </data>
+  <data name="ComSubName" xml:space="preserve">
+    <value>Com Sub Name</value>
+  </data>
+  <data name="ComSubName2" xml:space="preserve">
+    <value>Com Sub Name2</value>
+  </data>
+  <data name="CulminationAltitude" xml:space="preserve">
+    <value>Culmination Altitude</value>
+  </data>
+  <data name="CumulativeRevenue" xml:space="preserve">
+    <value>Cumulative Revenue</value>
+  </data>
+  <data name="DieselGenParameter" xml:space="preserve">
+    <value>DieselGen Parameter</value>
+  </data>
+  <data name="ElectricCharge" xml:space="preserve">
+    <value>Electric Charges</value>
+  </data>
+  <data name="ElectricOutput" xml:space="preserve">
+    <value>Electric Output</value>
+  </data>
+  <data name="EntityCode" xml:space="preserve">
+    <value>Entity Code</value>
+  </data>
+  <data name="EntityName" xml:space="preserve">
+    <value>Entity Name</value>
+  </data>
+  <data name="EntityUrl" xml:space="preserve">
+    <value>Entity Url</value>
+  </data>
+  <data name="FaqRegDate" xml:space="preserve">
+    <value>FAQ Reg Date</value>
+  </data>
+  <data name="FaqTitle" xml:space="preserve">
+    <value>FAQ Title</value>
+  </data>
+  <data name="FuelConsum" xml:space="preserve">
+    <value>Fuel Consum</value>
+  </data>
+  <data name="FuelInput" xml:space="preserve">
+    <value>Fuel Input</value>
+  </data>
+  <data name="FuelPrice" xml:space="preserve">
+    <value>Fuel Price [KRW/ℓ]</value>
+  </data>
+  <data name="FullUserName" xml:space="preserve">
+    <value>Full User Name</value>
+  </data>
+  <data name="Heat" xml:space="preserve">
+    <value>Heat</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="HolidayInfomation" xml:space="preserve">
+    <value>Holiday Infomation</value>
+  </data>
+  <data name="HourDisplay" xml:space="preserve">
+    <value>Hour Display</value>
+  </data>
+  <data name="Insolation" xml:space="preserve">
+    <value>Insolation</value>
+  </data>
+  <data name="InvestmentCost" xml:space="preserve">
+    <value>Equipment Cost </value>
+  </data>
+  <data name="ItemCode" xml:space="preserve">
+    <value>Item Code</value>
+  </data>
+  <data name="ItemName" xml:space="preserve">
+    <value>Item Name</value>
+  </data>
+  <data name="ItemSelection" xml:space="preserve">
+    <value>Item Selection:</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Load[%]</value>
+  </data>
+  <data name="LocationCode" xml:space="preserve">
+    <value>Location Code</value>
+  </data>
+  <data name="MaxOperEmr" xml:space="preserve">
+    <value>Max Oper Emr</value>
+  </data>
+  <data name="MaxOperOutput" xml:space="preserve">
+    <value>Max Oper Output</value>
+  </data>
+  <data name="MaxValue" xml:space="preserve">
+    <value>Max Value</value>
+  </data>
+  <data name="MinOperEmr" xml:space="preserve">
+    <value>Min Oper Emr</value>
+  </data>
+  <data name="MinOperOutput" xml:space="preserve">
+    <value>Min Oper Output</value>
+  </data>
+  <data name="MinValue" xml:space="preserve">
+    <value>Min Value</value>
+  </data>
+  <data name="ModelCode" xml:space="preserve">
+    <value>Model Code</value>
+  </data>
+  <data name="ModelSelection" xml:space="preserve">
+    <value>Model Selection</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="MonthDay" xml:space="preserve">
+    <value>Month Day</value>
+  </data>
+  <data name="NoticeTitle" xml:space="preserve">
+    <value>Notice Title</value>
+  </data>
+  <data name="OperTimeCom" xml:space="preserve">
+    <value>Oper Time Com</value>
+  </data>
+  <data name="OperTimeEmr" xml:space="preserve">
+    <value>Oper Time Emr</value>
+  </data>
+  <data name="PowerHour" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="PvEssScheduler" xml:space="preserve">
+    <value>PvEssScheduler</value>
+  </data>
+  <data name="RatedOuputCom" xml:space="preserve">
+    <value>Rated Ouput Com</value>
+  </data>
+  <data name="RatedOutputEmr" xml:space="preserve">
+    <value>Rated Output Emr</value>
+  </data>
+  <data name="RecCharge" xml:space="preserve">
+    <value>RecCharge</value>
+  </data>
+  <data name="SMPCharge" xml:space="preserve">
+    <value>SMPCharge</value>
+  </data>
+  <data name="SourceYear" xml:space="preserve">
+    <value>Source Year</value>
+  </data>
+  <data name="TargetYear" xml:space="preserve">
+    <value>Target Year</value>
+  </data>
+  <data name="ThemRatio" xml:space="preserve">
+    <value>Heat Rate</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Capacity</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="YearCopy" xml:space="preserve">
+    <value>Year Copy</value>
+  </data>
+  <data name="YearMonthDay" xml:space="preserve">
+    <value>Year Month Day</value>
+  </data>
+  <data name="YearOfDate" xml:space="preserve">
+    <value>Year Of Date</value>
+  </data>
+  <data name="AcceptedName" xml:space="preserve">
+    <value>Customer Name</value>
+  </data>
+  <data name="AddAdditionalHolidays" xml:space="preserve">
+    <value>Add Additional Holidays</value>
+  </data>
+  <data name="AddedHolidays" xml:space="preserve">
+    <value>Added Holidays</value>
+  </data>
+  <data name="Additionaldesignatedholidays" xml:space="preserve">
+    <value>Additional designated holidays:</value>
+  </data>
+  <data name="ApplicablePlan" xml:space="preserve">
+    <value>Electricity Rate Type </value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="AutomaticCalculationofPVPowerGeneration" xml:space="preserve">
+    <value>PV Generation – Automatic Calculation</value>
+  </data>
+  <data name="BaseYear" xml:space="preserve">
+    <value>Select the Concerned Year</value>
+  </data>
+  <data name="Batterycapacity" xml:space="preserve">
+    <value>Battery capacity</value>
+  </data>
+  <data name="Batterychargedischargeefficiency" xml:space="preserve">
+    <value>Battery Type</value>
+  </data>
+  <data name="Capacity" xml:space="preserve">
+    <value>Capacity</value>
+  </data>
+  <data name="Capacitycombination" xml:space="preserve">
+    <value>Capacity combination</value>
+  </data>
+  <data name="Chargingtime" xml:space="preserve">
+    <value>Select the charging time of ESS</value>
+  </data>
+  <data name="CHPCapacityrangeselection" xml:space="preserve">
+    <value>CHP (cogeneration) Capacity range selection</value>
+  </data>
+  <data name="CHPparameter" xml:space="preserve">
+    <value>CHP Parameter</value>
+  </data>
+  <data name="CHPparameterinput" xml:space="preserve">
+    <value>CHP parameter input</value>
+  </data>
+  <data name="CHPparameterlookup" xml:space="preserve">
+    <value>CHP parameter lookup</value>
+  </data>
+  <data name="CHPparameterselection" xml:space="preserve">
+    <value>CHP Type</value>
+  </data>
+  <data name="oclock" xml:space="preserve">
+    <value>o'clock</value>
+  </data>
+  <data name="Commercialmaximumoperationoutput" xml:space="preserve">
+    <value>Maximum Output – Common Use</value>
+  </data>
+  <data name="Commercialminimumoperationoutput" xml:space="preserve">
+    <value>Minimum Output – Common Use</value>
+  </data>
+  <data name="Component" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="ComponentSelection" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="ConnectionStatus" xml:space="preserve">
+    <value>Connection Status</value>
+  </data>
+  <data name="ContractPower" xml:space="preserve">
+    <value>Contract Capacity</value>
+  </data>
+  <data name="Currencydiscountrate" xml:space="preserve">
+    <value>Discount Rate</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>Customer define</value>
+  </data>
+  <data name="CustomerInformation" xml:space="preserve">
+    <value>Enter the Customer Information</value>
+  </data>
+  <data name="Customschedulercharginganddischargingtimeselection" xml:space="preserve">
+    <value>User-defined Scheduling</value>
+  </data>
+  <data name="Datanotfound" xml:space="preserve">
+    <value>Data not found</value>
+  </data>
+  <data name="DemandManagementModel" xml:space="preserve">
+    <value>Demand Management Model</value>
+  </data>
+  <data name="DieselGen" xml:space="preserve">
+    <value>Diesel Generator</value>
+  </data>
+  <data name="Dieselgeneratorcapacityrangeselection" xml:space="preserve">
+    <value>Diesel generator capacity range selection</value>
+  </data>
+  <data name="Dischargetime" xml:space="preserve">
+    <value>Select the discharging time of ESS</value>
+  </data>
+  <data name="Donotoverlapthechargetimeanddischargetime" xml:space="preserve">
+    <value>Do not overlap the charge time and discharge time.</value>
+  </data>
+  <data name="Downloadcustoms" xml:space="preserve">
+    <value>Download customs</value>
+  </data>
+  <data name="Downloadingsolarradiation" xml:space="preserve">
+    <value>Downloading solar radiation</value>
+  </data>
+  <data name="DrivingDOD" xml:space="preserve">
+    <value>Available capacity will be reduced to</value>
+  </data>
+  <data name="Electricaloutput" xml:space="preserve">
+    <value>Electric Power [kWh]</value>
+  </data>
+  <data name="SMPgrowthrate" xml:space="preserve">
+    <value>SMP growth rate</value>
+  </data>
+  <data name="Emergencymaximumoperationoutput" xml:space="preserve">
+    <value>Maximum Output – For Emergency</value>
+  </data>
+  <data name="Emergencyminimumoperationoutput" xml:space="preserve">
+    <value>Minimum Output – For Emergency</value>
+  </data>
+  <data name="Enterdieselgeneratorparameters" xml:space="preserve">
+    <value>Enter diesel generator parameters</value>
+  </data>
+  <data name="Entereconomicanalysisparameter" xml:space="preserve">
+    <value>Enter the Parameters of Economic Analysis</value>
+  </data>
+  <data name="EnterESSparameters" xml:space="preserve">
+    <value>Enter the ESS parameters</value>
+  </data>
+  <data name="EnterFCparameters" xml:space="preserve">
+    <value>Enter FC parameters</value>
+  </data>
+  <data name="ESSCapacityRangeSelection" xml:space="preserve">
+    <value>ESS</value>
+  </data>
+  <data name="ESSoutputreductionrate" xml:space="preserve">
+    <value>ESS Power Degradation</value>
+  </data>
+  <data name="ESSparameterlookup" xml:space="preserve">
+    <value>ESS parameter lookup</value>
+  </data>
+  <data name="ESSPVconnection" xml:space="preserve">
+    <value>Enter the range of capaciy to examine</value>
+  </data>
+  <data name="ESSPVlinkagemodel" xml:space="preserve">
+    <value>ESS-PV linkage model</value>
+  </data>
+  <data name="ESSRECweight" xml:space="preserve">
+    <value>ESS REC weight</value>
+  </data>
+  <data name="Estimatedinvestmentcost" xml:space="preserve">
+    <value>Capital Cost</value>
+  </data>
+  <data name="FacilityCost" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="FailedToSave" xml:space="preserve">
+    <value>Failed to save Check the input values.</value>
+  </data>
+  <data name="FCparameter" xml:space="preserve">
+    <value>FC parameter</value>
+  </data>
+  <data name="FCparameterinquiry" xml:space="preserve">
+    <value>FC parameter inquiry</value>
+  </data>
+  <data name="FCparameterselection" xml:space="preserve">
+    <value>FC Type</value>
+  </data>
+  <data name="Fuelconsumption" xml:space="preserve">
+    <value>Fuel consumption</value>
+  </data>
+  <data name="Fuelinput1" xml:space="preserve">
+    <value>Fuel Consumption [MMBtu]</value>
+  </data>
+  <data name="Heat1" xml:space="preserve">
+    <value>Heat Output [MMBtu]</value>
+  </data>
+  <data name="HolidaysName" xml:space="preserve">
+    <value>Holidays Name</value>
+  </data>
+  <data name="Inclinationangle" xml:space="preserve">
+    <value>Rake Angle (degrees)</value>
+  </data>
+  <data name="InstallCost" xml:space="preserve">
+    <value>Installation</value>
+  </data>
+  <data name="Interval" xml:space="preserve">
+    <value>Interval</value>
+  </data>
+  <data name="InvestmentLimit" xml:space="preserve">
+    <value>Cost Limit</value>
+  </data>
+  <data name="ISMARTInformation" xml:space="preserve">
+    <value>Enter the Login Information of iSMART</value>
+  </data>
+  <data name="Loaddata" xml:space="preserve">
+    <value>Load data</value>
+  </data>
+  <data name="Lookup" xml:space="preserve">
+    <value>Lookup</value>
+  </data>
+  <data name="Management" xml:space="preserve">
+    <value>Management</value>
+  </data>
+  <data name="Maximumcapacity" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="Meridianaltitude" xml:space="preserve">
+    <value>Installation Location</value>
+  </data>
+  <data name="MessageFileNotFound" xml:space="preserve">
+    <value> not found</value>
+  </data>
+  <data name="MessageFileNotFound2" xml:space="preserve">
+    <value>results20.exe not found</value>
+  </data>
+  <data name="MessageFileNotFound3" xml:space="preserve">
+    <value>opt_pg20.exe not found</value>
+  </data>
+  <data name="Minimumcapacity" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="Onethousandwon" xml:space="preserve">
+    <value>One thousand won</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Operatingtime1" xml:space="preserve">
+    <value>Hours of Use – Common Use</value>
+  </data>
+  <data name="Operatingtime2" xml:space="preserve">
+    <value>Hours of Use – For Emergency</value>
+  </data>
+  <data name="Optimizationbasedscheduler" xml:space="preserve">
+    <value>TOU rates to minimize reflected electric bill</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>Power(kW)</value>
+  </data>
+  <data name="PCSefficiency" xml:space="preserve">
+    <value>PCS Efficiency (%)</value>
+  </data>
+  <data name="PCSratedoutput" xml:space="preserve">
+    <value>PCS rated power</value>
+  </data>
+  <data name="Plan" xml:space="preserve">
+    <value>Electricity Rate </value>
+  </data>
+  <data name="Pleasecheckyourdataagain" xml:space="preserve">
+    <value>Please check your data again.</value>
+  </data>
+  <data name="Pleaseenteravaluegreaterthanthepreviousvalue" xml:space="preserve">
+    <value>Please enter a value greater than the previous value.</value>
+  </data>
+  <data name="Pleasefillfulltheinfomation" xml:space="preserve">
+    <value>Please fill full the infomation</value>
+  </data>
+  <data name="PowerPrice" xml:space="preserve">
+    <value>Power Price</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="PVgenerationinputmanually" xml:space="preserve">
+    <value>PV Generation –  Import data from Excel</value>
+  </data>
+  <data name="PVgenerationinquiry" xml:space="preserve">
+    <value>Confirm the Pattern of PV Generation</value>
+  </data>
+  <data name="PVlinkedESSdiscounts" xml:space="preserve">
+    <value>ESS incentive</value>
+  </data>
+  <data name="PVoutputreductionrate" xml:space="preserve">
+    <value>PV Power Degradation</value>
+  </data>
+  <data name="PVRECweight" xml:space="preserve">
+    <value>PV REC weight</value>
+  </data>
+  <data name="Radiationmanualinput" xml:space="preserve">
+    <value>Radiation manual input</value>
+  </data>
+  <data name="Ratedoutput1" xml:space="preserve">
+    <value>Rated Output – Common Use</value>
+  </data>
+  <data name="Ratedoutput2" xml:space="preserve">
+    <value>Rated Output – For Emergency</value>
+  </data>
+  <data name="Ratio" xml:space="preserve">
+    <value>Ratio</value>
+  </data>
+  <data name="RECsalesrevenue" xml:space="preserve">
+    <value>Renewable Energy Certificate (REC)</value>
+  </data>
+  <data name="RECunitpriceinquiry" xml:space="preserve">
+    <value>REC graph</value>
+  </data>
+  <data name="Rulebasedscheduler" xml:space="preserve">
+    <value>Rule-based Scheduling</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="Runeconomicanalysis" xml:space="preserve">
+    <value>Run the Economic Analysis</value>
+  </data>
+  <data name="RunMessage1" xml:space="preserve">
+    <value>It will take a long time to complete.</value>
+  </data>
+  <data name="RunMessage2" xml:space="preserve">
+    <value>Please don’t cancel or close your browser.</value>
+  </data>
+  <data name="Salesrevenue" xml:space="preserve">
+    <value>Select the Selling Price Type</value>
+  </data>
+  <data name="Salesrevenuetype" xml:space="preserve">
+    <value>Selling Price Type</value>
+  </data>
+  <data name="SalesunitpriceSelecttheyear" xml:space="preserve">
+    <value>Download the SMP &amp; REC Unit Rate</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="SelectApplicablePlan" xml:space="preserve">
+    <value>Power Rate and Input</value>
+  </data>
+  <data name="Selectdieselgeneratorparameters" xml:space="preserve">
+    <value>Diesel Generator Type</value>
+  </data>
+  <data name="SelectFCcapacityrange" xml:space="preserve">
+    <value>Enter the Capacity of FC</value>
+  </data>
+  <data name="SelectingthePVcapacityrange" xml:space="preserve">
+    <value>Selecting the PV capacity range</value>
+  </data>
+  <data name="SelectRECpriceYear" xml:space="preserve">
+    <value>REC location:</value>
+  </data>
+  <data name="Selectregion" xml:space="preserve">
+    <value>Select region</value>
+  </data>
+  <data name="SelectSMPpriceYear" xml:space="preserve">
+    <value>SMP location</value>
+  </data>
+  <data name="SelectWTCapacityRange" xml:space="preserve">
+    <value>Select WT Capacity Range</value>
+  </data>
+  <data name="SelectYear" xml:space="preserve">
+    <value>Select Year</value>
+  </data>
+  <data name="Selectyearmonthday" xml:space="preserve">
+    <value>Select year/month/day</value>
+  </data>
+  <data name="Selectyourregion" xml:space="preserve">
+    <value>Location </value>
+  </data>
+  <data name="SMPsalesrevenue" xml:space="preserve">
+    <value>System Marginal Price (SMP)</value>
+  </data>
+  <data name="SMPunitpriceinquiry" xml:space="preserve">
+    <value>SMP graph</value>
+  </data>
+  <data name="SOCrange" xml:space="preserve">
+    <value>Range of SOC</value>
+  </data>
+  <data name="Thousandwon" xml:space="preserve">
+    <value>USD / kW</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>System Type</value>
+  </data>
+  <data name="Viewdieselgeneratorparameters" xml:space="preserve">
+    <value>View diesel generator parameters</value>
+  </data>
+  <data name="ViewInputInformation" xml:space="preserve">
+    <value>Check load information</value>
+  </data>
+  <data name="won" xml:space="preserve">
+    <value>USD</value>
+  </data>
+  <data name="WTgenerationautomaticcalculation" xml:space="preserve">
+    <value>WT generation automatic calculation</value>
+  </data>
+  <data name="WToutputreductionrate" xml:space="preserve">
+    <value>WT Power Degradation</value>
+  </data>
+  <data name="WTparameterselection" xml:space="preserve">
+    <value>Select the Parameters of WT</value>
+  </data>
+  <data name="WTPowerGeneration" xml:space="preserve">
+    <value>Confirm the Pattern of WT Generation</value>
+  </data>
+  <data name="WTPowerGenerationManualInput" xml:space="preserve">
+    <value>WT Power Generation Manual Input</value>
+  </data>
+  <data name="Yearprofit" xml:space="preserve">
+    <value>1&lt;sup&gt;st &lt;/sup&gt; profit</value>
+  </data>
+  <data name="CaseId" xml:space="preserve">
+    <value>Case Id</value>
+  </data>
+  <data name="CaseManagement" xml:space="preserve">
+    <value>Case Management</value>
+  </data>
+  <data name="CHPParameterManagement" xml:space="preserve">
+    <value>CHP Parameter Management</value>
+  </data>
+  <data name="CommonCodeManagement" xml:space="preserve">
+    <value>Common Code Management</value>
+  </data>
+  <data name="CommonSelection" xml:space="preserve">
+    <value>Common Selection</value>
+  </data>
+  <data name="CommunityManagement" xml:space="preserve">
+    <value>Community Management</value>
+  </data>
+  <data name="CulminationAltitudeManagement" xml:space="preserve">
+    <value>Culmination Altitude Management</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="DieselGenParameterManagement" xml:space="preserve">
+    <value>DieselGen Parameter Management</value>
+  </data>
+  <data name="Downloadtheform" xml:space="preserve">
+    <value>Download the form</value>
+  </data>
+  <data name="ElectricChargesManagement" xml:space="preserve">
+    <value>Electric Charges Management</value>
+  </data>
+  <data name="Electricityrateclassification" xml:space="preserve">
+    <value>Electricity rate classification:</value>
+  </data>
+  <data name="EntityManagement" xml:space="preserve">
+    <value>Entity Management</value>
+  </data>
+  <data name="EssParameterManagement" xml:space="preserve">
+    <value>Ess Parameter Management</value>
+  </data>
+  <data name="Excelbatchregistration" xml:space="preserve">
+    <value>Excel Batch Registration</value>
+  </data>
+  <data name="Executable" xml:space="preserve">
+    <value>Executable</value>
+  </data>
+  <data name="FCParameterManagement" xml:space="preserve">
+    <value>FC Parameter Management</value>
+  </data>
+  <data name="HolidayInfomationManagement" xml:space="preserve">
+    <value>Holiday Infomation Management</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="InsolationManagement" xml:space="preserve">
+    <value>Insolation Management</value>
+  </data>
+  <data name="Itemmanagement" xml:space="preserve">
+    <value>Item Management</value>
+  </data>
+  <data name="ModelManagement" xml:space="preserve">
+    <value>Model Management</value>
+  </data>
+  <data name="Periodofassessment" xml:space="preserve">
+    <value>Period of assessment</value>
+  </data>
+  <data name="PvEssSchedulerManagement" xml:space="preserve">
+    <value>PvEss Scheduler Management</value>
+  </data>
+  <data name="RECChargeManagement" xml:space="preserve">
+    <value>REC Charge Management</value>
+  </data>
+  <data name="Releasedate" xml:space="preserve">
+    <value>Release Date</value>
+  </data>
+  <data name="SMPChargeManagement" xml:space="preserve">
+    <value>SMP Charge Management</value>
+  </data>
+  <data name="Stopusingselection" xml:space="preserve">
+    <value>Stop Using Selection</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="UserManagement" xml:space="preserve">
+    <value>User Management</value>
+  </data>
+  <data name="UseSelected" xml:space="preserve">
+    <value>Use Selected</value>
+  </data>
+  <data name="WindSpeed1" xml:space="preserve">
+    <value>Wind Speed Management</value>
+  </data>
+  <data name="WTParameterManagement" xml:space="preserve">
+    <value>WT Parameter Management</value>
+  </data>
+  <data name="Case" xml:space="preserve">
+    <value>Case</value>
+  </data>
+  <data name="CommonCode" xml:space="preserve">
+    <value>Common Code</value>
+  </data>
+  <data name="Entity" xml:space="preserve">
+    <value>Entity</value>
+  </data>
+  <data name="ESSParameter" xml:space="preserve">
+    <value>ESS Parameter</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="WTParameter" xml:space="preserve">
+    <value>WT Parameter</value>
+  </data>
+  <data name="ChpParamVolumn" xml:space="preserve">
+    <value>Volumn(KW)</value>
+  </data>
+  <data name="FcParamVolumn" xml:space="preserve">
+    <value>Volumn(KW)</value>
+  </data>
+  <data name="RecPriceInGrid" xml:space="preserve">
+    <value>REC Price</value>
+  </data>
+  <data name="RecTypeInGrid" xml:space="preserve">
+    <value>REC Type</value>
+  </data>
+  <data name="SmpPriceInGrid" xml:space="preserve">
+    <value>SMP Price</value>
+  </data>
+  <data name="WindSpeedTextInGrid" xml:space="preserve">
+    <value>WindSpeed(m/s)</value>
+  </data>
+  <data name="ValueCA" xml:space="preserve">
+    <value>Meridian altitude</value>
+  </data>
+  <data name="Message3" xml:space="preserve">
+    <value>A component that is not selected in Component Selection.</value>
+  </data>
+  <data name="Enterfacilitycosts" xml:space="preserve">
+    <value>Enter the Capital Cost</value>
+  </data>
+  <data name="LoadDataViews" xml:space="preserve">
+    <value>Confirm the Load Data</value>
+  </data>
+  <data name="HolidayName" xml:space="preserve">
+    <value>Holiday Name</value>
+  </data>
+  <data name="UserRegist" xml:space="preserve">
+    <value>User Regist</value>
+  </data>
+  <data name="YearDay" xml:space="preserve">
+    <value>Year Day</value>
+  </data>
+  <data name="Getpublicdataholidayinformation" xml:space="preserve">
+    <value>Get public data holiday information</value>
+  </data>
+  <data name="Wrongaccountorpassword" xml:space="preserve">
+    <value>Wrong account or password</value>
+  </data>
+  <data name="MessagePopupWindow" xml:space="preserve">
+    <value>It is in progress. It is possible to confirm only the completion.</value>
+  </data>
+  <data name="SysInfo" xml:space="preserve">
+    <value>Case Introduction</value>
+  </data>
+  <data name="ErrorSaveFile" xml:space="preserve">
+    <value>Could not save file</value>
+  </data>
+  <data name="CaseStatus" xml:space="preserve">
+    <value>Case Status</value>
+  </data>
+  <data name="OptimumCapacitySelection" xml:space="preserve">
+    <value>Optimum Capacity Selection</value>
+  </data>
+  <data name="TotalBenefit" xml:space="preserve">
+    <value>Revenue Summation</value>
+  </data>
+  <data name="Pleaseselectdieselgeneratorparameters" xml:space="preserve">
+    <value>Please select diesel generator parameters</value>
+  </data>
+  <data name="ErrorMessg" xml:space="preserve">
+    <value>There are currently many users are using. &lt;br /&gt; Try again in 10 minutes and 15 minutes. &lt;br /&gt; Click the Save button again when you see the same message.</value>
+  </data>
+  <data name="MsgE00017" xml:space="preserve">
+    <value>It is based on 10 digits.</value>
+  </data>
+  <data name="MsgE000172" xml:space="preserve">
+    <value>The final number of the IntervalValue must be 0</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Inprogress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="MyCase" xml:space="preserve">
+    <value>My Case</value>
+  </data>
+  <data name="MesageE19" xml:space="preserve">
+    <value>The calculation process is wrong. Please check the input data</value>
+  </data>
+  <data name="MessageE000171" xml:space="preserve">
+    <value>The maximum value must be greater than or equal to the minimum value.</value>
+  </data>
+  <data name="MessageE000172" xml:space="preserve">
+    <value>The interval must be less than or equal to (maximum - minimum).</value>
+  </data>
+  <data name="MessageE000173" xml:space="preserve">
+    <value>You must enter no more than 3 "CASE1"</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Proceeding" xml:space="preserve">
+    <value>Proceeding</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="OptimalCapacity" xml:space="preserve">
+    <value>Optimal Capacity</value>
+  </data>
+  <data name="MessageE00013" xml:space="preserve">
+    <value>It has been saved. When the number of cycles is A, it is decreased to the available capacity B%. "</value>
+  </data>
+  <data name="Userinput" xml:space="preserve">
+    <value>User input</value>
+  </data>
+  <data name="CaseQA" xml:space="preserve">
+    <value>Case Q&amp;A</value>
+  </data>
+  <data name="Comunity" xml:space="preserve">
+    <value>Comunity</value>
+  </data>
+  <data name="ServiceIntroduction" xml:space="preserve">
+    <value>Introduction</value>
+  </data>
+  <data name="MessageE00005" xml:space="preserve">
+    <value>Can not find Case folder</value>
+  </data>
+  <data name="Changeexecutablefile" xml:space="preserve">
+    <value>Change executable file</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>File Name</value>
+  </data>
+  <data name="Registrant" xml:space="preserve">
+    <value>Registrant:</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="MessageE000174" xml:space="preserve">
+    <value>Maximum capacity and minimum capacity are not equal.</value>
+  </data>
+  <data name="ComSelection" xml:space="preserve">
+    <value>Select the Components</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>Hour</value>
+  </data>
+  <data name="PVESSSchedulerTitle" xml:space="preserve">
+    <value>Register the built-in scheduler executable.</value>
+  </data>
+  <data name="RegDate" xml:space="preserve">
+    <value>Registration Date</value>
+  </data>
+  <data name="SchedulerType" xml:space="preserve">
+    <value>Scheduler Type</value>
+  </data>
+  <data name="WrongName" xml:space="preserve">
+    <value>Wrong file name format</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="ViewResult" xml:space="preserve">
+    <value>View Result</value>
+  </data>
+  <data name="MessDeleteCase" xml:space="preserve">
+    <value>Please select case to delete</value>
+  </data>
+  <data name="MessErrorE21" xml:space="preserve">
+    <value>Arguments are not valid. Please check your input.</value>
+  </data>
+  <data name="MessCaseReferences" xml:space="preserve">
+    <value>Please enter information from previous step</value>
+  </data>
+  <data name="MessMyCase" xml:space="preserve">
+    <value>Do you really want to delete the selected model?</value>
+  </data>
+  <data name="RemoveSuccess" xml:space="preserve">
+    <value>It has been removed</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="E00015Title" xml:space="preserve">
+    <value>Select the Scheduler Method</value>
+  </data>
+  <data name="MessCreateModel" xml:space="preserve">
+    <value>Do you want sign in to perform this action?</value>
+  </data>
+  <data name="TitleE00036" xml:space="preserve">
+    <value>Check the target cases for economic analysis</value>
+  </data>
+  <data name="RECweightinput" xml:space="preserve">
+    <value>Enter the REC weight</value>
+  </data>
+  <data name="TitleE00019" xml:space="preserve">
+    <value>Optimal Sizing</value>
+  </data>
+  <data name="PriceList" xml:space="preserve">
+    <value>Check the Sale Price graph</value>
+  </data>
+  <data name="PVparameterselection" xml:space="preserve">
+    <value>Select the calculation methods</value>
+  </data>
+  <data name="Selectmodel" xml:space="preserve">
+    <value>Select Model</value>
+  </data>
+  <data name="SelectWTarea" xml:space="preserve">
+    <value>Select the Location of WT</value>
+  </data>
+  <data name="Thousandwonh" xml:space="preserve">
+    <value>USD / kWh</value>
+  </data>
+  <data name="Vieweconomicanalysisresult" xml:space="preserve">
+    <value>Check the Results of Economic Analysis</value>
+  </data>
+  <data name="Distributedresourcecapacityrangeselection" xml:space="preserve">
+    <value>Distributed resource capacity range selection</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Korean" xml:space="preserve">
+    <value>한국어</value>
+  </data>
+  <data name="MessE000151" xml:space="preserve">
+    <value>Please set the charge time so that it does not overlap.</value>
+  </data>
+  <data name="MessE000152" xml:space="preserve">
+    <value>Please set the discharge time so that it does not overlap.</value>
+  </data>
+  <data name="MessE000153" xml:space="preserve">
+    <value>Do not overlap charging time and discharging time.</value>
+  </data>
+  <data name="Apr" xml:space="preserve">
+    <value>Apr&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Aug" xml:space="preserve">
+    <value>Aug&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="CheckId" xml:space="preserve">
+    <value>Please check ID/Password.</value>
+  </data>
+  <data name="Connectable" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="Dec" xml:space="preserve">
+    <value>Dec&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Feb" xml:space="preserve">
+    <value>Feb&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Ismart1" xml:space="preserve">
+    <value>* It may take a while to import processing</value>
+  </data>
+  <data name="Ismart2" xml:space="preserve">
+    <value>* Do not close or cancel your browser</value>
+  </data>
+  <data name="Jan" xml:space="preserve">
+    <value>Jan&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Jul" xml:space="preserve">
+    <value>July&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Jun" xml:space="preserve">
+    <value>June&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Line1" xml:space="preserve">
+    <value>Mar, Apr, May, Sept, Oct</value>
+  </data>
+  <data name="Line2" xml:space="preserve">
+    <value>June, July, Aug</value>
+  </data>
+  <data name="Line3" xml:space="preserve">
+    <value>Jan, Feb, Nov, Dec</value>
+  </data>
+  <data name="Mar" xml:space="preserve">
+    <value>Mar&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Nov" xml:space="preserve">
+    <value>Nov&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Oct" xml:space="preserve">
+    <value>Oct&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Sep" xml:space="preserve">
+    <value>Sept&lt;br/&gt;[USD/kW]</value>
+  </data>
+  <data name="Axis25" xml:space="preserve">
+    <value>SMP unit cost [USD/kWh]</value>
+  </data>
+  <data name="Axis25REC" xml:space="preserve">
+    <value>REC unit cost [USD/REC]</value>
+  </data>
+  <data name="AxisE28" xml:space="preserve">
+    <value>WT Power Generation / WT Rated Capacity [%]</value>
+  </data>
+  <data name="AxisE6" xml:space="preserve">
+    <value>Electricity Rate [USD/kWh]</value>
+  </data>
+  <data name="AxisE9" xml:space="preserve">
+    <value>Load [kWh]</value>
+  </data>
+  <data name="Axix10" xml:space="preserve">
+    <value>PV generation / PV rated capacity [%]</value>
+  </data>
+  <data name="BAT" xml:space="preserve">
+    <value>Battery</value>
+  </data>
+  <data name="CHPratedpower" xml:space="preserve">
+    <value>CHP Rated Power</value>
+  </data>
+  <data name="CHPRevenue" xml:space="preserve">
+    <value>CHP Revenue</value>
+  </data>
+  <data name="ConnectedYear" xml:space="preserve">
+    <value>Concerned Year </value>
+  </data>
+  <data name="CustomerName" xml:space="preserve">
+    <value>Customer Name</value>
+  </data>
+  <data name="Cycles" xml:space="preserve">
+    <value>cycles ,</value>
+  </data>
+  <data name="Discount1" xml:space="preserve">
+    <value>Basic Rate Discount</value>
+  </data>
+  <data name="Discount2" xml:space="preserve">
+    <value>Electricity Rate Discount</value>
+  </data>
+  <data name="Discount3" xml:space="preserve">
+    <value>Discount 3</value>
+  </data>
+  <data name="E131" xml:space="preserve">
+    <value>Available capacity will be reduced to </value>
+  </data>
+  <data name="E132" xml:space="preserve">
+    <value>% after </value>
+  </data>
+  <data name="E133" xml:space="preserve">
+    <value> cycles operation.</value>
+  </data>
+  <data name="ElectIncrease" xml:space="preserve">
+    <value>Electricity Growth Rate </value>
+  </data>
+  <data name="EMS" xml:space="preserve">
+    <value>EMS</value>
+  </data>
+  <data name="Enter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="ESSRevenue" xml:space="preserve">
+    <value>ESS Revenue</value>
+  </data>
+  <data name="FCratedpower" xml:space="preserve">
+    <value>FC Rated Power</value>
+  </data>
+  <data name="FCRevenue" xml:space="preserve">
+    <value>FC Revenue</value>
+  </data>
+  <data name="LApr" xml:space="preserve">
+    <value>Apr</value>
+  </data>
+  <data name="LAug" xml:space="preserve">
+    <value>Aug</value>
+  </data>
+  <data name="LDec" xml:space="preserve">
+    <value>Dec</value>
+  </data>
+  <data name="LFeb" xml:space="preserve">
+    <value>Feb</value>
+  </data>
+  <data name="LJan" xml:space="preserve">
+    <value>Jan</value>
+  </data>
+  <data name="LJul" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="LJun" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="LMar" xml:space="preserve">
+    <value>Mar</value>
+  </data>
+  <data name="LMay" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="LNov" xml:space="preserve">
+    <value>Nov</value>
+  </data>
+  <data name="LOct" xml:space="preserve">
+    <value>Oct</value>
+  </data>
+  <data name="LSep" xml:space="preserve">
+    <value>Sept</value>
+  </data>
+  <data name="Nolimit" xml:space="preserve">
+    <value>Without Limit</value>
+  </data>
+  <data name="PCS" xml:space="preserve">
+    <value>PCS</value>
+  </data>
+  <data name="Profitrange" xml:space="preserve">
+    <value>Ranking of Profit</value>
+  </data>
+  <data name="PVratedpower" xml:space="preserve">
+    <value>PV Capacity</value>
+  </data>
+  <data name="PVRevenue" xml:space="preserve">
+    <value>PV Revenue</value>
+  </data>
+  <data name="RECgrowthrate" xml:space="preserve">
+    <value>REC growth rate</value>
+  </data>
+  <data name="Savetheresults" xml:space="preserve">
+    <value>Export To Excel</value>
+  </data>
+  <data name="Times" xml:space="preserve">
+    <value>Times</value>
+  </data>
+  <data name="TitleE00006" xml:space="preserve">
+    <value>Check the Electricity Rate</value>
+  </data>
+  <data name="WTratedpower" xml:space="preserve">
+    <value>WT Rated Power</value>
+  </data>
+  <data name="WTRevenue" xml:space="preserve">
+    <value>WT Revenue</value>
+  </data>
+  <data name="CustomerInfo" xml:space="preserve">
+    <value>Customer Information</value>
+  </data>
+  <data name="DERSconnection" xml:space="preserve">
+    <value>Enter the range of capaciy to examine</value>
+  </data>
+  <data name="Diesel" xml:space="preserve">
+    <value>Diesel Generator</value>
+  </data>
+  <data name="DistributedSoft" xml:space="preserve">
+    <value>Modeling and Design of Distributed Energy Resources</value>
+  </data>
+  <data name="ESSratedpower" xml:space="preserve">
+    <value>Enter the Capacity of ESS</value>
+  </data>
+  <data name="ISMARTInfo" xml:space="preserve">
+    <value>Login Information</value>
+  </data>
+  <data name="LandIsland" xml:space="preserve">
+    <value>Land/Island</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="PVRated" xml:space="preserve">
+    <value>PV Rated Power</value>
+  </data>
+  <data name="Revenue" xml:space="preserve">
+    <value>Revenue</value>
+  </data>
+  <data name="CaseMess1" xml:space="preserve">
+    <value>To create a new business model(BM), please select the target BM blow.</value>
+  </data>
+  <data name="CaseMess2" xml:space="preserve">
+    <value>Blue buttons can be executed, but gray buttons can not be executed.</value>
+  </data>
+  <data name="CaseMess3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="TargetModel" xml:space="preserve">
+    <value>Target Model</value>
+  </data>
+  <data name="CasereferenceNotice" xml:space="preserve">
+    <value>Please fill and select your information in blank by clicking the blue button in order.</value>
+  </data>
+  <data name="ComSubName3" xml:space="preserve">
+    <value>ComSubName3</value>
+  </data>
+  <data name="DGratedpower" xml:space="preserve">
+    <value>Diesel Generator Rated Power</value>
+  </data>
+  <data name="E00029Title" xml:space="preserve">
+    <value>Enter the FC parameters</value>
+  </data>
+  <data name="E00031Title" xml:space="preserve">
+    <value>Enter the CHP parameters</value>
+  </data>
+  <data name="E00034Title" xml:space="preserve">
+    <value>Enter the Diesel Generator parameters</value>
+  </data>
+  <data name="WTPowerCurve" xml:space="preserve">
+    <value>Power Curve of WT</value>
+  </data>
+  <data name="DGPratedpower" xml:space="preserve">
+    <value>Diesel Generation Rated Power</value>
+  </data>
+  <data name="EnergyChargingSaving" xml:space="preserve">
+    <value>Energy Charging Saving</value>
+  </data>
+  <data name="MessLogin" xml:space="preserve">
+    <value>Wrong username or password</value>
+  </data>
+  <data name="Useyouracc" xml:space="preserve">
+    <value>Login Information</value>
+  </data>
+  <data name="Apr1" xml:space="preserve">
+    <value>Apr</value>
+  </data>
+  <data name="Aug1" xml:space="preserve">
+    <value>Aug</value>
+  </data>
+  <data name="Cost" xml:space="preserve">
+    <value>Cost</value>
+  </data>
+  <data name="Dec1" xml:space="preserve">
+    <value>Dec</value>
+  </data>
+  <data name="E27Desc1" xml:space="preserve">
+    <value>* Download the wind speed of selected location.</value>
+  </data>
+  <data name="E27Desc2" xml:space="preserve">
+    <value>* It take a while to import processing.</value>
+  </data>
+  <data name="E27Desc3" xml:space="preserve">
+    <value>* Do not close or cancel your browser.</value>
+  </data>
+  <data name="Feb1" xml:space="preserve">
+    <value>Feb</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="Jan1" xml:space="preserve">
+    <value>Jan</value>
+  </data>
+  <data name="Jul1" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="Jun1" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Mar1" xml:space="preserve">
+    <value>Mar</value>
+  </data>
+  <data name="May1" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="MessE19" xml:space="preserve">
+    <value>Please check the target cases.</value>
+  </data>
+  <data name="Nov1" xml:space="preserve">
+    <value>Nov</value>
+  </data>
+  <data name="Oct1" xml:space="preserve">
+    <value>Oct</value>
+  </data>
+  <data name="Sep1" xml:space="preserve">
+    <value>Sept</value>
+  </data>
+  <data name="HelpRECContent" xml:space="preserve">
+    <value>proof that energy has been generated from renewable sources such as solar or wind power. Each REC represents the environmental benefits of 1MWh of renewable energy generation. When you purchase RECs, renewable energy is generated on your behalf</value>
+  </data>
+  <data name="HelpRECTitle" xml:space="preserve">
+    <value>REC (Remewable Energy Certificate):</value>
+  </data>
+  <data name="HelpSMPContent" xml:space="preserve">
+    <value>cost of the most expensive generating unit included in the Price Setting Schedule (PSS). PSS is  set up by a computer program that can minimize th total production cost of generating units including the startup cost and incremental fuel cost</value>
+  </data>
+  <data name="HelpSMPTitle" xml:space="preserve">
+    <value>SMP (System Marginal Price):</value>
+  </data>
+  <data name="YearBase" xml:space="preserve">
+    <value>Base Year</value>
+  </data>
+  <data name="E20Title1" xml:space="preserve">
+    <value>- Annual discount rate of money and growth rate of selling price</value>
+  </data>
+  <data name="E20Title2" xml:space="preserve">
+    <value>- Annual power degradation rate of components</value>
+  </data>
+  <data name="PVPara" xml:space="preserve">
+    <value>Select the calculation methods</value>
+  </data>
+  <data name="E20Title11" xml:space="preserve">
+    <value>- Annual discount rate of money and growth rate of electricity price</value>
+  </data>
+  <data name="Mess19" xml:space="preserve">
+    <value>Please select the target case.</value>
+  </data>
+  <data name="MessEntity24" xml:space="preserve">
+    <value>REC is not selected.</value>
+  </data>
+  <data name="Above3000kW" xml:space="preserve">
+    <value>From beyond 3,000 kW</value>
+  </data>
+  <data name="Detailedcriteria" xml:space="preserve">
+    <value>Corresponding year</value>
+  </data>
+  <data name="Division" xml:space="preserve">
+    <value>Component</value>
+  </data>
+  <data name="ESSfacility" xml:space="preserve">
+    <value>ESS connection</value>
+  </data>
+  <data name="From100kW" xml:space="preserve">
+    <value>From 100kW</value>
+  </data>
+  <data name="Ifyouinstallitfloating" xml:space="preserve">
+    <value>If you install it floating on the water surface of maintenance</value>
+  </data>
+  <data name="InstallationType" xml:space="preserve">
+    <value>Installation Type</value>
+  </data>
+  <data name="IsmartMess1" xml:space="preserve">
+    <value>iSMART is a site of KEPCO that provides electricity usage and charge information for smart power management to high pressure customers.</value>
+  </data>
+  <data name="IsmartMess2" xml:space="preserve">
+    <value>iSMART Address: https://pccs.kepco.co.kr/iSmart/</value>
+  </data>
+  <data name="IsmartMess3" xml:space="preserve">
+    <value>Download will take from 5 to 10 minutes.</value>
+  </data>
+  <data name="IsmartMess4" xml:space="preserve">
+    <value>Do not close your browser until the download finishes.</value>
+  </data>
+  <data name="Lessthan100kw" xml:space="preserve">
+    <value>Less than 100kW</value>
+  </data>
+  <data name="orless" xml:space="preserve">
+    <value>Below 3,000kW</value>
+  </data>
+  <data name="RenewableEnergySupplyCertificateWeight" xml:space="preserve">
+    <value>Renewable Energy Certificate Weight</value>
+  </data>
+  <data name="Solarconnection" xml:space="preserve">
+    <value>Solar connection</value>
+  </data>
+  <data name="Solarenergy" xml:space="preserve">
+    <value>Solar&lt;br/&gt;energy</value>
+  </data>
+  <data name="SupplyCertificateWeights" xml:space="preserve">
+    <value>REC weight</value>
+  </data>
+  <data name="Targetenergyandreference" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Wheninstallingintheforest" xml:space="preserve">
+    <value>When installing in the forest</value>
+  </data>
+  <data name="Wheninstallingonaregularsite" xml:space="preserve">
+    <value>When installing on a regular site</value>
+  </data>
+  <data name="Whentrading" xml:space="preserve">
+    <value>When trading electricity through private power generation facilities</value>
+  </data>
+  <data name="Whenusingexistingfacilitiessuchasbuildings" xml:space="preserve">
+    <value>When using existing facilities such as buildings</value>
+  </data>
+  <data name="Windconnection" xml:space="preserve">
+    <value>Wind connection</value>
+  </data>
+  <data name="years" xml:space="preserve">
+    <value>years</value>
+  </data>
+  <data name="Reduce" xml:space="preserve">
+    <value>reduce</value>
+  </data>
+  <data name="PowercurveofWT" xml:space="preserve">
+    <value>Power curve of WT</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Source: https://www.knrec.or.kr/business/rps_guide.aspx</value>
+  </data>
+  <data name="yearss" xml:space="preserve">
+    <value>year</value>
+  </data>
+  <data name="ViewsCount" xml:space="preserve">
+    <value>Views</value>
+  </data>
+  <data name="CaseCreate" xml:space="preserve">
+    <value>Creating Case</value>
+  </data>
+  <data name="Introduc" xml:space="preserve">
+    <value>Program Introduction</value>
+  </data>
+  <data name="TitleMenu" xml:space="preserve">
+    <value>ESS-PV generation BM</value>
+  </data>
+  <data name="Grid26" xml:space="preserve">
+    <value>Wind speed (m/s)</value>
+  </data>
+  <data name="HelpE102" xml:space="preserve">
+    <value>* Manual input of PV power generation pattern is possible. &lt;/br&gt;
+1. Open the input file by clicking the form file button. &lt;/br&gt;
+2.Provide 24 hour pattern of power generation per PV rated capacity. &lt;/br&gt;
+3. Save the file you entered. &lt;/br&gt;
+4. Click the Browse button to load the saved file. &lt;/br&gt;</value>
+  </data>
+  <data name="E20Messs" xml:space="preserve">
+    <value>Would you like to do the economic analysis again?</value>
+  </data>
+  <data name="E20Descr1" xml:space="preserve">
+    <value>After saving, economic analysis is executed. It will take some time.</value>
+  </data>
+  <data name="E20Descr2" xml:space="preserve">
+    <value>Please wait.</value>
+  </data>
+  <data name="NewAddress1" xml:space="preserve">
+    <value>KERI, 12, Bulmosan-ro 10beon-gil, Seongsan-gu, Changwon-si, Gyeongsangnam-do, 51543, Republic of Korea / TEL. +82-55-280-1365</value>
+  </data>
+  <data name="NewAddressCopy" xml:space="preserve">
+    <value>Copyright ⓒ 2018, KERI. All Rights Reserved.</value>
+  </data>
+  <data name="moderstitle" xml:space="preserve">
+    <value>MODDER</value>
+  </data>
+  <data name="E00015ErrorCharge" xml:space="preserve">
+    <value>Charging time is from 10:00 to 16:00.</value>
+  </data>
+  <data name="E00015ErrorDisCharge" xml:space="preserve">
+    <value>Discharge time is from 16:00 to 24:00.</value>
+  </data>
+  <data name="ManualError1" xml:space="preserve">
+    <value>Data is defective. Please check the </value>
+  </data>
+  <data name="ManualError2" xml:space="preserve">
+    <value>row in your file.</value>
+  </data>
+  <data name="ModelDesign" xml:space="preserve">
+    <value>BM Design</value>
+  </data>
+  <data name="HolidayMess1" xml:space="preserve">
+    <value>Are you sure you want to delete?</value>
+  </data>
+  <data name="HolidayMess2" xml:space="preserve">
+    <value>Please select a deletion target</value>
+  </data>
+  <data name="AllSelect" xml:space="preserve">
+    <value>- All -</value>
+  </data>
+  <data name="DeleteAll" xml:space="preserve">
+    <value>Delete selected</value>
+  </data>
+  <data name="CheckDataMess" xml:space="preserve">
+    <value>No data available for the year and location(meridian altitude, insolation). Select another location.</value>
+  </data>
+  <data name="CheckDataMess1" xml:space="preserve">
+    <value>No data available for the year and location(wind speed). Select another location.</value>
+  </data>
+  <data name="MsgE000173" xml:space="preserve">
+    <value>Please enter all Textbox</value>
+  </data>
+  <data name="keriFooter" xml:space="preserve">
+    <value>Korea Electrotechnology Research Institute</value>
+  </data>
+  <data name="E37Mess" xml:space="preserve">
+    <value>Please use the left menu if you want to test the correction. &lt;br&gt;If you select another menu at the top, the model design is completely terminated.</value>
+  </data>
+  <data name="RangeTime1" xml:space="preserve">
+    <value>(10:00 to 16:00)</value>
+  </data>
+  <data name="RangeTime2" xml:space="preserve">
+    <value>(17:00 to 24:00)</value>
+  </data>
+  <data name="Btnen1" xml:space="preserve">
+    <value>background:url(/img/en1.png) no-repeat center;background-size:200px 50px;height:50px;width:200px;border:none</value>
+  </data>
+  <data name="Btnen2" xml:space="preserve">
+    <value>background:url(/img/en2.png) no-repeat center;background-size:200px 50px;height:50px;width:200px;border:none</value>
+  </data>
+  <data name="NullDataSearch" xml:space="preserve">
+    <value>Null Data Lookup</value>
+  </data>
+  <data name="MessageE000175" xml:space="preserve">
+    <value>Enter minimum capacity of 0 kW or more.</value>
+  </data>
+  <data name="iSmartErrorMesg" xml:space="preserve">
+    <value>A lot of people are busy right now. &lt;br /&gt;
+Please try again in 15 minutes and 10 minutes. &lt;br /&gt;
+When the same message appears, click the Save button again.</value>
+  </data>
+  <data name="NoId" xml:space="preserve">
+    <value>No iSmart account</value>
+  </data>
+  <data name="DeleteUser" xml:space="preserve">
+    <value>Do you want to delete these users?</value>
+  </data>
+  <data name="Economics" xml:space="preserve">
+    <value>Economics</value>
+  </data>
+  <data name="Investment" xml:space="preserve">
+    <value>Investment Cost</value>
+  </data>
+  <data name="RECSale" xml:space="preserve">
+    <value>REC Sales Revenue [USD]</value>
+  </data>
+  <data name="SMPSale" xml:space="preserve">
+    <value>SMP Sales Revenue [USD]</value>
+  </data>
+  <data name="ReferenceBoard" xml:space="preserve">
+    <value>Reference Board</value>
+  </data>
+  <data name="SaveReport" xml:space="preserve">
+    <value>Save Report</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>View Report</value>
+  </data>
+  <data name="ReportFaild" xml:space="preserve">
+    <value>Report generation failed.</value>
+  </data>
+  <data name="HolidayNull" xml:space="preserve">
+    <value>I could not get it because there was no data. Manually register</value>
+  </data>
+  <data name="FindingFiles" xml:space="preserve">
+    <value>Finding Files</value>
+  </data>
+  <data name="GetForm" xml:space="preserve">
+    <value>Get a form</value>
+  </data>
+  <data name="MessHol" xml:space="preserve">
+    <value>* Please download the form below.</value>
+  </data>
+  <data name="Registering" xml:space="preserve">
+    <value>Registering By Year</value>
+  </data>
+  <data name="MessErrorHoliday1" xml:space="preserve">
+    <value>There was an error in line </value>
+  </data>
+  <data name="MessErrorHoliday2" xml:space="preserve">
+    <value>please check again</value>
+  </data>
+  <data name="BasicDataManagement" xml:space="preserve">
+    <value>Basic Data Management</value>
+  </data>
+  <data name="ParameterManagement" xml:space="preserve">
+    <value>Parameter Management</value>
+  </data>
+  <data name="SystemAdministration" xml:space="preserve">
+    <value>System Administration</value>
+  </data>
+  <data name="AnnualPeakLoad" xml:space="preserve">
+    <value>Peak load for a year:</value>
+  </data>
+  <data name="LoadType" xml:space="preserve">
+    <value>Load Type:</value>
+  </data>
+  <data name="WorkLoad" xml:space="preserve">
+    <value>Average load for working day:</value>
+  </data>
+  <data name="MessE3" xml:space="preserve">
+    <value>Failed to save. Check the input values.</value>
+  </data>
+  <data name="SatDri" xml:space="preserve">
+    <value>Would you like to operate on Saturday?</value>
+  </data>
+  <data name="NoPermission" xml:space="preserve">
+    <value>Your account does not have permission to access this page</value>
+  </data>
+  <data name="PVESSTitle1" xml:space="preserve">
+    <value>* Register the built-in scheduler executable. If the same file is found at the time of new registration, the existing file is deleted and registered.</value>
+  </data>
+  <data name="PVESSTitle2" xml:space="preserve">
+    <value>* If possible, please delete the Solver program before registration and register.</value>
+  </data>
+  <data name="ModelPV" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="PVESSModal1" xml:space="preserve">
+    <value>* When uploading new files</value>
+  </data>
+  <data name="PVESSModal2" xml:space="preserve">
+    <value>* If an existing file already exists, it will be deleted and added.</value>
+  </data>
+  <data name="E18Mess1" xml:space="preserve">
+    <value>* Capital cost of EMS means the total EMS cost, not the unit capacity.</value>
+  </data>
+  <data name="E18Mess2" xml:space="preserve">
+    <value>** Installation cost of ESS means unit price per PCS rated capacity.</value>
+  </data>
+  <data name="TWon" xml:space="preserve">
+    <value>USD</value>
+  </data>
+  <data name="ConfirmEmailMess" xml:space="preserve">
+    <value>You have sent a confirmation email to the email you entered. Please check your email.</value>
+  </data>
+  <data name="Holiday" xml:space="preserve">
+    <value>Holiday</value>
+  </data>
+  <data name="MaximumLoadDay" xml:space="preserve">
+    <value>Maximum Load Day</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="SearchOption" xml:space="preserve">
+    <value>Search Option</value>
+  </data>
+  <data name="WorkingDay" xml:space="preserve">
+    <value>Working Day</value>
+  </data>
+  <data name="ComponentManagement" xml:space="preserve">
+    <value>Component Management</value>
+  </data>
+  <data name="ManualInput" xml:space="preserve">
+    <value>Manual Input of Electricity Rate Unit Price</value>
+  </data>
+  <data name="SelectKEPCO" xml:space="preserve">
+    <value>Select a KEPCO fare</value>
+  </data>
+  <data name="E00003Tiltle1" xml:space="preserve">
+    <value>Automatic Load Data Input (iSmart Interlocking)</value>
+  </data>
+  <data name="E00003Tiltle2" xml:space="preserve">
+    <value>Manual Load Data Input</value>
+  </data>
+  <data name="Fuelcostinput" xml:space="preserve">
+    <value>Fuel Cost Input</value>
+  </data>
+  <data name="SelectCityGasCompany" xml:space="preserve">
+    <value>Select City Gas Company</value>
+  </data>
+  <data name="SelectLoc" xml:space="preserve">
+    <value>Select Location</value>
+  </data>
+  <data name="Fuelcostmanagement" xml:space="preserve">
+    <value>Fuel Cost Management</value>
+  </data>
+  <data name="BaseRate" xml:space="preserve">
+    <value>Base Rate</value>
+  </data>
+  <data name="FormatFileWrong" xml:space="preserve">
+    <value>Please use the following downloaded form and the data of the type that suits it.</value>
+  </data>
+  <data name="FuelbialCrease" xml:space="preserve">
+    <value>Fuel cost price increase rate</value>
+  </data>
+  <data name="ZoneCrease" xml:space="preserve">
+    <value>Increase in load in the supply zone</value>
+  </data>
+  <data name="Aids" xml:space="preserve">
+    <value>Aids (no waterproofing agent), geothermal</value>
+  </data>
+  <data name="Bio" xml:space="preserve">
+    <value>Bio-SRF, IGCC, by-product gas, waste energy</value>
+  </data>
+  <data name="FixedType" xml:space="preserve">
+    <value>Fixed type</value>
+  </data>
+  <data name="Landfill" xml:space="preserve">
+    <value>Landfill gas, wood pallet, wood chip</value>
+  </data>
+  <data name="Linkdistance" xml:space="preserve">
+    <value>Link distance less than 5km</value>
+  </data>
+  <data name="Linkdistanceexceeded" xml:space="preserve">
+    <value>Link distance exceeded 15km</value>
+  </data>
+  <data name="Linkdistanceexceeding" xml:space="preserve">
+    <value>Link distance exceeding 5km and less than 10km</value>
+  </data>
+  <data name="Linkdistanceexceeding1" xml:space="preserve">
+    <value>Link distance exceeding 10km and less than 15km</value>
+  </data>
+  <data name="Misuse" xml:space="preserve">
+    <value>Misuse forest biomass disposal facility, hydrotherapy</value>
+  </data>
+  <data name="NonUser" xml:space="preserve">
+    <value>Non-use forest biomass (bio-energy only novel), fuel cell, tidal (no waterproofing), geothermal, algae</value>
+  </data>
+  <data name="Offshore" xml:space="preserve">
+    <value>Offshore wind power</value>
+  </data>
+  <data name="OtherBio" xml:space="preserve">
+    <value>Other bio-energy, onshore wind, hydro, tidal power</value>
+  </data>
+  <data name="OtherNewandRenewableEnergy" xml:space="preserve">
+    <value>Other New and Renewable Energy</value>
+  </data>
+  <data name="Variable" xml:space="preserve">
+    <value>Variable type</value>
+  </data>
+  <data name="Annualinterestrate" xml:space="preserve">
+    <value>Annual interest rate:</value>
+  </data>
+  <data name="Enterloaninformation" xml:space="preserve">
+    <value>Enter loan information</value>
+  </data>
+  <data name="Loanamount" xml:space="preserve">
+    <value>Loan amount:</value>
+  </data>
+  <data name="Loanperiod" xml:space="preserve">
+    <value>Loan period:</value>
+  </data>
+  <data name="Maintenancerate" xml:space="preserve">
+    <value>Maintenance rate:</value>
+  </data>
+  <data name="NoLoan" xml:space="preserve">
+    <value>No loans</value>
+  </data>
+  <data name="Priceincreaserate" xml:space="preserve">
+    <value>Price increase rate</value>
+  </data>
+  <data name="Repaymentmethod" xml:space="preserve">
+    <value>Repayment method:</value>
+  </data>
+  <data name="SelectLoanInformation" xml:space="preserve">
+    <value>Select Loan Information</value>
+  </data>
+  <data name="AddFC" xml:space="preserve">
+    <value>Add Fuel Cost</value>
+  </data>
+  <data name="Citygascompany" xml:space="preserve">
+    <value>City Gas Company</value>
+  </data>
+  <data name="ContactAminAnalysis" xml:space="preserve">
+    <value>An error was detected during analysis. Please contact your administrator.</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="Coefficient" xml:space="preserve">
+    <value>Coefficient</value>
+  </data>
+  <data name="ConstWaterPort" xml:space="preserve">
+    <value>Const Water Port</value>
+  </data>
+  <data name="Minimumdieseloperationcost" xml:space="preserve">
+    <value>Minimum diesel operation cost</value>
+  </data>
+  <data name="Minimumfuelcostsimplifiedsupplytype" xml:space="preserve">
+    <value>Minimum fuel cost simplified supply type</value>
+  </data>
+  <data name="RunningCost" xml:space="preserve">
+    <value>Running Cost</value>
+  </data>
+  <data name="E20Title112" xml:space="preserve">
+    <value>- Annual discount rate and fuel price increase rate</value>
+  </data>
+  <data name="FuelbialCrease2" xml:space="preserve">
+    <value>Fuel price increase rate</value>
+  </data>
+  <data name="Fuelcostsavings" xml:space="preserve">
+    <value>Fuel cost savings</value>
+  </data>
+  <data name="ViewData" xml:space="preserve">
+    <value>Charge / discharge pattern inquiry</value>
+  </data>
+  <data name="E00003Tiltle11" xml:space="preserve">
+    <value>Automatically input power demand data</value>
+  </data>
+  <data name="Loaddatainput" xml:space="preserve">
+    <value>Input power demand data</value>
+  </data>
+  <data name="Apr2" xml:space="preserve">
+    <value>Apr&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="Aug2" xml:space="preserve">
+    <value>Aug&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="Dec2" xml:space="preserve">
+    <value>Dec&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="E32T1" xml:space="preserve">
+    <value>Select city gas company</value>
+  </data>
+  <data name="E32T2" xml:space="preserve">
+    <value>Manual input of fuel cost</value>
+  </data>
+  <data name="Feb2" xml:space="preserve">
+    <value>Feb&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="Jan2" xml:space="preserve">
+    <value>Jan&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="Jul2" xml:space="preserve">
+    <value>July&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="Jun2" xml:space="preserve">
+    <value>June&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="Mar2" xml:space="preserve">
+    <value>Mar&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="May2" xml:space="preserve">
+    <value>May&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="Nov2" xml:space="preserve">
+    <value>Nov&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="Oct2" xml:space="preserve">
+    <value>Oct&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="Sep2" xml:space="preserve">
+    <value>Sep&lt;br/&gt;[USD/kWh]</value>
+  </data>
+  <data name="BM1" xml:space="preserve">
+    <value>Demand Management Model</value>
+  </data>
+  <data name="BM2" xml:space="preserve">
+    <value>DERs generation BM</value>
+  </data>
+  <data name="BM3" xml:space="preserve">
+    <value>P2P BM</value>
+  </data>
+  <data name="BM4" xml:space="preserve">
+    <value>Island BM</value>
+  </data>
+  <data name="BM5" xml:space="preserve">
+    <value>Prosumer BM</value>
+  </data>
+  <data name="GotoHome" xml:space="preserve">
+    <value>Go to Home</value>
+  </data>
+  <data name="Keri1" xml:space="preserve">
+    <value>Korea Electrotechnology Research Institute</value>
+  </data>
+  <data name="ManCostRte" xml:space="preserve">
+    <value>Maintenance cost ratio</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>View Electricity Price Unit Price Chart</value>
+  </data>
+  <data name="ESSCharge" xml:space="preserve">
+    <value>ESS charge / discharge pattern</value>
+  </data>
+  <data name="FCReductionRate" xml:space="preserve">
+    <value>FC Power Degradation</value>
+  </data>
+  <data name="E3Alert" xml:space="preserve">
+    <value>The contract capacity is less than or equal to the maximum value of the load</value>
+  </data>
+  <data name="ISShow" xml:space="preserve">
+    <value>View load pattern table</value>
+  </data>
+  <data name="PVShow" xml:space="preserve">
+    <value>View PV development pattern table</value>
+  </data>
+  <data name="ReferenceCapacity" xml:space="preserve">
+    <value>Reference Capacity</value>
+  </data>
+  <data name="Mess151" xml:space="preserve">
+    <value>A method of operation that is applied when the charge for each time is selected. It is operated by charging the power at the light load time and discharging it at the maximum load time to minimize the electricity charge</value>
+  </data>
+  <data name="Mess152" xml:space="preserve">
+    <value>TOU charge Reflecting charge method can be selected by the user in charge method of electric charge minimization, charge and discharge interval can be selected in two sections each day </value>
+  </data>
+  <data name="Mess153" xml:space="preserve">
+    <value>Saturday electricity rate unit price is composed of light-duty charge and heavy-duty charge, so the charge difference is small even after charging and discharging, so user can select option</value>
+  </data>
+  <data name="E0171" xml:space="preserve">
+    <value>※ Please input the rated capacity candidate to install for each distributed resource.</value>
+  </data>
+  <data name="E0172" xml:space="preserve">
+    <value>※ Each capacity candidate can be input less than 3.</value>
+  </data>
+  <data name="Mess1511" xml:space="preserve">
+    <value>How to plan your operation using simple logic in accordance with the operating rules of the renewable power generation business and the ESS operation constraints</value>
+  </data>
+  <data name="Mess1521" xml:space="preserve">
+    <value>User can select charging / discharging time in Rule-based operation method, select charging and discharging interval in two sections each day</value>
+  </data>
+  <data name="Dieselgeneratorparameters" xml:space="preserve">
+    <value>Diesel generator parameters (standard)</value>
+  </data>
+  <data name="Monthlyfuelcostinformation" xml:space="preserve">
+    <value>Monthly fuel cost information</value>
+  </data>
+  <data name="ChargePattern" xml:space="preserve">
+    <value>Charge / discharge pattern</value>
+  </data>
+  <data name="SalePattern" xml:space="preserve">
+    <value>Generation sales pattern</value>
+  </data>
+  <data name="E01711" xml:space="preserve">
+    <value>※   Each distributed resource must have a maximum capacity equal to or greater than the minimum capacity. The interval should be less than (max-min).</value>
+  </data>
+  <data name="E01721" xml:space="preserve">
+    <value>※   Each capacity candidate can not accommodate more than 3. If there are more than 3 capacity candidates, only 3 of them are simulated.</value>
+  </data>
+  <data name="E15BM4" xml:space="preserve">
+    <value>Choosing a method to operate a prosumer</value>
+  </data>
+  <data name="Maximizeprosumer" xml:space="preserve">
+    <value>Maximize prosumer profits (based on optimization)</value>
+  </data>
+  <data name="FCFuelCost" xml:space="preserve">
+    <value>FC Fuel Cost</value>
+  </data>
+  <data name="E7Mess" xml:space="preserve">
+    <value>Select the year in which you want to install distributed resources.</value>
+  </data>
+  <data name="Hide1" xml:space="preserve">
+    <value>Hide table</value>
+  </data>
+  <data name="Show1" xml:space="preserve">
+    <value>View Table</value>
+  </data>
+  <data name="Automaticwindspeedinput" xml:space="preserve">
+    <value>Automatic wind speed input</value>
+  </data>
+  <data name="SelectReagon" xml:space="preserve">
+    <value>Select region</value>
+  </data>
+  <data name="Windspeedmanualinput" xml:space="preserve">
+    <value>Wind speed manual input</value>
+  </data>
+  <data name="E13Info" xml:space="preserve">
+    <value>Assuming a cycle of 100% discharge after 100% charge, the cycle efficiency means how much the available capacity is reduced compared to the rated capacity according to the number of cycles.</value>
+  </data>
+  <data name="E5Manual" xml:space="preserve">
+    <value>The form file is composed of working days, Saturdays, holidays, maximum load days sheets, and you can directly enter the electricity rate hourly and monthly. You can download the form file, enter the unit price, and import it from Browse and save it.</value>
+  </data>
+  <data name="HelpMaximumDayPattern" xml:space="preserve">
+    <value>The maximum load day pattern will be calculated by multiplying the daily peak load by the work day. The annual peak load should be higher than the peak load of the working day pattern.</value>
+  </data>
+  <data name="HelpWorkingDayPattern" xml:space="preserve">
+    <value>The working day pattern will be calculated by inputting the average load of the working day in the relative coefficient according to the above load type.</value>
+  </data>
+  <data name="E3Max1" xml:space="preserve">
+    <value>The maximum value of the workday pattern you entered is</value>
+  </data>
+  <data name="E3Max2" xml:space="preserve">
+    <value> [kWh]. Please enter a larger value for the maximum peak load per year.</value>
+  </data>
+  <data name="ReducedEnergyCharges" xml:space="preserve">
+    <value>Reduced Energy Charges</value>
+  </data>
+  <data name="E12" xml:space="preserve">
+    <value>What is Utilization?</value>
+  </data>
+  <data name="E121" xml:space="preserve">
+    <value>It means the estimated output of PV that can be produced against the rated capacity, and shows the estimated generation of electricity generated by the power generation equipment as a percentage of the rated capacity of PV using the solar radiation of the selected PV installation area.</value>
+  </data>
+  <data name="E25" xml:space="preserve">
+    <value>It means the estimated output of the WT that can be produced against the rated capacity, and shows the estimated generation of electricity generated by the power generation equipment as a percentage of the rated capacity of the WT using the wind speed data of the selected WT installation area.</value>
+  </data>
+  <data name="CashFlow" xml:space="preserve">
+    <value>Cash Flow</value>
+  </data>
+  <data name="E13MesTi" xml:space="preserve">
+    <value>What is cycle efficiency?</value>
+  </data>
+  <data name="Pattern" xml:space="preserve">
+    <value>Distributed resource operation plan</value>
+  </data>
+  <data name="BaseRateUnitPrice" xml:space="preserve">
+    <value>Base Rate Unit Price</value>
+  </data>
+  <data name="CycleNum" xml:space="preserve">
+    <value>Cycle Number</value>
+  </data>
+  <data name="Distributedresource" xml:space="preserve">
+    <value>Distributed resource</value>
+  </data>
+  <data name="E10Title" xml:space="preserve">
+    <value>Input PV generation pattern</value>
+  </data>
+  <data name="E26Title" xml:space="preserve">
+    <value>Enter WT property information</value>
+  </data>
+  <data name="E29Tilte" xml:space="preserve">
+    <value>Enter FC property information</value>
+  </data>
+  <data name="E6Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Electricitybill" xml:space="preserve">
+    <value>Electricity bill</value>
+  </data>
+  <data name="EnterESSattributeinformation" xml:space="preserve">
+    <value>Enter ESS attribute information</value>
+  </data>
+  <data name="Fuelcostautoinput" xml:space="preserve">
+    <value>Fuel cost auto input</value>
+  </data>
+  <data name="Inputpowerdemanddata" xml:space="preserve">
+    <value>Input power demand data</value>
+  </data>
+  <data name="SelectDistributedResources" xml:space="preserve">
+    <value>Select Distributed Resources</value>
+  </data>
+  <data name="Selectwindspeedinformation" xml:space="preserve">
+    <value>Select wind speed information</value>
+  </data>
+  <data name="ESSOperationsPlan" xml:space="preserve">
+    <value>ESS Operations Plan</value>
+  </data>
+  <data name="FCOperationsPlan" xml:space="preserve">
+    <value>FC Operations Plan</value>
+  </data>
+  <data name="PatternAxis1" xml:space="preserve">
+    <value>Total charge [kWh]</value>
+  </data>
+  <data name="PatternAxis2" xml:space="preserve">
+    <value>Power generation [kWh]</value>
+  </data>
+  <data name="PatternDes" xml:space="preserve">
+    <value>* When ESS is charging, value is positive. And when ESS is discharging, value is negative.</value>
+  </data>
+  <data name="PVpowergeneration" xml:space="preserve">
+    <value>PV Power Generation</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Electricitybill1" xml:space="preserve">
+    <value>View electricity bill</value>
+  </data>
+  <data name="Bookareaname" xml:space="preserve">
+    <value>Book area name</value>
+  </data>
+  <data name="LocalInformation" xml:space="preserve">
+    <value>Local Information</value>
+  </data>
+  <data name="constfunction" xml:space="preserve">
+    <value>Cost function &lt;br/&gt; (= a * P + b)</value>
+  </data>
+  <data name="E0173" xml:space="preserve">
+    <value>※ Input capacity candidates are analyzed economically in all cases.</value>
+  </data>
+  <data name="E261Title" xml:space="preserve">
+    <value>Enter WT property information</value>
+  </data>
+  <data name="Enterwindspeedinformation" xml:space="preserve">
+    <value>Enter wind speed information</value>
+  </data>
+  <data name="Fuelcost" xml:space="preserve">
+    <value>Fuel cost</value>
+  </data>
+  <data name="E00015Title1" xml:space="preserve">
+    <value>Select driving plan</value>
+  </data>
+  <data name="Businessname" xml:space="preserve">
+    <value>Business name</value>
+  </data>
+  <data name="Distributedresource1" xml:space="preserve">
+    <value>Distributed resource</value>
+  </data>
+  <data name="E101" xml:space="preserve">
+    <value>Input PV generation pattern</value>
+  </data>
+  <data name="E13M3" xml:space="preserve">
+    <value>Enter ESS attribute information</value>
+  </data>
+  <data name="E1TitleM3" xml:space="preserve">
+    <value>Company Information</value>
+  </data>
+  <data name="SalePattern1" xml:space="preserve">
+    <value>PV operation plan</value>
+  </data>
+  <data name="UnitE25" xml:space="preserve">
+    <value>[USD/REC]</value>
+  </data>
+  <data name="DieselOperationPlan" xml:space="preserve">
+    <value>Diesel Operation Plan</value>
+  </data>
+  <data name="E0174" xml:space="preserve">
+    <value>※  Each distributed resource must have a maximum capacity equal to or greater than the minimum capacity. The interval should be less than (max-min).</value>
+  </data>
+  <data name="E0175" xml:space="preserve">
+    <value>※  Each capacity candidate can not accommodate more than 3. If there are more than 3 capacity candidates, only 3 of them are simulated.</value>
+  </data>
+  <data name="Powergeneration" xml:space="preserve">
+    <value>Power generation [kWh]</value>
+  </data>
+  <data name="Preexistingprice" xml:space="preserve">
+    <value>(Pre-existing price)</value>
+  </data>
+  <data name="E6Axis" xml:space="preserve">
+    <value>Price Unit [USD / kWh]</value>
+  </data>
+  <data name="PVOperationPlan" xml:space="preserve">
+    <value>PV Operation Plan</value>
+  </data>
+  <data name="WTOperationPlan" xml:space="preserve">
+    <value>WT Operation Plan</value>
+  </data>
+  <data name="CInformation" xml:space="preserve">
+    <value>Customer Information</value>
+  </data>
+  <data name="Energysavings" xml:space="preserve">
+    <value>Energy savings</value>
+  </data>
+  <data name="Salesrevenue1" xml:space="preserve">
+    <value>Sales revenue</value>
+  </data>
+  <data name="Totalrevenue" xml:space="preserve">
+    <value>Total revenue</value>
+  </data>
+  <data name="Prosumeroperationplan" xml:space="preserve">
+    <value>Prosumer operation plan</value>
+  </data>
+  <data name="Purchasedpower" xml:space="preserve">
+    <value>Purchased power</value>
+  </data>
+  <data name="Salespower" xml:space="preserve">
+    <value>Sales power</value>
+  </data>
+  <data name="HelpE52" xml:space="preserve">
+    <value>* Working day electricity quantity charge rate can be entered manually in the pattern of 24 hours a month by downloading the following form.
+&lt;br/&gt;* Working day electricity rate Using the unit price, the intermediate electricity charge unit price is applied from 9:00 am to 11:00 am on Saturday, and the light electricity charge unit price is applied to the electricity cost for 24 hours.
+&lt;br/&gt;* The basic rate is calculated by multiplying the monthly maximum load by the basic rate, so if you have a basic rate, enter it directly in the space below.</value>
+  </data>
+  <data name="E15M5" xml:space="preserve">
+    <value>Zoning Electricity Business Model is used to calculate surplus electric power after supplying power in the zone to the KPX
+&lt;br/&gt;This is a model for selling and generating profits.
+&lt;br/&gt;Optimize your driving plan to maximize.</value>
+  </data>
+  <data name="Negativenumbers" xml:space="preserve">
+    <value>* Negative numbers are electricity sales volume</value>
+  </data>
+  <data name="Decreaseto" xml:space="preserve">
+    <value>Decrease to%</value>
+  </data>
+  <data name="E12AxMo" xml:space="preserve">
+    <value>View PV utilization table</value>
+  </data>
+  <data name="E28ShoMo" xml:space="preserve">
+    <value>View WT Utilization table</value>
+  </data>
+  <data name="E5Mo" xml:space="preserve">
+    <value>Enter your electricity bill</value>
+  </data>
+  <data name="E6AxisMo" xml:space="preserve">
+    <value>Electricity unit price [USD / kWh]</value>
+  </data>
+  <data name="ViewPowerDemandDataTable" xml:space="preserve">
+    <value>View Power Demand Data Table</value>
+  </data>
+  <data name="Optimizationbasedscheduler5" xml:space="preserve">
+    <value>Maximizing profits in the district electricity business (based on optimization)</value>
+  </data>
+  <data name="E15Ax" xml:space="preserve">
+    <value>View SMP pricing table</value>
+  </data>
+  <data name="EstimatedWTtoratedcapacity" xml:space="preserve">
+    <value>Estimated WT to rated capacity</value>
+  </data>
+  <data name="PVexpectedoutput" xml:space="preserve">
+    <value>PV expected output [%]</value>
+  </data>
+  <data name="PVexpectedoutputrelativetoratedcapacity" xml:space="preserve">
+    <value>PV expected output relative to rated capacity</value>
+  </data>
+  <data name="ViewPVutilizationtable" xml:space="preserve">
+    <value>View PV utilization table</value>
+  </data>
+  <data name="WTEstimatedOutput" xml:space="preserve">
+    <value>WT Estimated Output [%]</value>
+  </data>
+  <data name="E20Btn" xml:space="preserve">
+    <value>Execution</value>
+  </data>
+  <data name="Negativenumbers1" xml:space="preserve">
+    <value>Negative numbers are generation sales</value>
+  </data>
+  <data name="PositiveAmount" xml:space="preserve">
+    <value>* Positive amount is charge amount, negative number is discharge amount</value>
+  </data>
+  <data name="reducepercent" xml:space="preserve">
+    <value>% Reduced</value>
+  </data>
+  <data name="resultrun" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="resultsearch" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="E18Orther1" xml:space="preserve">
+    <value>Other costs</value>
+  </data>
+  <data name="E18Orther2" xml:space="preserve">
+    <value>The Components</value>
+  </data>
+  <data name="E18Orther3" xml:space="preserve">
+    <value>Add</value>
+  </data>
+</root>

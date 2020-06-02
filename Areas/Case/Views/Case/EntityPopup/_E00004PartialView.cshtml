@@ -1,0 +1,171 @@
+﻿
+<style>
+    .E00004 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .promo {
+        background: #ccc;
+        padding: 3px;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade E00004" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.ViewInputInformation</h4>
+            </div>
+            <div class="modal-body" id="printDiv">
+                <div class="row text-left">
+                    <p>
+                        <h4 class="modal-title" id="title-41">@Resources.Langues.CustomerInfo</h4>
+                        <br />
+                        <label id="title-11">@Resources.Langues.AcceptedName</label>
+                        <span class="promo"><label id="Consumer"></label></span>
+                        <br />
+                        <label id="title-12">@Resources.Langues.Area</label>
+                        <span class="promo"><label id="ComSubName"></label></span>
+                    </p>
+                </div>
+                <hr />
+                <div class="row text-left hidden Ismart">
+                    <p>
+                        @Resources.Langues.ISMARTInfo <br />
+                        ID: <label id="iSmartId">@*0912345678*@</label><br />
+                        @Resources.Langues.ConnectionStatus <label id="iSmartStatus" @*style="color:deepskyblue"*@>@*접속 가능*@</label>
+                    </p>
+                </div>
+                <hr class="hidden Ismart" />
+                <div class="row text-left">
+                    <p>
+                        <h4 class="modal-title" id="component-title">@Resources.Langues.Component</h4> <br />
+                        <span class="promo"><label id="Component" @*style="color:deepskyblue"*@>@*PV<br /> ESS*@</label></span>
+                    </p>
+                </div>
+                <hr />
+                <div class="row text-left" id="hidden-div">
+                    <p>
+                        <h4 class="modal-title">@Resources.Langues.ContractPower</h4> <br />
+                        <span class="promo"><label id="contractPow"></label> kW</span>
+
+                    </p>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" class="btn btn-gray save-class" data-dismiss="modal">@Resources.Langues.OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/printThis/printThis.js"></script>
+<script>
+
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+        var modelCode = '@Request.Params["modelCode"]';
+        var $modal = $('.E00004');
+
+        $('.E00004').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        if (modelCode == "M00001") {
+            $('#component-title').html('@Resources.Langues.Distributedresource')
+        }
+        if (modelCode == "M00002") {
+            $('#title-41').html('@Resources.Langues.LocalInformation')
+            $('#title-11').html('@Resources.Langues.Bookareaname')
+            $('#component-title').html('@Resources.Langues.Distributedresource')
+            $('#hidden-div').addClass('hidden')
+        }
+
+        if (modelCode == "M00003") {
+            $('#title-41').html('@Resources.Langues.E1TitleM3')
+            $('#title-11').html('@Resources.Langues.Businessname')
+            $('#component-title').html('@Resources.Langues.Distributedresource1')
+            $('#hidden-div').addClass('hidden')
+        }
+        if (modelCode == "M00004") {
+            $('#component-title').html('@Resources.Langues.Distributedresource1')
+        }
+        //2019.07.11, ICPARK
+        if (modelCode == "M00005") {
+            $('#component-title').html('@Resources.Langues.Distributedresource1')
+        }
+
+        $modal.on('show.bs.modal', function () {
+            $("#btn_E00004").addClass("democlass");
+            
+            if (modelCode == "M00001") {
+                $('.Ismart').addClass('hidden');
+            } else {
+                $('.Ismart').addClass('hidden');
+            }
+
+            $.blockUI();
+            $.post("@Url.Action("GetComSubNameByLocationCode", "EntityE00004Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    if(result.comSubName){
+                        $('#ComSubName').text("" + result.comSubName);
+                    }
+
+                    $.post("@Url.Action("GetComSubNameByComCode", "EntityE00004Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                        if (result.success) {
+                            if(result.listComSubName){
+                                $('#Component').text("" + result.listComSubName.slice(0, -1));
+                            }
+
+                            $.post("@Url.Action("GetI00001", "EntityE00004Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    if(result.i00001){
+                                        $('#Consumer').text("" + result.i00001.Consumer);
+                                        $('#iSmartId').text("" + result.i00001.IsmartId);
+                                        $('#contractPow').text("" + result.contractPow.toLocaleString('en'));
+                                        if(result.i00001.IsmartStatus == true){
+                                            $('#iSmartStatus').text('@Resources.Langues.Connectable');
+                                        } else {
+                                            $('#iSmartStatus').text('@Resources.Langues.CheckId');
+                                        }
+                                    }
+                                } else {
+                                    showMess('Data not found')
+                                }
+                            })
+                        } else {
+                            showMess('Data not found')
+                        }
+                    })
+                } else {
+                   showMess('Data not found')
+                }
+            }).fail(function () {
+                showMess('@Resources.Langues.ContactAdmin')
+            }).always(function () {
+                $.unblockUI();
+            });
+        });
+    });
+</script>

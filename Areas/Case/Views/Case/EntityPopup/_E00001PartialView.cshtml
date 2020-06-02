@@ -1,0 +1,250 @@
+﻿@model DPDSP.Models.I00001ViewModel
+<style>
+    .E00001 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+</style>
+
+<script>
+    function onData() {
+        var filter = $('.k-textbox[aria-owns="LocationCode_listbox"]').val();
+        return { filter: filter };
+    }
+</script>
+
+@using (Html.BeginForm("SaveEntityE00001PopupData", "EntityE00001Popup", FormMethod.Post, new { @role = "form", @id = "E00001Form", enctype = "multipart/form-data" }))
+{
+    <div class="modal fade E00001" role="dialog">
+        <div class="modal-dialog">
+            @Html.HiddenFor(m => m.CaseId, Request.Params["caseId"])
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="title-1">@Resources.Langues.CInformation</h4>
+                </div>
+                <div class="modal-body">
+                    <br />
+                    <div class="form-horizontal col-md-offset-1">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 lbWT" id="title-area">@Resources.Langues.AcceptedName</label>
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(m => m.Consumer, new { @class = "form-control input-md", @data_val = "true", @style = "text-align:center;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 lbWT">@Resources.Langues.SelectReagon</label>
+                            <div class="col-md-6">
+                                @(Html.Kendo().DropDownListFor(m => m.LocationCode)
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .Filter(FilterType.Contains)
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("GetCommonSubByComCode", "EntityE00001Popup", new { area = "Case" }).Data("onData");
+                                        });
+                                    })
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                        </div>
+                        <div class="form-group" id="contract-power">
+                            <label class="control-label col-md-3 lbWT">@Resources.Langues.ContractPower</label>
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(m => m.ContractPower, new {
+                                   @class = "form-control input-md",
+                                   @data_val = "true",
+                                   @style = "text-align:right;",
+                                   @data_val_required = "The ContractPower field is required."
+                               })
+                            </div>
+                            <label class="control-label col-md-1" style="padding-left: unset;text-align: left;">kW</label>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="form-group pull-right">
+                                <button type="button" onclick="FormE00001Save()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]';
+    var locationCodeDropdown = $("#LocationCode").data("kendoDropDownList");
+    var $modal = $('.E00001');
+
+    $(document).ready(function () {
+        //$('.E00001').modal({
+        //    backdrop: 'static',
+        //    keyboard: false
+        //});
+
+        if (modelCode == "M00002") {
+            $('#title-1').html('@Resources.Langues.LocalInformation')
+             $('#title-area').html('@Resources.Langues.Bookareaname')
+            $('#ContractPower').val(0)
+            $('#contract-power').addClass('hidden')
+        }
+        if (modelCode == "M00003") {
+            $('#title-1').html('@Resources.Langues.E1TitleM3')
+             $('#title-area').html('@Resources.Langues.Businessname')
+            $('#ContractPower').val(0)
+            $('#contract-power').addClass('hidden')
+        }
+        if (modelCode == "M00004") {
+            $('#title-1').html('@Resources.Langues.CInformation')
+        }
+        //2019.07.11, ICPARK
+        if (modelCode == "M00005") {
+            $('#title-1').html('@Resources.Langues.CInformation')
+        }
+
+        $('.k-textbox[aria-owns="LocationCode_listbox"]').unbind();
+
+        $('.E00001').on('shown.bs.modal', function () {
+            $(document).off('focusin.modal');
+        });
+
+        $('.E00001').on('hide.bs.modal', function () {
+            $('.k-textbox[aria-owns="LocationCode_listbox"]').remove();
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+
+        $('.E00001').on('show.bs.modal', function () {
+            setTimeout(function () { $('#Consumer').focus(); }, 500);
+        });
+
+
+
+        $.blockUI();
+        $.post("@Url.Action("GetI00001", "EntityE00001Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#Consumer').val(result.Consumer);
+                $('#ContractPower').val(result.Contract.toLocaleString('en'));
+                $('#LocationCode').data('kendoDropDownList').value(result.LocationCode);
+                $("#btn_E00001").addClass("democlass");
+            }else {
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function () {
+            $.unblockUI();
+        });
+    });
+
+    $('#E00001Form').submit(function (e) {
+        $.blockUI();
+        var data = new FormData(this);
+        var $fromObj = $(this);
+        var urlAction = $fromObj.attr('action');
+        $.ajax({
+            url: urlAction,
+            type: 'POST',
+            dataType: "Json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: data,
+            success: function (result) {
+                if (result.success) {
+                    updateHistory(result.html)
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00001').modal('hide');
+                    });
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $("#btn_E00001").addClass("democlass");
+                    $.post("@Url.Action("CreateDirectory", "EntityE00001Popup", new { area="Case" })", { ModelId_CaseId: modelCode + "_" + caseId }, function (result) {
+                    }).fail(function () {
+                        showMess('@Resources.Langues.ContactAdmin')
+                    }).always(function () {
+                        //$.unblockUI();
+                    });
+                    @*$.blockUI();
+                    $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00001",modelCode:modelCode }, function (result) {
+                        $("#btn_E00001").addClass("democlass");
+                        $('.E00001').modal('hide');
+                        $.unblockUI();
+                        showMess('@Resources.Langues.Successful')
+                        result.list.forEach(function(item) {
+                            $("#btn_" + item).removeClass("democlass");
+                        });
+                        $.blockUI();
+                        
+                    }).fail(function () {
+                        showMess('@Resources.Langues.ContactAdmin')
+                    }).always(function () {
+                        $.unblockUI();
+                    });*@
+                } else {
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Error')
+                }
+            },
+            error: function (response) {
+            }
+        }).always(function () {
+        //$.unblockUI();
+        });
+
+        e.preventDefault();
+    });
+
+    function FormE00001Save() {
+        var valid = $('#E00001Form').valid();
+
+        if (valid) {
+            $('#E00001Form').submit();
+        }
+    };
+
+    $(".k-textbox").on('keyup', function (evt) {
+        locationCodeDropdown.dataSource.read();
+    });
+
+    $("#ContractPower").on('keyup', function (evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8 || charCode == 13) {
+            var a = $("#ContractPower").val()
+            if (a == 'NaN' || a == '') {
+                $("#ContractPower").val('')
+            } else {
+                var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                if (isNaN(n)) {
+                    $("#ContractPower").val('')
+                } else {
+                    $(this).val(n.toLocaleString());
+                }
+            }
+        } else {
+            $("#ContractPower").val($("#ContractPower").val().slice(0, -1))
+        }
+    });
+</script>

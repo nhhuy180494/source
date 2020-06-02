@@ -1,0 +1,77 @@
+﻿@model double[]
+
+<tr class="paraSubRow hidden">
+
+    <td class="col-xs-2 text-center">
+        @Model[0]%
+    </td>
+    @*<td class="hidden">
+             @Html.TextBox("ListParameterSubs[" + Model[1] + "].Load", Model[0].ToString())
+
+             @*, new
+        {
+            @disabled = "disabled",
+            @data_val = "true",
+            data_val_number = "The field Load must be a number.",
+            @data_val_range = "Invalid Target Price; Max 4 digits",
+            @data_val_range_max = "999.9",
+            @data_val_range_min = "0",
+            @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+            @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+            @data_val_required = "The Load field is required.",
+            @readonly = "readonly",
+        })
+         </td>*@
+    <td>
+        @Html.TextBox("ListParameterSubs[" + Model[1] + "].ElectricOutput", "", new
+   {
+       @disabled = "disabled",
+       @data_val = "true",
+       data_val_number = "The field ElectricOutput must be a number.",
+       @data_val_range = "Invalid Target Price; Max 5 digits",
+       @data_val_range_max = "9999.9",
+       @data_val_range_min = "0",
+       @data_val_regex = "Invalid Target Price; Maximum one Decimal Points.",
+       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+       @data_val_required = "The ElectricOutput field is required.",
+       @style = "text-align:right;",
+       @class="form-control",
+       @type = "tel"
+   })
+    </td>
+    <td>
+        @Html.TextBox("ListParameterSubs[" + Model[1] + "].Heat", "", new
+   {
+       @disabled = "disabled",
+       @data_val = "true",
+       data_val_number = "The field Heat must be a number.",
+       @data_val_range = "Invalid Target Price; Max 6 digits",
+       @data_val_range_max = "999.999",
+       @data_val_range_min = "0",
+       @data_val_regex = "Invalid Target Price; Maximum Three Decimal Points.",
+       @data_val_regex_pattern = @"^\d+(\.\d{1,3})?$",
+       @data_val_required = "The Heat field is required.",
+       @style = "text-align:right;",
+       @class = "form-control",
+       @type = "tel"
+   })
+    </td>
+    <td>
+        @Html.TextBox("ListParameterSubs[" + Model[1] + "].FuelInput", "", new
+   {
+       @disabled = "disabled",
+       @data_val = "true",
+       data_val_number = "The field FuelInput must be a number.",
+       @data_val_range = "Invalid Target Price; Max 5 digits",
+       @data_val_range_max = "999.99",
+       @data_val_range_min = "0",
+       @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+       @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+       @data_val_required = "The FuelInput field is required.",
+       @style = "text-align:right;",
+       @class = "form-control",
+       @type = "tel"
+   })
+    </td>
+</tr>
+

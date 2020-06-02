@@ -1,0 +1,799 @@
+﻿<!-- Modal -->
+<style>
+    .E00015 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .E17 td {
+        border-width: 1px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .k-item {
+        text-align: right
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: inline-block;
+        font-size: 20px;
+        color: blue;
+        border: 1px solid blue;
+        text-align: center;
+    }
+</style>
+
+<div class="modal fade E17 E00015" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="titleE15">
+                    @if (Request.Params["modelCode"] != "M00004")
+                    {
+                        if (Request.Params["modelCode"] != "M00003" && Request.Params["modelCode"] != "M00002" && Request.Params["modelCode"] != "M00005")
+                        {
+                            @Resources.Langues.E00015Title
+                        }
+                        else
+                        {
+                            @Resources.Langues.E00015Title1
+                        }
+                    }
+                    else
+                    {
+                        @Resources.Langues.E00015Title1
+                    }
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                @if (Request.Params["modelCode"] != "M00002" && Request.Params["modelCode"] != "M00004")
+                {
+                    <div class="row" id="group1">
+                        <div class="form-group">
+                            <div class="radio">
+                                <label style="font-weight:400 !important;">
+                                    <input type="checkbox" id="SC0001" name="optcheckbox">
+                                    @if (Request.Params["modelCode"] != "M00005")
+                                    {
+                                        @Resources.Langues.Optimizationbasedscheduler
+                                    }
+                                    else
+                                    {
+                                        @Resources.Langues.Optimizationbasedscheduler5
+                                    }
+
+                                <span onclick="helpClick('sc1')" class="dot">?</span> @*<button type="button" onclick="helpClick('sc1')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="group2">
+                        <div class="form-group">
+                            <div class="radio">
+                                <label style="font-weight:400 !important;"><input type="checkbox" id="SC0002" name="optcheckbox">  @Resources.Langues.Rulebasedscheduler <span onclick="helpClick('sc1')" class="dot">?</span>@*<button type="button" onclick="helpClick('sc1')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="group3">
+                        <div class="form-group">
+                            <div class="radio">
+                                <label style="font-weight:400 !important;"><input type="checkbox" id="E00016Check">  @Resources.Langues.Customschedulercharginganddischargingtimeselection <span onclick="helpClick('sc2')" class="dot">?</span>@*<button type="button" onclick="helpClick('sc2')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="form2" hidden="hidden">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6"><strong id="textCharge">@Resources.Langues.Chargingtime</strong> </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row" style="width:80%; margin:auto">
+                                <div class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-xs-4 row" style="width:200px; margin-bottom:10px">
+                                            <div class="col-xs-10">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("ChargStrTime")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                                )
+                                            </div>
+                                            <label class="control-label col-md-2 lbWT" style="text-align:left;margin-left: -20px">@Resources.Langues.oclock</label>
+                                        </div>
+                                        <label class="control-label col-xs-4 lbWT" style="text-align:left; width:10px">~</label>
+                                        <div class="col-xs-4 row" style=" width:200px">
+                                            <div class="col-xs-10">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("ChargEndTime")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                                )
+                                            </div>
+                                            <label class="control-label col-md-2 lbWT" style="text-align:left;margin-left: -20px">@Resources.Langues.oclock</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-horizontal" id="chargeHiden">
+                                    <div class="row">
+                                        <div class="col-xs-4 row" style="width:200px; margin-bottom:10px">
+                                            <div class="col-xs-10">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("ChargStrTime2")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                                )
+                                            </div>
+                                            <label class="control-label col-md-2 lbWT" style="text-align:left;margin-left: -20px">@Resources.Langues.oclock</label>
+                                        </div>
+                                        <label class="control-label col-xs-4 lbWT" style="text-align:left; width:10px">~</label>
+                                        <div class="col-xs-4 row" style=" width:200px">
+                                            <div class="col-xs-10">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("ChargEndTime2")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                                )
+                                            </div>
+                                            <label class="control-label col-md-2 lbWT" style="text-align:left;margin-left: -20px">@Resources.Langues.oclock</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <hr />
+                            <div class="row">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6"><strong id="textDisCharge">@Resources.Langues.Dischargetime</strong></div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row" style="width:80%; margin:auto; margin-bottom:10px">
+                                <div class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-xs-4 row" style=" width:200px; margin-bottom:10px">
+                                            <div class="col-xs-10">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("DischargStrTime")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                                )
+                                            </div>
+                                            <label class="control-label col-md-2 lbWT" style="text-align:left;margin-left: -20px">@Resources.Langues.oclock</label>
+                                        </div>
+                                        <label class="control-label col-xs-4 lbWT" style="text-align:left; width:10px">~</label>
+                                        <div class="col-xs-4 row" style=" width:200px">
+                                            <div class="col-xs-10">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("DischargEndTime")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                                )
+                                            </div>
+                                            <label class="control-label col-md-2 lbWT" style="text-align:left;margin-left: -20px">@Resources.Langues.oclock</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-horizontal" id="dischargeHiden">
+                                    <div class="row">
+                                        <div class="col-xs-4 row" style="width:200px; margin-bottom:10px">
+                                            <div class="col-xs-10">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("DischargStrTime2")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                                )
+                                            </div>
+                                            <label class="control-label col-md-2 lbWT" style="text-align:left;margin-left: -20px">@Resources.Langues.oclock</label>
+                                        </div>
+                                        <label class="control-label col-xs-4 lbWT" style="text-align:left; width:10px">~</label>
+                                        <div class="col-xs-4 row" style=" width:200px">
+                                            <div class="col-xs-10">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("DischargEndTime2")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                                )
+                                            </div>
+                                            <label class="control-label col-md-2 lbWT" style="text-align:left;margin-left: -20px">@Resources.Langues.oclock</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <hr />
+                }
+                else
+                {
+                    if (Request.Params["modelCode"] != "M00004")
+                    {
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="radio">
+                                    <label style="font-weight:400 !important;"><input type="checkbox" id="SC0007" name="optcheckbox" />  @Resources.Langues.Minimumfuelcostsimplifiedsupplytype</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="radio">
+                                    <label style="font-weight:400 !important;"><input type="checkbox" id="SC0008" name="optcheckbox" />  @Resources.Langues.Minimumdieseloperationcost</label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="radio">
+                                    <label style="font-weight:400 !important;"><input type="checkbox" id="SC0007" name="optcheckbox" />  @Resources.Langues.Maximizeprosumer</label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        <button type="button" onclick="FormE00015Save()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade HelpPopup" role="dialog">
+    <div class="modal-dialog" style="width:40%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-1 col-xl-1 col-xs-1 col-md-1 col-lg-1">
+                        <div style="margin:10px;font-size: 14px !important;">
+                            <lable>※</lable>
+                        </div>
+                    </div>
+                    <div class="col-10 col-xl-10 col-xs-10 col-md-10 col-lg-10">
+                        <div style="margin:10px;font-size: 14px !important;">
+                            <lable>@Html.Raw(@Resources.Langues.E15M5)</lable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:10px;border-top: unset !important">
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var caseId = @Request.Params["caseId"];
+    var SchedulerIdSC0001 = "SC0001";
+    var SchedulerIdSC0002 = "SC0002";
+    var SchedulerIdSC0007 = "SC0007";
+    var SchedulerIdSC0008 = "SC0008";
+    var schedulerId;
+    var checked = false;
+    var modelCode = '@Request.Params["modelCode"]';
+    var chargStrTimeDropdown = $("#ChargStrTime").data("kendoDropDownList");
+    var chargEndTimeDropdown = $("#ChargEndTime").data("kendoDropDownList");
+    var dischargStrTimeDropdown = $("#DischargStrTime").data("kendoDropDownList");
+    var dischargEndTimeDropdown = $("#DischargEndTime").data("kendoDropDownList");
+    var chargStrTimeDropdown2 = $("#ChargStrTime2").data("kendoDropDownList");
+    var chargEndTimeDropdown2 = $("#ChargEndTime2").data("kendoDropDownList");
+    var dischargStrTimeDropdown2 = $("#DischargStrTime2").data("kendoDropDownList");
+    var dischargEndTimeDropdown2 = $("#DischargEndTime2").data("kendoDropDownList");
+
+    $(document).ready(function () {
+        $('.E00015').modal({
+        backdrop: 'static',
+            keyboard: false
+        })
+
+        $('.E00015').on('hide.bs.modal', function () {
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+        $('.E00015').on('shown.bs.modal', function() {         $(document).off('focusin.modal'); });
+        $.blockUI();
+        $.post("@Url.Action("GetSchedulerType", "EntityE00015Popup", new { area="Case" })", { caseId: caseId }, function(result) {
+            if (result.success)
+            {
+                if (result.schedulerType == "SC0001")
+                {
+                    $('#SC0001').prop("checked", true);
+                }
+                if (result.schedulerType == "SC0002")
+                {
+                    $('#SC0002').prop("checked", true);
+                }
+                if (result.schedulerType == "SC0007")
+                {
+                    $('#SC0007').prop("checked", true);
+                }
+                if (result.schedulerType == "SC0008")
+                {
+                    $('#SC0008').prop("checked", true);
+                }
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function() {
+            $.unblockUI();
+        });
+
+        var data = [
+            { text: "0", value: 0 },
+            { text: "1", value: 1 },
+            { text: "2", value: 2 },
+            { text: "3", value: 3 },
+            { text: "4", value: 4 },
+            { text: "5", value: 5 },
+            { text: "6", value: 6 },
+            { text: "7", value: 7 },
+            { text: "8", value: 8 },
+            { text: "9", value: 9 },
+            { text: "10", value: 10 },
+            { text: "11", value: 11 },
+            { text: "12", value: 12 },
+            { text: "13", value: 13 },
+            { text: "14", value: 14 },
+            { text: "15", value: 15 },
+            { text: "16", value: 16 },
+            { text: "17", value: 17 },
+            { text: "18", value: 18 },
+            { text: "19", value: 19 },
+            { text: "20", value: 20 },
+            { text: "21", value: 21 },
+            { text: "22", value: 22 },
+            { text: "23", value: 23 },
+            { text: "24", value: 24 }
+        ];
+
+        var data2 = [
+            { text: "10", value: 10 },
+            { text: "11", value: 11 },
+            { text: "12", value: 12 },
+            { text: "13", value: 13 },
+            { text: "14", value: 14 },
+            { text: "15", value: 15 },
+            { text: "16", value: 16 }
+        ];
+
+        var data3 = [
+            { text: "17", value: 17 },
+            { text: "18", value: 18 },
+            { text: "19", value: 19 },
+            { text: "20", value: 20 },
+            { text: "21", value: 21 },
+            { text: "22", value: 22 },
+            { text: "23", value: 23 },
+            { text: "24", value: 24 }
+        ];
+
+        if (modelCode == "M00003")
+        {
+            $("#textCharge").text('@Resources.Langues.Chargingtime' + ' ' + '@Resources.Langues.RangeTime1')
+            $("#dischargeHiden").addClass('hidden');
+            $("#textDisCharge").text('@Resources.Langues.Dischargetime' + ' ' + '@Resources.Langues.RangeTime2')
+            $("#chargeHiden").addClass('hidden');
+        }
+
+        $("#ChargStrTime").kendoDropDownList({
+        dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            filter: "contains",
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#ChargStrTime2").kendoDropDownList({
+        dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            filter: "contains",
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#ChargEndTime").kendoDropDownList({
+        dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            filter: "contains",
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#ChargEndTime2").kendoDropDownList({
+        dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            filter: "contains",
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#DischargStrTime").kendoDropDownList({
+        dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            filter: "contains",
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#DischargEndTime").kendoDropDownList({
+        dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            filter: "contains",
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#DischargStrTime2").kendoDropDownList({
+        dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            filter: "contains",
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#DischargEndTime2").kendoDropDownList({
+        dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            filter: "contains",
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetI00009SubByCaseId", "EntityE00016Popup", new { area="Case" })", { caseId: caseId }, function(result) {
+            if (result.success)
+            {
+                if (!(result.ChargStrTime == 0 && result.ChargEndTime == 0 && result.DischargStrTime == 0 && result.DischargEndTime == 0 && result.ChargStrTime2 == 0 && result.ChargEndTime2 == 0 && result.DischargStrTime2 == 0 && result.DischargEndTime2 == 0))
+                {
+                    checked = true
+                    $('#E00016Check').prop("checked", true);
+                    $('#form2').removeAttr('hidden', 'hidden');
+                    $('#ChargStrTime').data('kendoDropDownList').value(result.ChargStrTime);
+                    $('#ChargEndTime').data('kendoDropDownList').value(result.ChargEndTime);
+                    $('#DischargStrTime').data('kendoDropDownList').value(result.DischargStrTime);
+                    $('#DischargEndTime').data('kendoDropDownList').value(result.DischargEndTime);
+                    $('#ChargStrTime2').data('kendoDropDownList').value(result.ChargStrTime2);
+                    $('#ChargEndTime2').data('kendoDropDownList').value(result.ChargEndTime2);
+                    $('#DischargStrTime2').data('kendoDropDownList').value(result.DischargStrTime2);
+                    $('#DischargEndTime2').data('kendoDropDownList').value(result.DischargEndTime2);
+
+                    if (result.SatOperating)
+                    {
+                        $('#Yes').prop("checked", true);
+                        $('#No').prop("checked", false);
+                    }
+                    else
+                    {
+                        $('#No').prop("checked", true);
+                        $('#Yes').prop("checked", false);
+                    }
+                    } else{
+                        if (result.SatOperating)
+                        {
+                        $('#Yes').prop("checked", true);
+                        $('#No').prop("checked", false);
+                        }
+                        else
+                        {
+                        $('#No').prop("checked", true);
+                        $('#Yes').prop("checked", false);
+                        }
+                    }
+                }
+                else
+                {
+                    checked = false
+                }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function() {
+            $.unblockUI();
+        });
+
+        if (modelCode == "M00001")
+        {
+            $('#group1').removeAttr('hidden', 'hidden');
+            $('#group2').attr('hidden', 'hidden');
+            $('#group3').attr('hidden', 'hidden');
+        }
+        else if (modelCode == "M00004")
+        {
+            $('#form2').attr('hidden', 'hidden');
+            $('#group3').attr('hidden', 'hidden');
+            $('#group2').attr('hidden', 'hidden');
+            $('#group1').removeAttr('hidden', 'hidden');
+        }
+        else if (modelCode == "M00005")
+        {
+            $('#group3').attr('hidden', 'hidden');
+            $('#group1').removeAttr('hidden', 'hidden');
+            $('#group2').attr('hidden', 'hidden');
+        }
+        else if (modelCode == "M00003")
+        {
+            $('#group2').removeAttr('hidden', 'hidden');
+            $('#group1').attr('hidden', 'hidden');
+            $('#group3').attr('hidden', 'hidden');
+        }
+    });
+
+    $('#E00016Check').click(function(){
+        if ($(this).is (':checked')){
+            checked = true
+            $('#SC0001').prop("checked", false);
+            $('#SC0002').prop("checked", false);
+            $('#form2').removeAttr('hidden', 'hidden');
+        } else {
+            checked = false
+            $('#form2').attr('hidden', 'hidden');
+        }
+    });
+
+    $('#SC0001').click(function() {
+        if ($(this).is (':checked')) {
+            checked = false
+            $('#SC0002').prop("checked", false);
+            $('#E00016Check').prop("checked", false);
+            $('#form2').attr('hidden', 'hidden');
+        } else {
+            $('#form2').attr('hidden', 'hidden');
+        }
+    });
+
+    $('#SC0002').click(function() {
+        if ($(this).is (':checked')) {
+            checked = false
+            $('#SC0001').prop("checked", false);
+            $('#E00016Check').prop("checked", false);
+            $('#form2').attr('hidden', 'hidden');
+        } else {
+            $('#form2').attr('hidden', 'hidden');
+        }
+    });
+
+    $('#SC0007').click(function() {
+        if ($(this).is (':checked')) {
+            checked = false
+            $('#SC0008').prop("checked", false);
+        } else {
+        }
+    });
+
+    $('#SC0008').click(function() {
+        if ($(this).is (':checked')) {
+            checked = false
+            $('#SC0007').prop("checked", false);
+        } else {
+        }
+    });
+
+    $('#Yes').click(function() {
+        if ($(this).is (':checked')) {
+            $('#No').prop("checked", false);
+        } else {
+            $('#No').prop("checked", true);
+        }
+    });
+
+    $('#No').click(function() {
+        if ($(this).is (':checked')) {
+            $('#Yes').prop("checked", false);
+        } else {
+            $('#Yes').prop("checked", true);
+        }
+    });
+
+    function FormE00015Save()
+    {
+        var satOperating = true;
+        if (modelCode != "M00002" && modelCode != "M00004")
+        {
+            if (($('#SC0002').is (":checked") && $('#SC0001').is (":checked")) || ($('#E00016Check').is (":checked") && $('#SC0001').is (":checked")) ||
+                ($('#SC0002').is(":checked") && $('#E00016Check').is(":checked")) || (!$('#SC0002').is(":checked") && !$('#SC0001').is(":checked") && !$('#E00016Check').is(":checked"))) {
+                showMess('one of the two can be selected')
+                return false;
+            }
+        }
+        else {
+            if (!$('#SC0007').is(":checked") && !$('#SC0008').is(":checked")) {
+                showMess('one of the two can be selected')
+                return false;
+            }
+        }
+
+        if ($('#SC0001').is (":checked")) {
+            schedulerType = SchedulerIdSC0001;
+        }
+
+        if ($('#SC0002').is (":checked")) {
+            schedulerType = SchedulerIdSC0002;
+        }
+
+        if ($('#SC0007').is (":checked")) {
+            schedulerType = SchedulerIdSC0007;
+        }
+
+        if ($('#SC0008').is (":checked")) {
+            schedulerType = SchedulerIdSC0008;
+        }
+
+        if ($('#Yes').is (":checked")) {
+            satOperating = true;
+        }
+
+        if ($('#No').is (":checked")) {
+            satOperating = false;
+        }
+
+        if (!$('#SC0001').is(":checked") && !$('#SC0002').is(":checked") && modelCode != "M00002" && modelCode != "M00004") {
+            schedulerType = ""
+        }
+
+        if (checked == true) {
+            if (chargStrTimeDropdown.value() == "" || chargEndTimeDropdown.value() == "" || dischargStrTimeDropdown.value() == "" || dischargEndTimeDropdown.value() == "") {
+                showMess('@Resources.Langues.Pleasefillfulltheinfomation')
+                return false;
+            }
+
+            if ((parseInt(chargStrTimeDropdown.value()) >= parseInt(chargEndTimeDropdown.value())) || (parseInt(dischargStrTimeDropdown.value()) >= parseInt(dischargEndTimeDropdown.value()))
+                || (parseInt(chargStrTimeDropdown2.value()) >= parseInt(chargEndTimeDropdown2.value())) || (parseInt(dischargStrTimeDropdown2.value()) >= parseInt(dischargEndTimeDropdown2.value())))
+            {
+                showMess('@Resources.Langues.FailedToSave')
+                return false;
+            }
+
+            if (modelCode == "M00003")
+            {
+                if (parseInt(chargStrTimeDropdown.value()) > 16 || parseInt(chargStrTimeDropdown.value()) < 10 ||
+                    parseInt(chargStrTimeDropdown2.value()) > 16 || parseInt(chargStrTimeDropdown2.value()) < 10)
+                {
+                    showMess('@Resources.Langues.E00015ErrorCharge')
+                return false;
+                }
+
+                if (parseInt(dischargStrTimeDropdown.value()) > 24 || parseInt(dischargEndTimeDropdown.value()) < 16 ||
+                    parseInt(dischargStrTimeDropdown2.value()) > 24 || parseInt(dischargEndTimeDropdown2.value()) < 16)
+                {
+                    showMess('@Resources.Langues.E00015ErrorDisCharge')
+                    return false;
+                }
+            }
+        }
+
+        $.blockUI();
+        $.ajax({
+        url: '@Url.Action("SaveEntityE00015PopupData", "EntityE00015Popup", new { area = "Case" })',
+            cache: false,
+            type: 'POST',
+            data: {
+                CaseId: caseId,
+                SchedulerType: schedulerType,
+                ChargStrTime: $('#ChargStrTime').val() == "" ? 0 : $('#ChargStrTime').val(),
+                ChargEndTime: $('#ChargEndTime').val() == "" ? 0 : $('#ChargEndTime').val(),
+                DischargStrTime: $('#DischargStrTime').val() == "" ? 0 : $('#DischargStrTime').val(),
+                DischargEndTime: $('#DischargEndTime').val() == "" ? 0 : $('#DischargEndTime').val(),
+                ChargStrTime2: $('#ChargStrTime2').val() == "" ? 0 : $('#ChargStrTime2').val(),
+                ChargEndTime2: $('#ChargEndTime2').val() == "" ? 0 : $('#ChargEndTime2').val(),
+                DischargStrTime2: $('#DischargStrTime2').val() == "" ? 0 : $('#DischargStrTime2').val(),
+                DischargEndTime2: $('#DischargEndTime2').val() == "" ? 0 : $('#DischargEndTime2').val(),
+                ModelCode: modelCode,
+                Checked: checked,
+                SatOperating: satOperating
+            },
+            success: function (result) {
+                if (result.success) {
+                    updateHistory(result.html)
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00015').modal('hide');
+                    });
+                        $("#btn_E00015").addClass("democlass");
+                } else {
+                    if (result.alert == "") {
+                        showMess('@Resources.Langues.Error')
+                    }
+                    else {
+                        showMess(result.alert)
+                    }
+                    $.unblockUI();
+                }
+            },
+            error: function (response) {
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    function helpClick(mes) {
+        if (mes == "sc1") {
+            if (modelCode != "M00003") {
+                if (modelCode == "M00005") {
+                    $('.HelpPopup').modal('show');
+                } else {
+                    showMess('@Resources.Langues.Mess151')
+                }
+            } else {
+                showMess('@Resources.Langues.Mess1511')
+            }
+        } else if (mes == "sc2") {
+            if (modelCode != "M00003") {
+                showMess('@Resources.Langues.Mess152')
+            } else {
+                showMess('@Resources.Langues.Mess1521')
+            }
+        } else {
+            showMess('@Resources.Langues.Mess153')
+        }
+    }
+</script>

@@ -1,0 +1,421 @@
+﻿@model DPDSP.Models.NoticeCommentViewModel
+@{
+    ViewBag.Title = "Sub2"; //NOTICE
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.silver.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        /*.input-validation-error {
+            border: 1px solid red;
+        }*/
+    </style>
+}
+
+<div class="col-md-8  col-md-offset-2">
+    <h2 class="sub_tit text-center" style="color:#fff">@Resources.Langues.Notice </h2>
+    <br />
+    <br />
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.NoticeManagementViewModel>()
+        .Name("NoticeGrid")
+        .Columns(columns =>
+        {
+            //columns.Bound(notice => notice.View).Hidden();
+            //columns.Bound(member => member.IsChange).Hidden();
+            columns.Bound(notice => notice.RegDate).Format("{0:yyyy-MM-dd}").HeaderHtmlAttributes(new { style = "text-align:center;" }).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.DateCreated).Width(120);
+            columns.Bound(notice => notice.NoticeTitle).HeaderHtmlAttributes(new { style = "text-align:center;" }).HtmlAttributes(new { style = "text-align:left;" }).Title(Resources.Langues.Title);
+            columns.Bound(notice => notice.FullUserName).HeaderHtmlAttributes(new { style = "text-align:center;" }).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Writer).Width(120);
+            //columns.Bound(member => member.LastLoginDate).Title(Resources.Langues.LastLogin).Format("{0: yyyy/MM/dd HH:mm:ss}").Width(120);
+            //columns.Command(command => { command.Custom(Resources.Langues.ViewDetails).Click("detailNotice"); }).Width(130);
+        })
+        .ToolBar(toolbar =>
+        {
+        //tool.Excel().HtmlAttributes(new { style = "float:right;" });
+        toolbar.Template(@<text>
+            <div class="input-group col-md-5" style="color: #003f59!important;border-color: #a3d0e4!important;">
+                <span class="input-group-addon btn-opal" style="pointer-events:none;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                <input type="text" class="form-control boder-opal" id='itemFilter' placeholder="@Resources.Langues.Title">
+                <span class="input-group-btn">
+                    <button class="btn btn-default btn-opal" id="resetNoticeGrid" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                </span>
+            </div>
+        </text>);
+        })
+        //.Excel(excel => excel.FileName("Case.xlsx").Filterable(true).ProxyURL(Url.Action("Excel_Export_Save", "CaseManagement")))
+        .Events(ev =>
+        {
+            ev.DataBound("onDataBound");
+            ev.Change("onRowChanged");
+        })
+        .Selectable(select => select
+            .Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row))
+        //.Events(ev => ev.Edit("PassSpecialType"))
+        //.Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Pageable()
+        .Sortable()
+        .Resizable(rz => rz.Columns(true))
+        .Scrollable()
+        .HtmlAttributes(new { style = "height:550px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(20)
+            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+            .Model(notice => { notice.Id(p => p.NoticeId); notice.Field(p => p.NoticeId).Editable(false); })
+            .Read(read => read.Action("EditingInline_ReadNotice", "Sub2", new { area = "" }))
+        //.Update(update => update.Action("EditingInline_UpdateCaseManagement", "CaseManagement"))
+        )
+        )
+    </div>
+    @if (Request.IsAuthenticated)
+    {
+        <br />
+    <div class="row" style="color:#fff;">
+        <table class="table tbQnA">
+            <thead>
+                <tr style="border:0;" class="">
+                    <th class="col-xs-3"></th>
+                    <th class="text-center bor-top bor-left-right">Q&A</th>
+                    <th class="col-xs-3"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-xs-3"></td>
+                    <td class="bor-left-right">@Resources.Langues.BottomeInCarge</td>
+                    <td class="col-xs-3"></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-3"></td>
+                    <td class="bor-left-right">@Resources.Langues.BottomEmailAdd</td>
+                    <td class="col-xs-3"></td>
+                </tr>
+                <tr>
+                    <td class="col-xs-3"></td>
+                    <td class="bor-bottom bor-left-right">@*@Resources.Langues.BottomeTelNumber*@</td>
+                    <td class="col-xs-3"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+        <br />
+    }
+</div>
+
+@using (Html.BeginForm("CreateComment", "Sub2", new { area = "" }, FormMethod.Post, new { role = "form", id = "comment_form" }))
+{
+    <!--popup-->
+    <div class="modal fade" id="popup01" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" style="color:#1e5687"> <i class="fa fa-check-circle"></i> <text>@Resources.Langues.Title:</text> <text id="Title"> </text></h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table" style="border-top:solid 2px #31708f;border-bottom:solid 1px #31708f;margin-top:10px;">
+                        <tbody>
+                            <tr>
+                                <td class="active text-center text-muted ">@Resources.Langues.Writer </td>
+                                <td id="UserName">@Resources.Langues.Writer</td>
+                            </tr>
+                            <tr>
+                                <td class="active text-center text-muted">@Resources.Langues.DateCreated </td>
+                                <td id="RegDate">@Resources.Langues.DateCreated</td>
+                            </tr>
+                            <tr>
+                                <td class="active text-center text-muted">@Resources.Langues.Views </td>
+                                <td id="View"></td>
+                            </tr>
+                            <tr>
+                                <td class="active text-center text-muted">@Resources.Langues.Attachments </td>
+                                <td id="file-content" class="scroll-style-7" style="overflow-y:scroll;max-height:100px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding:25px; line-height:25px" class="active">
+                                    @(Html.Kendo().Editor()
+                                  .Name("Content")
+                                  .Tools(tools => tools.Clear())
+                                  .HtmlAttributes(new { style = "height:300px", aria_label = "Content" })
+                                  .Resizable(rz => rz.Content(true))
+                                    )
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="post-footer">
+                        @Html.HiddenFor(m => m.NoticeId)
+                        @if (Request.IsAuthenticated)
+                        {
+                            <div class="input-group">
+                                @Html.TextBoxFor(m => m.Comment, new { @class = "form-control input-md", placeholder = Resources.Langues.AddAComment })
+                                <span class="input-group-addon" id="send_comment"> <a><i class="fa fa-edit"></i></a></span>
+                            </div>
+}
+                        <!--Comment-->
+                        <div class="form-group scroll-style-7"
+                             style="padding-top:10px; padding-left:10px; max-height:180px;
+                             overflow:hidden; overflow-y:scroll; padding-right:10px;"
+                             id="comment_content">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="border-top:none;">
+                        <button type="button" class="btn btn-gray " data-dismiss="modal">@Resources.Langues.Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var noticeGrid = $('#NoticeGrid').data('kendoGrid');
+            var myModal = '#popup01';
+            var itemFilter = '#itemFilter';
+            var $noticeId = $('#NotId');
+            $comment = $('#Comment');
+            $formComment = $('#comment_form');
+            $commentContent = $('#comment_content');
+
+            $(itemFilter).keyup(function () {
+                var value = $(itemFilter).val();
+                if (value) {
+                    noticeGrid.dataSource.filter({ field: "NoticeTitle", operator: "contains", value: value });
+                } else {
+                    noticeGrid.dataSource.filter({});
+                }
+            });
+
+            $('#resetNoticeGrid').click(function () {
+                $(itemFilter).val('');
+                noticeGrid.dataSource.filter({});
+            });
+
+            $(myModal).on('hidden.bs.modal', function () {
+                clearModal($formComment);
+            });
+
+            $('#send_comment').on('click', (function () {
+                var isValid = $formComment.validate();
+                if (isValid) {
+                    $formComment.submit();
+                } else {
+                    $comment.focus();
+                }
+            }));
+
+            $formComment.submit(function (e) {
+                $.blockUI();
+                var formData = new FormData(this);
+                var formObj = $(this);
+                var data = new FormData(this);
+                var urlAction = formObj.attr('action');
+                //console.log(urlAction);
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        var date = formatDate(parseInt(result.newComment.CommentDate.substr(6)));
+                        var comment = createCommentHmtl(result.newComment.CommentId, result.newComment.CommentUserName, result.newComment.Comment, date, result.newComment.isDeleted);
+                        $commentContent.prepend(comment);
+                        $comment.val('');
+                        $comment.removeClass('input-validation-error')
+                        $comment.blur();
+                    }
+                });
+                e.preventDefault();
+            });
+
+            $comment.keyup(function () {
+                if ($(this).val()) {
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+            $('form').on('click', '.btnDelete', function (e) {
+                var $comment = $(this).closest('p');
+                var commentId = $comment.attr('id');
+                $.blockUI();
+                var commentId = $comment.attr('id');
+                $.post('@Url.Action("DeleteComment", "Sub2")', { commentId: commentId }, function (result) {
+                    if (result.success) {
+                        $comment.remove();
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                });
+            });
+
+            //function callback(e) {
+            //    onDataBound();
+            //}
+
+            //noticeGrid.dataSource.bind('change', callback);
+            //noticeGrid.dataSource.fetch();
+        });
+
+        function clearModal($form) {
+            $('#Title').text('');
+            $('#UserName').text('');
+            $('#RegDate').text('');
+            var $fileChild = $('#file-content').children();
+            $fileChild.remove();
+            $("#file-content").contents().filter(function () {
+                return this.nodeType === 3;
+            }).remove();
+            $('#comment_content').children().remove();
+            $form.find('input').removeClass('input-validation-error');
+            $form[0].reset();
+            $('#NoticeGrid .k-grid-content tr').removeClass('k-state-selected');
+            $form.find('input, label, select, .form-group').removeClass('has-error');
+        }
+
+        function createCommentHmtl(commentId, commentUserName, comment, date, isDelete) {
+            var style = "style='display:none;padding: 3px 5px;'";
+            if (isDelete) {
+                style = "style='justify-content:center;align-items: center;padding: 3px 5px;'";
+            }
+            return "<p style='justify-content: space-between;display:flex;' id='"
+                + commentId + "'><label><i class='fa fa-user'></i> "
+                + commentUserName + ": "
+                + comment + "</label> <span style='justify-content: space-between;display:flex;height:25px;min-width: 135px;'>("
+                + (date) + ") <a role='button' "
+                + style + " class='btn btn-danger btn-xs btnDelete'><i class='fa fa-times'></i> @Resources.Langues.Delete</a></span></p>";
+        };
+
+        $(function () {
+            $($('#Content').data().kendoEditor.body).attr('contenteditable', false)
+        })
+
+        function createLinkHtml(noticeFileId, filePath, fileName, fileSize) {
+            return "<a id=" + noticeFileId + " target='_blank' href="
+            + getFilePath(filePath)
+            + "><i class='fa fa-save'></i> "
+            + fileName + " ("
+            + convertMBFileSize(fileSize) + "MB) </a> / ";
+        };
+
+        function onDataBound() {
+
+        };
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        function onRowChanged(e) {
+            $.blockUI();
+            var row = e.sender.select();
+            var dataItem = e.sender.dataItem(row);
+            var title = '#Title',
+                writer = '#UserName',
+                date = '#RegDate',
+                $noticeId = $('#NoticeId'),
+                $view = $('#View'),
+                $content = $('#Content').data('kendoEditor');
+            $(title).text(dataItem.NoticeTitle);
+            $(writer).text(dataItem.FullUserName);
+            $(date).text(formatDate(dataItem.RegDate));
+            $noticeId.val(dataItem.NoticeId)
+            $content.value('');
+            $content.value(dataItem.NoticeContent);
+            $.post('@Url.Action("GetFileAndCommentListByNoticeId", "Sub2", new { area="" })', { noticeId: $noticeId.val() }, function (result) {
+                if (result.success) {
+                    var $myModal = $('#popup01');
+                    $myModal.modal('show');
+                    var listFile = result.listFile;
+                    listFile.forEach(function (item) {
+                        var linkFile = createLinkHtml(item.NoticeFileId, item.FilePath, item.FileName, item.FieSize);
+                        $('#file-content').append(linkFile);
+                    });
+                    var listComment = result.listComment;
+                    listComment.forEach(function (item) {
+                        var date = formatDate(parseInt(item.CommentDate.substr(6)));
+                        var comment = createCommentHmtl(item.CommentId, item.CommentUserName, item.Comment, date, item.isDeleted);
+                        $('#comment_content').append(comment);
+                    });
+                    $view.text(result.view);
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+        };
+
+        function convertMBFileSize(size) {
+            return ((size / 1024) / 1024).toFixed(2);
+        }
+
+        function getFilePath(path) {
+            return path.substr(1);
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                //console.log("mess: ", message);
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            @*//console.log("mess: ", message);
+                        if (this == "CommCodeMaxLenght" || this == "CommName2MaxLenght" || this == "CommNameMaxLenght" || this.toLowerCase().indexOf("the value") != -1) {
+                            if (this == "CommCodeMaxLenght") {
+                                message += '@Resources.Langues.CommCodeMaxLenght' + "\n";
+                            }
+                            if (this == "CommNameMaxLenght") {
+                                message += '@Resources.Langues.CommNameMaxLenght' + "\n";
+                            }
+                            if (this == "CommName2MaxLenght") {
+                                message += '@Resources.Langues.CommName2MaxLenght' + "\n";
+                            }
+                            if (this.toLowerCase().indexOf("the value") != -1) {
+                                message += '@Resources.Langues.CommTypeMaxValue' + "\n";
+                            }
+                        } else {
+                            message += this + "\n";
+                        }*@
+                            message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+    </script>
+}
+

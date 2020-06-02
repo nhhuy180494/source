@@ -1,0 +1,193 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using DPDSP.Models
+@model SysInformationViewModel
+@{
+    ViewBag.Title = "System Information Management";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <style>
+        .input-validation-error {
+            border: 1px solid red !important;
+        }
+    </style>
+    <link href="~/Content/KendoGrid.css" rel="stylesheet" type="text/css" />
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (Request.IsAuthenticated)
+{
+    var userStore = new UserStore<ApplicationUser>(new DPDSPDbContext());
+    var userManager = new UserManager<ApplicationUser>(userStore);
+    var user = userManager.FindById(User.Identity.GetUserId());
+    ViewBag.CurrentUser = user;
+    using (Html.BeginForm("CreateSystemInformation", "SystemInfoManagement", new { area = "Admin" }, FormMethod.Post, new { role = "form", @id = "writing_form" }))
+    {
+        <div class="container-fluid adminSiteContent onlyOneGrid">
+            <div class="form-group">
+                <button id="btnSubmitForm" type="button" class="btn btn-default btn-opal" style="float:right;margin:0px 0px 10px 0px;width:100px;">Save</button>
+            </div>
+            <div class="row">
+                @(Html.Kendo().Editor()
+                  .Name("InforContent")
+                  .HtmlAttributes(new { style = "height:600px;", aria_label = "editor" })
+                  .Tools(tools => tools.Clear().FontName().FontSize().Bold().Italic().Underline().JustifyLeft().JustifyCenter().JustifyRight().FontColor().BackColor().InsertImage())
+                  //.Resizable(resizable => resizable.Content(true).Toolbar(true))
+                  .ImageBrowser(imageBrowser => imageBrowser
+                      .Image("~/Content/SystemInformationImages/" + ViewBag.CurrentUser.Id + "/{0}")
+                      .Read("Read", "ImageBrowserSysInfo")
+                      .Create("Create", "ImageBrowserSysInfo")
+                      .Destroy("Destroy", "ImageBrowserSysInfo")
+                      .Upload("Upload", "ImageBrowserSysInfo")
+                      .Thumbnail("Thumbnail", "ImageBrowserSysInfo")
+                  ).Events(events => events.KeyUp("EditorTextChange"))
+                )
+            </div>
+        </div>
+    }
+}
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var $btnSubmitForm = $('#btnSubmitForm');
+            var $SystemInfoGridData = $('#InforContent').data('kendoEditor');
+            var $SystemInfoGrid = $('#InforContent');
+            var $writing_form = $('#writing_form');
+            
+
+            $btnSubmitForm.on('click', function () {
+                if (!$SystemInfoGrid.val()) {
+                    $('.k-editable-area').addClass('input-validation-error');
+                    return false;
+                }
+
+                var isValid = $writing_form.valid();
+                if (isValid == true) {
+                    $writing_form.submit();
+                } else {
+                    $SystemInfoGridData.focus();
+                }
+            });
+
+            $writing_form.submit(function (event) {
+                $.blockUI();
+                var data = new FormData($writing_form[0]);
+                var urlAction = $writing_form.attr('action');
+                $.post({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+
+                }).success(function (result) {
+                    if (result.success) {
+                        bootbox.alert('@Resources.Langues.Successful');
+                    }
+                });
+
+                event.preventDefault();
+            });
+
+            $SystemInfoGrid.keyup(function () {
+                if ($(this).val()) {
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+            onOpen();
+        });
+
+        function EditorTextChange(e) {
+            if (e.sender.body.innerHTML.length > 4000) {
+                var $tr = $(e.sender.wrapper);
+                $tr.find('.k-editable-area').addClass('input-validation-error');
+                return;
+            }
+            $('.k-editable-area').removeClass('input-validation-error');
+        }
+
+
+        function convertMBFileSize(size) {
+            return ((size / 1024) / 1024).toFixed(2);
+        }
+
+        function getFilePath(path) {
+            return path.substr(1);
+        }
+
+        function onOpen() {
+            var $content = $('#InforContent').data('kendoEditor');
+            var infoId = 0;
+            $.blockUI();
+            $.post("@Url.Action("GetSysInformation", "SystemInfoManagement", new { area="Admin" })", function (result) {
+                if (result.success) {
+                    $content.value('');
+                    $content.value(result.data.InforContent);
+                    infoId = result.data.InforId;
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $.blockUI();
+            //var row = e.sender.select();
+            //var dataItem = e.sender.dataItem(row);
+            //var title = '#Title', writer = '#UserName',
+            //    date = '#RegDate', $noticeId = $('#NoticeId'),
+            //    $view = $('#View'),
+            //    $content = $('#Content').data('kendoEditor');
+            //$(title).text(dataItem.NoticeTitle);
+            //$(writer).text(dataItem.FullUserName);
+            //$(date).text(formatDate(dataItem.RegDate));
+            //$noticeId.val(dataItem.NoticeId);
+            //$content.value('');
+            //$content.value(dataItem.NoticeContent);
+            //var isDeleted = dataItem.IsDeleted;
+            @*$.post('@Url.Action("GetFileAndCommentListByNoticeId", "Sub2", new { area="" })', { noticeId: $noticeId.val() }, function (result) {
+                if (result.success) {
+                    var $myModal = $('#popup01');
+                    $myModal.modal('show');
+                    var listFile = result.listFile;
+                    listFile.forEach(function (item) {
+                        var linkFile = createLinkHtml(item.NoticeFileId, item.FilePath, item.FileName, item.FieSize, isDeleted);
+                        $('#file-content').append(linkFile);
+                    });
+                    var listComment = result.listComment;
+                    listComment.forEach(function (item) {
+                        var date = formatDate(parseInt(item.CommentDate.substr(6)));
+                        var comment = createCommentHmtl(item.CommentId, item.CommentUserName, item.Comment, date, item.isDeleted);
+                        $('#comment_content').append(comment);
+                    });
+                    $view.text(result.view);
+                    if (!isDeleted) {
+                        $('#btnDeleteNotice').css('display', 'none');
+                        $('#btnEditNotice').css('display', 'none');
+                    } else {
+                        $('#btnDeleteNotice').css('display', 'initial');
+                        $('#btnEditNotice').css('display', 'initial');
+                    }
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });*@
+        };
+
+    </script>
+}

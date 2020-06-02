@@ -1,0 +1,268 @@
+﻿<style>
+    .bootbox.modal {
+        z-index: 1000000000000000 !important;
+    }
+</style>
+<div align="center" class="container">
+    @{ string ModelCode = Request.Params["modelCode"];
+    }
+    <h4><strong>
+    @if (Request.Params["modelCode"] == "M00001" || Request.Params["modelCode"] == "M00003")
+    {
+        @Resources.Langues.CommonSelection
+    }
+    else
+    {
+        @Resources.Langues.ComponentSelection
+    }
+</strong></h4>
+    <div>
+        <form action="" method="POST">
+            <div class="modal-body">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div id="content" style="font-size:14px !important">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <label style="color:red; margin-top:10px">*저장을 하셔야 다음단계로 넘어 갑니다.</label>
+            <div>
+                <button type="button" onclick="E00002onSave()" class="button button-gray">@Resources.Langues.Save</button>
+                @*<button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>*@
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var $modal = $('.E00002');
+    var caseId = @Request.Params["caseId"]
+        var modelCode = '@Request.Params["modelCode"]'
+    $(document).ready(function () {
+        $('#btn_E00002').removeClass('progress-bar-warning');
+
+        $.blockUI();
+        $.post("@Url.Action("GetListComponent", "EntityE00002Popup", new { area="Case" })", { modelCode: '@Request.Params["modelCode"]' }, function (result) {
+            $('#content').html(result.html)
+            if ('@Request.Params["modelCode"]' == "M00001") {
+                $('#title-2').html('@Resources.Langues.SelectDistributedResources')
+                $('#CP0003').prop("checked", true);
+                $('#CP0003').prop("disabled", "disabled");
+            }
+            if ('@Request.Params["modelCode"]' == "M00002") {
+                $('#CP0001').prop("checked", true);
+                $('#CP0001').prop("disabled", "disabled");
+                $('#CP0002').prop("checked", true);
+                $('#CP0002').prop("disabled", "disabled");
+                $('#CP0003').prop("checked", true);
+                $('#CP0003').prop("disabled", "disabled");
+                $('#CP0006').prop("checked", true);
+                $('#CP0006').prop("disabled", "disabled");
+                $('#title-2').html('@Resources.Langues.CommonSelection')
+            }
+        }).fail(function(){
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function(){
+            $.unblockUI();
+        });
+
+        $('#hiden').hide();
+        $.blockUI();
+        $.post("@Url.Action("LoadDataByCaseId", "EntityE00002Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $("#btn_E00002").addClass("democlass");
+                if (modelCode != 'M00003') {
+                    if (result.CP0001) {
+                        $('#CP0001').prop("checked", true);
+                    }
+                    if (result.CP0002) {
+                        $('#CP0002').prop("checked", true);
+                    }
+                    if (result.CP0003) {
+                        $('#CP0003').prop("checked", true);
+                    }
+                    if (result.CP0004) {
+                        $('#CP0004').prop("checked", true);
+                    }
+                    if (result.CP0005) {
+                        $('#CP0005').prop("checked", true);
+                    }
+                    if (result.CP0006) {
+                        $('#CP0006').prop("checked", true);
+                    }
+                } else {
+                    if (result.CP0001) {
+                        $('#CP0001').prop("checked", true);
+                    }
+                    if (result.CP0002) {
+                        $('#CP0002').prop("checked", true);
+                    }
+                    if (result.CP0001 && result.CP0003) {
+                        $('#CP00013').prop("checked", true);
+                        $('#CP0001').prop("checked", false);
+                    }
+                }
+            } else {
+                if (modelCode == "M00002") {
+                    $('#CP0001').prop("checked", true);
+                    $('#CP0002').prop("checked", true);
+                    $('#CP0003').prop("checked", true);
+                    $('#CP0004').prop("checked", true);
+                    $('#CP0005').prop("checked", true);
+                    $('#CP0006').prop("checked", true);
+                }
+            }
+        }).fail(function(){
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function(){
+            $.unblockUI();
+                    });
+                //$('#CP00013').change(function () {
+                //    if ($('#CP00013').is(":checked")) {
+                //        $('#CP0001').prop("checked", true);
+                //    } else {
+                //    }
+                //});
+
+                //$('#CP00023').change(function () {
+                //    if ($('#CP00023').is(":checked")) {
+                //        $('#CP0002').prop("checked", true);
+                //    } else {
+                //    }
+                //});
+    });
+
+    function selectChange(code) {
+        if (modelCode == "M00003") {
+            if (code == "CP0001") {
+                $('#CP00013').prop("checked", false);
+                $('#CP00023').prop("checked", false);
+                $('#CP0002').prop("checked", false);
+            } else if (code == "CP0002") {
+                $('#CP00013').prop("checked", false);
+                $('#CP00023').prop("checked", false);
+                $('#CP0001').prop("checked", false);
+            } else if (code == "CP00023") {
+                $('#CP0002').prop("checked", false);
+                $('#CP0001').prop("checked", false);
+                $('#CP00013').prop("checked", false);
+            } else if (code == "CP00013") {
+                $('#CP0001').prop("checked", false);
+                $('#CP00023').prop("checked", false);
+                $('#CP0002').prop("checked", false);
+            }
+        }
+    }
+
+    function E00002onSave() {
+        if (!$('input[name="E00002optradio"]').is(":checked")) {
+            bootbox.alert("One or more must be selected");
+            return false;
+        }
+        var $chkPV = false;
+        var $chkESS  = false;
+        var $chkWT = false;
+        var $chkFC = false;
+        var $chkCHP = false;
+        var $chkDieselGen = false;
+
+        if (modelCode != 'M00003') {
+            var $chkPV = $('#CP0001').is(":checked");
+            var $chkESS = $('#CP0003').is(":checked");
+            var $chkWT = $('#CP0002').is(":checked");
+            var $chkFC = $('#CP0004').is(":checked");
+            var $chkCHP = $('#CP0005').is(":checked");
+            var $chkDieselGen = $('#CP0006').is(":checked");
+        } else {
+            if ($('#CP00013').is(":checked")) {
+                $chkPV = true;
+                $chkESS = true;
+            }
+            if ($('#CP00023').is(":checked")) {
+                $chkWT = true;
+                $chkESS = true;
+            }
+            if ($('#CP0001').is(":checked")) {
+                $chkPV = true;
+            }
+            if ($('#CP0002').is(":checked")) {
+                $chkWT = true;
+            }
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: "@Url.Action("SaveList", "EntityE00002Popup", new { area = "Case" })",
+            method: "post",
+            data: {
+                CP0001: $chkPV,
+                CP0003: $chkESS,
+                CP0002: $chkWT,
+                CP0004: $chkFC,
+                CP0005: $chkCHP,
+                CP0006: $chkDieselGen,
+                caseId: "@Request.Params["caseId"]",
+                modelCode: "@Request.Params["modelCode"]"
+            },
+            success: function (result) {
+                if (result.success) {
+                    if (!$chkPV) {
+                            $('#li_I00004').addClass('disabled')
+                        } else {
+                            $('#li_I00004').removeClass('disabled')
+                        }
+                        if (!$chkWT) {
+                            $('#li_I00005').addClass('disabled')
+                        } else {
+                            $('#li_I00005').removeClass('disabled')
+                        }
+                        if (!$chkESS) {
+                            $('#li_I00009').addClass('disabled')
+                            $('#li_I00006').addClass('disabled')
+                        } else {
+                            $('#li_I00009').removeClass('disabled')
+                            $('#li_I00006').removeClass('disabled')
+                        }
+                        if (!$chkFC) {
+                            $('#li_I00007').addClass('disabled')
+                        } else {
+                            $('#li_I00007').removeClass('disabled')
+                        }
+                        if (!$chkCHP) {
+                            $('#li_I00008').addClass('disabled')
+                        } else {
+                            $('#li_I00008').removeClass('disabled')
+                        }
+                        if (!$chkDieselGen) {
+                            $('#li_I00013').addClass('disabled')
+                        } else {
+                            $('#li_I00013').removeClass('disabled')
+                        }
+                        $.unblockUI();
+                        if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                        if (lstEntityNextStep.length != 0) {
+                            nextStepEntity(lstEntityNextStep[0]);
+                            lstEntityNextStep.shift();
+                            console.log(lstEntityNextStep)
+                        } else {
+                            nextEntity()
+                        }
+                } else {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.Error');
+                }
+            },
+            error: function (response) {
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        return { comCode: comCode }
+    };
+</script>

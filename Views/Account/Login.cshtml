@@ -1,0 +1,68 @@
+﻿@using DPDSP.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "KERI " + Resources.Langues.Login;
+    List<SelectListItem> ListLanguages = new List<SelectListItem>();
+    ListLanguages.Add(new SelectListItem { Value = "ko", Text = "Korea" });
+    ListLanguages.Add(new SelectListItem { Value = "en", Text = "English" });
+}
+
+@section styles{
+    <style>
+        #login-content {
+            box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
+            background-color: #EFEFEF;
+        }
+
+            #login-content .container-fluid {
+                padding:20px 15px 20px 15px;
+            }
+    </style>
+}
+
+<div class="container">
+    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-4 col-md-offset-4" style="margin-top:20px;margin-bottom:50px;">
+            <div id="login-content">
+                <div class="container-fluid">
+                    <div class="form-group">
+                        <div class="panel-heading">
+                            <h5 class="panel-title" style="background:url(../../img/ci.png) no-repeat top left;height:70px; font-style:italic;padding-top:40px;"> Demand Management Design Program</h5>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username" class="control-label">Use your DMDP account</label>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        <span class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        <span class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="username" class="control-label">Language</label>
+                        @Html.DropDownListFor(m => m.Language, ListLanguages, new { @class = "form-control" })
+                    </div>
+                    @*<div id="loginErrorMsg" class="alert alert-error hide">Wrong username og password</div>*@
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(m => m.RememberMe) @Resources.Langues.KeepMe
+                        </label>
+                    </div>
+                    <input type="submit" role="button" value="@Resources.Langues.Login" class="btn btn-primary btn-block">
+                    <br />
+                    @*<p style="line-height:20px;"><a role="button" href="@Url.Action("Register","Account")" class="primary"> <i class="fa fa-user-plus" aria-hidden="true"></i> Sign Up</a></p>*@
+                    <p style="line-height:20px;"><a role="button" href="@Url.Action("ForgotPassword","Account")" class="primary"> <i class="fa fa-key" aria-hidden="true"></i> Forgot Password </a></p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

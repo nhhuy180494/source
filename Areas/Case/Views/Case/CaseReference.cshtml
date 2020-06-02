@@ -1,0 +1,484 @@
+﻿
+@{
+    ViewBag.Title = "Case Reference";
+    Layout = "~/Areas/Case/Views/Shared/_CaseLayout.cshtml";
+}
+
+@section styles{
+    <style>
+        .glyphicon {
+            position: relative;
+            top: 1px;
+            display: inline-block;
+            font-family: 'Glyphicons Halflings';
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .glyphicon-triangle-right:before {
+            content: "\e250";
+        }
+
+        .bootbox button .btn-primary {
+            background-color:gray
+        }
+
+        .k-list-optionlabel {
+            text-align: center;
+        }
+
+        .democlass {
+            background-color: gray;
+        }
+
+        .sidebar {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            width: 200px;
+        }
+
+        .btn-default2 {
+            color: #fff;
+            background-color: #6a7180;
+        }
+
+        #page-wrapper {
+            margin-left: 200px;
+        }
+
+        .input-validation-error {
+            border: 1px solid red !important;
+        }
+
+        .panel-heading {
+            text-align:center;
+            font-size: 15px;
+            font-weight: bold
+        }
+
+        span {
+            cursor: pointer;
+        }
+
+        .button-help {
+            background-color: transparent;
+            padding-top: 0;
+        }
+
+        .bootbox-body {
+            word-break: keep-all !important;
+        }
+    </style>
+}
+
+<link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.common-bootstrap.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/case_site_css/case_site_styles.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/case_site_css/upload-file.css")" rel="stylesheet" />
+<style>
+    .modal-open[style] {
+        padding-right: 0px !important;
+    }
+
+    .modal {
+        overflow-y: auto;
+    }
+
+    .modal-open {
+        overflow: auto;
+    }
+
+    .bootbox-alert[style] {
+        padding-right: 0px !important;
+    }
+
+    .bootbox-alert {
+        overflow: auto;
+    }
+
+    body {
+        padding-right: 0px !important
+    }
+</style>
+
+<div class="@*container*@" id="case-references-content" style="padding-top:0px;margin: 0 10% 0 10%;">
+    <nav style="margin-bottom: 0; ">
+        <div class="sidebar" style="margin-top: -3px;height: 100%">
+            <div style="background-color:white ">
+                <label class="text-center hide-end-text" style="width:100%;line-height:43px;color:#fff;background:#1996e4;font-size:16px;margin-bottom:0px;font-weight:bolder">
+
+                    @ViewBag.ModelName
+                </label>
+            </div>
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav" id="side-menu">
+                    @foreach (var item in ViewBag.ItemList)
+                    {
+                        if (item.hidden == true)
+                        {
+                            <li id="li_@item.ItemCode" class="disabled"> <a id="@item.ItemCode" onclick="getListEntity('@item.ItemCode', '@item.ItemName')" role="button" class="over"><i class="glyphicon glyphicon-chevron-right"></i> @item.ItemName</a> </li>
+                        }
+                        else
+                        {
+                            <li id="li_@item.ItemCode"> <a id="@item.ItemCode" onclick="getListEntity('@item.ItemCode', '@item.ItemName')" role="button" class="over"><i class="glyphicon glyphicon-chevron-right"></i> @item.ItemName</a> </li>
+                        }
+                    }
+                    @*<li> <a href="" class="over"><i class="glyphicon glyphicon-chevron-right"></i> Item 1</a> </li>
+                        <li> <a href="" class="over"><i class="glyphicon glyphicon-chevron-right"></i> Item 2</a> </li>
+                        <li> <a href="" class="over"><i class="glyphicon glyphicon-chevron-right"></i> Item 3</a> </li>
+                        <li> <a href="" class="over"><i class="glyphicon glyphicon-chevron-right"></i> Item 4</a> </li>
+                        <li> <a href="" class="over"><i class="glyphicon glyphicon-chevron-right"></i> Item  5</a> </li>*@
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="page-wrapper">
+        <div class="col-md-9 col-lg-9">
+            <ul class="breadcrumb sub_nav" style="margin-top: -3px;">
+                <li class="active"><span id="itemTitle" style="font-weight:bold;font-size:16px;">@ViewBag.ModelName</span> </li>
+            </ul>
+            <div class="row">
+                <h5 class="sub_tit">@Resources.Langues.CasereferenceNotice</h5>
+                <div id="entity-content">
+
+                </div>
+                <div class="col-sm-12 text-right feature" style="padding-top:20px;">
+                    <a role="button" id="next-item" class="btn btn-default2 btn-md"> Next <i class="fa fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-3" style="padding:0 20px 20px 20px">
+            <div class="panel panel-default">
+                <div class="panel-heading">History of @ViewBag.CaseName</div>
+                <div class="panel-body" style="height:80vh;overflow-y:scroll;font-size:12px">
+                </div>
+                @*<div class="panel-footer"><button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button></div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="poppupContent">
+    @{
+        @*foreach (var item in ViewBag.EntiCodeList)
+            {
+                string path = "~/Areas/Case/Views/Case/EntityPopup/_" + item + "PartialView.cshtml";
+                try
+                {
+                    @Html.Partial(path);
+                }
+                catch
+                {
+                }
+            }*@
+        @*string path = "~/Areas/Case/Views/Case/EntityPopup/_" + "E00031" + "PartialView.cshtml";
+            @Html.Partial(path);*@
+
+    }
+</div>
+
+@section scripts{
+
+    <script>
+        var lstEntityNextStep = [];
+        var caseId = @Request.Params["caseId"];
+            var modelCode = '@Request.Params["modelCode"]';
+        var areas = getArea();
+        $("#case-references-content ul li:first-child").children().click();
+        $("#case-references-content ul li:first-child").children().addClass('am');
+
+        function getListEntity(e, name) {
+            
+            $.blockUI();
+            if (document.getElementById("li_" + e).className == "disabled") {
+                $.unblockUI();
+                return false;
+            }
+            $('#itemTitle').text(name);
+            var caseId = @Request.Params["caseId"];
+            var CP1 = false,CP2 = false,CP3 = false,CP4 = false,CP5 = false,CP6 = false
+            var itemCode = e;
+            var oldDiv = $('#entity-content').find('div');
+            if (oldDiv !== null) {
+                $(oldDiv).remove();
+            }
+            $.post("@Url.Action("GetListComponent", "Case")", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    result.list.forEach(function (item) {
+                        if (item == 'CP0001') {
+                            CP1 = true
+                        } if (item == 'CP0002') {
+                            CP2 = true
+                        } if (item == 'CP0003') {
+                            CP3 = true
+                        } if (item == 'CP0004') {
+                            CP4 = true
+                        } if (item == 'CP0005') {
+                            CP5 = true
+                        } if (item == 'CP0006') {
+                            CP6 = true
+                        }
+                    });
+
+                    if ((itemCode == 'I00004' && CP1 == false) || (itemCode == 'I00005' && CP2 == false)||(itemCode == 'I00006' && CP3 == false)||(itemCode == 'I00007' && CP4 == false)
+                        ||(itemCode == 'I00008' && CP5 == false) || (itemCode == 'I00013' && CP6 == false)) {
+                        $.unblockUI();
+                        return false;
+                    } else {
+                        $.blockUI();
+                        $.post("@Url.Action("GetListEntityByItemCode", "Case", new { area = "Case" })", { itemCode: itemCode, caseId: caseId, areas: areas }, function (result) {
+                            if (result.success) {
+                                var div = document.createElement('div');
+                                div.innerHTML = result.response;
+                                document.getElementById('entity-content').appendChild(div);
+                            }
+                            $.unblockUI();
+                        }).always(function () {
+
+                        }).fail(function () {
+                            $.unblockUI();
+                            bootbox.alert('@Resources.Langues.ContactAdmin')
+                        });
+                    }
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.ContactAdmin')
+            });
+        };
+
+        $(document).ready(function () {
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+            window.location.href = '@Url.Action("Index", "Home", new { area = "Mobile" })'
+        }
+        else {
+        }
+            $('#entity-content').on('click', '.btnSelect', function (e) {
+
+                $.blockUI();
+                var id = $(this).attr('id');
+                var idPopup = id.substr(4);
+                $('#poppupContent').children().remove();
+
+                if (idPopup == "E00024") {
+                    var status = 0;
+                    $.blockUI();
+                    $.post("@Url.Action("GetSalesTypeCodeByCaseId", "EntityE00023Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                        if (result.success) {
+                            result.list.forEach(function (item) {
+                                if (item == "SA0002") {
+                                    status++;
+                                }
+                            });
+                            if (status == 0) {
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.MessEntity24')
+                            } else {
+                                $.post("@Url.Action("GetEntityPrevious", "Case")", { modelCode: modelCode, entityName: idPopup, caseId: caseId }, function (result) {
+                                    if (result.success) {
+                                        $('#poppupContent').load("@Url.Action("GetEntityPopup", "Case", new { area="Case" })?id=" + idPopup + '&modelCode=' + modelCode + '&caseId=' + caseId, function () {
+                                            //var actionShowModal = new $.Deferred();
+                                            //// Set up the chain of events...
+                                            //$.when(actionShowModal).then(function (id) {
+                                            //    $.unblockUI();
+                                            //    $('.' + idPopup).modal('show');
+                                            //});
+                                            //actionShowModal.resolve(idPopup);
+                                            $.unblockUI();
+                                            $('.' + idPopup).modal('show');
+                                        });
+                                    } else {
+                                        $.unblockUI();
+                                        bootbox.alert('@Resources.Langues.MessCaseReferences')
+                                    }
+                                }).always(function () {
+                                    //$.unblockUI();
+                                }).fail(function () {
+                                    $.unblockUI();
+                                    bootbox.alert('@Resources.Langues.ContactAdmin')
+                                });
+                            }
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+
+                    });
+                } else {
+                    $.post("@Url.Action("GetEntityPrevious", "Case")", { modelCode: modelCode, entityName: idPopup, caseId: caseId }, function (result) {
+                        if (result.success) {
+                            $('#poppupContent').load("@Url.Action("GetEntityPopup", "Case", new { area="Case" })?id=" + idPopup + '&modelCode=' + modelCode + '&caseId=' + caseId, function () {
+                                //var actionShowModal = new $.Deferred();
+                                //// Set up the chain of events...
+                                //$.when(actionShowModal).then(function (id) {
+                                //    $.unblockUI();
+                                //    $('.' + idPopup).modal('show');
+                                //});
+                                //actionShowModal.resolve(idPopup);
+                                $.unblockUI();
+                                $('.' + idPopup).modal('show');
+
+                            });
+                        } else {
+                            $.unblockUI();
+                            bootbox.alert('@Resources.Langues.MessCaseReferences')
+                        }
+                    }).always(function () {
+                        //$.unblockUI();
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin')
+                    });
+                }
+
+                @*$.post("@Url.Action("GetEntityPrevious", "Case")", { modelCode: modelCode, entityName: idPopup, caseId: caseId }, function (result) {
+                    if (result.success) {
+                        $('#poppupContent').load("@Url.Action("GetEntityPopup", "Case", new { area="Case" })?id=" + idPopup + '&modelCode=' + modelCode + '&caseId=' + caseId, function () {
+                            var actionShowModal = new $.Deferred();
+                            // Set up the chain of events...
+                            $.when(actionShowModal).then(function (id) {
+                                $.unblockUI();
+                                $('.' + idPopup).modal('show');
+                            });
+                            actionShowModal.resolve(idPopup);
+                        });
+                    } else {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.MessCaseReferences')
+                    }
+                }).always(function () {
+                    //$.unblockUI();
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin')
+                });*@
+            });
+
+            $("#case-references-content ul li").click(function () {
+                $(this).siblings().find('a').removeClass('am');
+                $(this).children().addClass('am');
+                if ($(this).is(':last-child')) {
+                    $('#next-item').hide();
+                }
+                else {
+                    $('#next-item').show();
+                }
+            });
+
+            $('#next-item').click(function () {
+                nextItem();
+            });
+
+           
+        });
+
+        $('.bootbox').on("show.bs.modal", function () {
+            $('.bootbox-body').html($('.bootbox-body').html().replace(/\./g, '.<br/>'))
+        });
+        function nextItem(){
+            var $aTagElement = $("#case-references-content ul li > a[class='over am']");
+            var $selected = $aTagElement.closest('li');
+            var $next = $selected.next('li');
+            var checkDisabled = $next.attr('class');
+            $next.children().click();
+            $next.siblings().removeClass('am');
+            $next.children().addClass();
+            if ($next.is(':last-child')) {
+                $(this).hide();
+            }
+            if(checkDisabled=="disabled"){
+                nextItem();
+            }
+        }
+
+        function showModal(id) {
+            var modal = $(document).find('.' + id);
+            $(modal.selector).modal('show');
+        }
+
+        function getArea() {
+            var url = window.location.href;
+            var array = url.split('/');
+            if (array[3] == "Mobile" || array[4] == "Mobile") {
+                return "Mobile";
+            } else {
+                return "Case";
+            }
+        }
+
+        function updateHistory(text) {
+            var data = $('.panel-body').html() + text;
+            $('.panel-body').html('')
+            $('.panel-body').html(data)
+        }
+
+        function historyClick(entity) {
+            $('.am').removeClass('am')
+            var oldDiv = $('#entity-content').find('div');
+            if (oldDiv !== null) {
+                $(oldDiv).remove();
+            }
+            $.blockUI();
+            $.post("@Url.Action("GetItemByEntity", "Case")", { modelCode: modelCode, entityName: entity }, function (result) {
+                var itemCode = result.item
+                $.post("@Url.Action("GetListEntityByItemCode", "Case", new { area = "Case" })", { itemCode: itemCode, caseId: caseId, areas: areas }, function (result) {
+                    if (result.success) {
+
+                        $('#' + itemCode).addClass('am')
+                                var div = document.createElement('div');
+                                div.innerHTML = result.response;
+                        document.getElementById('entity-content').appendChild(div);
+                        $("#btn_" + entity).click();
+                            }
+                            $.unblockUI();
+                        }).always(function () {
+
+                        }).fail(function () {
+                            $.unblockUI();
+                            bootbox.alert('@Resources.Langues.ContactAdmin')
+                });
+            }).always(function () {
+
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.ContactAdmin')
+                });
+
+            //setTimeout(function () {
+            //    $("." + entity).modal('show');
+            //}, 2000);
+        }
+
+        function showMess(mess) {
+            bootbox.alert({
+                message: mess,
+                title: " ",buttons: {
+                    ok: {
+                        label: '@Resources.Langues.OK', className: 'btn-gray',
+                        className: 'btn-gray'
+                    }
+                }
+            });
+        }
+        function showMess(mess, callback) {
+            bootbox.alert({
+                message: mess,
+                title: " ",buttons: {
+                    ok: {
+                        label: '@Resources.Langues.OK', className: 'btn-gray',
+                        className: 'btn-gray'
+                    }
+                },
+                callback: callback
+            });
+        }
+    </script>
+}
+

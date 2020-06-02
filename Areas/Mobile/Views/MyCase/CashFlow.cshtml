@@ -1,0 +1,274 @@
+﻿@model DPDSP.Models.I00012LoanViewModel
+
+@{
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+
+<style>
+    .lbWT {
+        text-align: center;
+    }
+</style>
+
+@using (Html.BeginForm("SaveCashFlow", "MyCase", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "cash-flow-form", area = "Case" }))
+{
+    <div style="margin-top:80px">
+        <h4 style="text-align:center"><strong>@Resources.Langues.Vieweconomicanalysisresult</strong></h4>
+
+        <div class="@*form-group*@" style="margin-left:50px !important">
+            <div class="radio">
+                <input type="radio" name="optradio1" value="option1" checked="checked">  <h4>@Resources.Langues.NoLoan</h4>
+            </div>
+        </div>
+        <div id="form-option-1">
+            <div class="form-horizontal">
+                @Html.HiddenFor(m => m.I00012Id, Request.Params["i00012Id"])
+                @Html.HiddenFor(m => m.CaseId, Request.Params["caseId"])
+                @Html.HiddenFor(m => m.ModelCode, Request.Params["modelCode"])
+                <div class="form-group hidden">
+                    <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Maintenancerate</label>
+                    <div class="col-xs-6">
+                        @Html.TextBoxFor(m => m.MangeRate1, "", new
+                   {
+                       @class = "form-control input-md",
+                       @data_val_number = "The field MangeRate1 must be a number.",
+                       @data_val_range = "Invalid Target Price; Max 5 digits",
+                       @data_val_range_max = "9999.9",
+                       @data_val_range_min = "0",
+                       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                       @style = "text-align:right;",
+                   })
+                    </div>
+                    <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                        <span>%</span>
+                    </div>
+                </div>
+                <div class="form-group hidden">
+                    <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Priceincreaserate:</label>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.TextBoxFor(m => m.PriceUpRate1, "", new
+                   {
+                       @class = "form-control input-md",
+                       @data_val_number = "The field PriceUpRate1 must be a number.",
+                       @data_val_range = "Invalid Target Price; Max 5 digits",
+                       @data_val_range_max = "9999.9",
+                       @data_val_range_min = "0",
+                       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                       @style = "text-align:right;",
+                   })
+                    </div>
+                    <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                        <span>%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-left:50px !important">
+            <div class="radio">
+                <input type="radio" name="optradio1" value="option2">  <h4>@Resources.Langues.Enterloaninformation</h4>
+            </div>
+        </div>
+        <div id="form-option-2" class="hidden">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Loanamount</label>
+                    <div class="col-xs-6">
+                        @Html.TextBoxFor(m => m.LoanCost, "", new
+                   {
+                       @class = "form-control input-md",
+                       @data_val = "true",
+                       @data_val_number = "The field LoanCost must be a number.",
+                       @data_val_range = "Invalid Target Price; Max 16 digits",
+                       @data_val_range_max = "999999999999999.9",
+                       @data_val_range_min = "0",
+                       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                       @style = "text-align:right;",
+                   })
+                    </div>
+                    <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                        <span>@Resources.Langues.Thousandwon</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Loanperiod</label>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.TextBoxFor(m => m.LoanPeriod, "", new
+                   {
+                       @class = "form-control input-md",
+                       @data_val = "true",
+                       @data_val_number = "The field LoanPeriod must be a number.",
+                       @data_val_range = "Invalid Target Price; Max 3 digits",
+                       @data_val_range_max = "99.9",
+                       @data_val_range_min = "0",
+                       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                       @style = "text-align:right;",
+                   })
+                    </div>
+                    <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                        <span>@Resources.Langues.years</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Annualinterestrate</label>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.TextBoxFor(m => m.LoanRate, "", new
+                   {
+                       @class = "form-control input-md",
+                       @data_val = "true",
+                       @data_val_number = "The field LoanRate must be a number.",
+                       @data_val_range = "Invalid Target Price; Max 5 digits",
+                       @data_val_range_max = "9999.9",
+                       @data_val_range_min = "0",
+                       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                       @style = "text-align:right;",
+                   })
+                    </div>
+                    <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                        <span>%</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Repaymentmethod</label>
+                    <div class="col-xs-6">
+                        @(Html.Kendo().DropDownList()
+                                                                                                             .Name("ReturnMethod")
+                                                                                                             .DataTextField("Text")
+                                                                                                             .DataValueField("Value")
+                                                                                                             .Filter(FilterType.Contains)
+                                                                                                             .DataSource(source =>
+                                                                                                             {
+                                                                                                                 source.Read(read =>
+                                                                                                                 {
+                                                                                                                     read.Action("GetRepayment", "EntityE00001Popup", new { area = "Case" });
+                                                                                                                 });
+                                                                                                             })
+                                                                                                             .HtmlAttributes(new { style = "width: 100%" })
+                        )
+                    </div>
+                    <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                        <span></span>
+                    </div>
+                </div>
+
+                <div class="form-group hidden">
+                    <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Maintenancerate</label>
+                    <div class="col-xs-6">
+                        @Html.TextBoxFor(m => m.MangeRate, "", new
+                   {
+                       @class = "form-control input-md",
+                       @data_val_number = "The field MangeRate must be a number.",
+                       @data_val_range = "Invalid Target Price; Max 5 digits",
+                       @data_val_range_max = "9999.9",
+                       @data_val_range_min = "0",
+                       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                       @style = "text-align:right;",
+                   })
+                    </div>
+                    <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                        <span>%</span>
+                    </div>
+                </div>
+                <div class="form-group hidden">
+                    <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Priceincreaserate:</label>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.TextBoxFor(m => m.PriceUpRate, "", new
+                   {
+                       @class = "form-control input-md",
+                       @data_val_number = "The field PriceUpRate must be a number.",
+                       @data_val_range = "Invalid Target Price; Max 5 digits",
+                       @data_val_range_max = "9999.9",
+                       @data_val_range_min = "0",
+                       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                       @style = "text-align:right;",
+                   })
+                    </div>
+                    <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                        <span>%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div class="form-group" style="text-align:center">
+            <button type="button" id="submitCashFlow" class="btn btn-primary">@Resources.Langues.Save</button>
+            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $('input[type=radio][name=optradio1]').change(function () {
+        if (this.value == 'option1') {
+            $("#MangeRate").val('');
+            $("#PriceUpRate").val('');
+            $("#LoanCost").val('');
+            $("#LoanPeriod").val('');
+            $("#LoanRate").val('');
+            $("#ReturnMethod").val('');
+
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+        }
+        else if (this.value == 'option2') {
+            $("#MangeRate1").val('');
+            $("#PriceUpRate1").val('');
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+        }
+    });
+
+    $('#submitCashFlow').click(function () {
+            var valid = $('#cash-flow-form').valid();
+            if (valid) {
+                $('#cash-flow-form').submit();
+            }
+        
+    });
+
+    $('#cash-flow-form').submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                cache: false,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                    debugger
+                    if (result.path == "") {
+                        bootbox.alert('@Resources.Langues.Error');
+                    } else {
+                        window.open(result.path + ".xlsx", target = '_blank', '', replace = true);
+                    }
+                    $.unblockUI();
+                } else {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.Error');
+                }
+            });
+            e.preventDefault();
+    });
+</script>

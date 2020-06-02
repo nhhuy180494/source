@@ -1,0 +1,215 @@
+﻿<!-- Modal -->
+<style>
+    .E00022 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: inline-block;
+        font-size: 20px;
+        color: blue;
+        border: 1px solid blue;
+        text-align: center;
+    }
+</style>
+
+<div class="modal fade E00022" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.Salesrevenue</h4>
+            </div>
+            <div class="modal-body">
+                <br />
+                <table class="table table-bordered tblMultiRow">
+                    <thead>
+                        <tr>
+                            <th class="active" style="width:20%">@Resources.Langues.Select<br /><input type="checkbox" id="selectAll" name="optcheckbox" checked="checked" disabled></th>
+                            <th class="active" style="width:80%;vertical-align:middle">@Resources.Langues.Salesrevenuetype</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="active" style="vertical-align: middle">
+                                <input type="checkbox" id="SA0001" name="optcheckbox" checked="checked" disabled>
+                            </td>
+                            <td class="active" style="vertical-align: middle"> @Resources.Langues.SMPsalesrevenue <span onclick="helpOnclick('SMP')" class="dot">?</span>@*<button type="button" onclick="helpOnclick('SMP')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@</td>
+                        </tr>
+                        <tr class="hidden-m4">
+                            <td class="active">
+                                <input type="checkbox" id="SA0002" name="optcheckbox" checked="checked" disabled>
+                            </td>
+                            <td class="active" style="vertical-align: middle"> @Resources.Langues.RECsalesrevenue <span onclick="helpOnclick('REC')" class="dot">?</span>@*<button type="button" onclick="helpOnclick('REC')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr />
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        <button type="button" onclick="FormE00022Save()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var caseId = @Request.Params["caseId"];
+    var SA0001 = "";
+    var SA0002 = "";
+    var SA0003 = "";
+
+    $(document).ready(function () {
+
+        $('.E00022').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        if ('@Request.Params["modelCode"]' == "M00004") {
+            $('.hidden-m4').addClass('hidden')
+            $('#SA0002').prop("checked", false);
+        }
+
+        $.blockUI();
+        $.post("@Url.Action("GetSalesTypeCodeByCaseId", "EntityE00022Popup")", { caseId: caseId }, function (result) {
+            if (result.success) {
+                result.list.forEach(function (item) {
+                    if (item == "SA0001") {
+                        $('#SA0001').prop("checked", true);
+                    }
+                    if (item == "SA0002") {
+                        if ('@Request.Params["modelCode"]' != "M00004") {
+                            $('#SA0002').prop("checked", true);
+                        }
+                    }
+                    if (item == "SA0003") {
+                        $('#SA0003').prop("checked", true);
+                    }
+                });
+            } else{
+                $('#SA0001').prop("checked", true);
+                if ('@Request.Params["modelCode"]' != "M00004") {
+                    $('#SA0002').prop("checked", true);
+                }
+                $('#selectAll').prop("checked", true);
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function () {
+            $.unblockUI();
+        });
+    });
+
+    $('#selectAll').click(function () {
+        if ($(this).is(':checked')) {
+            $('#SA0001').prop("checked", true);
+            if ('@Request.Params["modelCode"]' != "M00004") {
+                $('#SA0002').prop("checked", true);
+            }
+            $('#SA0003').prop("checked", true);
+        } else {
+            $('#SA0001').prop("checked", false);
+            $('#SA0002').prop("checked", false);
+            $('#SA0003').prop("checked", false);
+        }
+    });
+
+    function FormE00022Save(){
+        if (!$('#SA0001').is(":checked") && !$('#SA0002').is(":checked")) {
+            showMess('@Resources.Langues.FailedToSave​')
+            return false;
+        }
+
+        if ($('#SA0001').is(":checked")) {
+            SA0001 = "SA0001";
+        }
+
+        if ($('#SA0002').is(":checked")) {
+            SA0002 = "SA0002";
+        }
+
+        if ($('#SA0003').is(":checked")) {
+            SA0003 = "SA0003";
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: '@Url.Action("SaveEntityE00022PopupData", "EntityE00022Popup")',
+            cache: false,
+            type: 'POST',
+            data: {
+                SA0001: SA0001,
+                SA0002: SA0002,
+                SA0003: SA0003,
+                caseId: caseId
+            },
+            success: function (result) {
+                if (result.success) {
+                    updateHistory(result.html)
+                    $("#btn_E00022").addClass("democlass");
+                        $('.E00022').modal('hide');
+                        showMess('@Resources.Langues.Successful')
+                        $.unblockUI();
+
+                    if (SA0002 != "SA0002") {
+                        $("#btn_E00024").addClass("democlass");
+                            $.unblockUI();
+                    }
+                } else {
+                }
+            },
+            error: function (response) {
+
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    function helpOnclick(obj) {
+        if (obj == 'SMP') {
+            var win = window.open('http://www.kpx.or.kr/www/contents.do?key=225', '_blank');
+            win.focus();
+        } else {
+            var win = window.open('http://rec.kmos.kr/index.do', '_blank');
+            win.focus();
+        }
+    }
+</script>
+

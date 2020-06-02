@@ -1,0 +1,791 @@
+﻿@{
+    ViewBag.Title = Resources.Langues.CaseManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <style>
+        /*input[type=checkbox][readonly] {
+            pointer-events: none;
+        }*/
+        .modal-dialog {
+            width: 98%;
+        }
+
+        @@font-face {
+            font-family: 'Korean Font';
+            src: url('../../../../fonts/h2mjre.ttf') format('truetype');
+        }
+
+        .k-header .k-link {
+            text-align: center;
+        }
+
+        th.k-header {
+            white-space: normal !important;
+        }
+
+        .k-widget {
+            font-family: "Korean Font";
+        }
+
+        .modal-content {
+            height: auto;
+            min-height: 100%;
+            border-radius: 0;
+        }
+
+        .toolbarInput {
+            height: 80%;
+        }
+
+        #StartDate {
+        }
+
+        @@media print {
+            /* on modal open bootstrap adds class "modal-open" to body, so you can handle that case and hide body */
+            body.modal-open {
+                visibility: hidden;
+            }
+
+                body.modal-open .modal .modal-body {
+                    visibility: visible; /* make visible modal body and header */
+                }
+        }
+    </style>
+    <style>
+        /* Page Template for the exported PDF */
+        .page-template {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+            .page-template .header {
+                position: absolute;
+                top: 30px;
+                left: 30px;
+                right: 30px;
+                border-bottom: 1px solid #888;
+                color: #888;
+            }
+
+            .page-template .footer {
+                position: absolute;
+                bottom: 30px;
+                left: 30px;
+                right: 30px;
+                border-top: 1px solid #888;
+                text-align: center;
+                color: #888;
+            }
+
+            .page-template .watermark {
+                font-weight: bold;
+                font-size: 400%;
+                text-align: center;
+                margin-top: 30%;
+                color: #aaaaaa;
+                opacity: 0.1;
+                transform: rotate(-35deg) scale(1.7, 1.5);
+            }
+
+        .classButton {
+            background-color: white;
+            border-color: #ea6b48;
+            color: #ea6b48;
+        }
+    </style>
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.CaseManagementViewModel>()
+    .Name("CaseGrid")
+
+    .Columns(columns =>
+    {
+        columns.Bound(cas => cas.Order).Title(Resources.Langues.Order).HtmlAttributes(new { @style = "text-align:center;" });
+        columns.Bound(cas => cas.CaseId).Title(Resources.Langues.CaseId).HtmlAttributes(new { @style = "text-align:center;" });
+        columns.Bound(cas => cas.ModelName).Title(Resources.Langues.ModelName).HtmlAttributes(new { @style = "text-align:center;" });
+        columns.Bound(cas => cas.CaseDate).Format("{0:yyyy-MM-dd}").Title(Resources.Langues.CaseDate).HtmlAttributes(new { @style = "text-align:center;" });
+        columns.Bound(cas => cas.CaseName).Title(Resources.Langues.CaseName).HtmlAttributes(new { @style = "text-align:center;" });
+        columns.Bound(cas => cas.UserName).Title(Resources.Langues.FullUserName).HtmlAttributes(new { @style = "text-align:center;" });
+        //columns.Bound(cas => cas.BAT).Title("BAT")/*.Width(110)*/.HtmlAttributes(new { @style = "text-align:right;" });
+        //columns.Bound(cas => cas.PV).Title("PV").HtmlAttributes(new { @style = "text-align:right;" });
+        //columns.Bound(cas => cas.InvestmentCost).Title(Resources.Langues.InvestmentCost)/*.Width(120)*/.HtmlAttributes(new { @style = "text-align:right;" });
+        //columns.Bound(cas => cas.CumulativeRevenue).Title(Resources.Langues.CumulativeRevenue).HtmlAttributes(new { @style = "text-align:right;" });
+        //columns.Bound(cas => cas.OptimalCapacity).Title(Resources.Langues.OptimalCapacity).HtmlAttributes(new { @style = "text-align:right;" });
+        columns.Group(group => group
+            .Title(Resources.Langues.ComSelection)
+            .Columns(info =>
+            {
+                info.Bound(x => x.PVCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=PVCHK ? checked='checked' :  '' # />")
+        .HtmlAttributes(new { style = "text-align:center;" }).Title("PV");
+                info.Bound(x => x.WTCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=WTCHK ? checked='checked' :  '' # />")
+        .HtmlAttributes(new { style = "text-align:center;" }).Title("WT");
+                info.Bound(x => x.ESSCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=ESSCHK ? checked='checked' :  '' # />")
+        .HtmlAttributes(new { style = "text-align:center;" }).Title("ESS");
+                info.Bound(x => x.FCCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=FCCHK ? checked='checked' :  '' # />")
+        .HtmlAttributes(new { style = "text-align:center;" }).Title("FC");
+                info.Bound(x => x.CHPCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=CHPCHK ? checked='checked' :  '' # />")
+        .HtmlAttributes(new { style = "text-align:center;" }).Title("CHP");
+                info.Bound(x => x.DGCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=DGCHK ? checked='checked' :  '' # />")
+        .HtmlAttributes(new { style = "text-align:center;" }).Title("DG");
+            })
+        );
+        columns.Bound(cas => cas.CaseStatus).Title(Resources.Langues.CaseStatus).HtmlAttributes(new { @style = "text-align:center;" });
+        columns.Command(command => { command.Custom("View").Click("onShowModal").HtmlAttributes(new { @class = "btn-info" }); }).HtmlAttributes(new { @style = "text-align:center;" });
+    })
+    .ToolBar(tool =>
+    {
+    //tool.Excel().HtmlAttributes(new { style = "float:right;" });
+    tool.Template(@<text>
+            <div id="CaseGridToolbar">
+                <div class="row" style="padding:10px 0 10px 0;">
+                    <div class="col-lg-9">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="control-label">@Resources.Langues.Periodofassessment </label>
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-5">
+                                            <input style="width:100%;" id="StartDate" class="hide-border" />
+                                        </div>
+                                        <div class="col-md-12 col-lg-5">
+                                            <input style="width:100%;" id="EndDate" class="hide-border" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="control-label">@Resources.Langues.Name </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon btn-opal"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                                        <input type="text" class="form-control boder-opal" id='caseFilter' placeholder="Enter Name...">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-opal" id="resetCaseGrid" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="control-label">@Resources.Langues.Progress </label>
+                                    <div class="row">
+                                        @(Html.Kendo().DropDownList()
+                          .Name("StatusSearch")
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group" style="float:right;">
+                            <br />
+                            @*<button class="k-button k-button-icontext k-grid-excel" type="button"><span class="k-icon k-i-excel"></span>@Resources.Langues.ExportToExcel</button>*@
+                            <button id="export" class="k-button k-button-icontext pull-right">@Resources.Langues.ExportToExcel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </text>);
+    })
+    //.Excel(excel => excel.FileName("Case.xlsx").Filterable(true).ProxyURL(Url.Action("Excel_Export_Save", "CaseManagement")))
+    .Events(ev => ev.DataBound("onDataBound"))
+        //.Events(ev => ev.Edit("PassSpecialType"))
+        //.Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Pageable()
+        .Scrollable(rz => rz.Enabled(false))
+        .Resizable(rz => rz.Columns(true))
+        .HtmlAttributes(new { style = "height:650px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+            .Model(cas => { cas.Id(p => p.CaseId); })
+            .Read(read => read.Action("ReadAllCase", "CaseManagement", new { progress = 2, filterString = "", endDate = "3000/12/01", startDate = "2000/01/01" }))
+        )
+        )
+    </div>
+    <div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">@Resources.Langues.Vieweconomicanalysisresult</h4>
+                    @*<h4 class="modal-title" id="myModalLabel01" style="color:#1e5687"><i class="fa fa-check-circle"></i> @Resources.Langues.MyCase</h4>*@
+                </div>
+                <div id="printDiv">
+                    @(Html.Kendo().Grid<DPDSP.Models.I00012DetailViewModel>()
+        .Name("PopupGrid")
+        .Pdf(pdf => pdf
+            .AllPages()
+            .AvoidLinks()
+            .PaperSize("A3")
+            .Scale(0.7)
+            .Landscape()
+            .RepeatHeaders()
+            .TemplateId("page-template")
+            .FileName("CaseResult.pdf")
+            .ProxyURL(Url.Action("Pdf_Export_Save", "MyCase"))
+
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(cas => cas.Order).Title(Resources.Langues.Order).HtmlAttributes(new { @style = "text-align:center;background-color:white" }).Format("{0:#,##}");
+            columns.Group(group => group
+               .Title(Resources.Langues.Capacity)
+               .Columns(info =>
+               {
+                   info.Bound(cas => cas.PvValue).Title("PV[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.WtValue).Title("WT[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.FCValue).Title("FC[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.CHPValue).Title("CHP[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.PcsValue).Title("PCS[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.EssValue).Title("Battery[kWh]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+               })
+           );
+
+            columns.Group(group => group
+               .Title(Resources.Langues.Investment)
+               .Columns(info =>
+               {
+                   info.Bound(cas => cas.InitialCost).Title(Resources.Langues.InvestmentCost).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.MaintananceCost).Title(Resources.Langues.MaintananceCost).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+               })
+           );
+            columns.Group(group => group
+               .Title(Resources.Langues.EnergyChargingSaving)
+               .Columns(info =>
+               {
+                   info.Bound(cas => cas.PVBenefit).Title("PV" + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.Wtbenefit).Title("WT" + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.Fcbenefit).Title("FC" + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.Chpbenefit).Title("CHP" + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.ESSOperation).Title("ESS" + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+               })
+           );
+            columns.Bound(cas => cas.PeakReduce).Title(Resources.Langues.PeakReduce + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+            columns.Bound(cas => cas.Incentive2).Title(Resources.Langues.Discount2 + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+            columns.Bound(cas => cas.Incentive1).Title(Resources.Langues.Discount1 + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+            columns.Bound(cas => cas.Incentive3).Title(Resources.Langues.Discount3 + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}").Hidden();
+
+            columns.Group(group => group
+               .Title(Resources.Langues.SMPSale)
+               .Columns(info =>
+               {
+                   info.Bound(cas => cas.PVSMP).Title("PV").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.ESSSMP).Title("ESS").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+               })
+           );
+
+            columns.Group(group => group
+               .Title(Resources.Langues.RECSale)
+               .Columns(info =>
+               {
+                   info.Bound(cas => cas.PVRec).Title("PV").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.ESSRec).Title("ESS").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+               })
+           );
+
+            columns.Bound(cas => cas.TotalBenefit).Title(Resources.Langues.TotalBenefit).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+
+            columns.Group(group => group
+               .Title(Resources.Langues.Economics)
+               .Columns(info =>
+               {
+                   info.Bound(cas => cas.PaybackPeriod).Title(Resources.Langues.PaybackPeriod).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                   info.Bound(cas => cas.IRR).Title(Resources.Langues.IRR).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+               })
+           );
+        })
+        .Pageable()
+        .Sortable()
+        .Resizable(rz => rz.Columns(true))
+        .Scrollable(rz => rz.Enabled(false))
+        .HtmlAttributes(new { style = "height:=400px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(20)
+            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+            .Model(cas => { cas.Id(p => p.CaseId); })
+        //.Read(read => read.Action("GetI00012DetailByCaseId", "MyCase", new { caseId = 81 }))
+        )
+                    )
+                </div>
+                <div class="modal-footer" style="border-top:none;">
+                    <button type="button" onclick="onExportReport()" class="btn btn-primary classButton">@Resources.Langues.ViewReport</button>
+                    <button type="button" onclick="onExportDetail()" class="btn btn-primary classButton">@Resources.Langues.SaveReport</button>
+                    @*<button type="button" onclick="PrintModal()" class="btn btn-primary">@Resources.Langues.Print</button>*@
+                    <button type="submit" class="btn btn-default " data-dismiss="modal">@Resources.Langues.OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/printThis/printThis.js"></script>
+    <script type="text/javascript">
+        var startDate = new Date(2000, 01, 01)
+        var endDate = new Date(3000, 01, 01)
+        var caseId;
+        var modelCode;
+
+        $(document).ready(function () {
+            var $caseGrid = $('#CaseGrid').data('kendoGrid');
+
+            var data = [
+            { text: '@Resources.Langues.All', value: 2 },
+            { text: '@Resources.Langues.Complete', value: 1 },
+            { text: '@Resources.Langues.Proceeding', value: 0 }
+            ];
+
+
+            $("#StatusSearch").kendoDropDownList({
+                dataTextField: "text",
+                dataValueField: "value",
+                dataSource: data,
+                change: statusChange,
+                index: 0,
+            });
+
+            //var today = kendo.date.today();
+            var start = $("#StartDate").kendoDatePicker({
+                format: "yyyy-MM-dd",
+                change: startChange,
+                parseFormats: ["yyyy/MM/dd"]
+            }).data("kendoDatePicker");
+
+            var end = $("#EndDate").kendoDatePicker({
+                format: "yyyy-MM-dd",
+                change: endChange,
+                parseFormats: ["yyyy/MM/dd"]
+            }).data("kendoDatePicker").bind('focus');
+
+            $("#caseFilter").keyup(function () {
+                var value = $("#caseFilter").val();
+                var progress = $("#StatusSearch").val();
+
+                if ($("#StartDate").val() != "") startDate = $("#StartDate").val();
+                if ($("#EndDate").val() != "") endDate = $("#EndDate").val()
+
+                if (value) {
+                    //caseGrid.dataSource.filter({ field: "CaseName", operator: "contains", value: value });
+                    $caseGrid.dataSource.read({ startDate: startDate, endDate: endDate, filterString: value, progress: progress });
+                } else {
+                    $caseGrid.dataSource.read({ startDate: startDate, endDate: endDate, filterString: "", progress: progress });
+                }
+            });
+
+            $('#resetCaseGrid').click(function () {
+                $('#caseFilter').val('');
+                $caseGrid.dataSource.filter({});
+            });
+
+            $('#export').click(function () {
+                var a = $("#caseFilter").val();
+                var b = $('#StatusSearch').val();
+                window.location = '@Url.Action("Case", "CaseManagement", new { area = "Admin"})?filterString=' + a + '&progress=' + b + '&startDate=' + formatDate(startDate) + '&endDate=' + formatDate(endDate);
+            });
+        });
+
+        function onExportDetail() {
+            window.location = '@Url.Action("CaseDetail", "CaseManagement", new { area = "Admin"})?caseId=' + caseId + "&modelCode=" + modelCode
+        };
+
+        function PrintModal() {
+            //$("#printDiv").printThis();
+            $("#PopupGrid").getKendoGrid().saveAsPDF();
+        };
+
+        function onShowModal(e) {
+            var grid = $("#CaseGrid").getKendoGrid();
+            var item = grid.dataItem($(e.target).closest("tr"));
+            caseId = item.CaseId;
+            modelCode = item.ModelCode
+
+            $.blockUI();
+            $.post("@Url.Action("GetModelCode", "Case", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    var modelCode = result.modelCode;
+                    $.blockUI();
+                    $.post("@Url.Action("CheckCaseStatus", "MyCase", new { area="Case" })", { caseId: caseId }, function (result) {
+                        if (!result.success) {
+                            bootbox.alert('@Resources.Langues.MessagePopupWindow');
+                        } else {
+                            if (modelCode == "M00003") {
+                                showM00003();
+                                Load(caseId);
+                            } else {
+                                showM00001();
+                                Load(caseId);
+                            }
+                            var originGridURL = '@Url.Content("/Case/MyCase/GetI00012DetailByCaseId")';
+                            var changedGridUrl = originGridURL + "?caseId=" + caseId;
+                            $('#PopupGrid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+                            $('#PopupGrid').data('kendoGrid').dataSource.read();
+
+                            $('#popup').modal('show');
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+        };
+
+        var counter = 1;
+
+        function renderNumber() {
+            return counter++;
+        };
+
+        function onDataBound() {
+            counter = 1;
+        };
+
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        };
+
+        function sync_handler(e) {
+            this.read();
+        };
+
+
+
+        function startChange() {
+            startDate = $("#StartDate").val();
+            if ($("#EndDate").val() != "") {
+                endDate = formatDate($("#EndDate").val());
+            } else {
+                endDate = formatDate(new Date(3000, 01, 01));
+            }
+            var $CaseGrid = $("#CaseGrid").data("kendoGrid");
+            $CaseGrid.dataSource.read({ startDate: startDate, endDate: endDate, filterString: $('#caseFilter').val(), progress: $('#StatusSearch').val() });
+        }
+
+        function endChange() {
+            endDate = $("#EndDate").val();
+            if ($("#StartDate").val() != "") {
+                startDate = formatDate($("#StartDate").val());
+            } else {
+                startDate = formatDate(new Date(2000, 01, 01));
+            }
+
+            var $CaseGrid = $("#CaseGrid").data("kendoGrid");
+            $CaseGrid.dataSource.read({ startDate: startDate, endDate: endDate, filterString: $('#caseFilter').val(), progress: $('#StatusSearch').val() });
+        }
+
+        function statusChange() {
+            if ($("#EndDate").val() != "") {
+                endDate = formatDate($("#EndDate").val());
+            } else {
+                endDate = formatDate(new Date(3000, 01, 01));
+            }
+            if ($("#StartDate").val() != "") {
+                startDate = formatDate($("#StartDate").val());
+            } else {
+                startDate = formatDate(new Date(2000, 01, 01));
+            }
+            var value = $('#StatusSearch').val();
+            var $CaseGrid = $("#CaseGrid").data("kendoGrid");
+            $CaseGrid.dataSource.read({ startDate: startDate, endDate: endDate, filterString: $('#caseFilter').val(), progress: value });
+        }
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        //(function (window, undefined) {
+        //    kendo.cultures["ko-KR"] = {
+        //        name: "ko-KR",
+        //        numberFormat: {
+        //            pattern: ["-n"],
+        //            decimals: 2,
+        //            ",": ",",
+        //            ".": ".",
+        //            groupSize: [3],
+        //            percent: {
+        //                pattern: ["-n %", "n %"],
+        //                decimals: 2,
+        //                ",": ",",
+        //                ".": ".",
+        //                groupSize: [3],
+        //                symbol: "%"
+        //            },
+        //            currency: {
+        //                name: "Korean Won",
+        //                abbr: "KRW",
+        //                pattern: ["-$n", "$n"],
+        //                decimals: 0,
+        //                ",": ",",
+        //                ".": ".",
+        //                groupSize: [3],
+        //                symbol: "₩"
+        //            }
+        //        },
+        //        calendars: {
+        //            standard: {
+        //                days: {
+        //                    names: ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"],
+        //                    namesAbbr: ["일", "월", "화", "수", "목", "금", "토"],
+        //                    namesShort: ["일", "월", "화", "수", "목", "금", "토"]
+        //                },
+        //                months: {
+        //                    names: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+        //                    namesAbbr: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+        //                },
+        //                AM: ["오전", "오전", "오전"],
+        //                PM: ["오후", "오후", "오후"],
+        //                patterns: {
+        //                    d: "yyyy-MM-dd",
+        //                    D: "yyyy'년' M'월' d'일' dddd",
+        //                    F: "yyyy'년' M'월' d'일' dddd tt h:mm:ss",
+        //                    g: "yyyy-MM-dd tt h:mm",
+        //                    G: "yyyy-MM-dd tt h:mm:ss",
+        //                    m: "M'월' d'일'",
+        //                    M: "M'월' d'일'",
+        //                    s: "yyyy'-'MM'-'dd'T'HH':'mm':'ss",
+        //                    t: "tt h:mm",
+        //                    T: "tt h:mm:ss",
+        //                    u: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
+        //                    y: "yyyy'년' M'월'",
+        //                    Y: "yyyy'년' M'월'"
+        //                },
+        //                "/": "-",
+        //                ":": ":",
+        //                firstDay: 0
+        //            }
+        //        }
+        //    }
+        //})(this);
+        //(function (window, undefined) {
+        //    kendo.cultures["en-AU"] = {
+        //        name: "en-AU",
+        //        numberFormat: {
+        //            pattern: ["-n"],
+        //            decimals: 2,
+        //            ",": ",",
+        //            ".": ".",
+        //            groupSize: [3],
+        //            percent: {
+        //                pattern: ["-n%", "n%"],
+        //                decimals: 2,
+        //                ",": ",",
+        //                ".": ".",
+        //                groupSize: [3],
+        //                symbol: "%"
+        //            },
+        //            currency: {
+        //                name: "Australian Dollar",
+        //                abbr: "AUD",
+        //                pattern: ["-$n", "$n"],
+        //                decimals: 2,
+        //                ",": ",",
+        //                ".": ".",
+        //                groupSize: [3],
+        //                symbol: "$"
+        //            }
+        //        },
+        //        calendars: {
+        //            standard: {
+        //                days: {
+        //                    names: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        //                    namesAbbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        //                    namesShort: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+        //                },
+        //                months: {
+        //                    names: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        //                    namesAbbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        //                },
+        //                AM: ["AM", "am", "AM"],
+        //                PM: ["PM", "pm", "PM"],
+        //                patterns: {
+        //                    d: "d/MM/yyyy",
+        //                    D: "dddd, d MMMM yyyy",
+        //                    F: "dddd, d MMMM yyyy h:mm:ss tt",
+        //                    g: "d/MM/yyyy h:mm tt",
+        //                    G: "d/MM/yyyy h:mm:ss tt",
+        //                    m: "MMMM d",
+        //                    M: "MMMM d",
+        //                    s: "yyyy'-'MM'-'dd'T'HH':'mm':'ss",
+        //                    t: "h:mm tt",
+        //                    T: "h:mm:ss tt",
+        //                    u: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
+        //                    y: "MMMM yyyy",
+        //                    Y: "MMMM yyyy"
+        //                },
+        //                "/": "/",
+        //                ":": ":",
+        //                firstDay: 1
+        //            }
+        //        }
+        //    }
+        //})(this);
+
+        function showM00001() {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4])
+        grid.showColumn(grid.columns[1].columns[5])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[3].columns[0])
+        grid.showColumn(grid.columns[3].columns[1])
+        grid.showColumn(grid.columns[3].columns[2])
+        grid.showColumn(grid.columns[3].columns[3])
+        grid.showColumn(grid.columns[3].columns[4])
+        grid.showColumn(grid.columns[4])
+        grid.showColumn(grid.columns[5])
+        grid.showColumn(grid.columns[6])
+        grid.showColumn(grid.columns[10])
+        grid.showColumn(grid.columns[11].columns[0])
+        grid.showColumn(grid.columns[11].columns[1])
+
+        grid.hideColumn(grid.columns[8].columns[0])
+        grid.hideColumn(grid.columns[8].columns[1])
+        grid.hideColumn(grid.columns[9].columns[1])
+        grid.hideColumn(grid.columns[9].columns[0])
+    }
+
+    function showM00003() {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        grid.hideColumn(grid.columns[1].columns[3])
+        //grid.hideColumn(grid.columns[1].columns[4])
+        grid.hideColumn(grid.columns[1].columns[5])
+        grid.hideColumn(grid.columns[3].columns[0])
+        grid.hideColumn(grid.columns[3].columns[1])
+        grid.hideColumn(grid.columns[3].columns[2])
+        grid.hideColumn(grid.columns[3].columns[3])
+        grid.hideColumn(grid.columns[3].columns[4])
+        grid.hideColumn(grid.columns[4])
+        grid.hideColumn(grid.columns[5])
+        grid.hideColumn(grid.columns[6])
+        grid.hideColumn(grid.columns[7])
+
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        //grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4])
+        grid.showColumn(grid.columns[1].columns[5])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[8].columns[0])
+        grid.showColumn(grid.columns[8].columns[1])
+        grid.showColumn(grid.columns[9].columns[1])
+        grid.showColumn(grid.columns[9].columns[0])
+        grid.showColumn(grid.columns[10])
+        grid.showColumn(grid.columns[11].columns[0])
+        grid.showColumn(grid.columns[11].columns[1])
+    }
+
+    function Load(caseId) {
+        $.blockUI();
+        $.post("@Url.Action("LoadDataByCaseId", "EntityE00002Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                var grid = $('#PopupGrid').data('kendoGrid');
+                if (result.CP0002) {
+                    grid.showColumn(grid.columns[1].columns[1])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[1])
+                }
+
+                if (result.CP0003) {
+                    grid.showColumn(grid.columns[1].columns[4])
+                    grid.showColumn(grid.columns[1].columns[5])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[4])
+                    grid.hideColumn(grid.columns[1].columns[5])
+                }
+
+                if (result.CP0004) {
+                    grid.showColumn(grid.columns[1].columns[2])
+                    grid.showColumn(grid.columns[3].columns[2])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[2])
+                    grid.hideColumn(grid.columns[3].columns[2])
+                }
+
+                if (result.CP0005) {
+                    grid.showColumn(grid.columns[1].columns[3])
+                    grid.showColumn(grid.columns[3].columns[3])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[3])
+                    grid.hideColumn(grid.columns[3].columns[3])
+                }
+
+                if (result.CP0006) {
+                    //grid.showColumn(grid.columns[2])
+                    //grid.showColumn(grid.columns[8])
+                } else {
+                    //grid.hideColumn(grid.columns[2])
+                    //grid.hideColumn(grid.columns[8])
+                }
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+        function onExportReport() {
+            $.blockUI();
+            $.post("@Url.Action("ExportReport", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success) {
+                    location.href = result.path;
+                } else {
+                    bootbox.alert('@Resources.Langues.ReportFaild');
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+        }
+    </script>
+}

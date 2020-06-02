@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Service Introduction";
+    Layout = "~/Areas/Case/Views/Shared/_CommunityMenuLayout.cshtml";
+}
+
+@section styles{
+    <style>
+        #item-toggle > a {
+            color: #fff;
+            background-color: #ea6b48;
+            font-weight: bold;
+        }
+    </style>
+}
+@Scripts.Render("~/bundles/jqueryval")
+
+<div class="row">
+    <h3 class="sub_tit" style="text-align:center"> @Resources.Langues.ServiceIntroduction</h3>
+    <p>@Html.Raw(ViewBag.SystemInfor)</p>
+    @*<p>분산전원 설계 소프트웨어는……</p>
+        <p>분산전원 설계 소프트웨어는……</p>
+        <p>분산전원 설계 소프트웨어는……</p>*@
+
+
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var current = $(location).attr('pathname');
+        if (current.search("ServiceIntroduceView")) {
+            var menuItem = $("#Menu1").find('li[id="Community"]');
+            $(menuItem).addClass('k-state-highlight');
+            var reponsiveItem = $("#responsiveMenu").find('li[id="Community"]');
+            $(reponsiveItem).addClass('k-state-selected');
+        }
+    </script>
+}
+
+

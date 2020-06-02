@@ -1,0 +1,555 @@
+﻿@{
+    ViewBag.Title = Resources.Langues.Fuelcostmanagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    input {
+        color: black
+    }
+</style>
+
+<script>
+    function onData() {
+        var GAC = $('#GACSelect').data('kendoDropDownList').value();
+        var GAL = $('#GALSelect').data('kendoDropDownList').value();
+        var year = $('#YearSelect').data('kendoDropDownList').value();
+        var fuelId = $("#FuelCostIdSelected").val();
+        return { GAC: GAC, GAL: GAL, year: year, fuelId: fuelId };
+    }
+</script>
+
+<h2>@ViewBag.Title</h2>
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    <div class="row">
+        <div class="row">
+            <div class="form-horizontal">
+                <label class="col-xs-1 col-md-1 control-label">@Resources.Langues.Area </label>
+                <div class="col-xs-1 col-md-1">
+                    @(Html.Kendo().DropDownList()
+                                                .Name("GALSelect")
+                                                .DataTextField("Text")
+                                                .DataValueField("Value")
+                                                .Filter(FilterType.Contains)
+                                                .DataSource(source =>
+                                                {
+                                                    source.Read(read =>
+                                                    {
+                                                        read.Action("GetListGAL", "FuelCostManagement", new { area = "Admin" });
+                                                    });
+                                                })
+
+                                                .HtmlAttributes(new { style = "width: 100%" })
+                                                .OptionLabel(Resources.Langues.PleaseSelect)
+                    )
+                </div>
+            </div>
+
+            <div class="form-horizontal">
+                <label class="col-xs-1 col-md-1 control-label">@Resources.Langues.Year </label>
+                <div class="col-xs-1 col-md-1">
+
+                    @(Html.Kendo().DropDownList()
+                                                .Name("YearSelect")
+                                                .DataTextField("Text")
+                                                .DataValueField("Value")
+                                                .Filter(FilterType.Contains)
+                                                .DataSource(source =>
+                                                {
+                                                    source.Read(read =>
+                                                    {
+                                                        read.Action("GetListYear", "EntityE00032Popup", new { area = "Case" });
+                                                    });
+                                                })
+                            .OptionLabel(Resources.Langues.PleaseSelect)
+                                                .HtmlAttributes(new { style = "width: 100%" })
+                    )
+                </div>
+            </div>
+
+            <div class="form-horizontal">
+                <label class="col-xs-2 col-md-2 control-label">@Resources.Langues.SelectCityGasCompany </label>
+                <div class="col-xs-2 col-md-2">
+                    @(Html.Kendo().DropDownList()
+                                                .Name("GACSelect")
+                                                .DataTextField("Text")
+                                                .DataValueField("Value")
+                                                .Filter(FilterType.Contains)
+                                                .DataSource(source =>
+                                                {
+                                                    source.Read(read =>
+                                                    {
+                                                        read.Action("GetListGAC", "FuelCostManagement", new { area = "Admin" });
+                                                    });
+                                                })
+                            .OptionLabel(Resources.Langues.PleaseSelect)
+                                                .HtmlAttributes(new { style = "width: 100%" })
+                    )
+                </div>
+            </div>
+
+            <div class="col-md-3" style="float:right;">
+                <button id="showCopyModal" class="k-button k-button-icontext pull-right">@Resources.Langues.YearCopy</button>
+                <button class="k-button k-button-icontext pull-right" onclick="NullDataLookup()">@Resources.Langues.NullDataSearch</button>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-6">
+        <div class="form-group">
+            @(Html.Kendo().Grid<DPDSP.Models.FuelCostViewModel>()
+                                            .Name("FuelCostGrid")
+                                            .Columns(columns =>
+                                            {
+                                                columns.Bound(m => m.FuelCostId).Hidden();
+
+                                                columns.Bound(member => member.GasLocationName).Title(Resources.Langues.Area).HtmlAttributes(new { style = "text-align:center;" });
+                                                columns.Bound(member => member.GasCompanyName).Title(Resources.Langues.Citygascompany).HtmlAttributes(new { style = "text-align:center;" });
+                                                columns.Bound(member => member.Year).Title(Resources.Langues.years).HtmlAttributes(new { style = "text-align:center;" });
+                                                columns.Command(command => { command.Custom(Resources.Langues.Edit).Click("EditFC").HtmlAttributes(new { @class = "btn-info" }); }).HtmlAttributes(new { @style = "text-align:center;" });
+                                            })
+                                            .ToolBar(tools => tools.Template(@<text>
+                                                <div class="row">
+                                                    <div><a class="k-button k-button-icontext" onclick="addFC()"><span class="k-icon k-i-add"></span>@Resources.Langues.AddNewRecord</a></div>
+                                                </div>
+                                            </text>))
+                                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                            .Events(ev =>
+                                            {
+                                                ev.Change("onChange");
+                                                ev.Edit("onEdit");
+                                                ev.DataBound("onDataBound");
+                                            })
+                                            .Selectable(selectable => selectable
+                                              .Mode(GridSelectionMode.Multiple)
+                                              .Type(GridSelectionType.Row))
+                                            .Pageable()
+                                            .Sortable()
+                                            .Scrollable(rz => rz.Enabled(true))
+                                            .Resizable(rz => rz.Columns(true))
+                                            .HtmlAttributes(new { style = "height:700px;" })
+                                            .DataSource(dataSource => dataSource
+                                                .Ajax()
+                                                .PageSize(48)
+                                                .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                                .Model(model => { model.Id(p => p.FuelCostId); })
+                                                .Read(read => read.Action("GetListFuelCost", "FuelCostManagement", new { area = "Admin" }).Data("onData"))
+                                        //.Create(add => add.Action("AddFuelCost", "FuelCostManagement", new { area = "Admin" }))
+                                        //.Update(update => update.Action("Update_FuelCost", "FuelCostManagement", new { area = "Admin" }))
+                                        )
+            )
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-6">
+        <div class="form-inline" style="padding:20px;">
+            <label class="form-group">@Resources.Langues.Area :</label>
+            <p class="form-group" id="text-area"></p>
+            <label class="form-group">@Resources.Langues.SelectCityGasCompany :</label>
+            <p class="form-group" id="text-gac"></p>
+            @Html.Hidden("FuelCostIdSelected")
+        </div>
+        <div class="form-group">
+            @(Html.Kendo().Grid<DPDSP.Models.FuelCostMonthViewModel>()
+                                            .Name("FuelCostMonthGrid")
+                                            .Columns(columns =>
+                                            {
+                                                columns.Bound(m => m.FuelCostId).Hidden();
+
+                                                columns.Bound(member => member.Month).Title(Resources.Langues.Month).HtmlAttributes(new { style = "text-align:center;" });
+                                                columns.Bound(member => member.FuelCost).Title(Resources.Langues.FuelPrice).HtmlAttributes(new { style = "text-align:center;" });
+                                                columns.Command(command =>
+                                                {
+                                                    command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+
+                                                }).HtmlAttributes(new { style = "text-align:center;" });
+                                            })
+                                            .ToolBar(toolbar => toolbar.Create().Text(Resources.Langues.AddNewRecord))
+                                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                            .Events(ev =>
+                                            {
+                                                ev.Edit("onEdit");
+                                            })
+                                            .Pageable()
+                                            .Sortable()
+                                            .Scrollable(rz => rz.Enabled(true))
+                                            .Resizable(rz => rz.Columns(true))
+                                            .HtmlAttributes(new { style = "height:700px;" })
+                                            .DataSource(dataSource => dataSource
+                                                .Ajax()
+                                                .PageSize(48)
+                                                .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                                .Model(model => { model.Id(p => p.FuelCostId); })
+                                                .Create(add => add.Action("AddFuelCostMonth", "FuelCostManagement", new { area = "Admin" }).Data("dataFuelCostId"))
+                                                .Read(read => read.Action("GetFuelCostMonth", "FuelCostManagement", new { area = "Admin" }).Data("dataFuelCostId"))
+                                                .Update(update => update.Action("Update_FuelCostMonth", "FuelCostManagement", new { area = "Admin" }))
+                                        )
+            )
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="copyModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.YearCopy</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">@Resources.Langues.SourceYear </label>
+                        <div class="col-md-9">
+                            <select class="form-control toolbarInput" id="sourceYearCopy" name=""></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">@Resources.Langues.TargetYear </label>
+                        <div class="col-md-9">
+                            <select data-val="true" , dat-val-required="The Target year is required." class="form-control toolbarInput" id="targetYearCopy" name=""></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="runCopy" class="btn btn-primary">@Resources.Langues.Run</button>
+                <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true" style="z-index:10000">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="printDiv">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div>
+                @(Html.Kendo().Grid<DPDSP.Models.FuelCostMonthViewModel>().Name("GridNull")
+                                        .Columns(columns =>
+                                        {
+                                            columns.Bound(m => m.FuelCostMonthId).Hidden();
+
+                                            columns.Bound(member => member.Month).HtmlAttributes(new { style = "text-align:center;" });
+                                            columns.Bound(member => member.FuelCost).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:#,##}");
+                                            columns.Command(command =>
+                                            {
+                                                command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+
+                                            }).HtmlAttributes(new { style = "text-align:center;" });
+                                        })
+                                        .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                        .Pageable()
+                                        .Sortable()
+                                        .Scrollable(rz => rz.Enabled(false))
+                                        .Resizable(rz => rz.Columns(true))
+                                        .HtmlAttributes(new { style = "height:auto;" })
+                                        .DataSource(dataSource => dataSource
+                                            .Ajax()
+                                            .PageSize(20)
+                                            .Events(events => events.Error("error_handler"))
+                                            .Model(model => { model.Id(p => p.FuelCostMonthId); })
+                                            .Read(read => read.Action("ReadFuelCostNullData", "FuelCostManagement", new { area = "Admin" }).Data("onData"))
+                                            .Update(update => update.Action("UpdateFuelCostNull", "FuelCostManagement", new { area = "Admin" }))
+                                        )
+                )
+            </div>
+            <div class="modal-footer" style="border-top:none;">
+                <button class="btn btn-default " onclick="SaveDataNullChange()" data-dismiss="modal">@Resources.Langues.Save</button>
+                <button class="btn btn-default " data-dismiss="modal">@Resources.Langues.Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="add-fc" class="modal modal-wide fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">@Resources.Langues.AddFC</h4>
+            </div>
+            <div class="modal-body" style="overflow:auto;">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-xs-4 col-md-4 control-label" for="LastName">√ @Resources.Langues.Area</label>
+                        <div class="col-xs-6 col-md-6">
+                            @(Html.Kendo().DropDownList()
+                                                        .Name("GAL")
+                                                        .DataTextField("Text")
+                                                        .DataValueField("Value")
+                                                        .Filter(FilterType.Contains)
+                                                        .DataSource(source =>
+                                                        {
+                                                            source.Read(read =>
+                                                            {
+                                                                read.Action("GetListGAL", "FuelCostManagement", new { area = "Admin" });
+                                                            });
+                                                        })
+
+                                                        .HtmlAttributes(new { style = "width: 100%" })
+                            )
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-md-4 control-label" for="LastName">√ @Resources.Langues.SelectCityGasCompany</label>
+                        <div class="col-xs-6 col-md-6">
+                            @(Html.Kendo().DropDownList()
+                                                        .Name("GAC")
+                                                        .DataTextField("Text")
+                                                        .DataValueField("Value")
+                                                        .Filter(FilterType.Contains)
+                                                        .DataSource(source =>
+                                                        {
+                                                            source.Read(read =>
+                                                            {
+                                                                read.Action("GetListGAC", "FuelCostManagement", new { area = "Admin" });
+                                                            });
+                                                        })
+
+                                                        .HtmlAttributes(new { style = "width: 100%" })
+                            )
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-md-4 control-label" for="LastName">√ @Resources.Langues.Year</label>
+                        <div class="col-xs-6 col-md-6">
+                            @Html.TextBox("Year", "", new { @class = "form-control input-md" })
+                            @Html.Hidden("isAdd", "add", new { @class = "form-control input-md" })
+                            @Html.Hidden("fuelCostId", "0", new { @class = "form-control input-md" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="saveData()" class="btn btn-primary">@Resources.Langues.Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Resources.Langues.Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var fuelCostGrid = $('#FuelCostGrid').data('kendoGrid');
+    var dropdownList = $('#YearSelect').data('kendoDropDownList');
+    var $copyModal = $('#copyModal');
+
+    function onEdit() {
+
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            bootbox.alert(message);
+        }
+    }
+
+    function sync_handler(e) {
+        this.read();
+    }
+
+    function clearCopySelect() {
+        $('#targetYearCopy').empty();
+        $('#sourceYearCopy').empty();
+    }
+
+    $copyModal.on('show.bs.modal', function () {
+        clearCopySelect()
+        $.blockUI();
+        $.post("@Url.Action("GetListYear", "EntityE00032Popup", new { area = "Case" })", function (result) {
+            if (result.length !== 0) {
+                result.forEach(function (item) {
+                    $("<option/>", {
+                        value: item.Value,
+                        text: item.Text
+                    }).appendTo($('#sourceYearCopy'));
+                });
+                var beginYear = parseInt(result[0].Value) + 1;
+                var futureYear = beginYear + 5;
+                for (var year = beginYear; year <= futureYear; year++) {
+                    $('<option/>', { value: year, text: year }).appendTo($('#targetYearCopy'))
+                }
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    });
+
+    $('#showCopyModal').click(function () {
+        $copyModal.modal('show');
+    });
+
+    $('#runCopy').click(function () {
+        $copyModal.modal('hide');
+        $.blockUI();
+        var sourceYearCopy = $('#sourceYearCopy').val();
+        var targetYearCopy = $('#targetYearCopy').val();
+        $.post('@Url.Action("CopyFuelCost", "FuelCostManagement", new { area="Admin" })',
+            { @*year: year, *@ targetYear: targetYearCopy, sourceYear: sourceYearCopy },
+            function (result) {
+                if (result.success) {
+                    if (result.insert) {
+                        bootbox.alert('Inserted successfully!');
+                        $('#YearSelect').data('kendoDropDownList').dataSource.read();
+                    } else {
+                        bootbox.alert('Updated successfully!');
+                    }
+                    $('#FuelCostGrid').data('kendoGrid').dataSource.read();
+                } else {
+                    if (result.message) {
+                        bootbox.alert(result.message);
+                    }
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            })
+    });
+
+    $('#sourceYearCopy').change(function () {
+        $('#targetYearCopy').empty();
+        var beginYear = parseInt($(this).val()) + 1;
+        var futureYear = beginYear + 5;
+        for (var year = beginYear; year <= futureYear; year++) {
+            $('<option/>', { value: year, text: year }).appendTo($('#targetYearCopy'))
+        }
+    });
+
+    $("#YearSelect").change(function () {
+        $('#FuelCostGrid').data('kendoGrid').dataSource.read();
+    });
+
+    $("#GALSelect").change(function () {
+        $('#FuelCostGrid').data('kendoGrid').dataSource.read();
+    });
+
+    $("#GACSelect").change(function () {
+        $('#FuelCostGrid').data('kendoGrid').dataSource.read();
+    });
+
+    function SaveDataNullChange() {
+        var data = $("#GridNull").data("kendoGrid").dataSource.data();
+        var lst = [];
+        data.forEach(function (item) {
+            lst.push(item)
+        })
+        var abc = JSON.stringify(lst);
+        $.blockUI();
+        $.post('@Url.Action("UpdateFuelCostNull", "FuelCostManagement")', { data: abc, fuelId: $("#FuelCostIdSelected").val() },
+            function (result) {
+                console.log(result.success)
+                $.unblockUI();
+                if (result.success == true) {
+                    $('#FuelCostGrid').data('kendoGrid').dataSource.read();
+                    bootbox.alert("@Resources.Langues.Successful");
+                } else {
+                    bootbox.alert("@Resources.Langues.Error");
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('Please contact to Administrator!');
+            }).always(function () {
+                //$.unblockUI();
+            });
+    }
+
+    function NullDataLookup() {
+        $('#GridNull').data('kendoGrid').dataSource.read();
+        $('#popup').modal("show")
+    }
+
+    function addFC() {
+        $('#isAdd').val('add')
+        $('#fuelCostid').val("")
+        $('#add-fc').modal('show');
+    }
+
+    function EditFC(e) {
+        var grid = $("#FuelCostGrid").getKendoGrid();
+        var item = grid.dataItem($(e.target).closest("tr"));
+
+        $('#isAdd').val('upd')
+        $('#fuelCostid').val(item.FuelCostId)
+        $('#Year').val(item.Year)
+        $('#GAL').data('kendoDropDownList').value(item.GasLocation);
+        $('#GAC').data('kendoDropDownList').value(item.GasCompany);
+
+        $('#add-fc').modal('show');
+    }
+
+    function saveData() {
+        var GAL = $('#GAL').val()
+        var GAC = $('#GAC').val()
+        var val = $('#Year').val()
+
+        if (GAL == "" || GAC == "" || val == "") {
+            return false
+        } else {
+            $.blockUI();
+            $.post('@Url.Action("AddFuelCost1", "FuelCostManagement", new { area="Admin"})', { GAL: GAL, GAC: GAC, val: val, isAdd: $('#isAdd').val(), id: $('#fuelCostId').val() },
+                function (result) {
+                    $.unblockUI();
+                    if (result.success == true) {
+                        bootbox.alert("@Resources.Langues.Successful");
+                         $('#FuelCostGrid').data('kendoGrid').dataSource.read();
+                        $('#add-fc').modal('hide');
+                    } else {
+                        bootbox.alert("@Resources.Langues.Error");
+                    }
+                }).fail(function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    //$.unblockUI();
+                });
+        }
+    }
+
+    $('#add-fc').on('hidden.bs.modal', function (e) {
+        $(this).removeData();
+    });
+
+    function dataFuelCostId() {
+        var fuelId = $("#FuelCostIdSelected").val();
+        return {
+            fuelId: fuelId
+        };
+    }
+
+    function onDataBound(e) {
+        var fuelCostGrid = $("#FuelCostGrid").data("kendoGrid");
+        var row = fuelCostGrid.tbody.find("tr[role='row']:first");
+        if (row != null) {
+            fuelCostGrid.select(e.sender.tbody.find("tr:first"));
+        }
+    }
+
+    function onChange(e) {
+        var fuelCostGrid = $("#FuelCostGrid").data("kendoGrid");
+        var fuelCostMonthGrid = $("#FuelCostMonthGrid").data("kendoGrid");
+        var fuelSelected = fuelCostGrid.dataItem(fuelCostGrid.select());
+        var GasLocationName = fuelSelected.GasLocationName;
+        var GasCompanyName = fuelSelected.GasCompanyName;
+        var id = fuelSelected.FuelCostId;
+        $('#text-area').text(GasLocationName);
+        $('#text-gac').text(GasCompanyName);
+        $('#FuelCostIdSelected').val(id);
+        fuelCostMonthGrid.dataSource.read({ fuelId: id });
+    }
+</script>

@@ -1,0 +1,511 @@
+﻿<style>
+    .bootbox.modal {
+        z-index: 1000000000000000 !important;
+    }
+</style>
+<script>
+    function onData() {
+        var filter = $('.k-textbox[aria-owns="AltitudeCode_listbox"]').val();
+        return { filter: filter };
+    }
+
+    function onData1() {
+        var filter = $('.k-textbox[aria-owns="PVKindCode_listbox"]').val();
+        return { filter: filter };
+    }
+</script>
+<h4  style="text-align:center">@Resources.Langues.PVparameterselection</h4>
+<div align="center" class="container">
+    <div class="row hidden">
+        @*<label> <input type="radio" name="optradio" value="automatic" checked="checked">  @Resources.Langues.AutomaticCalculationofPVPowerGeneration</label>&nbsp;*@
+        @*<label><input type="radio" name="optradio" value="manual"> @Resources.Langues.PVgenerationinputmanually <button type="button" onclick="helpOnclick('Manual')" class="btn btn-primary">?</button></label>*@
+
+        <h4><input type="checkbox" id="automatic" name="optcheckbox" checked> @Resources.Langues.AutomaticCalculationofPVPowerGeneration</h4>
+        <h4><input type="checkbox" id="manual" name="optcheckbox"> @Resources.Langues.PVgenerationinputmanually</h4>
+    </div>
+    @using (Html.BeginForm("SaveEntityE00010AutomaticData", "EntityE00010Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "AutomaticForm" }))
+    {
+        @Html.Hidden("CaseId", @Request.Params["caseId"], new
+   {
+       @data_val = "true",
+       @data_val_required = "The CaseId field is required."
+   })
+
+        @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+   {
+       @data_val = "true",
+       @data_val_required = "The CaseId field is required."
+   })
+        <div class="">
+            <div id="form1">
+                <br />
+                <div class="">
+                    <table class="table table-bordered tblRow">
+                        <tbody>
+                            <tr class="hidden">
+                                <td class="active col-xs-6">@Resources.Langues.PVRated </td>
+                                <td>
+                                    @Html.TextBox("Capacity", "100", new
+                               {
+                                   @data_val = "true",
+                                   data_val_number = "The field Capacity must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 11 digits",
+                                   @data_val_range_max = "9999999999.9",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum One Decimal Point.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                   @style = "text-align:right;border:0px",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td class="active col-xs-1">kWp</td>
+                            </tr>
+                            <tr>
+                                <td class="active col-xs-6">@Resources.Langues.PCSefficiency​</td>
+                                <td class="col-input">
+                                    @Html.TextBox("PCSEff", "95", new
+                               {
+                                   @data_val = "true",
+                                   data_val_number = "The field PCSEff must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 4 digits",
+                                   @data_val_range_max = "999.9",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum One Decimal Point.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                   @style = "text-align:right;border:0px",
+                                   @type = "tel"
+                               })
+                                </td>
+                                @*<td class="active col-xs-1">%</td>*@
+                            </tr>
+                            <tr>
+                                <td class="active col-xs-6">@Resources.Langues.Inclinationangle</td>
+                                <td class="col-input">
+                                    @Html.TextBox("Angle", "40", new
+                               {
+                                   @data_val = "true",
+                                   data_val_number = "The field Angle must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 5 digits",
+                                   @data_val_range_max = "9999.9",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum One Decimal Point.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                   @style = "text-align:right;border:0px",
+                                   @type = "tel"
+                               })
+                                </td>
+                                @*<td class="active col-xs-1">​​​​ﹾ</td>*@
+                            </tr>
+                            <tr>
+                                <td class="active col-xs-6">@Resources.Langues.Meridianaltitude</td>
+                                <td colspan="2">
+                                    <div>
+                                        @(Html.Kendo().DropDownList()
+                                                                                    .Name("AltitudeCode")
+                                                                                    .DataTextField("Text")
+                                                                                    .DataValueField("Value")
+                                                                                    .Filter(FilterType.Contains)
+                                                                                    .DataSource(source =>
+                                                                                    {
+                                                                                        source.Read(read =>
+                                                                                        {
+                                                                                            read.Action("GetCommonSubByComCode", "EntityE00001Popup", new { area = "Case" }).Data("onData");
+                                                                                        });
+                                                                                    })
+
+                                                                                    .HtmlAttributes(new { style = "width: 100%;text-align:center" })
+                                        )
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="active col-xs-6">PV @Resources.Langues.Type</td>
+                                <td colspan="2">
+                                    <div>
+                                        @(Html.Kendo().DropDownList()
+                                                                                    .Name("PVKindCode")
+                                                                                    .DataTextField("Text")
+                                                                                    .DataValueField("Value")
+                                                                                    .Filter(FilterType.Contains)
+                                                                                    .DataSource(source =>
+                                                                                    {
+                                                                                        source.Read(read =>
+                                                                                        {
+                                                                                            read.Action("GetPVKindCode", "EntityE00010Popup", new { area = "Case" }).Data("onData1");
+                                                                                        });
+                                                                                    })
+
+                                                                                    .HtmlAttributes(new { style = "width: 100%;text-align:center" })
+                                        )
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <br />
+                <div class="row">
+                    <div style="text-align: center;">
+                        <label style="color:red">*저장을 하셔야 다음단계로 넘어 갑니다.</label>
+                        <div>
+                            <button id="submitAutomaticForm" type="button" class="button button-gray">@Resources.Langues.Save</button>
+                            @*<button type="button" class="btn  btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+        @using (Html.BeginForm("SaveEntityE00010ManualData", "EntityE00010Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "ManualForm", @enctype = "multipart/form-data" }))
+        {
+            <div id="form2" hidden="hidden">
+                <div class="row">
+                    <div class="form-group col-md-9">
+                        <div class="input-group">
+                            @Html.Hidden("CaseUploadId", @Request.Params["caseId"], new
+                       {
+                           @data_val = "true",
+                           @data_val_required = "The CaseId field is required."
+                       })
+                            @Html.TextBox("File", "", new
+                       {
+                           @data_val = "true",
+                           @data_val_required = "The Excel File field is required.",
+                           @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                           @class = "form-control",
+                           @placeholder = "Excel File...",
+                           @type = "file"
+                       })
+                        </div>
+                    </div>
+                    <div>
+                        <a type="button" class="btn-sm btn-primary" href="@Url.Content("~/Content/TemplateForm/PV발전량수동입력(E00010)_Form.xlsx")">@Resources.Langues.Format</a>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div style="text-align: center;">
+                        <label style="color:red">*저장을 하셔야 다음단계로 넘어 갑니다.</label>
+                        <div>
+                            <button id="submitManualForm" type="button" class="btn btn-sm btn-primary">@Resources.Langues.Save</button>
+                            @*<button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<br />
+<br />
+
+@Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+        var $automaticForm = $('#AutomaticForm');
+        var $manualForm = $('#ManualForm');
+        var $submitAutomaticForm = $('#submitAutomaticForm');
+        var $submitManualForm = $('#submitManualForm');
+        var $downManualExcelForm = $('#downManualExcelForm');
+        var $modal = $('.E00010');
+        var $altitudeCodeDropdown = $('#AltitudeCode').data('kendoDropDownList');
+        var $pvKindCodeDropdown = $('#PVKindCode').data('kendoDropDownList');
+        $('#btn_E00010').removeClass('progress-bar-warning');
+
+        //$('.k-textbox[aria-owns="AltitudeCode_listbox"]').unbind();
+        //$('.k-textbox[aria-owns="PVKindCode_listbox"]').unbind();
+
+        $('.tblRow').find('input').removeAttr("readonly");
+        $.blockUI();
+        $.post("@Url.Action("GetI00001", "EntityE00001Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#AltitudeCode').data('kendoDropDownList').value(result.LocationCode);
+            }else {
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetI00004", "EntityE00010Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#Capacity').val(result.Capacity);
+                $('#PCSEff').val(result.PCSEff);
+                $('#Angle').val(result.Angle);
+                $('#PVKindCode').data('kendoDropDownList').value(result.PVKindCode);
+                $('#AltitudeCode').data('kendoDropDownList').value(result.AltitudeCode);
+            }else {
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+
+        $('input[type=radio][name=optradio]').change(function () {
+            clearModal();
+            if (this.value == 'automatic') {
+                $('#form1').removeAttr('hidden', 'hidden');
+                $('#form2').attr('hidden', 'hidden');
+            }
+            else if (this.value == 'manual') {
+                $('#form1').attr('hidden', 'hidden');
+                $('#form2').removeAttr('hidden', 'hidden');
+            }
+        });
+
+        $('#automatic').change(function () {
+            clearModal();
+            if ($('#automatic').is(":checked")) {
+                $('#form1').removeAttr('hidden', 'hidden');
+                $('#form2').attr('hidden', 'hidden');
+                $('#manual').prop("checked", false);
+            }
+            else {
+                $('#manual').prop("checked", true);
+            }
+        });
+
+        $('#manual').change(function () {
+            clearModal();
+            if ($('#manual').is(":checked")) {
+                $('#form1').attr('hidden', 'hidden');
+                $('#form2').removeAttr('hidden', 'hidden');
+                $('#automatic').prop("checked", false);
+            }
+            else {
+                $('#automatic').prop("checked", true);
+            }
+        });
+
+        $("#AltitudeCode").change(function () {
+            var caseId =  @Request.Params["caseId"];
+            var locationCode = $('#AltitudeCode').val();
+            $.blockUI();
+            $.post("@Url.Action("CheckDataLocationSelected", "EntityE00010Popup", new { area="Case" })", { caseId: caseId, locationCode: locationCode }, function (result) {
+                if (result.success) {
+                    $.unblockUI();
+                }else {
+                    $.unblockUI();
+                    $('#AltitudeCode').data('kendoDropDownList').value('');
+                    bootbox.alert('@Resources.Langues.CheckDataMess');
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+            });
+        });
+
+        $manualForm.on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $manualForm.submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                cache: false,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                    console.log(result.row);
+                    if (result.row != 0) {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ManualError1' + result.row + '@Resources.Langues.ManualError2');
+                    } else {
+                        $.unblockUI();
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    if (lstEntityNextStep.length != 0) {
+                        nextStepEntity(lstEntityNextStep[0]);
+                        lstEntityNextStep.shift();
+                        console.log(lstEntityNextStep)
+                    } else {
+                        nextEntity()
+                    }
+                    }
+                } else {
+                    $.unblockUI();
+                    $('#File').val('');
+                    bootbox.alert('@Resources.Langues.Pleasecheckyourdataagain');
+                }
+            });
+            e.preventDefault();
+        });
+
+        $('#submitManualForm').click(function(){
+            var valid = $manualForm.valid();
+            if(valid){
+                $manualForm.submit();
+            }
+        });
+
+        $('#File').change(function(){
+            if($(this).val()){
+                $('#File').removeClass('input-validation-error');
+            }
+        });
+
+        $automaticForm.on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $automaticForm.submit(function (e) {
+            if ($('#Capacity').val() > 100) {
+                $('#Capacity').addClass("input-validation-error")
+                return false
+            }
+
+            $.blockUI();
+            var data = $automaticForm.serializeArray()
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            e.preventDefault();
+            $.post(urlAction, {
+                CaseId: $('#CaseId').val(),
+                ModelCode: $('#ModelCode').val(),
+                AltitudeCode: $('#AltitudeCode').data('kendoDropDownList').value(),
+                PVKindCode: $('#PVKindCode').data('kendoDropDownList').value(),
+                Capacity: $('#Capacity').val(),
+                PCSEff: $('#PCSEff').val(),
+                Angle: $('#Angle').val()
+            }, function (result) {
+                if (result.success) {
+                    $.unblockUI();
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    if (lstEntityNextStep.length != 0) {
+                        nextStepEntity(lstEntityNextStep[0]);
+                        lstEntityNextStep.shift();
+                        console.log(lstEntityNextStep)
+                    } else {
+                        nextEntity()
+                    }
+                }else {
+                    $.unblockUI();
+                    if (result.Alert == ""){
+                        bootbox.alert('@Resources.Langues.Datanotfound');
+                    } else {
+                        bootbox.alert(result.Alert);
+                    }
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                //$.unblockUI();
+            });
+        });
+
+        $submitAutomaticForm.click(function () {
+            var valid = $automaticForm.valid();
+            if (valid) {
+                var caseId =  @Request.Params["caseId"];
+                var locationCode = $('#AltitudeCode').val();
+                $.blockUI();
+                $.post("@Url.Action("CheckDataLocationSelected", "EntityE00010Popup", new { area="Case" })", { caseId: caseId, locationCode: locationCode }, function (result) {
+                    if (result.success) {
+                        $automaticForm.submit();
+                    }else {
+                        $.unblockUI();
+                        $('#AltitudeCode').data('kendoDropDownList').value('');
+                        bootbox.alert('@Resources.Langues.CheckDataMess');
+                    }
+                }).fail(function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                });
+            }
+        });
+    });
+
+    function onExport() {
+        var caseId = @Request.Params["caseId"];
+        window.location = '@Url.Action("ExportExcel", "EntityE00010Popup", new { area = "Case" })' + '?caseId=' +caseId;
+
+    };
+
+    function clearAutomaticForm() {
+        var $automaticForm = $('#AutomaticForm');
+        var $altitudeCodeDropdown = $('#AltitudeCode').data('kendoDropDownList');
+        var $pvKindCodeDropdown = $('#PVKindCode').data('kendoDropDownList');
+        $pvKindCodeDropdown.value("");
+        $pvKindCodeDropdown.text("");
+        $altitudeCodeDropdown.text("");
+        $altitudeCodeDropdown.value("");
+        $automaticForm.find('.col-input').find('input').val('');
+        $automaticForm.find('input').prop("readonly", "readonly");
+        $automaticForm.find('input').removeClass("input-validation-error");
+        $altitudeCodeDropdown.enable(false);
+        $pvKindCodeDropdown.enable(false);
+        $('#submitAutomaticForm').prop('disabled', 'disabled');
+    };
+
+    function clearManualForm() {
+        var $manualForm = $('#ManualForm');
+        $manualForm.find('input').val('');
+        $manualForm.find('input').prop("disabled", "disabled");
+        $manualForm.find('input').removeClass("input-validation-error");
+        $('#submitManualForm').prop("disabled", "disabled");
+        $('#downManualExcelForm').prop("disabled", "disabled");
+    };
+
+    function clearModal() {
+        $('.tblMultiRow').find('tbody').children().not('.paraSubRow,.para').remove();
+        $('.tblMultiRow').find('.para').find('input').prop("readonly", "readonly");
+        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+        $('.paraSubRow').find('input').not('.loadInput').val("");
+        $('.paraSubRow').addClass('hidden');
+        $('.paraSubRow').find('input').attr('disabled', 'disabled');
+    };
+
+    function helpOnclick(obj) {
+        $('.HelpPopup').modal('show');
+        if (obj == 'Automatic') {
+
+        } else {
+
+        }
+    }
+
+    //$('.k-textbox[aria-owns="AltitudeCode_listbox"]').on('keyup', function (evt) {
+    //    //var charCode = (evt.which) ? evt.which : event.keyCode
+    //    //if (charCode == 13) {
+    //        $("#AltitudeCode").data('kendoDropDownList').dataSource.read();
+    //    //}
+    //});
+
+    //$('.k-textbox[aria-owns="PVKindCode_listbox"]').on('keyup', function (evt) {
+    //    //var charCode = (evt.which) ? evt.which : event.keyCode
+    //    //if (charCode == 13) {
+    //        $("#PVKindCode").data('kendoDropDownList').dataSource.read();
+    //    //}
+    //});
+</script>

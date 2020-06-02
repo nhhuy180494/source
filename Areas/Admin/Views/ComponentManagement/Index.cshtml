@@ -1,0 +1,243 @@
+﻿@{
+    ViewBag.Title = Resources.Langues.ComponentManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section styles{
+    <link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        input[type="checkbox"][readonly] {
+            pointer-events: none;
+        }
+
+        #SerchButton {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        .input-validation-error {
+            border: 1px solid red !important;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+
+        .my-custom-class .modal-dialog {
+            width: 25%;
+        }
+
+        .modal-dialog-regist {
+            width: 25%;
+        }
+
+        .classYes {
+            margin-right: 10px;
+        }
+
+        .classButton1 {
+            background-color: white;
+            border-color: #ea6b48;
+            color: #ea6b48;
+            margin-top: 10px;
+            width: 86px;
+        }
+
+        .classButton {
+            background-color: white;
+            border-color: #ea6b48;
+            color: #ea6b48;
+        }
+
+        .E00008 {
+            top: 5%;
+        }
+
+        span[class=k-input] {
+            text-align: center;
+        }
+
+        .lbWT {
+            padding-right: 0px;
+            font-weight: 400;
+        }
+
+        .radio label {
+            font-weight: 700 !important;
+        }
+
+        .tblMultiRow .active {
+            text-align: center;
+        }
+
+        .tblMultiRow th {
+            text-align: center;
+        }
+
+        .tblMultiRow input {
+            border: 0px;
+        }
+
+        .democlass {
+            background-color: gray;
+        }
+    </style>
+    <link href="~/Content/admin_site_css/LoadingBar.css" rel="stylesheet" />
+
+}
+<script>
+    function dataCom() {
+        var comCode = $('#comCodeDr').data('kendoDropDownList').value();
+        return ({
+            comCode: comCode
+        });
+    };
+
+    function dataComp() {
+        var comCode = $('#CompCode').val();
+        return ({
+            commCode: comCode
+        });
+    };
+</script>
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    @Html.Hidden("CompCode")
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.CommponentViewModel>()
+        .Name("ComGrid")
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Pageable()
+        .Resizable(rz => rz.Columns(true))
+        .Scrollable()
+        .HtmlAttributes(new { style = "height:650px;" })
+        .Columns(columns =>
+        {
+            columns.Bound(r => r.ComCode).Hidden();
+            columns.Bound(r => r.ComSubCode).Title(Resources.Langues.ComSubCode).HtmlAttributes(new { style = "text-align:center;" });
+            columns.Bound(r => r.ComName).Title(Resources.Langues.ComName).HtmlAttributes(new { style = "text-align:center;" });
+            columns.Bound(r => r.ComSubName).Title(Resources.Langues.ComSubName).HtmlAttributes(new { style = "text-align:center;" });
+            columns.Bound(r => r.ComSubName3).HtmlAttributes(new { style = "text-align:center;" });
+            columns.Bound(model => model.Status).ClientTemplate("<input type=\"checkbox\" readonly  #=Status ? checked='checked' : ''  # />")
+         .HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Status);
+            columns.Command(c =>
+            {
+                c.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                c.Custom(Resources.Langues.Delete).Click("deleteCom").HtmlAttributes(new { @class = "btn-danger" });
+            }).HtmlAttributes(new { style = "text-align:center;" });
+        })
+        .ToolBar(tools => tools.Template(@<text>
+            <div class="row">
+                <div class="col-xs-12 col-md-5">
+                    @(Html.Kendo().DropDownList()
+                    .Name("comCodeDr")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .Events(ev => ev.Change("onChange"))
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetListModelCode", "ComponentManagement", new { area = "Admin" });
+                        });
+                    }).OptionLabel("---All---")
+                    )
+                </div>
+            </div>
+        </text>))
+        .Selectable(selectable => selectable
+          .Mode(GridSelectionMode.Multiple)
+          .Type(GridSelectionType.Row))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(50)
+            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+            .Model(model =>
+            {
+                model.Id(r => r.ComSubCode);
+                model.Field(r => r.ComName).Editable(false);
+                model.Field(r => r.ComSubCode).Editable(false);
+            })
+            .Read(read => read.Action("ReadDataComponent", "ComponentManagement", new { area = "Admin" }).Data("dataCom"))
+            .Update(update => update.Action("EditingInline_UpdateComm", "CommonCodeManagement", new { area = "Admin" }).Data("dataComp"))
+            //.Destroy(update => update.Action("DestroyModelMap", "ModelManagement", new { area = "Admin" }))
+            )
+        )
+    </div>
+</div>
+
+<script>
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            bootbox.alert(message);
+        }
+        bootbox.alert(message);
+    };
+
+    function sync_handler(e) {
+        this.read();
+    };
+
+    function onChange() {
+        $("#ComGrid").data("kendoGrid").dataSource.read();
+    }
+
+    $('#ComGrid').on('click', 'tr', function (e) {
+        var row = $(this).closest('tr');
+        var dataItem = $("#ComGrid").data("kendoGrid").dataItem(row);
+        $('#CompCode').val(dataItem.ComSubCode);
+    });
+
+    function deleteCom(e) {
+        var row = $(this).closest('tr');
+        var dataItem = $("#ComGrid").data("kendoGrid").dataItem($(e.currentTarget).closest("tr"))
+        bootbox.confirm({
+            message: '@Resources.Langues.AreYouSure',
+            buttons: {
+                cancel: {
+                    label: '@Resources.Langues.No',
+                }, confirm: {
+                    label: '@Resources.Langues.Yes',
+                    className: 'btn-success'
+                }
+            },
+            callback: function (callback) {
+                if (callback) {
+                    $.blockUI();
+                    $.post('@Url.Action("EditingInline_DeleteComm", "CommonCodeManagement")', { commCode: dataItem.ComSubCode },
+                    function (result) {
+                        if (result.success) {
+                            bootbox.alert('@Resources.Langues.Successful');
+                        } else {
+                            bootbox.alert('@Resources.Langues.Error');
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    })
+                }
+            }
+        });
+    }
+</script>

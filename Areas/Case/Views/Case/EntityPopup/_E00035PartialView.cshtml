@@ -1,0 +1,296 @@
+﻿<style>
+    .E00035 {
+        top: 5%;
+    }
+
+    .tblRow .active {
+        text-align: center;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .k-list-optionlabel {
+        text-align: center;
+    }
+
+    .tblMultiRow th, td {
+        text-align: center;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    @@media print {
+        /* on modal open bootstrap adds class "modal-open" to body, so you can handle that case and hide body */
+        body.modal-open {
+            visibility: hidden;
+        }
+
+        body.modal-open .modal .modal-body {
+            visibility: visible; /* make visible modal body and header */
+        }
+    }
+</style>
+<link href="@Url.Content("~/Content/case_site_css/entity_popup_styles.css")" rel="stylesheet" type="text/css" />
+
+@using (Html.BeginForm("PrintEntityE00035PopupData", "EntityE00035Popup", FormMethod.Post, new { @role = "form", @id = "EntityE00035Form" }))
+{
+    <div class="modal fade E00035" id="" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">@Resources.Langues.Viewdieselgeneratorparameters</h4>
+                </div>
+                <div class="modal-body" id="printDiv">
+                    <br />
+                    @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                    {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                    })
+                    <div class="row">
+                        <div class="form-horizontal">
+                            <label class="control-label col-md-4 lbWT">@Resources.Langues.Selectdieselgeneratorparameters</label>
+                            <div class="col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                  .Name("E00035ModelName")
+                                  .DataTextField("Text")
+                                  .DataValueField("Value")
+                                  .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <table class="table table-bordered tblRow">
+                            <tbody>
+                                <tr>
+                                    <td class="active col-xs-3">@Resources.Langues.Company</td>
+                                    <td>
+                                        @Html.TextBox("Company", "", new { @readonly = "readonly", })
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <table class="table table-bordered tblRow">
+                            <tbody>
+                                <tr>
+                                    <td class="active col-xs-3">@Resources.Langues.ModelName</td>
+                                    <td>
+                                        @Html.TextBox("ModelName", "", new { @readonly = "readonly", })
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row" style="margin-top:5px;">
+                        <table class="table table-bordered tblRow">
+                            <tbody>
+                                <tr>
+                                    <td class="active col-xs-3">@Resources.Langues.FuelPrice</td>
+                                    <td>
+                                        @Html.TextBox("FuelPrice", "", new { @readonly = "readonly", @style = "text-align:right;" })
+                                    </td>
+                                    <td class="active col-xs-1">@Resources.Langues.won</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row scroll-style-7" style="max-height:400px; overflow-y:scroll;">
+                        <table class="table table-bordered tblMultiRow">
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="list-inline pull-right">
+                            @*<button onclick="PrintModal()" type="button" class="btn btn-primary">@Resources.Langues.Print</button>*@
+                            <button type="button" class="btn btn-gray save-class" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/printThis/printThis.js"></script>
+<script>
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+        $("#btn_E00035").addClass("democlass");
+        
+        $('.E00035').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        var dieselDropdown = $("#E00035ModelName").data("kendoDropDownList");
+        $('.E00035').on('shown.bs.modal', function () {         $(document).off('focusin.modal');     });
+        $('.E00035').on('show.bs.modal',function(){
+            clearModal();
+            $.blockUI();
+            $("#E00035ModelName").kendoDropDownList({
+                index: 0,
+                dataValueField: "Value",
+                dataTextField: "Text",
+                serverFiltering: true,
+                change: onDieselChange,
+                dataSource: {
+                    transport: {
+                        read: {
+                            dataType: "json",
+                            url: "@Url.Action("Read_DieselParameter", "EntityE00035Popup", new { area = "Case" })"
+                        }
+                    }
+                },
+                filter:"contains",
+                optionLabel: "– Select –",
+            });
+            $.unblockUI();
+        });
+        $.blockUI();
+        $.post("@Url.Action("GetDieselGenParameterByCaseId", "EntityE00034Popup", new { area="Case" })", { caseId:caseId }, function (result) {
+            if(result.success){
+                var id = result.id;
+                var tbody = $('.tblMultiRow').find('tbody');
+
+                $.blockUI();
+                $.post("@Url.Action("GetDieselParameterSubList", "EntityE00035Popup", new { area="Case" })", { dieselParameterId:id }, function (result) {
+                    if(result.success){
+                        clearModal();
+                        var list = result.listDieselParaSub;
+                        var dieselParameter = result.dieselParameter;
+                        $('#Company').val(dieselParameter.Company);
+                        $('#ModelName').val(dieselParameter.ModelName);
+                        $('#FuelPrice').val(dieselParameter.FuelPrice);
+                        var order = 0;
+                        list.forEach(function( item ) {
+                            var html = createHtmlParaSub(order,item);
+                            tbody.append(html);
+                            order++;
+                        });
+                    }
+                }).fail(function () {
+                    bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                }).always(function(){
+                    $.unblockUI();
+                });
+
+                $.blockUI();
+                $.post("@Url.Action("GetDGParameter", "EntityE00034Popup", new { area="Case" })", { dgParameterId:id }, function (result) {
+                    if(result.success){
+                        $('#Company').val(result.DGParam.Company);
+                        $('#ModelName').val(result.DGParam.ModelName);
+                        $('#FuelPrice').val(result.DGParam.FuelPrice);
+                        $("#E00035ModelName").data("kendoDropDownList").value(id);
+                    }
+                }).fail(function () {
+                    bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                }).always(function(){
+                    $.unblockUI();
+                });
+
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+        }).always(function(){
+            $.unblockUI();
+        });
+    });
+
+    function onDieselChange(){
+        var tbody = $('.tblMultiRow').find('tbody');
+        var value = this.value();
+        if(value === ""){
+            clearModal();
+        }
+        else {
+            $.blockUI();
+            $.post("@Url.Action("GetDieselParameterSubList", "EntityE00035Popup", new { area="Case" })", { dieselParameterId:value }, function (result) {
+                if(result.success){
+                    clearModal();
+                    var list = result.listDieselParaSub;
+                    var dieselParameter = result.dieselParameter;
+                    $('#Company').val(dieselParameter.Company);
+                    $('#ModelName').val(dieselParameter.ModelName);
+                    $('#FuelPrice').val(dieselParameter.FuelPrice);
+                    var order = 0;
+                    list.forEach(function( item ) {
+                        var html = createHtmlParaSub(order,item);
+                        tbody.append(html);
+                        order++;
+                    });
+                }
+            }).fail(function () {
+                bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }).always(function(){
+                $.unblockUI();
+            });
+        }
+    };
+
+    function createHtmlParaSub(order,item){
+        return '<tr><td class="col-xs-5">' + '@Resources.Langues.Ratedoutput1' +'</td><td><input type="text" readonly="readonly" class="text-center" style = "text-align:right;" name="ListDieselGenParamSubs['+order+'].RatedOuputCom" value="'+item.RatedOuputCom+'"/></td>'+
+            '<td class="col-xs-1">kW</td></tr><tr><td class="col-xs-5">' + '@Resources.Langues.Commercialminimumoperationoutput' +'</td><td><input type="text" style = "text-align:right;" readonly="readonly" class="text-center" name="ListDieselGenParamSubs['+order+'].MinOperOutput" value="'+item.MinOperOutput+'"/>'+
+            '</td><td class="col-xs-1">kW</td></tr><tr><td class="col-xs-5">' + '@Resources.Langues.Commercialmaximumoperationoutput' +'</td><td><input type="text" style = "text-align:right;" readonly="readonly" class="text-center" name="ListDieselGenParamSubs['+order+'].MaxOperOutput" value="'+item.MaxOperOutput+'"/>'+
+            '</td><td class="col-xs-1">kW</td></tr><tr ><td class="col-xs-5">' + '@Resources.Langues.Ratedoutput2' +'</td><td><input type="text" style = "text-align:right;" readonly="readonly" class="text-center" name="ListDieselGenParamSubs['+order+'].RatedOyputEmr" value="'+item.RatedOyputEmr+'"/>'+
+            '</td><td class="col-xs-1">kW</td></tr><tr ><td class="col-xs-5">' + '@Resources.Langues.Emergencyminimumoperationoutput' +'</td><td><input type="text" style = "text-align:right;" style = "text-align:right;" readonly="readonly" class="text-center" name="ListDieselGenParamSubs['+order+'].MinOperEmr" value="'+item.MinOperEmr+'"/>'+
+            '</td><td class="col-xs-1">kW</td></tr><tr ><td class="col-xs-5">' + '@Resources.Langues.Emergencymaximumoperationoutput' +'</td><td><input type="text" style = "text-align:right;" readonly="readonly" class="text-center" name="ListDieselGenParamSubs['+order+'].MaxOperEmr" value="'+item.MaxOperEmr+'"/>'+
+            '</td><td class="col-xs-1">kW</td></tr><tr ><td class="col-xs-5">' + '@Resources.Langues.Operatingtime1' +'</td><td><input type="text" style = "text-align:right;" readonly="readonly" class="text-center" name="ListDieselGenParamSubs['+order+'].OperTimeCom" value="'+item.OperTimeCom+'"/>'+
+            '</td><td class="col-xs-1">시간</td></tr><tr ><td class="col-xs-5">' + '@Resources.Langues.Operatingtime2' +'</td><td><input type="text" style = "text-align:right;" readonly="readonly" class="text-center" name="ListDieselGenParamSubs['+order+'].OperTimeEmr" value="'+item.OperTimeEmr+'"/>'+
+            '</td><td class="col-xs-1">시간</td></tr><tr><td class="col-xs-5">' + '@Resources.Langues.Co2Emiisions' +'</td><td><input type="text" style = "text-align:right;" readonly="readonly" class="text-center" name="ListDieselGenParamSubs['+order+'].Co2Emiisions" value="'+item.Co2Emiisions+'"/></td><td class="col-xs-1">tCO2/리터</td></tr><br />';
+    }
+
+    function clearModal(){
+        $('.tblRow').find('input').not('.loadInput').val("");
+        $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+        $('.tblRow').find('input').prop("readonly","readonly");
+        $('.tblRow').find('input').removeClass("input-validation-error");
+        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+        $('.paraSubRow').find('input').not('.loadInput').val("");
+        $('.paraSubRow').addClass('hidden');
+        $('.paraSubRow').find('input').attr('disabled','disabled');
+    };
+    function PrintModal() {
+        $("#printDiv").printThis();
+    }
+</script>
+

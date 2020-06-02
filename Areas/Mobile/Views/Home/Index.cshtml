@@ -1,0 +1,42 @@
+﻿@{
+
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+
+<div class="container" style="padding-top:13px">
+
+    <h1 align="center"><img src="~/Theme/images/main.png" width="320" height="456" alt="" /></h1>
+    <br>
+    <div align="center">
+        <button type="button" class="btn btn-default" onclick="changeLang('ko')">KOREA </button>&nbsp;&nbsp;&nbsp; 
+        <button type="button" class="btn btn-default"  onclick="changeLang('en')">ENGLISH</button>
+    </div>
+
+
+    <!--MAIN ONLY FILES-->
+    <!--MAIN CSS, JS-->
+    <link rel="stylesheet" href="~/Theme/css/d-main.css" />
+    <script src="~/Theme/js/d-main.js"></script>
+
+    </div>
+
+<script>
+    var langBase = "ko"
+    function changeLang(lang) {
+        langBase = lang;
+        var url = window.location.href;
+        var res = url.split('/');
+        var a = res[3].toLowerCase()
+        if (res[3].toLowerCase() == 'ko' || res[3].toLowerCase() == 'en') {
+            res[3] = lang;
+        } else {
+            res.splice(3, 0, lang);
+        }
+        var newUrl = "";
+        res.forEach(function (entry) {
+            newUrl = newUrl + entry + "/";
+        });
+        newUrl = newUrl.slice(0, -1);
+        window.location.href = newUrl
+    }
+</script>

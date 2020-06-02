@@ -1,0 +1,412 @@
+﻿<style>
+    .E00002 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .radio-group {
+        position: relative;
+    }
+
+    .radio {
+        display: inline-block;
+        width: 35%;
+        /* line-height: 7.4; */
+        /* margin-bottom: 15px; */
+        margin-right: 15px;
+        border-radius: 100%;
+        background-color: #dedede;
+        border: 4px solid #dedede;
+        cursor: pointer;
+        margin-top: 0px;
+    }
+
+        .radio.selected {
+            border-color: #4d565f;
+            background: #4d565f;
+            color: #fff
+        }
+</style>
+<!-- Modal -->
+<div class="modal fade E00002" role="dialog">
+    <div class="modal-dialog modal-sm">
+        @{ string ModelCode = Request.Params["modelCode"];
+        }
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="title-2">@Resources.Langues.ComponentSelection</h4>
+            </div>
+            <div class="modal-body">
+                <div class='row text-left'>
+                    <div class='form-group'>
+                        <div id="content">
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <div class="row E00002BtnRow">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" onclick="E00002onSave()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var $modal = $('.E00002');
+    var caseId = @Request.Params["caseId"]
+        var modelCode = '@Request.Params["modelCode"]'
+
+
+
+    $(document).ready(function () {
+        $('.E00002').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+
+
+        $('.E00002').on('hide.bs.modal', function () {
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetListComponent", "EntityE00002Popup", new { area="Case" })", { modelCode: '@Request.Params["modelCode"]' }, function (result) {
+            $('#content').html(result.html)
+            debugger
+            if ('@Request.Params["modelCode"]' == "M00001") {
+                $('#title-2').html('@Resources.Langues.SelectDistributedResources')
+                //$('#CP0003').prop("checked", true);
+                //$('#CP0003').prop("disabled", "disabled");
+                $('#CP0003[data-value=true]').addClass("selected");
+                $('#CP0003').prop("disabled", "disabled");
+            }
+            if ('@Request.Params["modelCode"]' == "M00002") {
+                //$('#CP0001').prop("checked", true);
+                //$('#CP0001').prop("disabled", "disabled");
+                //$('#CP0002').prop("checked", true);
+                //$('#CP0002').prop("disabled", "disabled");
+                //$('#CP0003').prop("checked", true);
+                //$('#CP0003').prop("disabled", "disabled");
+                //$('#CP0006').prop("checked", true);
+                //$('#CP0006').prop("disabled", "disabled");
+                $('#CP0001[data-value=true]').addClass("selected");
+                $('#CP0001').prop("disabled", "disabled");
+                $('#CP0002[data-value=true]').addClass("selected");
+                $('#CP0002').prop("disabled", "disabled");
+                $('#CP0003[data-value=true]').addClass("selected");
+                $('#CP0003').prop("disabled", "disabled");
+                $('#CP0006[data-value=true]').addClass("selected");
+                $('#CP0006').prop("disabled", "disabled");
+                $('#title-2').html('@Resources.Langues.CommonSelection')
+            }
+            if ('@Request.Params["modelCode"]' == "M00003") {
+                $('#title-2').html('@Resources.Langues.CommonSelection')
+            }
+            if ('@Request.Params["modelCode"]' == "M00004") {
+                $('#title-2').html('@Resources.Langues.CommonSelection')
+            }
+            //2019.07.11, ICPARK
+            if ('@Request.Params["modelCode"]' == "M00005") {
+                $('#title-2').html('@Resources.Langues.CommonSelection')
+            }
+
+            $.blockUI();
+        $.post("@Url.Action("LoadDataByCaseId", "EntityE00002Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $("#btn_E00002").addClass("democlass");
+                if (modelCode == 'M00004') {
+                    //$('#CP0001').prop("disabled", "disabled");
+                    //$('#CP0003').prop("disabled", "disabled");
+                    //$('#CP0004').prop("disabled", "disabled");
+                    $('#CP0001').prop("disabled", "disabled");
+                    $('#CP0003').prop("disabled", "disabled");
+                    $('#CP0004').prop("disabled", "disabled");
+                }
+                if (modelCode != 'M00003') {
+                    if (result.CP0001) {
+                        //$('#CP0001').prop("checked", true);
+                        $('.radio[name=CP0001][data-value=true]').click();
+                    } else {
+                        //$('#CP0001').prop("checked", false);
+                        $('.radio[name=CP0001][data-value=false]').click();
+                    }
+                    if (result.CP0002) {
+                        //$('#CP0002').prop("checked", true);
+                        $('.radio[name=CP0002][data-value=true]').click();
+                    } else {
+                        //$('#CP0002').prop("checked", false);
+                         $('.radio[name=CP0002][data-value=false]').click();
+                    }
+                    if (result.CP0003) {
+                        //$('#CP0003').prop("checked", true);
+                        $('.radio[name=CP0003][data-value=true]').click();
+                    } else {
+                        //$('#CP0003').prop("checked", false);
+                        $('.radio[name=CP0003][data-value=false]').click();
+                    }
+                    if (result.CP0004) {
+                        //$('#CP0004').prop("checked", true);
+                        $('.radio[name=CP0004][data-value=true]').click();
+                    } else {
+                        //$('#CP0004').prop("checked", false);
+                        $('.radio[name=CP0004][data-value=false]').click();
+                    }
+                    if (result.CP0005) {
+                        //$('#CP0005').prop("checked", true);
+                        $('.radio[name=CP0005][data-value=true]').click();
+                    } else {
+                        //$('#CP0005').prop("checked", false);
+                        $('.radio[name=CP0005][data-value=false]').click();
+                    }
+                    if (result.CP0006) {
+                        //$('#CP0006').prop("checked", true);
+                        $('.radio[name=CP0006][data-value=true]').click();
+                    } else {
+                        //$('#CP0006').prop("checked", false);
+                        $('.radio[name=CP0006][data-value=false]').click();
+                    }
+                } else {
+                    if (result.CP0001) {
+                        //$('#CP0001').prop("checked", true);
+                        $('.radio[name=CP0001][data-value=true]').click();
+                    }
+                    if (result.CP0002) {
+                        //$('#CP0002').prop("checked", true);
+                         $('.radio[name=CP0002][data-value=true]').click();
+                    }
+                    if (result.CP0001 && result.CP0003) {
+                        //$('#CP00013').prop("checked", true);
+                        //$('#CP0001').prop("checked", false);
+                        $('.radio[name=CP00013][data-value=true]').click();
+                        $('.radio[name=CP0001][data-value=false]').click();
+                    }
+                }
+            } else {
+                if (modelCode == "M00002") {
+                    //$('#CP0001').prop("checked", true);
+                    //$('#CP0002').prop("checked", true);
+                    //$('#CP0003').prop("checked", true);
+                    //$('#CP0004').prop("checked", true);
+                    //$('#CP0005').prop("checked", true);
+                    //$('#CP0006').prop("checked", true);
+                    $('.radio[name=CP0001][data-value=true]').click();
+                    $('.radio[name=CP0002][data-value=true]').click();
+                    $('.radio[name=CP0003][data-value=true]').click();
+                    $('.radio[name=CP0004][data-value=true]').click();
+                    $('.radio[name=CP0005][data-value=true]').click();
+                    $('.radio[name=CP0006][data-value=true]').click();
+                }
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function(){
+            $.unblockUI();
+        });
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function(){
+            $.unblockUI();
+        });
+    });
+
+    function selectChange(code) {
+        if (modelCode == "M00003") {
+            if (code == "CP0001") {
+                //$('#CP00013').prop("checked", false);
+                //$('#CP00023').prop("checked", false);
+                //$('#CP0002').prop("checked", false);
+                $('.radio[name=CP00013][data-value=false]').click();
+                $('.radio[name=CP00023][data-value=false]').click();
+                $('.radio[name=CP0002][data-value=false]').click();
+            } else if (code == "CP0002") {
+                //$('#CP00013').prop("checked", false);
+                //$('#CP00023').prop("checked", false);
+                //$('#CP0001').prop("checked", false);
+                $('.radio[name=CP00013][data-value=false]').click();
+                $('.radio[name=CP00023][data-value=false]').click();
+                $('.radio[name=CP0001][data-value=false]').click();
+            } else if (code == "CP00023") {
+                //$('#CP0002').prop("checked", false);
+                //$('#CP0001').prop("checked", false);
+                //$('#CP00013').prop("checked", false);
+                $('.radio[name=CP0002][data-value=false]').click();
+                $('.radio[name=CP0001][data-value=false]').click();
+                $('.radio[name=CP00013][data-value=false]').click();
+            } else if (code == "CP00013") {
+                //$('#CP0001').prop("checked", false);
+                //$('#CP00023').prop("checked", false);
+                //$('#CP0002').prop("checked", false);
+                $('.radio[name=CP0001][data-value=false]').click();
+                $('.radio[name=CP00023][data-value=false]').click();
+                $('.radio[name=CP0002][data-value=false]').click();
+            }
+        }
+    }
+
+    function E00002onSave() {
+        //if (!$('input[name="E00002optradio"]').is(":checked")) {
+        //    showMess('One or more must be selected')
+        //    return false;
+        //}
+        var $chkPV = false;
+        var $chkESS  = false;
+        var $chkWT = false;
+        var $chkFC = false;
+        var $chkCHP = false;
+        var $chkDieselGen = false;
+        debugger
+        if (modelCode != 'M00003') {
+            //var $chkPV = $('#CP0001').is(":checked");
+            //var $chkESS = $('#CP0003').is(":checked");
+            //var $chkWT = $('#CP0002').is(":checked");
+            //var $chkFC = $('#CP0004').is(":checked");
+            //var $chkCHP = $('#CP0005').is(":checked");
+            //var $chkDieselGen = $('#CP0006').is(":checked");
+            var $chkPV = $('.radio[name=CP0001].selected').attr('data-value') === 'true';
+            var $chkESS = $('.radio[name=CP0003].selected').attr('data-value') === 'true';
+            var $chkWT = $('.radio[name=CP0002].selected').attr('data-value') === 'true';
+            var $chkFC = $('.radio[name=CP0004].selected').attr('data-value') === 'true';
+            var $chkCHP = $('.radio[name=CP0005].selected').attr('data-value') === 'true';
+            var $chkDieselGen = $('.radio[name=CP0006].selected').attr('data-value') === 'true';
+            
+        } else {
+            if ($('.radio[name=CP00013].selected').attr('data-value') == "true"/*$('#CP00013').is(":checked")*/) {
+                $chkPV = true;
+                $chkESS = true;
+            }
+            if ($('.radio[name=CP00023].selected').attr('data-value') == "true"/*$('#CP00023').is(":checked")*/) {
+                $chkWT = true;
+                $chkESS = true;
+            }
+            if ($('.radio[name=CP0001].selected').attr('data-value') == "true"/*$('#CP0001').is(":checked")*/) {
+                $chkPV = true;
+            }
+            if ($('.radio[name=CP0002].selected').attr('data-value') == "true"/*$('#CP0002').is(":checked")*/) {
+                $chkWT = true;
+            }
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: "@Url.Action("SaveList", "EntityE00002Popup", new { area = "Case" })",
+            method: "post",
+            data: {
+                CP0001: $chkPV,
+                CP0003: $chkESS,
+                CP0002: $chkWT,
+                CP0004: $chkFC,
+                CP0005: $chkCHP,
+                CP0006: $chkDieselGen,
+                caseId: "@Request.Params["caseId"]",
+                modelCode: "@Request.Params["modelCode"]"
+            },
+            success: function (result) {
+                if (result.success) {
+                    updateHistory(result.html)
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                        bootbox.alert({
+                            message: "@Resources.Langues.Successful",
+                            title: " ", buttons: {
+                                ok: {
+                                    label: '@Resources.Langues.OK', className: 'btn-gray',
+                                    className: 'btn-gray'
+                                }
+                            }
+                            , callback: function () {
+
+                                if (!$chkPV) {
+                                    $('#li_I00004').addClass('disabled')
+                                } else {
+                                    $('#li_I00004').removeClass('disabled')
+                                }
+                                if (!$chkWT) {
+                                    $('#li_I00005').addClass('disabled')
+                                } else {
+                                    $('#li_I00005').removeClass('disabled')
+                                }
+                                if (!$chkESS) {
+                                    $('#li_I00009').addClass('disabled')
+                                    $('#li_I00006').addClass('disabled')
+                                } else {
+                                    $('#li_I00009').removeClass('disabled')
+                                    $('#li_I00006').removeClass('disabled')
+                                }
+                                if (!$chkFC) {
+                                    $('#li_I00007').addClass('disabled')
+                                } else {
+                                    $('#li_I00007').removeClass('disabled')
+                                }
+                                if (!$chkCHP) {
+                                    $('#li_I00008').addClass('disabled')
+                                } else {
+                                    $('#li_I00008').removeClass('disabled')
+                                }
+                                if (!$chkDieselGen) {
+                                    $('#li_I00013').addClass('disabled')
+                                } else {
+                                    $('#li_I00013').removeClass('disabled')
+                                }
+                                $('.modal-backdrop').remove();
+                                $('.E00002').modal('hide');
+                            }
+                        });
+                        $("#btn_E00002").addClass("democlass");
+                    $.unblockUI();
+                } else {
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Error')
+                }
+            },
+            error: function (response) {
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+</script>

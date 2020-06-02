@@ -1,0 +1,300 @@
+﻿
+@{
+    ViewBag.Title = Resources.Langues.PVESSSchedulerTitle;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        .input-validation-error {
+            border: 1px solid red !important;
+        }
+
+        .text {
+            padding-top: 7px;
+        }
+
+        #uploadModal {
+            top: 5%;
+        }
+    </style>
+}
+
+<script>
+    function onData() {
+        var modelCode = $('#ModelCode').val();
+        return { modelCode: modelCode };
+    }
+</script>
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    @Resources.Langues.PVESSTitle1<br />
+    @Resources.Langues.PVESSTitle2<br />
+
+    <div class="row" style="margin-top:20px; margin-bottom:20px;">
+        <div class="col-md-6">
+            <button class="btn btn-opal showUploadModal1">@Resources.Langues.Changeexecutablefile</button>
+        </div>
+    </div>
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.PvEssSchedulerViewModel>()
+                        .Name("Grid")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(m => m.SchedulerId).Hidden();
+                            columns.Bound(member => member.SchedulerTypeName).Title(Resources.Langues.ModelPV).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.SchedulerTypeName2).Title(Resources.Langues.SchedulerType).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.FileFullName).Title(Resources.Langues.FileName).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.RegDate).Title(Resources.Langues.RegDate).Format("{0: yyyy/MM/dd}").HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.RegUser).Title(Resources.Langues.RegUser).HtmlAttributes(new { style = "text-align:center;" });
+                            //columns.Bound(member => member.Status).Title(Resources.Langues.Status).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Command(command =>
+                            {
+                                command.Custom(Resources.Langues.Delete).Click("onDelete");
+                            }).Title("").HtmlAttributes(new { style = "text-align:center;" });
+                        })
+                        .Editable(editable => editable.Mode(GridEditMode.InLine))
+                        .Pageable()
+                        .Sortable()
+                        .Scrollable(rz => rz.Enabled(false))
+                        .Resizable(rz => rz.Columns(true))
+                        .HtmlAttributes(new { style = "height:auto;" })
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(15)
+                            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                            .Model(model => { model.Id(p => p.SchedulerId); })
+                            .Read(read => read.Action("Read", "PvEssSchedulerManagement", new { area = "Admin" }))
+                    )
+        )
+    </div>
+</div>
+
+<!-- Modal -->
+@using (Html.BeginForm("SavePvEssScheduler", "PvEssSchedulerManagement", FormMethod.Post, new { @role = "form", @id = "ManualForm", @enctype = "multipart/form-data" }))
+{
+    <div class="modal fade" id="uploadModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Program Change(Upload)</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        @Resources.Langues.PVESSModal1 <br/>
+                        @Resources.Langues.PVESSModal2 <br />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-6 lbWT">@Resources.Langues.ModelPV</label>
+                        <div>
+                            @(Html.Kendo().DropDownList()
+                                .Name("ModelCode")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .Events(ev => ev.Change("onChange"))
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("GetModelList", "PvEssSchedulerManagement", new { area = "Admin"});
+                                    });
+                                })
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                .OptionLabel("- Select -")
+                            )
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-6 lbWT">@Resources.Langues.SchedulerType</label>
+                        <div>
+                            @(Html.Kendo().DropDownList()
+                                .Name("SchedulerType")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .Events(e => e.DataBound("dataBound"))
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("ReadListComSub", "PvEssSchedulerManagement", new { area = "Admin" }).Data("onData");
+                                    });
+                                })
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                .OptionLabel("- Select -")
+                            )
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @*@Html.Hidden("SchedulerType", "", new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                   })*@
+                        @Html.Hidden("FileName", "", new
+                   {
+                       @data_val = "true",
+                   })
+                        @*<input type="file" class="form-control" />*@
+                        @Html.TextBox("File", "", new
+                   {
+                       @data_val = "true",
+                       @class = "form-control",
+                       @type = "file"
+                   })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="submitManualForm" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-gray" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var $uploadModal = $('#uploadModal');
+            var fileName = "";
+
+            $('#uploadModal').on('shown.bs.modal', function () { $(document).off('focusin.modal'); });
+
+            $('.showUploadModal1').click(function () {
+                $uploadModal.modal('show');
+            });
+            $('.showUploadModal2').click(function () {
+                $uploadModal.modal('show');
+            });
+            var $manualForm = $('#ManualForm');
+            var $submitManualForm = $('#submitManualForm');
+            var $modal = $('#uploadModal');
+
+            $manualForm.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $('#submitManualForm').click(function () {
+                var fileName = $('#FileName').val()
+                    $manualForm.submit();
+            });
+
+            $manualForm.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    cache: false,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        $('#File').val('')
+                        $modal.modal('hide');
+                        $('#Grid').data('kendoGrid').dataSource.read();
+                        bootbox.alert('@Resources.Langues.Successful');
+                    } else {
+                        $('#File').val('');
+                        if (result.alert != "") {
+                            bootbox.alert(result.alert);
+                        } else {
+                            bootbox.alert('Check excel data again.');
+                        }
+                    }
+                });
+                e.preventDefault();
+            });
+
+            $('#File').change(function () {
+                if ($(this).val()) {
+                    $('#File').removeClass('input-validation-error');
+                }
+            });
+        });
+
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+
+        function onChange() {
+            $.blockUI();
+            $('#SchedulerType').data('kendoDropDownList').dataSource.read();
+            $.unblockUI();
+        }
+
+        function onDelete(e) {
+            var itemGrid = $("#Grid").data("kendoGrid");
+            var dataItem = itemGrid.dataItem($(e.currentTarget).closest("tr"));
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("DeletePVESS", "PvEssSchedulerManagement")', { schedulerId: dataItem.SchedulerId },
+                        function (result) {
+                            if (result) {
+                                itemGrid.dataSource.read();
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function dataBound(e) {
+            var ds = this.dataSource.data();
+            if (ds.length == 1) {
+                this.select(1);
+            }
+        }
+    </script>
+}

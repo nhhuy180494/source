@@ -1,0 +1,107 @@
+﻿@*@{
+        ViewBag.Title = "Main";
+        Layout = "~/Areas/HomepageSite/Views/Shared/_Layout.cshtml";
+    }*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+@section styles{
+    <style>
+        .main-button {
+            background-color: #C03636;
+            border-color: #C03636;
+        }
+
+            .main-button:hover {
+                background-color: #C03636;
+                opacity: 0.8;
+                border-color: #C03636;
+            }
+
+    </style>
+}
+
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 col-sm-12">   @*--this check need --*@
+@*<div class="col-md-8 col-md-offset-2">*@
+    @*<h2 class="text-center" style="color:#fff">@Resources.Langues.DistributedPowerDesignSoftware</h2>*@
+    <h2 class="sub_tit text-center" style="color:#fff">@Resources.Langues.DistributedPowerDesignSoftware </h2>
+    <br />
+    <br />
+    <p style="color:#fff;font-size:20px;line-height:30px;">@Resources.Langues.DistributedPowerExplanation2 </p>
+    <br />
+    <p class="text-right" style="color:#fff;font-size:17px;line-height:30px;">@Resources.Langues.DistributedPowerSmart </p>
+    <br />
+    @*<div class="col-xs-offset-3 col-sm-offset-1 col-lg-offset-2 col-md-offset-1">*@
+    @*<div class="col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-2">*@
+        @*<img class="img-responsive" src="~/img/Home_Main_img1.png" width="560" height="338" alt="into" title="File size= 93.5KB">*@
+        @*<img class="visible-sm" src="~/img/Home_Main_img1.png" width="560" height="338" alt="into" title="File size= 93.5KB">
+        <img class="visible-xs" src="~/img/Home_Main_img1.png" width="560" height="338" alt="into" title="File size= 93.5KB">*@        
+    @*</div>*@
+    <div class="col-sm-12 text-center feature" style="padding-top:20px;">
+        <img src="~/img/Home_Main_img1.png" width="560" height="338" alt="into" title="File size= 93.5KB">
+        <br />
+        <h2 class="sub_tit text-center" style="color:#fff"><br /> </h2>
+        <br />
+    </div>
+    @if (Request.IsAuthenticated)
+    {
+        <div class="row">
+            <div class="col-sm-12 text-center feature" style="/*padding-top:20px;*/">
+                @*<a href="@Url.Action("Index","Home", new { area="Case" })" target="_blank" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-check"></span> @Resources.Langues.CreateCase</a>*@
+                <a role="button" href="~/Content/LinkFile/PV-ESS 수요관리 모형 설계 프로그램 개요.pdf" style="margin:2px;" target="_blank" class="btn btn-primary btn-lg main-button" @*id="btnCreateCase"*@>
+                    <span class="glyphicon glyphicon-check"></span> @Resources.Langues.ProgramInformationDownload
+                </a>
+                <a role="button" href="http://121.254.224.214/ESSD/Setup/?appid=ESSD" style="margin:2px; background-color: orange;" target="_blank" class="btn btn-lg main-button" @*id="btnCreateCase"*@>
+                    <span class="glyphicon glyphicon-check"></span> @Resources.Langues.TrailVersionDownload
+                </a>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row" style="color:#fff;">
+            <table class="table tbQnA">
+                <thead>
+                    <tr style="border:0;" class="">
+                        <th class="col-xs-3"></th>
+                        <th class="text-center bor-top bor-left-right">Q&A</th>
+                        <th class="col-xs-3"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-xs-3"></td>
+                        <td class="bor-left-right">@Resources.Langues.BottomeInCarge</td>
+                        <td class="col-xs-3"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-3"></td>
+                        <td class="bor-left-right">@Resources.Langues.BottomEmailAdd</td>
+                        <td class="col-xs-3"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-3"></td>
+                        <td class="bor-bottom bor-left-right">@*@Resources.Langues.BottomeTelNumber*@</td>
+                        <td class="col-xs-3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br />
+    }
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#btnCreateCase').click(function () {
+                bootbox.alert('@Resources.Langues.CaseRedirectMessage');
+            });
+        });
+
+    </script>
+}
+

@@ -1,0 +1,288 @@
+﻿<style>
+    .E00025 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    .modal-dialog1 {
+        width: 80%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade E00025" role="dialog">
+    <div class="modal-dialog modal-dialog1 modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.PriceList </h4>
+            </div>
+            <div class="modal-body">
+                <!--Popup Name -->
+                <br />
+                <div class="SA0001" id="printDiv1">
+                    <div class="row">
+                        <div class="form-horizontal">
+                            <div class="active col-xs-6"><h4><strong>@Resources.Langues.SMPunitpriceinquiry</strong></h4></div>
+                        </div>
+                    </div>
+                    <br />
+                    @model IEnumerable<DPDSP.Models.SMPChargeSubViewModel>
+                    <div>
+                        @(Html.Kendo().Chart(Model)
+                                            .Name("Chart")
+                                            .Title("")
+                                            .DataSource(dataSource => dataSource
+                                                .Read(read => read.Action("GetChartByYearAndComCode", "EntityE00025Popup", new { caseId = @Request.Params["caseId"] }))
+                                                .Group(group => group.Add(model => model.Month))
+                                                .Sort(sort => sort.Add(model => model.hours).Ascending())
+                                            )
+                                            .ChartArea(chartArea => chartArea
+                                                .Background("transparent")
+                                            //.Width(1288)
+                                            )
+                                            .SeriesDefaults(seriesDefaults =>
+                                                seriesDefaults.Line()
+                                            )
+                                            .Series(series =>
+                                            {
+                                                series.Line(model => model.Value).Name("#= group.items[0].MonthString # ").CategoryField("hours").Markers(x => x.Visible(false));
+                                            })
+                                            .SeriesColors("#e8a1a2", "#264d7e", "#bbc9a5", "#698b47", "#3e4630", "#428b64", "#6e4a75", "#feec04", "#9e7339", "#4c4a3c", "#dd7b00", "#dd3420")
+                                            .ValueAxis(axis => axis.Numeric()
+                                                .Title(title => title.Text(Resources.Langues.Axis25))
+                                                .Line(line => line.Visible(false))
+                                            )
+                                            .CategoryAxis(axis => axis
+                                                .Title(title => title.Text(Resources.Langues.Time + "[hour]"))
+                                                .Line(line => line.Visible(true))
+                                                .MinorGridLines(mi => mi.Visible(true))
+                                                .MajorGridLines(ma => ma.Visible(false))
+                                            )
+                                            .Legend(legend => legend
+                                                .Position(ChartLegendPosition.Right)
+                                            )
+                                            .Tooltip(tooltip => tooltip
+                                                .Visible(true)
+                                                .Format("{0}")
+                                            )
+                        )
+                    </div>
+                    <br />
+                    <button type="button" id="show-btn" class="btn btn-primary">@Resources.Langues.Show1</button>
+                    <br />
+                    <div class="grid hidden">
+                        @(Html.Kendo().Grid<DPDSP.Models.SMPChargeGridModel>()
+                                            .Name("Grid")
+                                            .Columns(columns =>
+                                            {
+                                                columns.Bound(member => member.Hour).Title(Resources.Langues.Time).HtmlAttributes(new { style = "text-align:center;" });
+                                                columns.Bound(member => member.Jan).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Jan2).Format("{0:n0}");
+                                                columns.Bound(member => member.Feb).Title(Resources.Langues.Feb2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Mar).Title(Resources.Langues.Mar2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Apr).Title(Resources.Langues.Apr2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.May).Title(Resources.Langues.May2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Jun).Title(Resources.Langues.Jun2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Jul).Title(Resources.Langues.Jul2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Aug).Title(Resources.Langues.Aug2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Sep).Title(Resources.Langues.Sep2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Oct).Title(Resources.Langues.Oct2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Nov).Title(Resources.Langues.Nov2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Dec).Title(Resources.Langues.Dec2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                            })
+                                            .DataSource(dataSource => dataSource
+                                                .Ajax()
+                                                .Model(model => model.Id(SMPChargeGridModel => SMPChargeGridModel.Hour))
+                                                .Read(read => read.Action("GetGridByYear", "EntityE00025Popup", new { /*comCode = "SMP001", year = 2016*/caseId = @Request.Params["caseId"] }))
+                                            )
+                        )
+                    </div>
+                    <hr />
+                    <div class="SA0002" id="printDiv2">
+                        <div class="row">
+                            <div class="form-horizontal">
+                                <div class="active col-xs-6">
+                                    <h4><strong>@Resources.Langues.RECunitpriceinquiry</strong></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div>
+                            <div>
+                                @(Html.Kendo().Chart<DPDSP.Models.RECChargeChartModel>()
+                                                    .Name("Chart1")
+                                                    .Title("")
+                                                    .DataSource(dataSource => dataSource
+                                                        .Read(read => read.Action("GetRECChargeChart", "EntityE00025Popup", new { caseId = @Request.Params["caseId"] }))
+                                                        .Group(group => group.Add(model => model.Year))
+                                                        .Sort(sort => sort.Add(model => model.Month).Ascending())
+                                                    )
+                                                    .ChartArea(chartArea => chartArea
+                                                        .Background("transparent")
+                                                    //.Width(1288)
+                                                    )
+                                                    .Series(series =>
+                                                    {
+                                                        series.Column(model => model.Value).Name("#= group.value #").CategoryField("month").Color("#2164d1");
+                                                    }
+                                                    )
+                                                    .Legend(legend => legend
+                                                        .Position(ChartLegendPosition.Right)
+                                                    )
+                                                    .SeriesColors("#2164d1", "#264d7e", "#bbc9a5", "#698b47", "#3e4630", "#428b64", "#6e4a75", "#feec04", "#9e7339", "#4c4a3c", "#dd7b00", "#dd3420")
+                                                    .ValueAxis(axis => axis.Numeric()
+                                                        .Title(title => title.Text(Resources.Langues.Axis25REC))
+                                                        .Line(line => line.Visible(false))
+                                                        .Labels(label => label.Format("{0:#,###}"))
+                                                    )
+                                                    .CategoryAxis(ca => ca
+                                                        .Line(line => line.Visible(true))
+                                                        .MinorGridLines(mi => mi.Visible(true))
+                                                        .MajorGridLines(ma => ma.Visible(false))
+                                                    )
+                                                    .Tooltip(tooltip => tooltip
+                                                        .Visible(true)
+                                                        .Format("{0}")
+                                                    )
+                                )
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                    <br />
+                    <button type="button" id="show-btn1" class="btn btn-primary SA0002">@Resources.Langues.Show1</button>
+                    <br />
+                    <div class="grid1 hidden SA0002">
+                        @(Html.Kendo().Grid<DPDSP.Models.RECChargeGridModel>()
+                                            .Name("Grid1")
+                                            .Columns(columns =>
+                                            {
+                                                columns.Bound(member => member.Name).Title("").HtmlAttributes(new { style = "text-align:center;" });
+                                                columns.Bound(member => member.Jan).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Jan1 + "<br/>" + Resources.Langues.UnitE25).Format("{0:n0}");
+                                                columns.Bound(member => member.Feb).Title(Resources.Langues.Feb1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Mar).Title(Resources.Langues.Mar1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Apr).Title(Resources.Langues.Apr1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.May).Title(Resources.Langues.May1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Jun).Title(Resources.Langues.Jun1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Jul).Title(Resources.Langues.Jul1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Aug).Title(Resources.Langues.Aug1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Sep).Title(Resources.Langues.Sep1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Oct).Title(Resources.Langues.Oct1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Nov).Title(Resources.Langues.Nov1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                                columns.Bound(member => member.Dec).Title(Resources.Langues.Dec1 + "<br/>" + Resources.Langues.UnitE25).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                                            })
+                                            .DataSource(dataSource => dataSource
+                                                .Ajax()
+                                                .Model(model => model.Id(x => x.Name))
+                                                .Read(read => read.Action("GetGridRECByYear", "EntityE00025Popup", new { caseId = @Request.Params["caseId"] }))
+                                            )
+                        )
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="form-group pull-right">
+                                @*<button type="button" onclick="PrintModal2()" class="btn btn-primary">@Resources.Langues.Print</button>*@
+                                <button type="button" class="btn btn-gray save-class" data-dismiss="modal">@Resources.Langues.OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/printThis/printThis.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.SA0001').hide();
+        $('.SA0002').hide();
+        var $modal = $('.E00025');
+        var caseId = @Request.Params["caseId"];
+        var $M0003Form = $('#M00003Form');
+
+        $('.E00025').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $modal.on('show.bs.modal', function () {
+            $("#btn_E00025").addClass("democlass");
+            
+            $.blockUI();
+            $.post("@Url.Action("GetCodeByCaseId", "EntityE00025Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    if(result.listLocationCode){
+                        result.listLocationCode.forEach(function(item) {
+                            $('#'+ item).val(item);
+                            $('.' + item).show();
+                        });
+                    }
+                }
+            }).fail(function () {
+                bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }).always(function () {
+                //$.unblockUI();
+            });
+        });
+
+        $.blockUI();
+        setTimeout(function () {
+            $("#Chart").data("kendoChart").refresh();
+            $("#Chart1").data("kendoChart").refresh();
+            $.unblockUI();
+        }, 2000);
+    });
+
+    function PrintModal1() {
+        $("#printDiv1").printThis();
+    };
+
+    function PrintModal2() {
+        $("#printDiv2").printThis();
+    };
+
+    $('#show-btn').click(function () {
+            if ($(".grid.hidden").length == 1) {
+                $('.grid').removeClass('hidden')
+                $('#show-btn').text('@Resources.Langues.Hide1')
+            } else {
+                $('.grid').addClass('hidden')
+                $('#show-btn').text('@Resources.Langues.Show1')
+            }
+    });
+
+    $('#show-btn1').click(function () {
+            if ($(".grid1.hidden").length == 1) {
+                $('.grid1').removeClass('hidden')
+                $('#show-btn1').text('@Resources.Langues.Hide1')
+            } else {
+                $('.grid1').addClass('hidden')
+                $('#show-btn1').text('@Resources.Langues.Show1')
+            }
+    });
+</script>
+

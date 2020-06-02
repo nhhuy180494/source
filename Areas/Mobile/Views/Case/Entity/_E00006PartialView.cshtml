@@ -1,0 +1,325 @@
+﻿
+<style>
+    .E00006 {
+        top: 5%;
+    }
+
+    .modal-dialog {
+        width: 80%;
+    }
+
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    .k-grid-header th.k-header {
+        vertical-align: middle;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .E00006modal-xl {
+        width: 80%;
+        /*max-width: 1200px;*/
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    @@media print {
+        body.modal-open {
+            visibility: hidden;
+        }
+
+            body.modal-open .modal .modal-body {
+                visibility: visible; /* make visible modal body and header */
+            }
+    }
+
+    th.k-header {
+        border-right-style: none;
+        border-top-width: 1px;
+        border-top-style: solid
+    }
+</style>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/printThis/printThis.js"></script>
+<script>
+    var caseId = @Request.Params["caseId"];
+    var comSubNameDropdown = $("#E00006ComSubName").data("kendoDropDownList");
+    var powerYearDropdown = $("#E00006PowerYear").data("kendoDropDownList");
+
+    $(document).ready(function () {
+        $('#btn_E00006').addClass('progress-bar-warning');
+        
+        $.blockUI();
+        $.post("@Url.Action("GetPaymentCodeAndBaseYearByCaseId", "EntityE00006Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+
+                var originChartURL = '@Url.Action("GetPowerRateByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case" })';
+                var changedChartUrl = originChartURL + "?caseId=" + caseId;
+
+                var originGridURL = '@Url.Action("GetGirdByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case" })';
+                var changedGridUrl = originGridURL + "?caseId=" + caseId;
+
+                $('#ContractPower').val(result.ContractPower.toLocaleString('en'));
+                $('#ComName').val(result.comName);
+                $('#BaseYear').val(result.baseYear);
+
+                $('#Chart').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+                $('#Chart').data('kendoChart').dataSource.read();
+
+                $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+                $('#Grid').data('kendoGrid').dataSource.read();
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            //$.unblockUI();
+            });
+
+        $.blockUI();
+        setTimeout(function () {
+            $("#Chart").data("kendoChart").refresh();
+            $('.k-header').attr('style', 'border-top-width: 1px;padding:0 0 0 0')
+            $.unblockUI();
+        }, 2000);
+
+        
+    });
+
+
+    function ComSubNameChange() {
+        var PowerRateCostCode = $("#E00006ComSubName").val();
+        var PowerYear = $("#E00006PowerYear").val();
+        var originChartURL = '@Url.Action("GetPowerRateByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case" })';
+        var changedChartUrl = originChartURL + "?PowerRateCostCode=" + PowerRateCostCode + "&PowerYear=" + PowerYear + "&caseId=" + caseId;
+
+        var originGridURL = '@Url.Action("GetGirdByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case" })';
+        var changedGridUrl = originGridURL + "?PowerRateCostCode=" + PowerRateCostCode + "&PowerYear=" + PowerYear + "&caseId=" + caseId;
+
+        $('#Chart').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+        $('#Chart').data('kendoChart').dataSource.read();
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    };
+
+    function PowerYearChange() {
+        var PowerRateCostCode = $("#E00006ComSubName").val();
+        var PowerYear = $("#E00006PowerYear").val();
+        var originChartURL = '@Url.Action("GetPowerRateByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case" })';
+        var changedChartUrl = originChartURL + "?caseId=" + caseId;
+
+        var originGridURL = '@Url.Action("GetGirdByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case" })';
+        var changedGridUrl = originGridURL + "?caseId=" + caseId;
+
+        $('#Chart').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+        $('#Chart').data('kendoChart').dataSource.read();
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    };
+
+    function PrintModal() {
+        $("#printDiv").printThis();
+    };
+
+    function dataComCode() {
+        var comCode = "PY0000"; //Requirement
+        return { comCode: comCode }
+    };
+</script>
+<!-- Modal -->
+<h4 style="text-align:center">@Resources.Langues.TitleE00006​</h4>
+<div class="" id="printDiv" style="padding:0px;margin-top:15px">
+    <div class="">
+        <div class="form-horizontal">
+            <div class="form-group" style="margin-right: 0px;">
+                <div>
+                    <label class="control-label col-xs-4 lbWT">@Resources.Langues.ApplicablePlan </label>
+                    <div class="col-xs-6">
+                        <input id="ComName" readonly class="form-control" type="text" style="text-align:center;margin-bottom: 10px;" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div>
+                    <label class="control-label col-xs-4 lbWT">@Resources.Langues.Year </label>
+                    <div class="col-xs-6">
+                        <input id="BaseYear" readonly class="form-control" type="text" style="text-align:center;margin-bottom: 10px;" />
+                    </div>
+                </div>
+                <br />
+                <div> 
+                    <label class="control-label col-xs-4 lbWT">
+                        @if (Request.Params["modelCode"] == "M00001")
+                        {
+                            @Resources.Langues.BaseRateUnitPrice
+                        }
+                        else
+                        {
+                            @Resources.Langues.ContractPower
+                        }
+                    </label>
+                    <div class="col-xs-6">
+                        <input id="ContractPower" readonly class="form-control" type="text" style="text-align:center" />
+                    </div>
+                    <label class="control-label col-xs-2 lbWT" style="text-align:left;margin-left:0px">@Resources.Langues.won /kW </label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="outer">
+        @model IEnumerable<DPDSP.Models.PowerRatesMageViewModel>
+        @(Html.Kendo().Chart<DPDSP.Models.PowerRatesMageViewModel>()
+                                                    .Name("Chart")
+                                                    .Title("")
+                                                    .ChartArea(chartArea => chartArea
+                                                        .Background("transparent")
+                                                    )
+                                                    .DataSource(dataSource => dataSource
+                                                        .Read(read => read.Action("GetPowerRateByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case", caseId = @Request.Params["caseId"] }))
+                                                        .Group(group => group.Add(model => model.Legend))
+                                                        .Sort(sort => sort.Add(model => model.PowerHour).Ascending())
+                                                    )
+                                                    .ValueAxis(axis => axis.Numeric()
+                                                        .Title(title => title.Text(@Resources.Langues.AxisE6).Font("12px Arial, Helvetica, sans-serif;"))
+                                                        .Line(line => line.Visible(false))
+                                                    )
+                                                    .CategoryAxis(axis => axis
+                                                        .Title(title => title.Text(Resources.Langues.Time + " [hour]").Font("12px Arial, Helvetica, sans-serif;"))
+                                                        .Line(line => line.Visible(true))
+                                                        .MinorGridLines(mi => mi.Visible(false))
+                                                        .MajorGridLines(ma => ma.Visible(false))
+                                                    )
+                                                    .SeriesDefaults(seriesDefaults => seriesDefaults
+                                                        .Line()
+                                                    .MissingValues(ChartLineMissingValues.Gap)
+                                                    )
+                                                    .Series(series =>
+                                                    {
+                                                        series.Line(model => model.PowerRate).Name("#= group.value #").CategoryField("PowerHour").Markers(x => x.Visible(false));
+                                                    })
+                                                    .SeriesColors("#e8a1a2", "#264d7e", "#bbc9a5", "#698b47", "#3e4630", "#428b64", "#6e4a75", "#feec04", "#9e7339", "#4c4a3c", "#dd7b00", "#dd3420")
+                                                    .Legend(legend => legend
+                                                        .Position(ChartLegendPosition.Top)
+                                                    )
+                                                    .Tooltip(tooltip => tooltip
+                                                        .Visible(true)
+                                                        .Format("{0}")
+                                                    )
+                                                    .Pannable(pannable => pannable
+                                                        .Lock(ChartAxisLock.Y)
+                                                    )
+                                                    .Zoomable(zoomable => zoomable
+                                                        .Mousewheel(mousewheel => mousewheel.Lock(ChartAxisLock.Y))
+                                                        .Selection(selection => selection.Lock(ChartAxisLock.Y))
+                                                    )
+                                                    .HtmlAttributes(new { style = "font-size:10px" })
+        )
+    </div>
+    <div class="form-group" style="text-align:center">
+        <button type="button" id="show-btn" class="button1 button-gray" onclick="clickShow('show')">@Resources.Langues.Show</button>
+    </div>
+    
+    <div class="outer grid hidden">
+        @(Html.Kendo().Grid<DPDSP.Models.PowerRateGridModel>()
+                                                    .Name("Grid")
+                                                    .Columns(columns =>
+                                                    {
+                                                        columns.Bound(member => member.Hour).Title(Resources.Langues.Time).HtmlAttributes(new { style = "text-align:center;" }).Locked(true);
+                                                        columns.Bound(member => member.Jan).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Jan2).Format("{0:n1}");
+                                                        columns.Bound(member => member.Feb).Title(Resources.Langues.Feb2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.Mar).Title(Resources.Langues.Mar2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.Apr).Title(Resources.Langues.Apr2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.May).Title(Resources.Langues.May2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.Jun).Title(Resources.Langues.Jun2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.Jul).Title(Resources.Langues.Jul2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.Aug).Title(Resources.Langues.Aug2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.Sep).Title(Resources.Langues.Sep2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.Oct).Title(Resources.Langues.Oct2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.Nov).Title(Resources.Langues.Nov2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                        columns.Bound(member => member.Dec).Title(Resources.Langues.Dec2).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                    })
+
+                                                    .DataSource(dataSource => dataSource
+                                                        .Ajax()
+                                                        .Model(model => model.Id(powerRateGridModel => powerRateGridModel.Hour))
+                                                        .Read(read => read.Action("GetGirdByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case", caseId = @Request.Params["caseId"] }))
+                                                        )
+                                                        .Sortable()
+                                                            .HtmlAttributes(new { style = "" })
+
+        )
+    </div>
+    <br />
+    <div class="form-group" style="text-align:center">
+        <button type="button" class="button button-gray" onclick="nextEntity()">@Resources.Langues.OK</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btn_E00006").addClass("democlass");
+        $('#btn_E00006').removeClass('progress-bar-warning');
+        $('#btn_E00006').removeClass('progress-bar-bg-info');
+        
+
+        $('.E00006').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $.blockUI();
+        $.post("@Url.Action("GetPaymentCodeAndBaseYearByCaseId", "EntityE00006Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+
+                var originChartURL = '@Url.Action("GetPowerRateByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case" })';
+                var changedChartUrl = originChartURL + "?PowerRateCostCode=" + result.payment + "&PowerYear=" + result.baseYear + "&caseId=" + caseId;
+
+                var originGridURL = '@Url.Action("GetGirdByComCodeAndYearPowerRate", "EntityE00006Popup", new { area = "Case" })';
+                var changedGridUrl = originGridURL + "?PowerRateCostCode=" + result.payment + "&PowerYear=" + result.baseYear + "&caseId=" + caseId;
+
+                $('#ComName').val(result.comName);
+                $('#BaseYear').val(result.baseYear);
+
+                $('#Chart').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+                $('#Chart').data('kendoChart').dataSource.read();
+
+                $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+                $('#Grid').data('kendoGrid').dataSource.read();
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            //$.unblockUI();
+        });
+
+        $.blockUI();
+        setTimeout(function () {
+            $("#Chart").data("kendoChart").refresh();
+            $.unblockUI();
+        }, 2000);
+
+        if ('@Request.Params["modelCode"]' == "M00001" || '@Request.Params["modelCode"]' == "M00004" || '@Request.Params["modelCode"]' == "M00005") {
+            $('#Chart').data('kendoChart').setOptions({
+                valueAxis: [
+                    {
+                        title: {
+                            text: "@Resources.Langues.E6AxisMo"
+                        },
+                        axisCrossingValue: -10000
+                    }
+                ]
+            });
+        }
+    });
+</script>

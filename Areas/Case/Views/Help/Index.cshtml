@@ -1,0 +1,277 @@
+﻿@model DPDSP.Models.FAQManagementViewModel
+
+@{
+    ViewBag.Title = "FAQ";
+    Layout = "~/Areas/Case/Views/Shared/_CommunityMenuLayout.cshtml";
+}
+
+@section styles{
+    <style>
+        /*a {
+            cursor: pointer;
+        }
+
+        .k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td {
+            background-color: #66ccff;
+        }
+
+        .k-grid .k-state-selected {
+            background-color: #66ccff;
+            color: black;
+        }*/
+    </style>
+    <link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+}
+@Scripts.Render("~/bundles/jqueryval")
+<ul class="breadcrumb sub_nav">
+    <li class="active"><span style="font-weight:bold;">Help</span> <i class="fa fa-angle-right"> </i> Frequently Asked Questions</li>
+</ul>
+<div class="row" style="margin-left:50px">
+    <h4 class="sub_tit"><i class="fa fa-dot-circle-o"></i> Frequently Asked Questions</h4>
+    <br />
+    <div>
+        @(Html.Kendo().Grid<DPDSP.Models.FAQManagementViewModel>()
+                    .Name("FAQGrid")
+                    .Columns(columns =>
+                    {
+                        columns.Template(t => { }).ClientTemplate("#= renderNumber() #").Title("No").Width(80).HtmlAttributes(new { style = "text-align:center;" });
+                //columns.Bound(member => member.Id).Hidden();
+                //columns.Bound(member => member.IsChange).Hidden();
+                columns.Bound(notice => notice.FaqTitle).Title(Resources.Langues.Title);
+                        columns.Bound(notice => notice.FullUserName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Writer)/*.Width(85)*/;
+                        columns.Bound(notice => notice.FaqRegDate).Format("{0:yyyy-MM-dd}").HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Date)/*.Width(90)*/;
+                //columns.Bound(member => member.LastLoginDate).Title(Resources.Langues.LastLogin).Format("{0: yyyy/MM/dd HH:mm:ss}").Width(120);
+                //columns.Command(command => { command.Custom(Resources.Langues.ViewDetails).Click("detailFAQ"); }).Width(130);
+            })
+                    .ToolBar(toolbar =>
+                    {
+                //tool.Excel().HtmlAttributes(new { style = "float:right;" });
+                toolbar.Template(@<text>
+                        @*<div class="form-group">
+                                <h4>@ViewBag.Title</h4>
+                            </div>*@
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                                        <input type="text" class="form-control" id='itemFilter' placeholder="Enter Title...">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" id="resetFAQGrid" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </text>);
+                })
+            //.Excel(excel => excel.FileName("Case.xlsx").Filterable(true).ProxyURL(Url.Action("Excel_Export_Save", "CaseManagement")))
+            .Events(ev =>
+            {
+                ev.DataBound("onDataBound");
+                ev.Change("onRowChanged");
+            })
+            //.Events(ev => ev.Edit("PassSpecialType"))
+            //.Editable(editable => editable.Mode(GridEditMode.InLine))
+            .Pageable()
+            .Sortable()
+            .Resizable(rz => rz.Columns(true))
+            .Scrollable()
+             .Selectable(select => select
+                    .Mode(GridSelectionMode.Single)
+                    .Type(GridSelectionType.Row))
+            .HtmlAttributes(new { style = "height:500px;" })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(20)
+                .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                .Model(notice => { notice.Id(p => p.FaqId); notice.Field(p => p.FaqId).Editable(false); })
+                .Read(read => read.Action("EditingInline_ReadFAQ", "Help"))
+            //.Update(update => update.Action("EditingInline_UpdateCaseManagement", "CaseManagement"))
+            )
+        )
+    </div>
+</div>
+<div class="modal fade" id="popup01" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true" style="z-index:1100">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel03" style="color:#1e5687"> <i class="fa fa-check-circle"></i> 제목부분 어쩌구 저쩌구 내용임</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table" style="border-top:solid 2px #31708f;border-bottom:solid 1px #31708f;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="active text-center text-muted ">Title  </td>
+                            <td id="Title"></td>
+                        </tr>
+                        <tr>
+                            <td class="active text-center text-muted " width="100px;">Writer  </td>
+                            <td id="UserName"></td>
+                        </tr>
+                        <tr>
+                            <td class="active text-center text-muted">Date Created   </td>
+                            <td id="RegDate"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding:25px; line-height:25px" class="active">
+                                @*쇼핑몰을 운영하면서 업무인 프로그램 수정 요구를 많이 받았습니다. 제가 책임자이다 보니 업무 협의를 하였고, 역시 무리한 요구가 많았습니다.
+                                이런 경우는 우선 순위 구분과 협의를 통해 해결하였으나, 점점 무리한 요구가 많아지면서 결국에는 가용 인력 대비 업무량이 넘치게 되고, 모든 업무의 일정 변경이 잦아지면서 꼬이는 것을 막을 수 없게 됩니다*@
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer" style="border-top:none;">
+                <button type="submit" class="btn btn-default " data-dismiss="modal">Close</button>
+            </div>
+            <div class="row" style="padding:10px;font-size:12px;">
+                <hr />
+                <p>
+                    분산전원 설계 소프트웨어 이용 중 문의 사항은 아래 전화 또는 Email로 연락 주시기 바랍니다. <br>
+                    본 서비스 이용에 불편 및 요류 사항 등의 사용 의견을 주시면 검토하여 반영하겠습니다.
+                </p>
+                <p>
+                    Tel: 031 - 689 - 3138<br>
+                    Email : <a href="mailto:workit@workit.co.kr">workit@workit.co.kr</a>
+                </p>
+                <p> <img src="@Url.Content("~/img/ci.png")" width="101" height="31" alt="" /> </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+@*<div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="myForm" class="form-horizontal col-md-offset-1">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Title: </label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.FaqTitle, new { @class = "form-control modalInput", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Writer: </label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.FullUserName, new { @class = "form-control modalInput", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Date created: </label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.FaqRegDate, new { @class = "form-control modalInput", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <button type="button" class="btn btn-default btn-inline" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var myModal = "#popup01";
+            var faqGrid = $('#FAQGrid').data('kendoGrid');
+
+            $("#itemFilter").keyup(function () {
+                var value = $("#itemFilter").val();
+                if (value) {
+                    faqGrid.dataSource.filter({ field: "FaqTitle", operator: "contains", value: value });
+                } else {
+                    faqGrid.dataSource.filter({});
+                }
+            });
+
+            $('#resetFAQGrid').click(function () {
+                $('#itemFilter').val('');
+                faqGrid.dataSource.filter({});
+            });
+
+            $(myModal).on('hidden.bs.modal', function () {
+                clearModal();
+            });
+
+            //var createdDate = $("#createdDate").kendoDatePicker({
+            //    format: "yyyy-MM-dd",
+            //    //change: startChange,
+            //    parseFormats: ["yyyy/MM/dd"]
+            //}).data("kendoDatePicker");
+
+        });
+
+        function clearModal() {
+            $('#Title').text('');
+            $('#UserName').text('');
+            $('#Date').text('');
+        }
+
+        var counter = 1;
+
+        function renderNumber() {
+            return counter++;
+        };
+
+        function onDataBound() {
+            counter = 1;
+        };
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        function onRowChanged(e) {
+            var myModal = '#popup01';
+            $(myModal).modal('show');
+            var row = e.sender.select();
+            var dataItem = e.sender.dataItem(row);
+            var title = '#Title', writer = '#UserName', date = '#RegDate';
+            $(title).text(dataItem.FaqTitle);
+            $(writer).text(dataItem.FullUserName);
+            $(date).text(formatDate(dataItem.FaqRegDate));
+        };
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () { message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        };
+
+        function sync_handler(e) {
+            this.read();
+        };
+    </script>
+}

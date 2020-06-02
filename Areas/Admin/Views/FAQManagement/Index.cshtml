@@ -1,0 +1,369 @@
+﻿
+@model DPDSP.Models.FAQManagementViewModel
+
+@{
+    ViewBag.Title = "FAQ Management";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <style>
+        #FaqRegDate_validationMessage {
+            display: none !important;
+        }
+
+        .input-validation-error {
+            border: 1px solid red !important;
+        }
+
+        #FaqRegDateCreate, #FaqRegDate{
+            pointer-events:none;
+        }
+
+        .k-input k-invalid input-validation-error {
+            border: 1px solid red !important;
+        }
+    </style>
+    <link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.FAQManagementViewModel>()
+    .Name("FAQGrid")
+    .Columns(columns =>
+    {
+        columns.Template(t => { }).ClientTemplate("#= renderNumber() #").Title("No").HtmlAttributes(new { style = "text-align:center;" });
+        columns.Bound(faq => faq.FaqId).Hidden();
+        //columns.Bound(member => member.IsChange).Hidden();
+        columns.Bound(faq => faq.FaqTitle).Title(Resources.Langues.FaqTitle);
+        columns.Bound(faq => faq.FullUserName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.FullUserName)/*.Width(85)*/;
+        columns.Bound(faq => faq.FaqRegDate).Format("{0:yyyy-MM-dd}").HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.FaqRegDate)/*.Width(90)*/;
+        //columns.Bound(member => member.LastLoginDate).Title(Resources.Langues.LastLogin).Format("{0: yyyy/MM/dd HH:mm:ss}").Width(120);
+        columns.Command(command => { command.Custom(Resources.Langues.ViewDetails).Click("detailFAQ"); }).HtmlAttributes(new { style = "text-align:center;" });
+    })
+    .ToolBar(toolbar =>
+    {
+        //tool.Excel().HtmlAttributes(new { style = "float:right;" });
+        toolbar.Template(@<text>
+            <div class="form-group">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon btn-opal"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                            <input type="text" class="form-control boder-opal" id='itemFilter' placeholder="Enter Title...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-opal" id="resetFAQGrid" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a role="button" style="margin-right: 15px; float: right; width: 100px;" class="btn btn-default btn-opal" id="addFAQ">Add</a>
+                </div>
+            </div>
+        </text>);
+    })
+    //.Excel(excel => excel.FileName("Case.xlsx").Filterable(true).ProxyURL(Url.Action("Excel_Export_Save", "CaseManagement")))
+    .Events(ev => ev.DataBound("onDataBound"))
+    //.Events(ev => ev.Edit("PassSpecialType"))
+    //.Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Resizable(rz => rz.Columns(true))
+    .Scrollable(rz => rz.Enabled(false))
+    .HtmlAttributes(new { style = "height:650px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+        .Model(notice => { notice.Id(p => p.FaqId); notice.Field(p => p.FaqId).Editable(false); })
+        .Read(read => read.Action("EditingInline_ReadFAQManagement", "FAQManagement"))
+    //.Update(update => update.Action("EditingInline_UpdateCaseManagement", "CaseManagement"))
+    )
+        )
+    </div>
+</div>
+
+<div class="modal fade" id="popup01" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("UpdateFAQ", "FAQManagement", FormMethod.Post, new { @role = "form", @id = "myForm" }))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel03" style="color:#1e5687"> <i class="fa fa-info-circle" aria-hidden="true"></i> 제목부분 어쩌구 저쩌구 내용임</h4>
+                </div>
+                @Html.HiddenFor(m => m.FaqId)
+                <div class="modal-body">
+                    <div class="form-group" style="overflow-x:scroll;">
+                        <table class="table" style="border-top:solid 2px #31708f;border-bottom:solid 1px #31708f;margin-top:10px;">
+                            <tbody>
+                                <tr>
+                                    <td class="active text-center text-muted ">Title  </td>
+                                    <td>@Html.TextBoxFor(m => m.FaqTitle, new { @class = "form-control modalInput", placeholder = "FAQ Title" })</td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted ">Writer  </td>
+                                    <td>@Html.TextBoxFor(m => m.FullUserName, new { @class = "form-control modalInput", placeholder = "Full User Name" })</td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted">Date Created   </td>
+                                    <td>
+                                        @(Html.Kendo().DatePicker()
+                                        .Name("FaqRegDate")
+                                        .Format("yyyy-MM-dd")
+                                        .HtmlAttributes(new { style = "width: 100%", title = "monthpicker", @placeholder = "Choose Date" })
+                                        )
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted">Attach file   </td>
+                                    <td id="file-content"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="padding:25px; line-height:25px" class="active">
+                                        <img src="@Url.Content("~/img/samp4.jpg")" />
+                                        <br />
+                                        <br />
+                                        쇼핑몰을 운영하면서 업무인 프로그램 수정 요구를 많이 받았습니다. 제가 책임자이다 보니 업무 협의를 하였고, 역시 무리한 요구가 많았습니다. 이런 경우는 우선 순위 구분과 협의를 통해 해결하였으나, 점점 무리한 요구가 많아지면서 결국에는 가용 인력 대비 업무량이 넘치게 되고, 모든 업무의 일정 변경이 잦아지면서 꼬이는 것을 막을 수 없게 됩니다
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:none;">
+                    <button type="button" id="btnSave" class="btn btn-success btn-inline">@Resources.Langues.Save</button>
+                    <button type="button" id="btnDelete" class="btn btn-danger btn-inline">@Resources.Langues.Delete</button>
+                    <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="popup-add" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("CreateFAQ", "FAQManagement", FormMethod.Post, new { @role = "form", @id = "addForm" }))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="popup-add-label" style="color:#1e5687"> <i class="fa fa-info-circle" aria-hidden="true"></i> 제목부분 어쩌구 저쩌구 내용임</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" style="overflow-x:scroll;">
+                        <table class="table" style="border-top:solid 2px #31708f;border-bottom:solid 1px #31708f;margin-top:10px;">
+                            <tbody>
+                                <tr>
+                                    <td class="active text-center text-muted ">Title  </td>
+                                    <td>
+                                        @Html.TextBox("FaqTitleCreate", null, new
+                                   {
+                                       @class = "form -control modalInput valid",
+                                       @data_val = "true",
+                                       @data_val_required = "FAQ Title is required",
+                                       data_val_length = "The field FAQ Title must be a string with a maximum length of 150.",
+                                       @data_val_length_max = "150",
+                                       placeholder = "Notice Title"
+                                   })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted ">Writer  </td>
+                                    <td>
+                                        @Html.TextBox("FullUserNameCreate", null, new
+                                   {
+                                       @class = "form-control modalInput valid",
+                                       @data_val = "true",
+                                       @data_val_required = "Full User Name is required",
+                                       data_val_length = "The field Full User Name must be a string with a maximum length of 100.",
+                                       @data_val_length_max = "100",
+                                       placeholder = "Full User Name"
+                                   })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted">Date Created   </td>
+                                    <td>
+                                        @(Html.Kendo().DatePicker()
+                                        .Name("FaqRegDateCreate")
+                                        .Format("yyyy-MM-dd")
+                                        .HtmlAttributes(new
+                                        {
+                                            @style = "width: 100%;",
+                                            @data_val = "true",
+                                            data_val_date = "The field Registration Date must be a date.",
+                                            data_val_required = "The Registration Date  field is required.",
+                                            @placeholder = "Choose Date"
+                                        })
+                                        )
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted">Attach file   </td>
+                                    <td id="file-content"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="padding:25px; line-height:25px" class="active">
+                                        <img src="@Url.Content("~/img/samp4.jpg")" />
+                                        <br />
+                                        <br />
+                                        쇼핑몰을 운영하면서 업무인 프로그램 수정 요구를 많이 받았습니다. 제가 책임자이다 보니 업무 협의를 하였고, 역시 무리한 요구가 많았습니다. 이런 경우는 우선 순위 구분과 협의를 통해 해결하였으나, 점점 무리한 요구가 많아지면서 결국에는 가용 인력 대비 업무량이 넘치게 되고, 모든 업무의 일정 변경이 잦아지면서 꼬이는 것을 막을 수 없게 됩니다
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:none;">
+                    <button type="button" id="btnCreateFaq" class="btn btn-success btn-inline">@Resources.Langues.Save</button>
+                    <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var myModal = "#popup01";
+            var faqGrid = $('#FAQGrid').data('kendoGrid');
+            var myForm = "#myForm";
+            var $addForm = $('#addForm'), $popupAdd = $('#popup-add');
+
+            $("#itemFilter").keyup(function () {
+                var value = $("#itemFilter").val();
+                if (value) {
+                    faqGrid.dataSource.filter({ field: "FaqTitle", operator: "contains", value: value });
+                } else {
+                    faqGrid.dataSource.filter({});
+                }
+            });
+
+            $('#resetFAQGrid').click(function () {
+                $('#itemFilter').val('');
+                faqGrid.dataSource.filter({});
+            });
+
+            $('#addFAQ').click(function (e) {
+                $popupAdd.modal('show');
+            });
+
+            $(myModal).on('hidden.bs.modal', function () {
+                $(myForm)[0].reset();
+                $(myForm).find('input').removeClass("k-invalid");
+                $(myForm).find('input').removeClass("input-validation-error");
+            });
+
+            $popupAdd.on('hidden.bs.modal', function () {
+                $addForm[0].reset();
+                $addForm.find('input').removeClass("k-invalid");
+                $addForm.find('input').removeClass("input-validation-error");
+            });
+
+            $('#btnSave').click(function () {
+                var isValid = $(myForm).valid();
+                if (isValid) {
+                    $.blockUI();
+                    var model = $(myForm).serialize();
+                    $.post('@Url.Action("UpdateFAQ", "FAQManagement")', model, function (result) {
+                        if (result.success) {
+                            $(myModal).modal("hide");
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                }
+            });
+
+            $('#btnCreateFaq').click(function () {
+                var isValid = $addForm.valid();
+                if (isValid) {
+                    $.blockUI();
+                    var model = $addForm.serialize();
+                    $.post('@Url.Action("CreateFAQ", "FAQManagement")', model, function (result) {
+                        if (result.success) {
+                            $popupAdd.modal("hide");
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                }
+            });
+
+            $('.k-select').on('click',function () {
+                $('#FaqRegDateCreate').prop('readonly', true);
+                $('#FaqRegDate').prop('readonly', true);
+            });
+
+        });
+
+        var counter = 1;
+
+        function renderNumber() {
+            return counter++;
+        };
+
+        function onDataBound() {
+            counter = 1;
+        };
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        function detailFAQ(e) {
+            $('#popup01').modal('show');
+            var faqGrid = $('#FAQGrid').data('kendoGrid');
+            var row = $(e.currentTarget).closest('tr');
+            var dataItem = faqGrid.dataItem(row);
+            var title = '#FaqTitle', writer = '#FullUserName', date = '#FaqRegDate', faqId = '#FaqId';
+            $(title).val(dataItem.FaqTitle);
+            $(writer).val(dataItem.FullUserName);
+            $(date).val(formatDate(dataItem.FaqRegDate));
+            $(faqId).val(dataItem.FaqId);
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                           message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        };
+
+        function sync_handler(e) {
+            this.read();
+        };
+
+    </script>
+}

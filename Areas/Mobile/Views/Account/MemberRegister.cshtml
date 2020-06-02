@@ -1,0 +1,286 @@
+﻿@model DPDSP.Models.LoginOrRegisterViewModel
+@using BotDetect.Web.Mvc;
+@{
+    /**/
+
+    ViewBag.Title = "MemberRegister";
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+<style>
+    .form-horizontal .form-group {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+
+    .captcha, #recaptcha_image, #recaptcha_image img {
+        width: 100% !important;
+    }
+</style>
+@using (Html.BeginForm("HomeLogin", "Account", new { area = "Case" }, FormMethod.Post, new { role = "form", @id = "myForm1", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <fieldset>
+            <h5>※ √ @Resources.Langues.InputFieldsAreRequried</h5>
+            <div class="form-group">
+                <label class="col-xs-4 control-label" for="UserRegister_Email"> √  @Resources.Langues.Email</label>
+                <div class="col-xs-6">
+                    @Html.ValidationMessageFor(m => m.UserRegister.Email, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(m => m.UserRegister.Email, new { @class = "form-control input-md" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-4 control-label" for="UserRegister_LastName">√ @Resources.Langues.LastName</label>
+                <div class="col-xs-6">
+                    @Html.TextBoxFor(m => m.UserRegister.LastName, new { @Value = "", @class = "form-control input-md" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-4 control-label" for="UserRegister_FirstName">√ @Resources.Langues.FirstName</label>
+                <div class="col-xs-6">
+                    @Html.TextBoxFor(m => m.UserRegister.FirstName, new { @Value = "", @class = "form-control input-md" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-4 control-label" for="UserRegister_UserTel">  @Resources.Langues.PhoneNumber</label>
+                <div class="col-xs-6">
+                    @Html.TextBoxFor(m => m.UserRegister.UserTel, new { @Value = "", @class = "form-control input-md" })
+                </div>
+            </div>
+            <div class="col-xs-12 text-center">
+                ※ @Resources.Langues.ValidatePasswordMessage
+            </div>
+            <div class="form-group">
+                <label class="col-xs-4 control-label" for="UserRegister_Password">√ @Resources.Langues.Password</label>
+                <div class="col-xs-6">
+                    @Html.PasswordFor(m => m.UserRegister.Password, new
+               {
+                   @class = "form-control input-md",
+                   @data_val = "true",
+                   @data_val_password = Resources.Langues.ValidatePasswordMessage,
+                   @data_val_password_min = "6",
+                   @data_val_password_nonalphamin = "1",
+                   @data_val_required = " "
+               })
+                    @Html.ValidationMessageFor(m => m.UserRegister.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-4 control-label" for="UserRegister_ConfirmPassword">√ @Resources.Langues.ConfirmPass</label>
+                <div class="col-xs-6">
+                    @Html.PasswordFor(m => m.UserRegister.ConfirmPassword, new
+               {
+                   @class = "form-control input-md"
+               })
+                    @Html.ValidationMessageFor(m => m.UserRegister.ConfirmPassword, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-xs-12">
+                ※ @Resources.Langues.PleaseConfirmImageAndInput
+            </div>
+            @if (!Request.IsAuthenticated)
+            {
+                <div class="form-group">
+                    <label class="col-xs-4 control-label" for="CaptchaInputText"></label>
+                    <div class="col-xs-4" id="captcha_content">
+                        <fieldset>
+                            <div>
+                                @{ MvcCaptcha exampleCaptcha = new MvcCaptcha("ExampleCaptcha");
+                                    exampleCaptcha.UserInputID = "CaptchaCode";
+                                }
+                                @Html.Captcha(exampleCaptcha)
+                            </div>
+                            <div class="actions">
+                                @Html.TextBox("CaptchaCode", "", new { @class = "form-control input-md", style = "margin-top:10px;" })
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            }
+            <div style="text-align:center">
+                <button type="button" @*onclick="loginSubmit()"*@ id="register-submit" class="btn btn-xs btn-primary">@Resources.Langues.SignUp</button>
+                <button type="button" class="btn btn-xs btn-default" data-dismiss="modal">@Resources.Langues.Cancel</button>
+            </div>
+        </fieldset>
+    </div>
+}
+
+
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    const isNumericInput = function (event) {
+        const key = event.keyCode;
+        return ((key >= 48 && key <= 57) || // Allow number line
+            (key >= 96 && key <= 105) // Allow number pad
+        );
+    };
+
+    const isModifierKey = function (event) {
+        const key = event.keyCode;
+        return (event.shiftKey === true || key === 35 || key === 36) || // Allow Shift, Home, End
+            (key === 8 || key === 9 || key === 13 || key === 46) || // Allow Backspace, Tab, Enter, Delete
+            (key > 36 && key < 41) || // Allow left, up, right, down
+            (
+                // Allow Ctrl/Command + A,C,V,X,Z
+                (event.ctrlKey === true || event.metaKey === true) &&
+                (key === 65 || key === 67 || key === 86 || key === 88 || key === 90)
+            )
+    };
+
+    const enforceFormat = function (event) {
+        // Input must be of a valid number format or a modifier key, and not longer than ten digits
+        if (!isNumericInput(event) && !isModifierKey(event)) {
+            event.preventDefault();
+        }
+    };
+
+    const formatToPhone = function (event) {
+        if (isModifierKey(event)) { return; }
+
+        // I am lazy and don't like to type things more than once
+        const target = event.target;
+        const input = event.target.value.replace(/\D/g, '').substring(0, 11); // First ten digits of input only
+        const zip = input.substring(0, 3);
+        const middle = input.substring(3, 6);
+        const last = input.substring(6, 11);
+        if (input.length > 9) {
+            const zip1 = input.substring(0, 3);
+            const middle1 = input.substring(3, 7);
+            const last1 = input.substring(7, 11);
+            target.value = zip1 + "-" + middle1 + "-" + last1;
+        }
+        else if (input.length > 6) { target.value = zip + "-" + middle + "-" + last; }
+        else if (input.length > 3) { target.value = zip + "-" + middle; }
+        else if (input.length > 0) { target.value = zip; }
+    };
+
+    const inputElement = document.getElementById('UserRegister_UserTel');
+    inputElement.addEventListener('keydown', enforceFormat);
+    inputElement.addEventListener('keyup', formatToPhone);
+
+    var $myForm = $('#myForm1');
+    var $loginMess = $('#login-message');
+    var $loginPass = $('#UserLogin_Password');
+    var $loginModal = $('#login');
+
+    var $regisModal = $('#member');
+    var emailNotExist = false;
+    var $emailInput = $('#UserRegister_Email');
+    var $IsLogin = '@Request.IsAuthenticated.ToString()'
+
+    $(document).ready(function () {
+        $.validator.setDefaults({
+            onkeyup: false
+        })
+
+        $('#ReturnUrl').val(window.location);
+
+        $('#register-submit').on('click', function (event) {
+
+            $('#IsLogin').val(false);
+            // get client-side Captcha object instance
+            var captchaObj = $("#CaptchaCode").get(0).Captcha;
+
+            // gather data required for Captcha validation
+            var params = {}
+            params.CaptchaId = captchaObj.Id;
+            params.InstanceId = captchaObj.InstanceId;
+            params.UserInput = $("#CaptchaCode").val();
+
+            // make asynchronous Captcha validation request
+            $.post('@Url.Action("CheckCaptcha", "Account", new { area = "Case" })', params, function (result) {
+                if (true === result) {
+                    var isValid = $myForm.valid();
+                    if (isValid && emailNotExist) {
+                        $.blockUI();
+                        var data = new FormData($myForm[0]);
+                        var urlAction = $myForm.attr('action');
+                        //event.preventDefault();
+                        $.ajax({
+                            url: urlAction,
+                            type: 'POST',
+                            dataType: "JSON",
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            data: data,
+                            fail: function () {
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }
+                        }).success(function (result) {
+                            console.log(result)
+                            if (result.isLogin) {
+                                if (result.isRedirect) {
+                                    window.location.href = result.redirectUrl;
+                                }
+                                else if (result.isLocked) {
+                                    bootbox.alert(result.message);
+                                    $loginMess.text(result.message);
+                                    $loginPass.val('');
+                                } else if (result.isError) {
+                                    bootbox.alert(result.message);
+                                    $loginMess.text(result.message);
+                                    $loginPass.val('');
+                                }
+                            }
+                            else {
+                                if (result.isRegisError) {
+                                    if (result.message.length) {
+                                        bootbox.alert(result.message);
+                                    } else {
+                                    }
+                                } else if (result.isRegisSuccess) {
+                                    $regisModal.modal('hide');
+                                    bootbox.alert(result.message, function () {
+                                        window.location.reload()
+                                    });
+                                }
+                            }
+                        }).always(function () {
+                            $.unblockUI();
+                        });
+
+                    } else {
+
+                        $emailInput.addClass('input-validation-error');
+                        $emailInput.removeClass('valid');
+                    }
+
+
+                } else {
+                    ;
+                    // always change Captcha code if validation fails
+                    captchaObj.ReloadImage();
+                }
+            });
+        });
+        $('#UserRegister_Email').blur(function (e) {
+            var email = $(this).val();
+            if (email.length) {
+                $.post('@Url.Action("DoesEmailExist","Account", new { area = "Case" })', { email: email }, function (result) {
+                    if (!result)//email exist
+                    {
+                        $emailInput.addClass('input-validation-error');
+                        $emailInput.removeClass('valid');
+                        emailNotExist = result;
+                    }
+                    else //email not exist
+                    {
+                        $emailInput.addClass('valid');
+                        $emailInput.removeClass('input-validation-error');
+                        emailNotExist = result;
+                    }
+                });
+            }
+        });
+        $('#myForm1').on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+

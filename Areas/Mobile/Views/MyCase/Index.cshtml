@@ -1,0 +1,449 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+
+<style>
+    .k-grid-header .k-header > .k-link, .k-header, .k-treemap-title {
+        font-weight: bold;
+    }
+
+    .headerClass {
+        background-color: #81b4e0;
+        font-weight: bold;
+    }
+
+    th.k-header {
+        white-space: normal !important;
+        vertical-align: middle !important;
+    }
+
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    .my-custom-class .modal-dialog {
+        width: 30%;
+    }
+
+    .classYes {
+        margin-right: 10px;
+    }
+
+    .classButton1 {
+        background-color: white;
+        border-color: #ea6b48;
+        color: #ea6b48;
+        margin-top: 10px;
+        width: 86px;
+    }
+
+    .classButton {
+        background-color: white;
+        border-color: #ea6b48;
+        color: #ea6b48;
+    }
+</style>
+
+<div align="center">
+    <div>
+        <h4 class="modal-title"> @Resources.Langues.MyCase</h4>
+    </div>
+    <div class="outer">
+        @(Html.Kendo().Grid<DPDSP.Models.MyCaseViewModel>()
+                                                        .Name("CaseGrid")
+                                                        .Columns(columns =>
+                                                        {
+                                                            columns.Bound(m => m.Selection).ClientTemplate("<input type=\"checkbox\" #=Selection ? checked='checked' :  '' # class=\"chkbox\" id=\"#=CaseId#\" /> ")
+                                                                                    .HtmlAttributes(new { style = "text-align:center" }).Title(Resources.Langues.Select).HeaderHtmlAttributes(new { style = "width:3%;", @class = "headerCheckbox" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                            columns.Bound(cas => cas.Order).Title(Resources.Langues.Order).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                            columns.Bound(cas => cas.CaseDate).Format("{0:yyyy-MM-dd}").Title(Resources.Langues.CaseDate).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                            columns.Bound(cas => cas.CaseName).Title(Resources.Langues.CaseName).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                            columns.Bound(cas => cas.ModelName).Title(Resources.Langues.TargetModel).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                            columns.Group(group => group
+                                                            .Title(Resources.Langues.Component)
+                                                            .HeaderHtmlAttributes(new { @class = "headerClass" })
+                                                            .Columns(info =>
+                                                            {
+                                                                info.Bound(x => x.PVCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=PVCHK ? checked='checked' :  '' # />")
+                                                        .HtmlAttributes(new { style = "text-align:center;" }).Title("PV").HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                info.Bound(x => x.WTCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=WTCHK ? checked='checked' :  '' # />")
+                                                        .HtmlAttributes(new { style = "text-align:center;" }).Title("WT").HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                info.Bound(x => x.ESSCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=ESSCHK ? checked='checked' :  '' # />")
+                                                        .HtmlAttributes(new { style = "text-align:center;" }).Title("ESS").HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                info.Bound(x => x.FCCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=FCCHK ? checked='checked' :  '' # />")
+                                                        .HtmlAttributes(new { style = "text-align:center;" }).Title("FC").HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                info.Bound(x => x.CHPCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=CHPCHK ? checked='checked' :  '' # />")
+                                                        .HtmlAttributes(new { style = "text-align:center;" }).Title("CHP").HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                info.Bound(x => x.DGCHK).ClientTemplate("<input type=\"checkbox\" disabled  #=DGCHK ? checked='checked' :  '' # />")
+                                                        .HtmlAttributes(new { style = "text-align:center;" }).Title("DG").HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                            })
+                                                        );
+                                                            columns.Bound(cas => cas.CaseStatus).Title(Resources.Langues.CaseStatus).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                            columns.Command(command => { command.Custom("View").Click("onShowModal").HtmlAttributes(new { @class = "btn-info" }); }).Title(Resources.Langues.ViewDetails).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                        })
+                                                        //.Excel(excel => excel.FileName("Case.xlsx").Filterable(true).ProxyURL(Url.Action("Excel_Export_Save", "CaseManagement")))
+                                                        .Events(ev => ev.DataBound("onDataBound"))
+                                                        //.Events(ev => ev.Edit("PassSpecialType"))
+                                                        //.Editable(editable => editable.Mode(GridEditMode.InLine))
+                                                        .Pageable()
+                                                        .Sortable(s => s.Enabled(false))
+                                                        .Scrollable(rz => rz.Enabled(false))
+                                                        .HtmlAttributes(new { style = "height:auto;" })
+                                                        .DataSource(dataSource => dataSource
+                                                            .Ajax()
+                                                            .PageSize(10)
+                                                            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                                            .Model(cas => { cas.Id(p => p.CaseId); })
+                                                            .Read(read => read.Action("EditingInline_ReadCase", "MyCase", new { area = "Case" }))
+                                                        )
+        )
+    </div>
+    <div class='form-group'>
+        <button type="button" onclick="onDelete()" class="btn btn-primary classButton1">@Resources.Langues.Delete</button>
+    </div>
+</div>
+
+<script>
+    var checkedItems = [];
+    var caseId;
+    var modelCode;
+    var $selectColumn = $('#CaseGrid th:first');
+
+    $(document).ready(function () {
+        //$('.k-floatwrap').addClass('hidden')
+
+        var data = $selectColumn.html();
+        data = data + '<input id="selectAll" type="checkbox">';
+        $selectColumn.html('');
+        $selectColumn.html(data);
+        $selectColumn.attr("style", "vertical-align: middle;text-align: center;");
+
+        $(document).on('click', '.chkbox', function (e) {
+            var checked = this.checked,
+                row = $(this).closest("tr");
+            var id = row.find('input[type="checkbox"]').attr('id');
+
+            if (checked) {
+                row.addClass("k-state-selected");
+                checkedItems.push(id);
+            } else {
+                row.removeClass("k-state-selected");
+                var index = checkedItems.indexOf(id);
+                checkedItems.splice(index, 1);
+            }
+        });
+
+        $('#selectAll').click(function () {
+            if ($(this).is(':checked')) {
+                checkedItems = [];
+                var data = $("#CaseGrid").data('kendoGrid').dataSource.view();
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    $('#' + id).prop("checked", true);
+                    checkedItems.push(id);
+                }
+            } else {
+                var data = $("#CaseGrid").data('kendoGrid').dataSource.view();
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    $('#' + id).prop("checked", false);
+                    checkedItems.splice(id);
+                }
+                checkedItems = [];
+            }
+        });
+
+        $('.k-reset').click(function () {
+            $('#selectAll').prop("checked", false);
+            checkedItems = [];
+        });
+    });
+
+    function PrintModal() {
+        //$("#printDiv").printThis();
+        $("#PopupGrid").getKendoGrid().saveAsPDF();
+    };
+
+    function onExportDetail() {
+        window.location = '@Url.Action("CaseDetail", "CaseManagement", new { area = "Admin"})?caseId=' + caseId + "&modelCode=" + modelCode
+    };
+
+    function onShowModal(e) {
+        var grid = $("#CaseGrid").getKendoGrid();
+        var item = grid.dataItem($(e.target).closest("tr"));
+        caseId = item.CaseId;
+        modelCode = item.ModelCode
+
+        $.blockUI();
+        $.post("@Url.Action("GetModelCode", "Case", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                var modelCode = result.modelCode;
+                $.blockUI();
+                $.post("@Url.Action("CheckCaseStatus", "MyCase", new { area="Case" })", { caseId: caseId }, function (result) {
+                    if (!result.success) {
+                        var href = '@Url.Action("CaseReferences", "Case", new { area="Mobile" })' + "?modelCode=" + modelCode + "&caseId=" + caseId;
+                        var windowOpen = window.open(href);
+                        if (windowOpen == null) {
+                            bootbox.alert({
+                                "message": '@Resources.Langues.MessagePopupWindow',
+                                "className": "my-custom-class",
+                            });
+                        }
+                    } else {
+                        var href = '@Url.Action("CaseResult", "MyCase", new { area="Mobile" })' + "?modelCode=" + modelCode + "&caseId=" + caseId;
+                        var windowOpen = window.open(href);
+                        if (windowOpen == null) {
+                            bootbox.alert({
+                                "message": '@Resources.Langues.MessagePopupWindow',
+                                "className": "my-custom-class",
+                            });
+                        }
+                    }
+                }).fail(function () {
+                    bootbox.alert({
+                        "message": '@Resources.Langues.ContactAdmin',
+                        "className": "my-custom-class",
+                    });
+                }).always(function () {
+                    $.unblockUI();
+                });
+            }
+        }).fail(function () {
+            bootbox.alert({
+                "message": '@Resources.Langues.ContactAdmin',
+                "className": "my-custom-class",
+            });
+        }).always(function () {
+            $.unblockUI();
+        });
+    };
+
+    var counter = 1;
+
+    function renderNumber() {
+        return counter++;
+    };
+
+    function onDataBound() {
+        var data = this.dataSource.view();
+        for (var i = 0; i < data.length; i++) {
+            var uid = data[i].uid;
+            var row = this.table.find("tr[data-uid='" + uid + "']");
+
+            if (data[i].CaseStatus == '@Resources.Langues.Complete') {
+                row.find(".k-button-icontext").html('@Resources.Langues.ViewResult');
+            } else {
+                row.find(".k-button-icontext").html('@Resources.Langues.Continue');
+            }
+        }
+        counter = 1;
+    };
+
+    function onSelectAll() {
+        checkedItems = [];
+        var data = $("#CaseGrid").data('kendoGrid').dataSource.view();
+        for (var i = 0; i < data.length; i++) {
+            var id = data[i].id;
+            $('#' + id).prop("checked", true);
+            checkedItems.push(id);
+        }
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            bootbox.alert(message);
+        }
+    };
+
+    function sync_handler(e) {
+        this.read();
+    };
+
+    function showM00001() {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4])
+        grid.showColumn(grid.columns[1].columns[5])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[3].columns[0])
+        grid.showColumn(grid.columns[3].columns[1])
+        grid.showColumn(grid.columns[3].columns[2])
+        grid.showColumn(grid.columns[3].columns[3])
+        grid.showColumn(grid.columns[3].columns[4])
+        grid.showColumn(grid.columns[4])
+        grid.showColumn(grid.columns[5])
+        grid.showColumn(grid.columns[6])
+        grid.showColumn(grid.columns[10])
+        grid.showColumn(grid.columns[11].columns[0])
+        grid.showColumn(grid.columns[11].columns[1])
+
+        grid.hideColumn(grid.columns[8].columns[0])
+        grid.hideColumn(grid.columns[8].columns[1])
+        grid.hideColumn(grid.columns[9].columns[1])
+        grid.hideColumn(grid.columns[9].columns[0])
+    }
+
+    function showM00003() {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        grid.hideColumn(grid.columns[1].columns[3])
+        //grid.hideColumn(grid.columns[1].columns[4])
+        grid.hideColumn(grid.columns[1].columns[5])
+        grid.hideColumn(grid.columns[3].columns[0])
+        grid.hideColumn(grid.columns[3].columns[1])
+        grid.hideColumn(grid.columns[3].columns[2])
+        grid.hideColumn(grid.columns[3].columns[3])
+        grid.hideColumn(grid.columns[3].columns[4])
+        grid.hideColumn(grid.columns[4])
+        grid.hideColumn(grid.columns[5])
+        grid.hideColumn(grid.columns[6])
+        grid.hideColumn(grid.columns[7])
+
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        //grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4])
+        grid.showColumn(grid.columns[1].columns[5])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[8].columns[0])
+        grid.showColumn(grid.columns[8].columns[1])
+        grid.showColumn(grid.columns[9].columns[1])
+        grid.showColumn(grid.columns[9].columns[0])
+        grid.showColumn(grid.columns[10])
+        grid.showColumn(grid.columns[11].columns[0])
+        grid.showColumn(grid.columns[11].columns[1])
+    }
+
+    function Load(caseId) {
+        $.blockUI();
+        $.post("@Url.Action("LoadDataByCaseId", "EntityE00002Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                var grid = $('#PopupGrid').data('kendoGrid');
+                if (result.CP0002) {
+                    grid.showColumn(grid.columns[1].columns[1])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[1])
+                }
+
+                if (result.CP0003) {
+                    grid.showColumn(grid.columns[1].columns[4])
+                    grid.showColumn(grid.columns[1].columns[5])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[4])
+                    grid.hideColumn(grid.columns[1].columns[5])
+                }
+
+                if (result.CP0004) {
+                    grid.showColumn(grid.columns[1].columns[2])
+                    grid.showColumn(grid.columns[3].columns[2])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[2])
+                    grid.hideColumn(grid.columns[3].columns[2])
+                }
+
+                if (result.CP0005) {
+                    grid.showColumn(grid.columns[1].columns[3])
+                    grid.showColumn(grid.columns[3].columns[3])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[3])
+                    grid.hideColumn(grid.columns[3].columns[3])
+                }
+
+                if (result.CP0006) {
+                    //grid.showColumn(grid.columns[2])
+                    //grid.showColumn(grid.columns[8])
+                } else {
+                    //grid.hideColumn(grid.columns[2])
+                    //grid.hideColumn(grid.columns[8])
+                }
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+    function onDelete() {
+        bootbox.confirm({
+            message: '@Resources.Langues.MessMyCase',
+            className: 'my-custom-class',
+            buttons: {
+                confirm: {
+                    label: '@Resources.Langues.Yes',
+                    className: 'btn-success classYes',
+                }, cancel: {
+                    label: '@Resources.Langues.No',
+                    className: 'btn-danger pull-right'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    if (checkedItems.length == 0) {
+                        bootbox.alert({
+                            "message": '@Resources.Langues.MessDeleteCase',
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                        $.blockUI();
+                        $.post("@Url.Action("DeleteListCase", "MyCase", new { area="Case" })", { list: checkedItems }, function (result) {
+                            if (result.success) {
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.RemoveSuccess',
+                                    "className": "my-custom-class",
+                                });
+                                $('#CaseGrid').data('kendoGrid').dataSource.read();
+                                $('#selectAll').prop("checked", false);
+                            } else {
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.Error',
+                                    "className": "my-custom-class",
+                                });
+                            }
+                        }).fail(function () {
+                            bootbox.alert({
+                                "message": '@Resources.Langues.ContactAdmin',
+                                "className": "my-custom-class",
+                            });
+                        }).always(function () {
+                            $.unblockUI();
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    function onExportReport() {
+        $.blockUI();
+        $.post("@Url.Action("ExportReport", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+            if (result.success) {
+                location.href = result.path;
+            } else {
+                bootbox.alert('@Resources.Langues.ReportFaild');
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+</script>
+

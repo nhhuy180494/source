@@ -1,0 +1,648 @@
+﻿<!-- Modal -->
+<style>
+    .E00019 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    th.k-header {
+        white-space: normal !important;
+        vertical-align: middle !important;
+        color:black
+    }
+
+    .text {
+        padding-top: 7px;
+    }
+
+    .k-header .k-link {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .modal-dialog {
+        width: 95%;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    #Grid td {
+        word-wrap: inherit;
+    }
+
+    .modal-dialog {
+        overflow-y: initial !important
+    }
+
+    .modal-body1 {
+        height: 500px;
+        overflow-y: auto;
+    }
+
+    .my-custom-class .modal-dialog {
+        width: 30%;
+    }
+
+    #valueFilter {
+        text-align: right;
+    }
+
+    .k-grid-header th.k-header {
+        vertical-align: middle;
+    }
+</style>
+
+
+<script>
+    var $modal = $('.E00019');
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]'
+    var grid = $("#Grid").data("kendoGrid");
+    var topValue = "All"
+    var value = 0
+
+    $(document).ready(function () {
+        $('.E00019').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $modal.on('show.bs.modal', function () {
+            if (modelCode == "M00003") {
+                showM00003();
+                Load(caseId);
+            } else {
+                showM00001();
+                Load(caseId);
+            }
+            $.blockUI();
+            $.post("@Url.Action("RunProcess", "EntityE00019Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.unblockUI();
+                    if (modelCode == "M00001"){
+                        bootbox.alert({
+                            "message": result.filename + ' ' + '@Resources.Langues.MessageFileNotFound',
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                       bootbox.alert({
+                            "message": result.filename + ' ' + '@Resources.Langues.MessageFileNotFound',
+                            "className": "my-custom-class",
+                        });
+                    }
+                    return false
+                } else {
+                    if (result.alert != "") {
+                        $.unblockUI();
+                        bootbox.alert({
+                            "message": result.alert,
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                        $.blockUI();
+                        $.post("@Url.Action("ReadResultFile", "EntityE00019Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                            if (result.success == false) {
+                                $.unblockUI();
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.Error',
+                                    "className": "my-custom-class",
+                                });
+                            } else {
+                                var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+                                var changedGridUrl = originGridURL + "?value=" + value + "&top=All" + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+                                $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+                                $('#Grid').data('kendoGrid').dataSource.read();
+                                $("#btn_E00019").addClass("democlass");
+                                $.unblockUI();
+                                @*bootbox.alert({
+                                    "message": '@Resources.Langues.MessE19',
+                                    "className": "my-custom-class",
+                                });*@
+                            }
+                        }).fail(function () {
+                            $.unblockUI();
+                            bootbox.alert({
+                                "message":'@Resources.Langues.ContactAdmin',
+                                "className": "my-custom-class",
+                            });
+                        }).always(function () {
+                            //$.unblockUI();
+                        });
+                    }
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert({
+                    "message":'@Resources.Langues.ContactAdmin',
+                    "className": "my-custom-class",
+                });
+
+            }).always(function () {
+                //$.unblockUI();
+                });
+
+            $("#valueFilter").on('keyup', function (evt) {
+                var charCode = (evt.which) ? evt.which : event.keyCode
+                if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8) {
+                    var a = $("#valueFilter").val()
+                    if (a == 'NaN' || a == '') {
+                        $("#valueFilter").val('')
+                    } else {
+                        var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                        $(this).val(n.toLocaleString());
+                    }
+                }
+
+                if (charCode == 13) {
+                    console.log('ashcghaksjcd')
+                    if ($('#Reset').is(":checked")) {
+                        value = 0
+                    } else {
+                        value = $('#valueFilter').val()
+                    }
+                    if (value == '') { value = 0}
+
+                    value = String(value).split(/,/).join('')
+                    var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+                    var changedGridUrl = originGridURL + "?value=" + value + "&top=" + topValue + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+                    $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+                    $('#Grid').data('kendoGrid').dataSource.read();
+                } else {
+                    return false
+                }
+            });
+        });
+    });
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        } else {
+            $('#Reset').prop("checked", false);
+            return true;
+        }
+    }
+
+    @*function toggle() {
+        debugger
+        if ($('#Reset').is(":checked")) {
+            value = 0
+        } else {
+            value = $('#valueFilter').val()
+        }
+        if (value == '') { value = 0}
+
+        value = value.split(',').join('')
+        var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+        var changedGridUrl = originGridURL + "?value=" + value + "&top=" + topValue + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    }*@
+
+    $('input:radio[name="optradio"]').change(function () {
+        if ($('#Reset').is(":checked")) {
+            value = 0
+        } else {
+            value = $('#valueFilter').val()
+        }
+        if (value == '') { value = 0 }
+
+        topValue = $(this).val()
+
+        value = String(value).split(/,/).join('')
+
+        var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+        var changedGridUrl = originGridURL + "?value=" + value + "&top=" + topValue + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+
+    });
+
+     $('#Reset').change(function () {
+        if ($('#Reset').is(":checked")) {
+            value = 0
+            $('#valueFilter').val('')
+        } else {
+            value = $('#valueFilter').val()
+        }
+
+        if (value == '') { value = 0 }
+
+
+        var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+        var changedGridUrl = originGridURL + "?value=" + value + "&top=" + topValue + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+
+    });
+
+
+    function Reset() {
+        //$('input:radio[name="optradio"]').filter('[value=Reset]').prop('checked', true);
+        $('#valueFilter').val('')
+        var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+        var changedGridUrl = originGridURL + "?value=" + 0 + "&top=" + 0 + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    }
+</script>
+
+<div class="modal fade E00019" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="titleE15">@Resources.Langues.TitleE00019</h4>
+            </div>
+            <div class="modal-body1">
+                <div class="row">
+                    <div class="form-horizontal" style="margin-top:10px">
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <label class="control-label col-xs-12 col-sm-1 active" style="text-align:left">@Resources.Langues.InvestmentLimit</label>
+                            <div class="col-xs-2 col-sm-2">
+                                <input class="form-control" id="valueFilter" value="" onkeypress="return isNumberKey(event)" onChange="toggle()">
+                            </div>
+                            <div class="col-sm-1 active text" style="padding-left:0px;">
+                                <span>@Resources.Langues.won</span>
+                            </div>
+                            <label class="radio-inline" style="margin-right:8%;text-align:right"><input type="checkbox" name="optradio1" id="Reset" value="Reset" checked>@Resources.Langues.Nolimit</label>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <label class="control-label col-sm-1 active" style="text-align:left"> @Resources.Langues.Profitrange </label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="3">Top 3</label>
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="5">Top 5</label>
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="10">Top 10</label>
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" id="All" value="All" checked>All</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        @(Html.Kendo().Grid<DPDSP.Models.I00010ResultViewModel>()
+                                                                    .Name("Grid")
+                                                                    .Columns(columns =>
+                                                                    {
+                                                                        columns.Bound(m => m.Selection).ClientTemplate("<input type=\"checkbox\" #=Selection ? checked='checked' :  '' # class=\"chkbox\" id=\"#=I00010ResultId#\" /> ")
+                                                                            .HtmlAttributes(new { style = "text-align:center;width:3%;background-color:white;color:black" }).Title(Resources.Langues.Select).HeaderHtmlAttributes(new { style = "width:3%;" });
+                                                                        columns.Bound(p => p.OrderNumber).HtmlAttributes(new { style = "text-align:center;width:3%;background-color:white;color:black" }).HeaderHtmlAttributes(new { style = "width:3%;" }).Title(Resources.Langues.Order);
+
+                                                                        columns.Group(group => group
+                                                                                            .Title(Resources.Langues.Capacity)
+                                                                                            .Columns(info =>
+                                                                                            {
+                                                                                                info.Bound(p => p.PvValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white;color:black", @class = "test" }).Title("PV<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+                                                                                                info.Bound(p => p.WtValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white;color:black" }).Title("WT<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+                                                                                                info.Bound(p => p.FCValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white;color:black" }).Title("FC<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+                                                                                                info.Bound(p => p.CHPValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white;color:black" }).Title("CHP<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+
+                                                                                                info.Group(group1 => group1
+                                                                                                    .Title("ESS")
+                                                                                                    .Columns(info1 =>
+                                                                                                    {
+                                                                                                        info1.Bound(p => p.PcsValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white;color:black" }).Title("PCS<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+                                                                                                        info1.Bound(p => p.EssValue).HtmlAttributes(new { style = "text-align:right;width:5%;background-color:white;color:black" }).Title("Battery<br/>[kWh]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:5%;" });
+                                                                                                    })
+                                                                                                );
+                                                                                            })
+                                                                                        );
+
+                                                                        columns.Group(group => group
+                                                                                            .Title(Resources.Langues.Revenue)
+                                                                                            .Columns(info =>
+                                                                                            {
+                                                                                                info.Bound(p => p.ESSREC).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title("ESS REC" + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                                                info.Bound(p => p.ESSSMP).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title("ESS SMP" + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                                                info.Bound(p => p.PVREC).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title("PV REC" + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                                                info.Bound(p => p.PVSMP).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title("PV SMP" + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                                            })
+                                                                                        );
+                                                                        columns.Group(group => group
+                                                                                            .Title(Resources.Langues.EnergyChargingSaving)
+                                                                                            .Columns(info =>
+                                                                                            {
+                                                                                                info.Bound(p => p.PVBenefit).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.PVRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                                                info.Bound(p => p.WTBenefit).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.WTRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                                                info.Bound(p => p.FCBenefit).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.FCRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                                                info.Bound(p => p.CHPBenefit).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.CHPRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                                                info.Bound(p => p.ESSOperation).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.ESSRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                                            })
+                                                                                        );
+
+
+
+                                                                        columns.Bound(p => p.PeakReduce).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.PeakReduce + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                        columns.Bound(p => p.Incentive1).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.Discount1 + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                        columns.Bound(p => p.Incentive2).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.Discount2 + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                        columns.Bound(p => p.Incentive3).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.Discount3 + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}").Hidden();
+                                                                        columns.Bound(p => p.InvestmentCost).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.Estimatedinvestmentcost + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                        columns.Bound(p => p.OneYearRevenue).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(@Html.Raw(Resources.Langues.Yearprofit) + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                        columns.Bound(p => p.InvestmentCost).HtmlAttributes(new { style = "text-align:right;background-color:white;color:black" }).Title(Resources.Langues.Estimatedinvestmentcost + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                    })
+                                                                    .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                                                    .Pageable()
+                                                                    .Sortable(sr => sr.Enabled(false))
+                                                                    .Scrollable(rz => rz.Enabled(false))
+                                                                    //.Selectable(selectable => selectable
+                                                                    //    .Mode(GridSelectionMode.Multiple)
+                                                                    //    .Type(GridSelectionType.Row))
+                                                                    .Resizable(rz => rz.Columns(false))
+                                                                    .DataSource(dataSource => dataSource
+                                                                        .Ajax()
+                                                                        .PageSize(100000)
+                                                                        .Model(model => { model.Id(p => p.I00010ResultId); })
+                                                                        .Read(read => read.Action("GetTopI00010Result", "EntityE00019Popup", new { value = 0, top = "0", caseId = 0, modelCode = "" }))
+                                                                    )
+                        )
+                    </div>
+                </div>
+                @*<div class="row">
+                        <div class="form-group">
+                            <div class="radio">
+                                <label style="font-weight:400 !important;"><input type="checkbox" id="selectAll">  @Resources.Langues.SelectAll</label>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    @*<div class="form-horizontal">
+                            <div class="form-group">
+                                <label style="font-weight:400 !important;">@Resources.Langues.SelectAll</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="radio pull-left">
+                                    <input type="checkbox" id="selectAll">
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="list-inline pull-right">
+                        <button type="button" onclick="saveEvent()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $modal = $('.E00019');
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]'
+    var grid = $("#Grid").data("kendoGrid");
+    var checkedItems = [];
+    var $selectColumn = $('#Grid th:first');
+
+    $(document).ready(function () {
+        $('.k-floatwrap').addClass('hidden')
+
+        var data = $selectColumn.html();
+        data = data + '<input id="selectAll" type="checkbox">';
+        $selectColumn.html('');
+        $selectColumn.html(data);
+        $selectColumn.attr("style", "vertical-align: middle;text-align: center;");
+
+
+        $modal.on('show.bs.modal', function () {
+            if (modelCode == "M00003") {
+                showM00003();
+            } else {
+                showM00001();
+                Load(caseId);
+            }
+        });
+
+        $(document).on('click', '.chkbox', function (e) {
+            var checked = this.checked,
+                row = $(this).closest("tr");
+            var id = row.find('input[type="checkbox"]').attr('id');
+
+            if (checked) {
+                row.addClass("k-state-selected");
+                checkedItems.push(id);
+            } else {
+                row.removeClass("k-state-selected");
+                var index = checkedItems.indexOf(id);
+                checkedItems.splice(index, 1);
+            }
+
+            console.log(checkedItems)
+        });
+
+    });
+
+    $('#selectAll').click(function () {
+        if ($(this).is(':checked')) {
+            checkedItems = [];
+            var data = $("#Grid").data('kendoGrid').dataSource.view();
+            for (var i = 0; i < data.length; i++) {
+                var id = data[i].id;
+                $('#' + id).prop("checked", true);
+                checkedItems.push(id);
+            }
+        } else {
+            var data = $("#Grid").data('kendoGrid').dataSource.view();
+            for (var i = 0; i < data.length; i++) {
+                var id = data[i].id;
+                $('#' + id).prop("checked", false);
+                checkedItems.splice(id);
+            }
+            checkedItems = [];
+        }
+        console.log(checkedItems)
+    });
+
+    function saveEvent() {
+        if (checkedItems.length == 0) {
+            bootbox.alert({
+                        "message":'@Resources.Langues.MessE19',
+                        "className": "my-custom-class",
+                    });
+        } else {
+            $.blockUI();
+            $.post("@Url.Action("SaveDataI00010Result", "EntityE00019Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode, list: checkedItems }, function (result) {
+                if (result.success == false) {
+                    $.unblockUI();
+                    bootbox.alert({
+                        "message":'@Resources.Langues.Error',
+                        "className": "my-custom-class",
+                    });
+                } else {
+                    $.blockUI();
+                    $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00019",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                        $('.E00019').modal('hide');
+                        $("#btn_E00019").addClass("democlass");
+                        bootbox.alert({
+                            "message": '@Resources.Langues.Successful',
+                            "className": "my-custom-class",
+                        });
+                        $.unblockUI();
+                        result.list.forEach(function(item) {
+                            $("#btn_" + item).removeClass("democlass");
+                        });
+                    }).fail(function () {
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                bootbox.alert({
+                    "message":'@Resources.Langues.ContactAdmin',
+                    "className": "my-custom-class",
+                });
+            }).always(function () {
+                //$.unblockUI();
+            });
+        }
+    }
+
+
+    function showM00001() {
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[2].columns[2])
+        grid.showColumn(grid.columns[2].columns[3])
+        grid.showColumn(grid.columns[2].columns[4].columns[0])
+        grid.showColumn(grid.columns[2].columns[4].columns[1])
+        grid.showColumn(grid.columns[4].columns[0])
+        grid.showColumn(grid.columns[4].columns[1])
+        grid.showColumn(grid.columns[4].columns[2])
+        grid.showColumn(grid.columns[4].columns[3])
+        grid.showColumn(grid.columns[5])
+        grid.showColumn(grid.columns[4].columns[4])
+        grid.showColumn(grid.columns[6])
+        grid.showColumn(grid.columns[7])
+        //grid.showColumn(grid.columns[20])
+        grid.showColumn(grid.columns[11])
+        grid.showColumn(grid.columns[10])
+
+        grid.hideColumn(grid.columns[3].columns[0])
+        grid.hideColumn(grid.columns[3].columns[1])
+        grid.hideColumn(grid.columns[3].columns[2])
+        grid.hideColumn(grid.columns[3].columns[3])
+        grid.hideColumn(grid.columns[9])
+    }
+
+    function showM00003() {
+        grid.hideColumn(grid.columns[2].columns[1])
+        grid.hideColumn(grid.columns[2].columns[2])
+        grid.hideColumn(grid.columns[2].columns[3])
+        grid.hideColumn(grid.columns[4].columns[0])
+        grid.hideColumn(grid.columns[4].columns[1])
+        grid.hideColumn(grid.columns[4].columns[2])
+        grid.hideColumn(grid.columns[4].columns[3])
+        grid.hideColumn(grid.columns[4].columns[4])
+        grid.hideColumn(grid.columns[5])
+        grid.hideColumn(grid.columns[6])
+        grid.hideColumn(grid.columns[7])
+        //grid.hideColumn(grid.columns[20])
+        grid.hideColumn(grid.columns[9])
+
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[4].columns[0])
+        grid.showColumn(grid.columns[2].columns[4].columns[1])
+        grid.showColumn(grid.columns[3].columns[0])
+        grid.showColumn(grid.columns[3].columns[1])
+        grid.showColumn(grid.columns[3].columns[2])
+        grid.showColumn(grid.columns[3].columns[3])
+        grid.showColumn(grid.columns[11])
+        grid.showColumn(grid.columns[10])
+    }
+
+    function Load(caseId) {
+        $.blockUI();
+        $.post("@Url.Action("LoadDataByCaseId", "EntityE00002Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                var grid = $('#Grid').data('kendoGrid');
+                if (modelCode == 'M0003') {
+                    if (result.CP0001) {
+                        grid.showColumn(grid.columns[2].columns[0])
+                        grid.showColumn(grid.columns[3].columns[2])
+                        grid.showColumn(grid.columns[3].columns[3])
+                    } else {
+                        grid.hideColumn(grid.columns[2].columns[0])
+                        grid.hideColumn(grid.columns[3].columns[2])
+                        grid.hideColumn(grid.columns[3].columns[3])
+                    }
+                    if (result.CP0002) {
+                        grid.showColumn(grid.columns[2].columns[1])
+                    } else {
+                        grid.hideColumn(grid.columns[2].columns[1])
+                    }
+                }
+
+
+                if (result.CP0004) {
+                    grid.showColumn(grid.columns[2].columns[2])
+                    grid.showColumn(grid.columns[4].columns[2])
+                } else {
+                    grid.hideColumn(grid.columns[4].columns[2])
+                    grid.hideColumn(grid.columns[2].columns[2])
+                }
+
+                if (result.CP0005) {
+                    grid.showColumn(grid.columns[2].columns[3])
+                    grid.showColumn(grid.columns[4].columns[3])
+                } else {
+                    grid.hideColumn(grid.columns[2].columns[3])
+                    grid.hideColumn(grid.columns[4].columns[3])
+                }
+
+                if (result.CP0006) {
+                    //grid.showColumn(grid.columns[2])
+                    //grid.showColumn(grid.columns[8])
+                } else {
+                    //grid.hideColumn(grid.columns[2])
+                    //grid.hideColumn(grid.columns[8])
+                }
+            }
+        }).fail(function(){
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+            $.unblockUI();
+        }).always(function(){
+            //$.unblockUI();
+        });
+    }
+
+</script>

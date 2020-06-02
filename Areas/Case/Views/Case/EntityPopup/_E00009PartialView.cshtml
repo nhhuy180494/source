@@ -1,0 +1,238 @@
+﻿<style>
+    .E00009 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .text {
+        padding-top: 7px;
+    }
+
+    .modal-dialog1 {
+        width: 80%;
+    }
+
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    .k-grid-header th.k-header {
+        vertical-align: middle;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    @@media print {
+        body.modal-open {
+            visibility: hidden;
+        }
+
+            body.modal-open .modal .modal-body {
+                visibility: visible; /* make visible modal body and header */
+            }
+    }
+</style>
+
+<script>
+    function sync_handler(e) {
+        $(this).read();
+    };
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            bootbox.alert(message);
+        }
+    };
+
+    function dataComCode() {
+        var comCode = "PY0000"; //Requirement
+        return { comCode: comCode }
+    };
+</script>
+
+<!-- Modal -->
+<div class="modal fade E00009" role="dialog">
+    <div class="modal-dialog modal-dialog1 modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.LoadDataViews</h4>
+            </div>
+            <div class="modal-body" id="printDiv">
+                <div class="row">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-sm-1 active" style="text-align:left"> @Resources.Langues.SearchOption </label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="1" checked>@Resources.Langues.WorkingDay</label>
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="7">@Resources.Langues.Saturday</label>
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="8">@Resources.Langues.Holiday</label>
+                                @if (@Request.Params["modelCode"] != "M00002")
+                                {
+                                    <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="4">@Resources.Langues.MaximumLoadDay</label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    @(Html.Kendo().Chart<DPDSP.Models.I00001iSmartViewModel>()
+                        .Name("E00009chart")
+                        .Title("")
+                        .DataSource(dataSource => dataSource
+                            .Read(read => read.Action("GetI00001iSmartByCaseId", "EntityE00009Popup", new { caseId = @Request.Params["caseId"], date = 1 }))
+                            .Group(group => group.Add(model => model.Month))
+                            .Sort(sort => sort.Add(model => model.Hour).Ascending())
+                        )
+                        .ChartArea(chartArea => chartArea
+                            //.Width(1288)
+                            .Background("transparent")
+                        )
+                        .SeriesDefaults(seriesDefaults =>
+                            seriesDefaults.Line()
+                        )
+                        .Series(series =>
+                        {
+                            series.Line(model => model.Value).Name("#= group.items[0].MonthString # ").CategoryField("Hour").Markers(x => x.Visible(false));
+                        })
+                        .SeriesColors("#e8a1a2", "#264d7e", "#bbc9a5", "#698b47", "#3e4630", "#428b64", "#6e4a75", "#feec04", "#9e7339", "#4c4a3c", "#dd7b00", "#dd3420")
+                        .ValueAxis(axis => axis.Numeric()
+                            .Title(title => title.Text(Resources.Langues.AxisE9))
+                            .Line(line => line.Visible(false))
+                            .Labels(label => label.Format("{0:#,###}"))
+                        )
+                        .CategoryAxis(axis => axis
+                            .Title(title => title.Text(Resources.Langues.Time + " [hour]"))
+                            .Line(line => line.Visible(true))
+                        .MinorGridLines(mi => mi.Visible(true))
+                        .MajorGridLines(ma => ma.Visible(false))
+                        )
+                        .Legend(legend => legend
+                            .Position(ChartLegendPosition.Right)
+                        )
+                        .Tooltip(tooltip => tooltip
+                            .Visible(true)
+                            .Format("{0}")
+                        )
+                    )
+                </div>
+                <br />
+                <button type="button" id="show-btn" class="btn btn-primary">@Resources.Langues.Show1</button>
+                <br />
+                <div class="grid hidden">
+                    @(Html.Kendo().Grid<DPDSP.Models.I00001iSmartGridModel>()
+                        .Name("Grid")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(member => member.Hour).Title(Resources.Langues.Time).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.Jan).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Jan1 + "<br/>[kWh]").Format("{0:n0}");
+                            columns.Bound(member => member.Feb).Title(Resources.Langues.Feb1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.Mar).Title(Resources.Langues.Mar1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.Apr).Title(Resources.Langues.Apr1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.May).Title(Resources.Langues.May1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.Jun).Title(Resources.Langues.Jun1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.Jul).Title(Resources.Langues.Jul1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.Aug).Title(Resources.Langues.Aug1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.Sep).Title(Resources.Langues.Sep1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.Oct).Title(Resources.Langues.Oct1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.Nov).Title(Resources.Langues.Nov1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                            columns.Bound(member => member.Dec).Title(Resources.Langues.Dec1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n0}");
+                        })
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Model(model => model.Id(i00001iSmartGridModel => i00001iSmartGridModel.Hour))
+                            .Read(read => read.Action("GetGirdByCaseId", "EntityE00009Popup", new { caseId = @Request.Params["caseId"], date = 1 }))
+                        )
+                        .HtmlAttributes(new { style = "width:100%;" })
+                    )
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" class="btn btn-gray save-class" data-dismiss="modal">@Resources.Langues.OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/printThis/printThis.js"></script>
+<script>
+    var caseId = @Request.Params["caseId"];
+    $(document).ready(function () {
+        var yearDayGrid = $("#YearDayGrid").data("kendoGrid");
+        var $modal = $('.E00009');
+        var wtInternvalValue = 0;
+
+        $("#btn_E00009").addClass("democlass");
+
+        $('.E00009').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $.blockUI();
+        $.post("@Url.Action("GetCaseByCaseId", "EntityE00009Popup")", { caseId: caseId }, function (result) {
+            if (result.success) {
+                if(result.iCase){
+                    $('#Year').val(result.iCase.BaseYear).prop("readonly", true);
+                }
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function () {
+            //$.unblockUI();
+        });
+
+        $.blockUI();
+        setTimeout(function () {
+            $("#E00009chart").data("kendoChart").refresh();
+            $.unblockUI();
+        }, 2000);
+    });
+
+    $('input:radio[name="optradio"]').change(function () {
+        topValue = $(this).val()
+
+        var originChartURL = '@Url.Action("GetI00001iSmartByCaseId", "EntityE00009Popup", new { area = "Case" })';
+        var changedChartUrl = originChartURL + "?caseId=" + caseId + "&date=" + topValue;
+
+        $('#E00009chart').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+        $('#E00009chart').data('kendoChart').dataSource.read();
+
+        var originGridURL = '@Url.Action("GetGirdByCaseId", "EntityE00009Popup", new { area = "Case" })';
+        var changedGridUrl = originGridURL + "?caseId=" + caseId + "&date=" + topValue;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    });
+
+    $('#show-btn').click(function () {
+        if ($(".grid.hidden").length == 1) {
+            $('.grid').removeClass('hidden')
+            $('#show-btn').text('@Resources.Langues.Hide1')
+        } else {
+            $('.grid').addClass('hidden')
+            $('#show-btn').text('@Resources.Langues.Show1')
+        }
+    });
+</script>

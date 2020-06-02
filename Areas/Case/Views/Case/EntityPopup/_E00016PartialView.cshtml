@@ -1,0 +1,274 @@
+﻿<!-- Modal -->
+<style>
+    .E00016 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .tab-left-label {
+        text-indent: 10%;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+</style>
+
+<div class="modal fade E00016" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.Customschedulercharginganddischargingtimeselection</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-horizontal">
+                        <div class="active col-xs-6"><strong>@Resources.Langues.Chargingtime</strong></div>
+                    </div>
+                </div>
+                <br />
+                <div class="row" style="width:80%; margin:auto">
+                    <div class="form-horizontal">
+                        <div class="col-xs-4 row" style="width:200px; margin-bottom:10px">
+                            <div class="col-xs-10">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("ChargStrTime")
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                            <label class="control-label col-md-2 lbWT" style="text-align:left">@Resources.Langues.oclock</label>
+                        </div>
+                        <label class="control-label col-xs-4 lbWT" style="text-align:left; width:10px">~</label>
+                        <div class="col-xs-4 row" style=" width:200px">
+                            <div class="col-xs-10">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("ChargEndTime")
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                            <label class="control-label col-md-2 lbWT" style="text-align:left">@Resources.Langues.oclock</label>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <div class="row">
+                    <div class="form-horizontal">
+                        <div class="active col-xs-6"><strong>@Resources.Langues.Dischargetime</strong></div>
+                    </div>
+                </div>
+                <br />
+                <div class="row" style="width:80%; margin:auto; margin-bottom:10px">
+                    <div class="form-horizontal">
+                        <div class="col-xs-4 row" style=" width:200px; margin-bottom 10px">
+                            <div class="col-xs-10">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("DischargStrTime")
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                            <label class="control-label col-md-2 lbWT" style="text-align:left">@Resources.Langues.oclock</label>
+                        </div>
+                        <label class="control-label col-xs-4 lbWT" style="text-align:left; width:10px">~</label>
+                        <div class="col-xs-4 row" style=" width:200px">
+                            <div class="col-xs-10">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("DischargEndTime")
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                            <label class="control-label col-md-2 lbWT" style="text-align:left">@Resources.Langues.oclock</label>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        @*<button type="button" class="btn btn-primary">Add</button>*@
+                        <button type="button" onclick="FormE00016Save()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]';
+    var chargStrTimeDropdown = $("#ChargStrTime").data("kendoDropDownList");
+    var chargEndTimeDropdown = $("#ChargEndTime").data("kendoDropDownList");
+    var dischargStrTimeDropdown = $("#DischargStrTime").data("kendoDropDownList");
+    var dischargEndTimeDropdown = $("#DischargEndTime").data("kendoDropDownList");
+
+    $(document).ready(function () {
+        $('.E00016').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $('.E00016').on('shown.bs.modal', function () {         $(document).off('focusin.modal');     });
+        var data = [
+            { text: "0", value: 0 },
+            { text: "1", value: 1 },
+            { text: "2", value: 2 },
+            { text: "3", value: 3 },
+            { text: "4", value: 4 },
+            { text: "5", value: 5 },
+            { text: "6", value: 6 },
+            { text: "7", value: 7 },
+            { text: "8", value: 8 },
+            { text: "9", value: 9 },
+            { text: "10", value: 10 },
+            { text: "11", value: 11 },
+            { text: "12", value: 12 },
+            { text: "13", value: 13 },
+            { text: "14", value: 14 },
+            { text: "15", value: 15 },
+            { text: "16", value: 16 },
+            { text: "17", value: 17 },
+            { text: "18", value: 18 },
+            { text: "19", value: 19 },
+            { text: "20", value: 20 },
+            { text: "21", value: 21 },
+            { text: "22", value: 22 },
+            { text: "23", value: 23 }
+        ];
+
+        $("#ChargStrTime").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#ChargEndTime").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#DischargStrTime").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $("#DischargEndTime").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: data,
+            index: 0,
+            optionLabel: "- Select -",
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetI00009SubByCaseId", "EntityE00016Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#ChargStrTime').data('kendoDropDownList').value(result.ChargStrTime);
+                $('#ChargEndTime').data('kendoDropDownList').value(result.ChargEndTime);
+                $('#DischargStrTime').data('kendoDropDownList').value(result.DischargStrTime);
+                $('#DischargEndTime').data('kendoDropDownList').value(result.DischargEndTime);
+            }else {
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    });
+
+    function FormE00016Save(){
+        if (chargStrTimeDropdown.value() == "" || chargEndTimeDropdown.value() == "" || dischargStrTimeDropdown.value() == "" || dischargEndTimeDropdown.value() == "") {
+            bootbox.alert('@Resources.Langues.Pleasefillfulltheinfomation');
+            return false;
+        }
+
+        if ((parseInt(chargStrTimeDropdown.value()) >= parseInt(chargEndTimeDropdown.value())) || (parseInt(dischargStrTimeDropdown.value()) >= parseInt(dischargEndTimeDropdown.value()))) {
+            bootbox.alert('@Resources.Langues.FailedToSave');
+            return false;
+        }
+
+        if ((parseInt(chargStrTimeDropdown.value()) >= parseInt(dischargStrTimeDropdown.value()) && parseInt(chargStrTimeDropdown.value()) <= parseInt(dischargEndTimeDropdown.value())) ||
+            (parseInt(chargEndTimeDropdown.value()) >= parseInt(dischargStrTimeDropdown.value()) && parseInt(chargEndTimeDropdown.value()) <= parseInt(dischargEndTimeDropdown.value())) ||
+            (parseInt(dischargStrTimeDropdown.value()) >= parseInt(chargStrTimeDropdown.value()) && parseInt(dischargStrTimeDropdown.value()) <= parseInt(chargEndTimeDropdown.value())) ||
+            (parseInt(dischargEndTimeDropdown.value()) >= parseInt(chargStrTimeDropdown.value()) && parseInt(dischargEndTimeDropdown.value()) <= parseInt(chargEndTimeDropdown.value()))) {
+            bootbox.alert('@Resources.Langues.Donotoverlapthechargetimeanddischargetime');
+            return false;
+        }
+        $.blockUI();
+        $.ajax({
+            url: '@Url.Action("SaveEntityE00016PopupData", "EntityE00016Popup")',
+            cache: false,
+            type: 'POST',
+            data: {
+                ChargStrTime: $('#ChargStrTime').val(),
+                ChargEndTime: $('#ChargEndTime').val(),
+                DischargStrTime: $('#DischargStrTime').val(),
+                DischargEndTime: $('#DischargEndTime').val(),
+                caseId: caseId,
+                ModelCode: modelCode
+            },
+            success: function (result) {
+                if (result.success) {
+                    $.blockUI();
+                    $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00016",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                        $('.E00016').modal('hide');
+                    $("#btn_E00016").addClass("democlass");
+                        bootbox.alert('@Resources.Langues.Successful');
+                        $.unblockUI();
+                        result.list.forEach(function(item) {
+                            $("#btn_" + item).removeClass("democlass");
+                        });
+                    }).fail(function () {
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+
+                } else {
+                    bootbox.alert('@Resources.Langues.Error');
+                }
+            },
+            error: function (response) {
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+</script>

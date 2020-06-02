@@ -1,0 +1,463 @@
+﻿<style>
+    .E00026 {
+        top: 5%;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .k-list-optionlabel {
+        text-align: center;
+    }
+
+    .input-validation-error {
+        border: 1px solid red !important;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .bootbox.modal {
+        z-index: 1000000000000000 !important;
+    }
+
+    .paraSubRow > td {
+        padding: 0px !important;
+        vertical-align: middle !important;
+        
+    }
+
+        .paraSubRow > td > input {
+            border: 0px !important;
+        }
+
+    .active {
+        text-align:center;
+        vertical-align:middle !important;
+        font-weight:bold
+    }
+</style>
+<script>
+    function onData() {
+        var filter =  $('.k-textbox[aria-owns="E00026ModelName_listbox"]').val();
+        return { filter: filter};
+    }
+
+    function onChange(e){
+        var value = $("#E00026ModelName").data("kendoDropDownList").value();
+        var tbody = $('.tblMultiRow').find('tbody');
+        $("#WtPowergenId").val(value);
+        if(value === ""){
+            clearModal();
+        }
+        else if(value ==="custom"){
+            clearModal();
+            $('.tblRow').find('input').removeAttr("readonly");
+            $('.paraSubRow').find('input').removeAttr('disabled');
+        } else {
+            $.blockUI();
+            $.post("@Url.Action("GetWTPowergenSubList", "EntityE00026Popup", new { area="Case" })", { powergenId:value }, function (result) {
+                if(result.success){
+                    clearModal();
+                    $('.tblRow').find('input').removeAttr("readonly");
+                    $('.paraSubRow').find('input').removeAttr('disabled');
+
+                    var powergen = result.powergenResult;
+                    $('#ModelName').val(powergen.ModelName);
+                    $('#Volume').val(powergen.Volume);
+                    $('#Height').val(powergen.Height);
+                    var list = result.listPowergenSub;
+                    var order = 0;
+                    list.forEach(function( item ) {
+                        $('#ListWTPowergenSubs_' + order + '__Output').val(item.Output.toFixed(1))
+                        order++;
+                    });
+                }
+            }).fail(function(){
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function(){
+                $.unblockUI();
+            });
+        }
+    };
+</script>
+<h4 style="text-align:center">
+    @if (Request.Params["modelCode"] == "M00001" || Request.Params["modelCode"] == "M00003")
+    {
+        @Resources.Langues.E26Title
+    }
+    else
+    {
+        @Resources.Langues.WTparameterselection
+    }
+</h4>
+@using (Html.BeginForm("SaveEntityE00026CalculationData", "EntityE00026Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "CalculationForm" }))
+{
+    <div class="col-xs-12" style="font-size:12px">
+
+        @Html.Hidden("CaseId", @Request.Params["caseId"], new
+   {
+       @data_val = "true",
+       @data_val_required = "The CaseId field is required."
+   })
+        @Html.Hidden("WtPowergenId", 0, new
+   {
+   })
+
+        @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+   {
+       @data_val = "true",
+       @data_val_required = "The ModelCode field is required.",
+       @data_val_length = "The field ModelCode must be a string with a maximum length of 6.",
+       @data_val_length_max = "6",
+       @style = "text-align:right;"
+   })
+        <div class="col-xs-12">
+            <div class="form-horizontal">
+                <label class="control-label col-xs-4 lbWT" style="text-align:right">모델선택</label>
+                <div class="col-xs-7">
+                    @(Html.Kendo().DropDownList()
+                                                                      .Name("E00026ModelName")
+                                                                      .DataTextField("Text")
+                                                                                .DataValueField("Value")
+                                                                                .Filter(FilterType.Contains)
+                                                                                .DataSource(source =>
+                                                                                {
+                                                                                    source.Read(read =>
+                                                                                    {
+                                                                                        read.Action("Read_WTPowergen", "EntityE00026Popup", new { area = "Case" }).Data("onData");
+                                                                                    });
+                                                                                })
+                                                                                .Events(ev => ev.Change("onChange"))
+                                                                                .HtmlAttributes(new { style = "width: 100%;text-align:center;" })
+                    )
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <br />
+            <table class="table table-bordered tblRow">
+                <tbody>
+                    <tr>
+                        <td class="active col-xs-5">모델명</td>
+                        <td colspan="2">
+                            @Html.TextBox("ModelName", "", new
+                       {
+                           @data_val = "true",
+                           @data_val_length = "The field ModelName must be a string with a maximum length of 200.",
+                           @data_val_length_max = "200",
+                           @data_val_required = "The ModelName field is required.",
+                           @style = "text-align:center !important;",
+                           @class = "form-control"
+                       })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="active col-xs-5">용량</td>
+                        <td>
+                            @Html.TextBox("Volume", "", new
+                       {
+                           @data_val = "true",
+                           data_val_number = "The field Volume must be a number.",
+                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                           @data_val_range_max = "99999999.99",
+                           @data_val_range_min = "0",
+                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                           @data_val_required = "The Volume field is required.",
+                           @style = "text-align:right;",
+                           @class = "form-control"
+                       })
+                        </td>
+                        <td class="active col-xs-1">kW</td>
+                    </tr>
+                    <tr>
+                        <td class="active col-xs-3">높이</td>
+                        <td>
+                            @Html.TextBox("Height", "", new
+                       {
+                           @data_val = "true",
+                           data_val_number = "The field Height must be a number.",
+                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                           @data_val_range_max = "99999999.99",
+                           @data_val_range_min = "0",
+                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                           @data_val_required = "The Height field is required.",
+                           @style = "text-align:right;",
+                           @class = "form-control",
+                           @type = "tel"
+                       })
+                        </td>
+                        <td class="active col-xs-1">m</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <label class="control-label"> WT 출력 곡선 </label>
+        <div class="col-xs-12 ">
+            <table class="table table-bordered tblMultiRow">
+                <thead>
+                    <tr>
+                        <th class="active col-xs-6">@Resources.Langues.Grid26</th>
+                        <th class="active col-xs-6">@Resources.Langues.Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int totalRow = 26;
+                        int order = 1;
+                        for (int index = 0; index < totalRow; index++)
+                        {
+                            string path = "~/Areas/Mobile/Views/Case/Entity/_E00026Sub.cshtml";
+                            int[] arrs = new int[] { order, index };
+                            @Html.Partial(path, arrs);
+                            order++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div style="text-align:center">
+            <label style="color:red;text-align:center">*저장을 하셔야 다음단계로 넘어 갑니다.</label>
+        </div>
+        <div class="col-xs-12" style="margin-top:10px">
+            <div class="form-group" style="text-align:center">
+                <button id="submitCalculationForm" type="button" class="button button-gray">@Resources.Langues.Save</button>
+                @*<button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>*@
+            </div>
+        </div>
+    </div>
+                        }
+<script>
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+        var dropdownlist = $("#E00026ModelName").data("kendoDropDownList");
+        var $calculationForm = $('#CalculationForm');
+        var $manualForm = $('#ManualForm');
+        var $modal = $('.E00026');
+        $('#btn_E00026').removeClass('progress-bar-warning');
+        $('input[type=radio][name=optradio]').change(function () {
+            $("#E00026ModelName").data("kendoDropDownList").text('');
+            $("#E00026ModelName").data("kendoDropDownList").value('');
+            clearModal();
+            if (this.value == 'calculation') {
+                $('#form1').removeAttr('hidden', 'hidden');
+                $('#form2').attr('hidden', 'hidden');
+            }
+            else if (this.value == 'manual') {
+                $('#form1').attr('hidden', 'hidden');
+                $('#form2').removeAttr('hidden', 'hidden');
+                dropdownlist.text(""); // clears visible text
+                dropdownlist.value(""); // clears invisible value
+            }
+        });
+
+        $manualForm.on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $calculationForm.on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $calculationForm.submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                     $.unblockUI();
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                            if (lstEntityNextStep.length != 0) {
+                                nextStepEntity(lstEntityNextStep[0]);
+                                lstEntityNextStep.shift();
+                                console.log(lstEntityNextStep)
+                            } else {
+                                nextEntity()
+                            }
+                } else {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.Error');
+                }
+            });
+            e.preventDefault();
+        });
+
+        $manualForm.submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                     $.unblockUI();
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                            if (lstEntityNextStep.length != 0) {
+                                nextStepEntity(lstEntityNextStep[0]);
+                                lstEntityNextStep.shift();
+                                console.log(lstEntityNextStep)
+                            } else {
+                                nextEntity()
+                            }
+                }else{
+                    $('#File').val('');
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.Pleasecheckyourdataagain');
+                }
+            });
+            e.preventDefault();
+        });
+
+        $('#submitCalculationForm').click(function(){
+            if(dropdownlist.value() != "custom" && dropdownlist.value() != ""){
+                $calculationForm.submit();
+            }else if(dropdownlist.value() != ""){
+                var valid = $calculationForm.valid();
+                if(valid){
+                    var outputArrs = [];
+                    var stop = 26;//26 input
+                    for (var index = 0; index < stop; index++) {
+                        outputArrs.push($('#ListWTPowergenSubs_'+index+'__Output').val());
+                    }
+                    $calculationForm.submit();
+                }
+            }
+        });
+
+        $('#submitManualForm').click(function(){
+            var valid = $manualForm.valid();
+            if(valid){
+                $manualForm.submit();
+            }
+        });
+
+        $('#File').change(function(){
+            if($(this).val()){
+                $('#File').removeClass('input-validation-error');
+            }
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetWtPowergenIdByCaseId", "EntityE00026Popup", new { area="Case" })", { caseId:caseId }, function (result) {
+            if(result.success){
+                var id = result.id;
+                var value = $("#E00026ModelName").data("kendoDropDownList").value();
+                var tbody = $('.tblMultiRow').find('tbody');
+                clearModal();
+                $('.tblRow').find('input').removeAttr("readonly");
+                $('.paraSubRow').find('input').removeAttr('disabled');
+                $.blockUI();
+                $.post("@Url.Action("GetWTPowergenSubList", "EntityE00026Popup", new { area="Case" })", { powergenId:id }, function (result) {
+                    if(result.success){
+                        clearModal();
+                        $('.tblRow').find('input').removeAttr("readonly");
+                        var powergen = result.powergenResult;
+                        $('#ModelName').val(powergen.ModelName);
+                        $('#Volume').val(powergen.Volume);
+                        $('#Height').val(powergen.Height);
+                        $("#E00026ModelName").data('kendoDropDownList').value(id);
+
+                        var list = result.listPowergenSub;
+                        var order = 0;
+                        list.forEach(function( item ) {
+                            $('#ListWTPowergenSubs_' + order + '__Output').val(item.Output)
+                            order++;
+                        });
+                    }
+                }).fail(function(){
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function(){
+                    $.unblockUI();
+                });
+            }
+        }).fail(function(){
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function(){
+            $.unblockUI();
+        });
+    });
+
+    function checkIncrementalList(arrs){
+        var min = parseInt(arrs[0]);
+        for (var i = 1; i < arrs.length; i++) {
+            if(parseInt(arrs[i]) <= min){
+                return false
+            }
+            min = parseInt(arrs[i]);
+        }
+        return true;
+    };
+
+    function round(value, precision) {
+        var multiplier = Math.pow(10, precision || 0);
+        return Math.round(value * multiplier) / multiplier;
+    }
+
+    function createCustomHtmlParaSub(order,item){
+        return '<tr><td><input type="text" class="text-center" name="ListWTPowergenSubs[' + order + '].WindSpeed" value="'+item.WindSpeed+'" readonly="readonly" type = "tel" /></td>'+
+            '<td><input type="text" class="text-center" name="ListWTPowergenSubs[' + order + '].Output" type = "tel" value="'+item.Output+'" /></td></tr>';
+    }
+    function clearModal(){
+        $('.tblRow').find('input').not('.loadInput').val("");
+        $('.tblMultiRow').find('tbody').children().not('.paraSubRow,.para').remove();
+        $('.tblMultiRow').find('.para').find('input').prop("readonly","readonly");
+        $('.tblRow').find('input').prop("readonly","readonly");
+        $('.tblRow').find('input').removeClass("input-validation-error");
+        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+        $('.paraSubRow').find('input').not('.loadInput').val("");
+    };
+
+    $('.k-textbox[aria-owns="E00026ModelName_listbox"]').on('keyup', function (evt) {
+        //var charCode = (evt.which) ? evt.which : event.keyCode
+        //if (charCode == 13) {
+        //    $("#E00026ModelName").data('kendoDropDownList').dataSource.read();
+        //}
+        $("#E00026ModelName").data('kendoDropDownList').dataSource.read();
+    });
+</script>

@@ -1,0 +1,194 @@
+﻿
+
+@{
+    ViewBag.Title = Resources.Langues.CommonCodeManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        .k-grid .k-state-selected {
+            background-color: #66ccff;
+            color: black;
+        }
+
+        .k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td {
+            background-color: #66ccff;
+        }
+
+        .displayCommonCode {
+            font-size: 20px;
+        }
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent">
+    <div class="form-group">
+        <div class="col-xs-12 col-md-12 col-lg-6">
+            <div class="form-group">
+                @(Html.Kendo().Grid<DPDSP.Models.CommonCodeViewModel>()
+    .Name("CommonParentGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(common => common.ComCode).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ComCode);
+        columns.Bound(common => common.ComName).HtmlAttributes(new { style = "text-align:center;"}).Title(Resources.Langues.ComName);
+        columns.Bound(common => common.ComName2).HtmlAttributes(new { style = "text-align:center;"}).Title(Resources.Langues.ComName2);
+        columns.Bound(common => common.CommonType).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.CommonType);
+        columns.Command(command =>
+        {
+            command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+            //command.Custom(Resources.Langues.Delete).Click("DeleteItem");
+        }).Title(Resources.Langues.Management).HtmlAttributes(new { style = "text-align:center;" });
+    })
+    .ToolBar(toolbar => toolbar.Create().Text(Resources.Langues.AddNewRecord))
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:650px;" })
+    .Selectable(selectable => selectable
+          .Mode(GridSelectionMode.Multiple)
+          .Type(GridSelectionType.Row))
+    .Events(ev =>
+    {
+        ev.Change("onChange");
+        ev.Edit("onEdit");
+        ev.DataBound("onDataBound");
+    })
+    //.PersistSelection(true)
+    //.Navigatable()
+    .Resizable(rz => rz.Columns(true))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+        .Model(common =>
+        {
+            common.Id(p => p.ComCode);
+        })
+    .Read(read => read.Action("EditingInline_ReadCommonParent", "CommonCodeManagement"))
+    .Create(update => update.Action("EditingInline_CreateParentComm", "CommonCodeManagement"))
+       .Update(update => update.Action("EditingInline_UpdateParentComm", "CommonCodeManagement"))
+    //.Destroy(update => update.Action("EditingInline_DestroyModel", "ModelManagement"))
+    )
+                )
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-12 col-lg-6">
+            <div class="form-inline" style="padding:20px;">
+                <label class="form-group displayCommonCode">@Resources.Langues.CommonSelection</label>
+                <p class="form-group displayCommonCode" id="CommonSelected"></p>
+                @Html.Hidden("ComSubParent", "", new
+           {
+           })
+            </div>
+            <div class="row">
+                @(Html.Kendo().Grid<DPDSP.Models.CommonSubViewModel>()
+            .Name("CommonSubGrid")
+            .Columns(columns =>
+            {
+                columns.Bound(common => common.ComSubCode).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ComSubCode);
+                columns.Bound(common => common.ComSubName).HtmlAttributes(new { style = "text-align:center;"}).Title(Resources.Langues.ComSubName);
+                columns.Bound(common => common.ComSubName2).HtmlAttributes(new { style = "text-align:center;"}).Title(Resources.Langues.ComSubName2);
+                columns.Bound(common => common.ComSubName3).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ComSubName3);
+                columns.Bound(common => common.CommonSubType).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.CommonSubType);
+                columns.Command(command =>
+                {
+                    command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                    //command.Custom(Resources.Langues.Delete).Click("DeleteItem");
+                }).Title(Resources.Langues.Management).HtmlAttributes(new { style = "text-align:center;" });
+            }).ToolBar(toolbar => toolbar.Create().Text(Resources.Langues.AddNewRecord))
+            //.ToolBar(toolbar =>
+            //{
+            //    toolbar.Custom().Text("Add Entity").HtmlAttributes(new { id = "showAddEntity", style = "margin-right:10px;" });
+            //})
+
+            .Editable(editable => editable.Mode(GridEditMode.InLine))
+            .Pageable()
+            .Sortable()
+            .Scrollable(rz => rz.Enabled(false))
+            .HtmlAttributes(new { style = "height:600px;" })
+                //.Selectable(selectable => selectable
+                //      .Mode(GridSelectionMode.Multiple)
+                //      .Type(GridSelectionType.Row))
+                //.Events(ev => ev.Change("onChange"))
+                //.PersistSelection(true)
+                //.Navigatable()
+                .Resizable(rz => rz.Columns(true))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(10)
+                            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                            .Model(common =>
+                            {
+                                common.Id(p => p.ComSubCode);
+                            })
+                            .Read(read => read.Action("ReadCommonChild", "CommonCodeManagement").Data("dataCommCode"))
+                            .Create(update => update.Action("EditingInline_CreateChildComm", "CommonCodeManagement").Data("dataCommCode"))
+                            .Update(update => update.Action("EditingInline_UpdateChildComm", "CommonCodeManagement").Data("dataCommCode"))
+                            //.Destroy(update => update.Action("DestroyModelMap", "ModelManagement"))
+                            )
+                )
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+
+        function dataCommCode() {
+            var commCode = $("#CommonSelected").text();
+            return {
+                commCode: commCode
+            };
+        }
+
+        function onEdit(e) {
+            if (e.model.isNew() == false) {
+                $(e.container).find('input[name=CommonCode]').prop("readonly", true);
+            }
+        }
+
+        function onDataBound(e) {
+            var commParentGrid = $("#CommonParentGrid").data("kendoGrid");
+            var row = commParentGrid.tbody.find("tr[role='row']:first");
+            if (row != null) {
+                commParentGrid.select(e.sender.tbody.find("tr:first"));
+            }
+        }
+
+        function onChange(e) {
+            var commonParentGrid = $("#CommonParentGrid").data("kendoGrid");
+            var commonSubGrid = $("#CommonSubGrid").data("kendoGrid");
+            var commonSelected = commonParentGrid.dataItem(commonParentGrid.select());
+            var itemCode = commonSelected.ComCode;
+            $('#CommonSelected').text(itemCode);
+            
+            $('#ComSubParent').val(itemCode);
+            commonSubGrid.dataSource.read({ itemCode: itemCode });
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+    </script>
+}

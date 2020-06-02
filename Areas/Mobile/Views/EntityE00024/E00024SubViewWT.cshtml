@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "E00024SubViewREC";
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+<div class="modal-body">
+    <div class="i_section mt20">
+        <div class="center" style="margin:10px">
+            <h4 class="tit_h6 bu_cross1">@Resources.Langues.RenewableEnergySupplyCertificateWeight</h4>
+        </div>
+        <div>
+            <table class="table table-bordered tblMultiRow" style="vertical-align:middle">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="center">@Resources.Langues.Division</th>
+                        <th rowspan="2" class="bd_right center">@Resources.Langues.SupplyCertificateWeights</th>
+                        <th colspan="2" class="center">@Resources.Langues.Targetenergyandreference</th>
+                    </tr>
+
+                    <tr>
+                        <th>@Resources.Langues.InstallationType</th>
+                        <th>@Resources.Langues.Detailedcriteria</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="WT">
+                        <td rowspan="10" class="bd_right center">@Html.Raw(Resources.Langues.OtherNewandRenewableEnergy)</td>
+                        <td class="center">0.25</td>
+                        <td colspan="2" class="left">@Resources.Langues.Bio</td>
+                    </tr>
+                    <tr class="WT">
+                        <td class="center">0.5</td>
+                        <td colspan="2" class="left">@Resources.Langues.Landfill</td>
+                    </tr>
+                    <tr class="WT">
+                        <td class="center">1.0</td>
+                        <td colspan="2" class="left">@Resources.Langues.OtherBio</td>
+                    </tr>
+                    <tr class="WT">
+                        <td class="center">1.5</td>
+                        <td colspan="2" class="left">@Resources.Langues.Misuse</td>
+                    </tr>
+                    <tr class="WT">
+                        <td class="center">2.0</td>
+                        <td>@Resources.Langues.NonUser</td>
+                        <td class="center">@Resources.Langues.FixedType</td>
+                    </tr>
+                    <tr class="WT">
+                        <td class="center">1.0 ~ 2.5</td>
+                        <td class="left">@Resources.Langues.Aids</td>
+                        <td>@Resources.Langues.Variable</td>
+                    </tr>
+                    <tr class="WT">
+                        <td class="center">2.0</td>
+                        <td rowspan="4" class="left"> @Resources.Langues.Offshore</td>
+                        <td class="center"> @Resources.Langues.Linkdistance</td>
+                    </tr>
+                    <tr class="WT">
+                        <td class="center">2.5</td>
+                        <td class="center">@Resources.Langues.Linkdistanceexceeding</td>
+                    </tr>
+                    <tr class="WT">
+                        <td class="center">3.0</td>
+                        <td class="center">@Resources.Langues.Linkdistanceexceeding1</td>
+                    </tr>
+                    <tr class="WT">
+                        <td class="center">3.5</td>
+                        <td class="center">@Resources.Langues.Linkdistanceexceeded</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="float:right;margin-bottom:5px">@Resources.Langues.Source</div>
+        </div>
+    </div>
+</div>

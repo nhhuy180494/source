@@ -1,0 +1,264 @@
+﻿@using System.Security.Claims
+@using DPDSP.Models
+@using DPDSP.Services
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using DPDSP.Models
+@using DPDSP.Services
+@using System.Configuration;
+@using BotDetect.Web.Mvc;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="한국전기연구원 스마트배전연구센터,분산자원,분산자원설계,분산자원설계프로그램" />
+    <title>KERI 분산자원설계프로그램</title>
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.common-bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/angular.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.aspnetmvc.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/cultures/kendo.culture.ko-KR.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/cultures/kendo.culture.en-US.min.js")"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Hind|Oxygen" rel="stylesheet" />
+    @*<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>*@
+    <link rel="stylesheet" href="~/Theme/menu-design/css/material-design-iconic-font.css" />
+    <link rel="stylesheet" href="~/Theme/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Theme/bootstrap/css/bootstrap-theme.min.css">
+    <script src="~/Theme/js/jquery.jside.menu.js"></script>
+    <link rel="stylesheet" href="~/Theme/css/jside-menu.css" />
+    <link rel="stylesheet" href="~/Theme/css/jside-skins.css" />
+
+    <link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/KendoGridOff365.css")" rel="stylesheet" type="text/css" />
+    <style>
+        .k-grid {
+            font-size: 14px;
+        }
+
+         .k-widget{
+               border-right-style:none
+            }
+
+        .outer {
+            width: 100%;
+            padding:2px;
+            white-space: nowrap;
+            position: relative;
+            overflow-x: scroll;
+            overflow-y: hidden;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .button-gray {
+            background-color: white;
+            color: black;
+            border: 2px solid #e7e7e7;
+        }
+    </style>
+
+    <script>
+        var baseUrl = '@Url.Content("~/")';
+
+        $(document).ready(function () {
+            $(".menu-container").jSideMenu({
+                jSidePosition: "position-left", //possible options position-left or position-right
+
+                jSideSticky: true, // menubar will be fixed on top, false to set static
+
+                jSideSkin: "keri_blue", // to apply custom skin, just put its name in this string
+            });
+
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+            }
+            else {
+                window.location.href = '@Url.Action("Index", "Home", new { area = "Case" })'
+            }
+        });
+    </script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+    <!-- skin theme change able jSideSkin: "blue","green","orange","black""wood" -->
+
+</head>
+<body>
+
+    <menu class="menubar" style="
+          z-index: 100;">
+        <menuitem>
+            <button class="menu-trigger"> </button>
+        </menuitem>
+
+        <menuitem class="logo" title="홈으로 이동">
+            <a href=""><img id="logo-img" src="~/Theme/images/logo.png" alt="홈으로이동" /> </a>
+        </menuitem>
+    </menu>
+    <div class="menu-head">
+        <span class="layer">
+            <div class="col">
+                <div class="row for-pic">
+                    <div class="profile-pic">
+                        <img src="~/Theme/images/menu_title.jpg" alt="분산자원 설계 프로그램" />
+                    </div>
+                </div>
+                <div class="row for-name" style="padding-top:50px">
+                    <span class="tagline" align="center"> @Resources.Langues.Keri1 </span>
+                    <span class="tagline"> @Resources.Langues.DistributedPowerDesignSoftware </span>
+                </div>
+            </div> <!--//col-->
+        </span>
+    </div>
+    <!--//menu-head-->
+    <!--//menu-head-->
+    <!--좌측 메뉴 시작 --- left menu start-->
+    <nav class="menu-container">
+        <ul class="menu-items">
+            <li class="has-sub">
+                <span class="item-icon"> <i class="glyphicon glyphicon-film"></i> </span>
+                <span class="dropdown-heading">@Resources.Langues.Community </span>
+                <ul>
+                    <li>
+                        <a href="@Url.Action("ServiceIntroduction","Community", new { area="Mobile"})">- @Resources.Langues.ServiceIntroduction </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Notice","Community", new { area="Mobile"})">- @Resources.Langues.Notice </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("CaseQA","Community", new { area="Mobile"})">- FAQ </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("ReferenceBoard","Community", new { area="Mobile"})">- @Resources.Langues.ReferenceBoard </a>
+                    </li>
+                </ul>
+            </li>
+            @*<li>
+                <span class="item-icon"> <i class="glyphicon glyphicon-book"></i> </span>
+                <a href="#">
+                    모형 설계
+                </a>
+            </li>*@
+            <li class="has-sub">
+                <span class="item-icon"> <i class="glyphicon glyphicon-eye-open"></i> </span>
+                <a href="@Url.Action("Index", "Case", new { area="Mobile", modelCode = "M00001" })">
+                    @Resources.Langues.BM1
+                </a>
+            </li>
+            <li class="has-sub">
+                <span class="item-icon"> <i class="glyphicon glyphicon-cloud"></i> </span>
+                <a href="@Url.Action("Index", "Case", new { area="Mobile", modelCode = "M00003" })">
+                    @Resources.Langues.BM2
+                </a>
+            </li>
+            <li>
+                <span class="item-icon"> <i class="glyphicon glyphicon-asterisk"></i> </span>
+                <a style="color:#ccc;" @*href="@Url.Action("Index", "Case", new { area="Mobile", modelCode = "M00005" })"*@>
+                    @Resources.Langues.BM3
+                </a>
+            </li>
+            <li>
+                <span class="item-icon"><i class="glyphicon glyphicon-earphone"></i></span>
+                <a style="color:#ccc;" @*href="@Url.Action("Index", "Case", new { area="Mobile", modelCode = "M00002" })"*@>
+                    @Resources.Langues.BM4
+                </a>
+            </li>
+            <li>
+                <span class="item-icon"> <i class="glyphicon glyphicon-camera"></i> </span>
+                <a style="color:#ccc;" @*href="@Url.Action("Index", "Case", new { area="Mobile", modelCode = "M00004" })"*@>
+                    @Resources.Langues.BM5
+                </a>
+            </li>
+            <!---- 로그인, 로그아웃, 회원 가입정보 시작 login,logout,information start ----->
+            <li>
+                <span class="item-icon"></span>
+
+            </li>
+            <div class="action">
+                @if (!Request.IsAuthenticated)
+                {
+
+
+                    <a href="@Url.Action("Login","Account", new { area="Mobile"})"> <font color="#fff">@Resources.Langues.Login &nbsp;<span class="glyphicon  glyphicon-log-in"></span></font></a>
+
+                    <a href="@Url.Action("MemberRegister","Account", new { area="Mobile"})"> <font color="#fff">@Resources.Langues.Register &nbsp;<span class="glyphicon  glyphicon-log-in"></span></font></a>
+
+                }
+                else
+                {
+                    using (Html.BeginForm("LogOff", "Account", new { area = "Mobile" }, FormMethod.Post, new { id = "logoutForm", }))
+                    {
+                        var userStore = new UserStore<ApplicationUser>(new DPDSPDbContext());
+                        var userManager = new UserManager<ApplicationUser>(userStore);
+                        var user = userManager.FindById(User.Identity.GetUserId());
+                        try
+                        {
+                            user.FirstName = StringCipher.Decrypt(user.FirstName, ConfigurationManager.AppSettings["passEncrytp"]);
+                            user.LastName = StringCipher.Decrypt(user.LastName, ConfigurationManager.AppSettings["passEncrytp"]);
+                            user.UserExtend.UserTel = StringCipher.Decrypt(user.UserExtend.UserTel, ConfigurationManager.AppSettings["passEncrytp"]);
+                        }
+                        catch
+                        {
+                            user.FirstName = "Unknown";
+                            user.LastName = "Unknown";
+                            user.UserExtend.UserTel = "Unknown";
+                        }
+                        ViewBag.CurrentUser = user;
+                        @Html.AntiForgeryToken()
+                        <a role="button" onclick="javascript:document.getElementById('logoutForm').submit()"> <font color="#fff">@Resources.Langues.Logout &nbsp;<span class="glyphicon  glyphicon-user"></span></font></a>
+                        <!--login & join link end -->
+                        <a href="@Url.Action("Myinfo","Account", new { area="Mobile"})">
+                            <i class="icon-user"></i>@ViewBag.CurrentUser.LastName @ViewBag.CurrentUser.FirstName
+                        </a>
+                    }
+                }
+                <!--- login --->
+                <!-- log out -->
+
+
+            </div>
+
+            <!---- 로그인, 로그아웃, 회원 가입정보 시작 login,logout,information End ----->
+            <!-----------------------------  나의 결과 모형 ------------------->
+            @if (Request.IsAuthenticated)
+            {
+                <li>
+                    <span class="item-icon"> <i class="zmdi zmdi-aspect-ratio-alt"></i> </span>
+                    <a href="@Url.Action("Index", "MyCase", new { area = "Mobile" })">@Resources.Langues.MyCase</a>
+                </li>
+            }
+            <!--------------------   나의 결과 모형 끝 ---->
+        </ul>
+    </nav>
+    <div style="min-height:80vh;margin-top:50px;">
+        @RenderBody()
+    </div>
+    <!--MAIN ONLY FILES-->
+    <!--MAIN CSS, JS-->
+    <link rel="stylesheet" href="~/Theme/css/d-main.css" />
+    <script src="~/Theme/js/d-main.js"></script>
+    <footer class="credit">
+        경상남도 창원시 성산구 불모산로10번길 12 (성주동)<br> 한국전기연구원 / TEL. 055-280-1365<br>
+        Copyright ⓒ KERI &copy; 2018 <a href="http://www.modder.co.kr/" title="분산자원설계프로그램" target="_blank">All Rights Reserved.</a>
+    </footer>
+</body>
+
+</html>

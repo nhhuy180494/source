@@ -1,0 +1,377 @@
+﻿@using Microsoft.AspNet.Identity
+@using System.Security.Claims
+@using DPDSP.Models
+@using DPDSP.Services
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - @Resources.Langues.KERI</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.common-bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/case_site_css/case_site_styles.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/case_site_css/style.css" rel="stylesheet" />
+    <link href="~/Content/case_site_css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/case_site_css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/angular.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.aspnetmvc.min.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/cultures/kendo.culture.ko-KR.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/cultures/kendo.culture.en-US.min.js")"></script>
+    @*<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>*@
+
+    <script type="text/javascript">
+        var baseUrl = '@Url.Content("~/")';
+    </script>
+
+    @*Naver Analysis Tool*@
+    <script type="text/javascript" src="http://wcs.naver.net/wcslog.js"></script>
+    <script type="text/javascript">
+        if (!wcs_add) var wcs_add = {};
+        wcs_add["wa"] = "830a41f791bde";
+        wcs_do();
+    </script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="~/Scripts/BEN.js"></script>
+
+    @RenderSection("styles", required: false)
+    <style>
+        .line_bar {
+            /*width: 2px;
+            height: 21px;
+            line-height: 20px;
+            background: #2f3137;
+            margin: 15px 10px 0 10px;
+            border-left: 1px solid #787c86;*/
+        }
+
+        .user-name {
+            /*text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            display: inline;
+            width: 8em;*/
+        }
+
+        .bootbox.modal {
+            z-index: 99999999 !important;
+        }
+
+        .logo_margin> a {
+    color: #1996e4 !important;
+    font-size: 25px;
+    font-weight: bold;
+    padding-left: 50px;
+}
+        .modal{
+            z-index:1000000
+        }
+
+
+            #footer {
+            position:fixed;
+            bottom: 0;
+            width: 100%;
+            margin: 0;
+            margin-bottom:0px;
+            z-index: 999
+        }
+
+        .classYes {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("LogOff", "Account", new { area = "Case" }, FormMethod.Post, new { id = "logoutForm", }))
+    {
+        @Html.AntiForgeryToken()
+        @*<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="@Html.isNavMenuActive("Index", "Home")"><a href="@Url.Action("Index", "Home")">@Resources.Langues.Home</a></li>
+                            <li class="line_bar line2"> </li>
+                            <li class="@Html.isNavMenuActive("Index", "Case")">
+                                <a href="@Url.Action("Index", "Case")">@Resources.Langues.Case <!--b class="caret"></b--></a>
+                            </li>
+                            <li class="line_bar line2"> </li>
+                            <li ><a onclick="commuClick()" >@Resources.Langues.Comunity</a></li>
+                            <li id="item-toggle" class="hidden">
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button">Comunity <b class="caret"></b> </a>
+                                <ul class="dropdown-menu multi-level" style="margin-top:0;">
+                                    <li class="@Html.isNavMenuActive("ServiceIntroduction", "Community")"><a href="@Url.Action("ServiceIntroduction", "Community")">서비스소개</a></li>
+                                    <li class="divider"></li>
+                                    <li class="@Html.isNavMenuActive("Notice", "Community")"><a href="@Url.Action("Notice", "Community")">공지사항</a></li>
+                                </ul>
+                            </li>
+                            <li class="line_bar line2 hidden"> </li>
+                            <li class="@Html.isNavMenuActive("Index", "Help") hidden"> <a href="@Url.Action("Index", "Help")" class="dropdown-toggle">Help </a> </li>
+                        </ul>
+                        <ul class="nav navbar-nav pull-right">
+                            @if (Request.IsAuthenticated)
+                            {
+                                var FullName = ((ClaimsIdentity)User.Identity).FindFirst("FullName");
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="background:#434750">
+                                        <span class="fa fa-user"></span> <span class="user-name">@FullName.Value</span> <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu" style="font-size:12px;">
+                                        <li><a role="button" onclick="javascript:document.getElementById('logoutForm').submit();">@Resources.Langues.Logout</a></li>
+                                    </ul>
+                                </li>
+                                <li class="@Html.isNavMenuActive("Index","MyCase")"><a href="@Url.Action("Index", "MyCase")"> @Resources.Langues.MyCase </a> </li>
+                            }
+                            else
+                            {
+                                <li><a id="loginTag"  data-toggle="modal" href="#login"> @Resources.Langues.Login </a> </li>
+                                <li><a id="registerTag"  data-toggle="modal" href="#member"> @Resources.Langues.SignUp </a> </li>
+                            }
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="background:#434750">
+                                    <span class="fa"></span> <span class="user-name" id="langName">@Resources.Langues.Language</span> <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu" style="font-size:12px;">
+                                    <li><a role="button" onclick="changeLanguage('ko')">@Resources.Langues.Korean</a></li>
+                                    <li><a role="button" onclick="changeLanguage('en')">@Resources.Langues.English</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--/.nav-collapse -->
+                </div>
+            </div>*@
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <!-- add logo st -->
+                        <li class="logo_margin" style="width:200px;text-align:center"> <a href="@Url.Action("Index", "Home")">MODDER</a> </li>
+                        <!-- add logo end -->
+                        <li class="@Html.isNavMenuActive("Index", "Home")"><a href="@Url.Action("Index", "Home")" class="dropdown-toggle">@Resources.Langues.Home</a></li>
+                        <li class="line_bar line2"> </li>
+                        <li class="@Html.isNavMenuActive("ServiceIntroduction", "Community")"><a href="@Url.Action("ServiceIntroduction", "Community")" class="dropdown-toggle">@Resources.Langues.ServiceIntroduction</a></li>
+                        <li class="line_bar line2"> </li>
+                        <li class="@Html.isNavMenuActive("Index", "Case")">
+                            <a href="@Url.Action("Index", "Case")" @*class="dropdown-toggle" data-toggle="dropdown"*@>@Resources.Langues.ModelDesign  <!--b class="caret"></b--></a>
+                        </li>
+                        <li class="line_bar line2"> </li>
+                        <li class="@Html.isNavMenuActive("Notice", "Community")">
+                            <a href="@Url.Action("Notice", "Community")" >@Resources.Langues.Notice  <!--b class="caret"></b--></a>
+                        </li>
+
+                        @*<a href="#" class="dropdown-toggle" data-toggle="dropdown">@Resources.Langues.Notice <b class="caret"></b> </a>
+                        <ul class="dropdown-menu multi-level" style="margin-top:5px;">
+                            <li class="@Html.isNavMenuActive("ServiceIntroduction", "Community")"><a href="@Url.Action("ServiceIntroduction", "Community")">@Resources.Langues.ServiceIntroduction</a></li>
+                            <li class="divider"></li>
+                            <li class="@Html.isNavMenuActive("Notice", "Community")"><a href="@Url.Action("Notice", "Community")">@Resources.Langues.Notice</a></li>
+                            <li class="divider"></li>
+                            <li class="@Html.isNavMenuActive("CaseQA", "Community")"><a href="@Url.Action("CaseQA", "Community")">@Resources.Langues.QnA</a></li>
+                        </ul>
+                        </li>*@
+                        <li class="line_bar line2"> </li>
+                        <li class="@Html.isNavMenuActive("CaseQA", "Community")"> <a href="@Url.Action("CaseQA", "Community")" class="dropdown-toggle">@Resources.Langues.QnA </a> </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav pull-right">
+                        @if (Request.IsAuthenticated)
+                        {
+                            var FullName = ((ClaimsIdentity)User.Identity).FindFirst("FullName");
+                            <li class="dropdown">
+                                <a class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fa fa-user"></span> <span class="user-name">@FullName.Value</span> <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu" style="font-size:12px;">
+                                    @*<li style="border-bottom:1px dashed #ddd;"><a href="my_case.html">My Case</a></li>
+                                        <li style="border-bottom:1px dashed #ddd;"><a href="my_info.html">Edit Profile</a></li>*@
+                                    <li><a role="button" onclick="javascript:document.getElementById('logoutForm').submit();">@Resources.Langues.Logout</a></li>
+                                </ul>
+                            </li>
+                            <li class="@Html.isNavMenuActive("Index","MyCase")"><a href="@Url.Action("Index", "MyCase")"> @Resources.Langues.MyCase </a> </li>
+                        }
+                        else
+                        {
+                            <li><a id="loginTag" data-toggle="modal" href="#login" @*onclick="modalShow()"*@> @Resources.Langues.Login </a> </li>
+                            <li><a id="registerTag" data-toggle="modal" href="#member"> @Resources.Langues.SignUp </a> </li>
+                        }
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="fa"></span> <span class="user-name" id="langName">@Resources.Langues.Language</span> <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" style="font-size:12px;">
+                                <li><a role="button" onclick="changeLanguage('ko')">@Resources.Langues.Korean</a></li>
+                                <li><a role="button" onclick="changeLanguage('en')">@Resources.Langues.English</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    @*<ul class="nav navbar-nav pull-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="background:#434750 "> <span class="fa fa-user"> </span> 홍길동 <b class="caret"></b> </a>
+                                <ul class="dropdown-menu" style="font-size:12px;">
+                                    <li style="border-bottom:1px dashed #ddd;"><a href="my_case.html">My Case</a></li>
+                                    <li style="border-bottom:1px dashed #ddd;"><a href="my_info.html">Edit Profile</a></li>
+                                    <li><a href="login.html">Log out</a></li>
+                                </ul>
+
+                            </li>
+                            <li><a href="my_case.html"> My Case </a> </li>
+                            <li><a href="#" data-toggle="modal" data-target="#basicModal01"> Login <span class="glyphicon  glyphicon-log-out"></span></a> </li>
+                        </ul>*@
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+    }
+    <div style="margin-top:55px; margin-bottom:60px">
+        <div class="title-hiden"></div>
+        @RenderBody()
+    </div>
+
+    @*<footer id="footer">
+            <div class="container footer-content">
+                <div class="row">
+                    <div class="col-xs-12 text-left column">
+                        <h1 class="col-sm-1"></h1>
+                        <ul class="col-sm-6 text-left">
+                            <li>Copyright ⓒ 2017, KERI. All Rights Reserved.</li>
+                        </ul>
+                        <ul class="text-right">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>*@
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 text-left column">
+                    <h1 class="col-sm-1"></h1>
+                    <ul class="col-sm-10 text-left">
+                        <li>
+                            @Resources.Langues.NewAddress1
+                        </li>
+                        <li>
+                            @Resources.Langues.NewAddressCopy
+                        </li>
+                        @*<li>Copyright ⓒ 2017, KERI. All Rights Reserved.</li>*@
+                        @*<li>통신판매 신고: xx-xxxxx-xxxxxx</li>*@
+                    </ul>
+                    @*<ul class="text-right">
+                        <li><a href="@Url.Action("Agreement", "Home", new { name = "agree01" })" class="text-muted">이용약관</a> | <a href="agreement02.html" class="text-muted">개인정보 처리방침</a> | <a href="help.html" class="text-muted">고객센터</a></li>
+                        <li>서비스센터: 123-123-1234</li>
+                    </ul>*@
+                </div>
+            </div>
+        </div>
+    </footer>
+    @Html.Partial("~/Areas/Case/Views/Shared/Login.cshtml")
+    @*@Html.Partial("~/Areas/Case/Views/Shared/Login.cshtml")*@
+    @*}
+        else
+        {
+            <div class="container" style="margin-top:80px;margin-bottom:50px;">
+                @RenderBody()
+            </div>
+        }*@
+
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = window.location.href;
+            var res = url.split('/');
+            var a = res[3].toLowerCase()
+            if (res[3].toLowerCase() == 'en') {
+                //$('.title-hiden').addClass("hidden")
+                $('#langName').html('');
+                $('#langName').html('@Resources.Langues.English');
+            } else {
+               // $('.title-hiden').removeClass("hidden")
+                $('#langName').html('');
+                $('#langName').html('@Resources.Langues.Korean');
+            }
+        });
+        //language calendar
+        var current = $(location).attr('pathname');
+        if (current.search("ko") == true) {
+            kendo.culture("ko-KR");
+        } else {
+            kendo.culture("en-AU");
+        }
+
+        function modalShow() {
+            $('#login').appendTo("body").modal("show");
+        }
+
+        function changeLanguage(lang) {
+            
+            var url = window.location.href;
+            var res = url.split('/');
+            var a = res[3].toLowerCase()
+            if (res[3].toLowerCase() == 'ko' || res[3].toLowerCase() == 'en') {
+                res[3] = lang;
+            } else {
+                res.splice(3, 0, lang);
+            }
+            var newUrl = "";
+            res.forEach(function (entry) {
+                newUrl = newUrl + entry + "/";
+            });
+            newUrl = newUrl.slice(0, -1);
+            window.location.href = newUrl
+        }
+
+        function commuClick() {
+            var isAuth = '@Request.IsAuthenticated';
+
+            if (isAuth == 'True') {
+                window.location.href = '@Url.Action("Notice", "Community")';
+            } else {
+                bootbox.confirm({
+                        message: '@Resources.Langues.MessCreateModel',
+                        className: 'my-custom-class',
+                        buttons: {
+                            cancel: {
+                                label: '@Resources.Langues.No',
+                                className: 'btn-danger pull-right'
+                           },confirm: {
+                                label: '@Resources.Langues.Yes',
+                               className: 'btn-success classYes'
+                           }
+                        },
+                    callback: function (result) {
+                            if (result) {
+                                $('#loginTag').click()
+                            } else {
+                                window.location.href = '@Url.Action("Notice", "Community")';
+                            }
+                        }
+                    });
+            }
+        }
+
+    </script>
+</body>
+</html>

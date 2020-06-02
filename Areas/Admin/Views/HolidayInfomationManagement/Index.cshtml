@@ -1,0 +1,643 @@
+﻿@{
+    ViewBag.Title = Resources.Langues.HolidayInfomationManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section styles{
+    <link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        input[type="checkbox"][readonly] {
+            pointer-events: none;
+        }
+
+        #SerchButton {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        .input-validation-error {
+            border: 1px solid red !important;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+
+        .my-custom-class .modal-dialog {
+            width: 25%;
+        }
+
+        .modal-dialog-regist {
+            width: 25%;
+        }
+
+        .classYes {
+            margin-right: 10px;
+        }
+
+        .classButton1 {
+            background-color: white;
+            border-color: #ea6b48;
+            color: #ea6b48;
+            margin-top: 10px;
+            width: 86px;
+        }
+
+        .classButton {
+            background-color: white;
+            border-color: #ea6b48;
+            color: #ea6b48;
+        }
+
+        .E00008 {
+            top: 5%;
+        }
+
+        span[class=k-input] {
+            text-align: center;
+        }
+
+        .lbWT {
+            padding-right: 0px;
+            font-weight: 400;
+        }
+
+        .radio label {
+            font-weight: 700 !important;
+        }
+
+        .tblMultiRow .active {
+            text-align: center;
+        }
+
+        .tblMultiRow th {
+            text-align: center;
+        }
+
+        .tblMultiRow input {
+            border: 0px;
+        }
+
+        .democlass {
+            background-color: gray;
+        }
+    </style>
+    <link href="~/Content/admin_site_css/LoadingBar.css" rel="stylesheet" />
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.YearDayViewModel>()
+        .Name("yearDayGrid")
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Pageable()
+        .Resizable(rz => rz.Columns(true))
+        .Scrollable()
+        .HtmlAttributes(new { style = "height:650px;" })
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Selection).ClientTemplate("<input type=\"checkbox\" #=Selection ? checked='checked' :  '' # class=\"chkbox\" id=\"#=YearDayId#\" /> ")
+                                                                                    .HtmlAttributes(new { style = "text-align:center" }).Title(Resources.Langues.Select).HeaderHtmlAttributes(new { style = "width:3%;", @class = "headerCheckbox" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+            columns.Bound(r => r.YearDayId).Hidden();
+            columns.Bound(r => r.DayYear).Title(Resources.Langues.YearDay).HtmlAttributes(new { style = "text-align:center;" });
+            columns.Bound(r => r.HolidayName).Title(Resources.Langues.HolidayName).HtmlAttributes(new { style = "text-align:center;" });
+            //columns.Bound(r => r.UserRegist).Title(Resources.Langues.UserRegist).ClientTemplate("<input type=\"checkbox\" readonly  #=UserRegist ? checked='checked' :  '' # />")
+            //.HtmlAttributes(new { style = "text-align:center;" });
+            columns.Command(c =>
+            {
+                c.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                c.Custom(Resources.Langues.Delete).Click("DeleteYearDay").HtmlAttributes(new { @class = "btn-danger" });
+            }).HtmlAttributes(new { style = "text-align:center;" });
+        })
+        .ToolBar(tools => tools.Template(@<text>
+            <div class="row">
+                <div class="col-xs-12 col-md-5">
+                    @(Html.Kendo().DropDownList()
+                    .Name("yearDropdownList")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetYear", "HolidayInfomationManagement", new { area = "Admin" });
+                        });
+                    }).OptionLabel("---All---")
+                    )
+                    <button class="k-button btn-opal" onclick="SearchByComSubCode()">@Resources.Langues.Search</button>
+                </div>
+                <div class="col-md-6" style="float:right;">
+                    @*<button data-target="#YearCopyModal" data-toggle="modal" class="k-button k-button-icontext pull-right" id="yearCopy">
+                            @Resources.Langues.YearCopy
+                        </button>
+                        <button data-target="#UploadFileModal" data-toggle="modal" class="k-button k-button-icontext pull-right">
+                            <span class="k-icon k-i-excel"></span>@Resources.Langues.UploadFile
+                        </button>*@
+                    <button class="k-button k-button-icontext pull-right" type="button" onclick="GetHoliday()">@Resources.Langues.Getpublicdataholidayinformation</button>
+                    <button class="k-button k-button-icontext pull-right" type="button" onclick="onDelete()">@Resources.Langues.DeleteAll</button>
+                    <button class="k-button k-button-icontext pull-right" type="button" data-toggle="modal" data-target="#AddHoliday">추가하기</button>
+                    <button class="k-button k-button-icontext pull-right" type="button" onclick="registering()">@Resources.Langues.Registering</button>
+                </div>
+            </div>
+        </text>))
+        .Selectable(selectable => selectable
+          .Mode(GridSelectionMode.Multiple)
+          .Type(GridSelectionType.Row))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+            .Model(model =>
+            {
+                model.Id(r => r.YearDayId);
+                //model.Field(r => r.ComSubName).Editable(false);
+            })
+            .Read(read => read.Action("Read", "HolidayInfomationManagement", new { area = "Admin" }).Data("dataYear"))
+            .Update(update => update.Action("Update", "HolidayInfomationManagement", new { area = "Admin" }))
+            )
+        )
+    </div>
+</div>
+
+<div class="modal fade E00008" id="AddHoliday" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> @Resources.Langues.AddAdditionalHolidays</h4>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 lbWT">@Resources.Langues.Selectyearmonthday </label>
+                        <div class="col-md-6">
+                            @(Html.Kendo().DatePicker()
+                                .Name("datepicker")
+                                .Value(DateTime.Now)
+                                .HtmlAttributes(new { style = "width: 100%", title = "datepicker" })
+                            )
+                        </div>
+                        @*<div><button class="btn btn-primary" onclick="">@Resources.Langues.Save</button></div>*@
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 lbWT">@Resources.Langues.HolidaysName</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("HolidayName", "", new { @class = "form-control input-md" })
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" onclick="FormE00008Save()" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="YearHoliday" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.BaseYear</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-horizontal">
+                        <label class="control-label col-md-5 lbWT">@Resources.Langues.SelectYear</label>
+                        <div class="col-md-6">
+                            @(Html.Kendo().DropDownList()
+                                .Name("YearSelected")
+                                .HtmlAttributes(new { style = "width: 100%" })
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="list-inline">
+                    <button type="button" onclick="getHoliday()" class="btn btn-default">@Resources.Langues.Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Resources.Langues.Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("ReadFileUpload", "HolidayInfomationManagement", FormMethod.Post, new { @role = "form", @id = "uploadFile", @enctype = "multipart/form-data" }))
+{
+    <div class="modal fade" id="Reistering" role="dialog">
+        <div class="modal-dialog modal-dialog-regist">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">@Resources.Langues.Registering</h4>
+                </div>
+                <div class="modal-body" style="font-size:15px;margin:10px">
+                    @Resources.Langues.MessHol
+                    <br />
+                    @Resources.Langues.GetForm : <a href="~/Content/TemplateForm/Holiday_Sample_ Form.xlsx">@Resources.Langues.Registering</a>
+                    <br />
+                    <br />
+                    <div class="row">
+                        <div class="col-md-5" style="text-align:center;">
+                            <button type="button" style="width:90%" class="btn btn-default" onclick="findFiles()" id="file-select">@Resources.Langues.FindingFiles</button>
+                            <input type="file" id="imgInp" class="hidden">
+                        </div>
+                        <div class="col-md-2"  style="text-align:center;vertical-align:middle">
+                            <img style="height:30px" src="~/img/arrow.png" />
+                        </div>
+                        <div class="col-md-5"  style="text-align:center;">
+                            <button type="button" style="width:90%" class="btn btn-default" onclick="Savefile()">@Resources.Langues.Save</button>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="bar hidden">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="list-inline">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@Resources.Langues.Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script>
+    var checkedItems = [];
+    var $selectColumn = $('#yearDayGrid th:first');
+
+    $(document).ready(function () {
+        var data = $selectColumn.html();
+        data = data + '<input id="selectAll" type="checkbox">';
+        $selectColumn.html('');
+        $selectColumn.html(data);
+        $selectColumn.attr("style", "vertical-align: middle;text-align: center;");
+        var data = [
+            { text: "2017", value: 2017 },
+            { text: "2018", value: 2018 },
+            { text: "2019", value: 2019 },
+            { text: "2020", value: 2020 },
+            { text: "2021", value: 2021 },
+            { text: "2022", value: 2022 },
+            { text: "2023", value: 2023 },
+            { text: "2024", value: 2024 },
+            { text: "2025", value: 2025 },
+            { text: "2026", value: 2026 },
+            { text: "2027", value: 2027 },
+            { text: "2028", value: 2028 },
+            { text: "2029", value: 2029 },
+            { text: "2030", value: 2030 },
+            { text: "2031", value: 2031 },
+            { text: "2032", value: 2032 },
+            { text: "2033", value: 2033 },
+            { text: "2034", value: 2034 },
+            { text: "2035", value: 2035 },
+            { text: "2036", value: 2036 },
+            { text: "2037", value: 2037 },
+            { text: "2038", value: 2038 },
+            { text: "2039", value: 2039 },
+            { text: "2040", value: 2040 },
+            { text: "2041", value: 2041 },
+            { text: "2042", value: 2042 },
+            { text: "2043", value: 2043 },
+            { text: "2044", value: 2044 },
+            { text: "2045", value: 2045 },
+            { text: "2046", value: 2046 },
+            { text: "2047", value: 2047 },
+            { text: "2048", value: 2048 },
+            { text: "2049", value: 2049 },
+            { text: "2050", value: 2050 },
+            { text: "2051", value: 2051 },
+            { text: "2052", value: 2052 },
+            { text: "2053", value: 2053 },
+            { text: "2054", value: 2054 },
+            { text: "2055", value: 2055 },
+            { text: "2056", value: 2056 },
+            { text: "2057", value: 2057 },
+            { text: "2058", value: 2058 },
+            { text: "2059", value: 2059 },
+        ];
+
+        $("#YearSelected").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            filter: "contains",
+            dataSource: data,
+        });
+
+        $(document).on('click', '.chkbox', function (e) {
+            var checked = this.checked,
+                row = $(this).closest("tr");
+            var id = row.find('input[type="checkbox"]').attr('id');
+
+            if (checked) {
+                row.addClass("k-state-selected");
+                checkedItems.push(id);
+            } else {
+                row.removeClass("k-state-selected");
+                var index = checkedItems.indexOf(id);
+                checkedItems.splice(index, 1);
+            }
+        });
+
+        $('#selectAll').click(function () {
+            if ($(this).is(':checked')) {
+                checkedItems = [];
+                var data = $("#yearDayGrid").data('kendoGrid').dataSource.view();
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    $('#' + id).prop("checked", true);
+                    checkedItems.push(id);
+                }
+            } else {
+                var data = $("#yearDayGrid").data('kendoGrid').dataSource.view();
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    $('#' + id).prop("checked", false);
+                    checkedItems.splice(id);
+                }
+                checkedItems = [];
+            }
+            console.log(checkedItems)
+        });
+    });
+
+    function GetHoliday() {
+        $('#YearHoliday').modal('show');
+    }
+
+    function getHoliday() {
+        var $grid = $("#yearDayGrid").data("kendoGrid");
+        $.blockUI();
+        $.post('@Url.Action("GetHoliDayFromWebAPI", "HolidayInfomationManagement")', { yearStr: $('#YearSelected').val() },
+        function (result) {
+            if (result.success) {
+                $('#YearHoliday').modal('hide');
+                bootbox.alert('@Resources.Langues.Successful');
+                $grid.dataSource.read({ year: $('#YearSelected').val() });
+                $("#yearDropdownList").data("kendoDropDownList").dataSource.read();
+            }
+            else {
+                bootbox.alert(result.mess);
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        })
+    }
+
+    function DeleteYearDay(e) {
+        var $year = $("#yearDropdownList").val();
+        var $grid = $("#yearDayGrid").data("kendoGrid");
+        var dataItem = $grid.dataItem($(e.currentTarget).closest("tr"));
+        bootbox.confirm({
+            message: '@Resources.Langues.AreYouSure',
+            buttons: {
+                confirm: {
+                    label: '@Resources.Langues.Yes',
+                    className: 'btn-success classYes',
+                }, cancel: {
+                    label: '@Resources.Langues.No',
+                    className: 'btn-danger pull-right'
+                }
+            },
+            callback: function (callback) {
+                if (callback) {
+                    $.blockUI();
+                    $.post('@Url.Action("Delete", "HolidayInfomationManagement")', { id: dataItem.YearDayId },
+                    function (result) {
+                        if (result) {
+                            //$grid.dataSource.read({ year: $year });
+                            $grid.dataSource.read();
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    })
+                }
+            }
+        });
+    }
+
+    function SearchByComSubCode() {
+        var $year = $("#yearDropdownList").val();
+        var $grid = $("#yearDayGrid").data("kendoGrid");
+        $grid.dataSource.read({ year: $year });
+        @*$.blockUI();
+        $.post('@Url.Action("Read", "HolidayInfomationManagement")', { year: $year },
+            function (result) {
+                //$grid.dataSource.read({ year: $year });
+
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });*@
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message = "Input YearDay with format yyyy/MM/dd";
+                    });
+                }
+            });
+            bootbox.alert(message);
+        }
+        bootbox.alert(message);
+    };
+
+    function sync_handler(e) {
+        this.read();
+    };
+
+    function onDelete() {
+        bootbox.confirm({
+            message: '@Resources.Langues.HolidayMess1',
+            className: 'my-custom-class',
+            buttons: {
+                confirm: {
+                    label: '@Resources.Langues.Yes',
+                    className: 'btn-success classYes',
+                }, cancel: {
+                    label: '@Resources.Langues.No',
+                    className: 'btn-danger pull-right'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    if (checkedItems.length == 0) {
+                        bootbox.alert({
+                            "message": '@Resources.Langues.HolidayMess2',
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                        $.blockUI();
+                        $.post("@Url.Action("DeleteListDate", "HolidayInfomationManagement", new { area="Admin" })", { list: checkedItems }, function (result) {
+                            if (result.success) {
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.RemoveSuccess',
+                                    "className": "my-custom-class",
+                                });
+                                $('#yearDayGrid').data('kendoGrid').dataSource.read();
+                                $('#selectAll').prop("checked", false);
+                            } else {
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.Error',
+                                    "className": "my-custom-class",
+                                });
+                            }
+                        }).fail(function () {
+                            bootbox.alert({
+                                "message": '@Resources.Langues.ContactAdmin',
+                                "className": "my-custom-class",
+                            });
+                        }).always(function () {
+                            $.unblockUI();
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    function FormE00008Save() {
+        if (($('#HolidayName').val() == "")) {
+            bootbox.alert('@Resources.Langues.FailedToSave');
+            return false;
+        }
+
+        $.blockUI();
+        $.post("@Url.Action("Create_YearDay", "EntityE00008Popup", new { area="Case" })", { YearDay: $('#datepicker').val(), Holiday: true, HolidayName: $('#HolidayName').val(), CaseId: null }, function (result) {
+            if (result.success) {
+                $('#HolidayName').val("");
+                $('#yearDayGrid').data('kendoGrid').dataSource.read();
+                $('.E00008').modal('hide');
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.Successful');
+
+            } else {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.Error');
+            }
+        }).fail(function () {
+            $.unblockUI();
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+
+        });
+
+    };
+    function dataYear() {
+        var year = $("#yearDropdownList").val();
+        return {
+            year: year
+        };
+    }
+
+    function registering() {
+        $('#Reistering').modal('show');
+    }
+
+    function findFiles() {
+        $('#imgInp').click()
+    }
+
+    $("#imgInp").change(function () {
+        var text = $('#imgInp').val().split(/(\\|\/)/g).pop();
+        if (text == "") {
+            $('#file-select').text('@Resources.Langues.FindingFiles')
+        } else {
+            $('#file-select').text(text)
+        }
+    });
+
+    function Savefile() {
+        $('.bar').removeClass('hidden');
+        if ($('#imgInp').val() != "") {
+            $('#uploadFile').submit();
+        } else {
+            bootbox.alert('@Resources.Langues.PleaseSelect')
+            $('.bar').addClass('hidden');
+        }
+    }
+
+    $('#uploadFile').submit(function (e) {
+        var data = new FormData();
+        data.append("imgInp", $('#imgInp')[0].files[0]);
+        var $formObj = $(this);
+        var urlAction = $formObj.attr('action');
+        $.ajax({
+            url: urlAction,
+            type: 'POST',
+            dataType: 'JSON',
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: data
+        }).success(function (result) {
+            if (result.success) {
+                if (result.errorRow == 0) {
+                    $("#yearDropdownList").data("kendoDropDownList").dataSource.read();
+                    //$('#Reistering').modal('hide');
+                    bootbox.alert('@Resources.Langues.Successful');
+                } else {
+                    bootbox.alert('@Resources.Langues.MessErrorHoliday1' + " " + result.errorRow + " " + '@Resources.Langues.MessErrorHoliday2');
+                }
+            } else {
+                bootbox.alert('@Resources.Langues.Error');
+            }
+            $('#imgInp').val('')
+            $('#file-select').text('@Resources.Langues.FindingFiles')
+            $('.bar').addClass('hidden');
+        }).fail(function () {
+            $('#imgInp').val('')
+            $('#file-select').text('@Resources.Langues.FindingFiles')
+            $('.bar').addClass('hidden');
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+        });
+        e.preventDefault();
+    });
+</script>

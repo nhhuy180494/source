@@ -1,0 +1,496 @@
+﻿
+@{
+    ViewBag.Title = @Resources.Langues.WTParameterManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        .displayModelCode {
+            font-size: 20px;
+        }
+
+        input[type="checkbox"][readonly] {
+            pointer-events: none;
+        }
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent">
+    <div class="form-group">
+        <div class="col-md-12 col-lg-6">
+            <div class="form-group">
+                @(Html.Kendo().Grid<DPDSP.Models.WTPowergenViewModel>()
+    .Name("WTPowergen")
+    .Columns(columns =>
+    {
+        columns.Bound(m => m.Selection).ClientTemplate("<input type=\"checkbox\" #=Selection ? checked='checked' :  '' # class=\"chkbox1\" id=\"#=WtPowergenId#\" /> ")
+                                                                                   .HtmlAttributes(new { style = "text-align:center" }).Title(Resources.Langues.Select).HeaderHtmlAttributes(new { style = "width:3%;", @class = "headerCheckbox" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+        columns.Bound(p => p.Company).HtmlAttributes(new { style = "text-align:center;"}).Title(Resources.Langues.Company);
+        columns.Bound(p => p.ModelName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ModelName);
+        columns.Bound(p => p.ModelNameEng).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ModelName + " (Eng)");
+        columns.Bound(p => p.Volume).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Volume).Format("{0:n2}");
+        columns.Bound(p => p.Height).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Height).Format("{0:n2}");
+        columns.Bound(p => p.FullUserName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.FullUserName);
+        //columns.Bound(p => p.HowReg).ClientTemplate("#=HowReg ? 'Admin' : 'User' #").HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.HowReg);
+        columns.Bound(p => p.WtPowergenId).Hidden();
+        columns.Command(command =>
+        {
+            command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+            command.Custom(Resources.Langues.Delete).Click("deletePowergent").HtmlAttributes(new { @class = "btn-danger" });
+        })/*.Title("Management")*/.HtmlAttributes(new { style = "text-align:center;" });
+    })
+    .ToolBar(toolbar =>
+    {
+    toolbar.Template(@<text>
+                    <div class="form-group">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon btn-opal"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                                    <input type="text" class="form-control boder-opal" id='powergenFilter' placeholder="제품명">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-opal" id="resetPowergenGrid" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group pull-right">
+                            <a class="k-button k-button-icontext k-grid-add" href="/Admin/WTParameterManagement/Read_WTPowergen?WTPowergen-mode=insert"><span class="k-icon k-i-add"></span>@Resources.Langues.AddNewRecord</a>
+                            <button class="k-button k-button-icontext" type="button" onclick="onDelete1()">@Resources.Langues.DeleteAll</button>
+                        </div>
+                    </div>
+    </text>);
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+                            .Resizable(rz => rz.Columns(true))
+                            .Scrollable(rz => rz.Enabled(false))
+    .HtmlAttributes(new { style = "height:auto;" })
+    .Selectable(selectable => selectable
+          .Mode(GridSelectionMode.Multiple)
+          .Type(GridSelectionType.Row))
+    .Events(ev =>
+    {
+        ev.Change("onChange");
+        ev.Edit("onEdit");
+        ev.DataBound("onDataBound");
+    })
+    .Resizable(rz => rz.Columns(true))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+        .Model(model => { model.Id(p => p.WtPowergenId); })
+    .Read(read => read.Action("Read_WTPowergen", "WTParameterManagement"))
+    .Create(update => update.Action("Create_WTPowergen", "WTParameterManagement"))
+       .Update(update => update.Action("Update_WTPowergen", "WTParameterManagement"))
+    )
+                )
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-6">
+            <div class="form-group">
+                <div class="form-inline" style="padding:20px;">
+                    <label class="form-group displayModelCode">@Resources.Langues.ModelSelection</label>
+                    <p class="form-group displayModelCode" id="PowergenSelected"></p>
+                    @Html.Hidden("PowergenSelectedId")
+                </div>
+                <div class="row">
+                    @(Html.Kendo().Grid<DPDSP.Models.WTPowergenSubViewModel>()
+            .Name("WTPowergenSubGrid")
+            .Columns(columns =>
+            {
+                columns.Bound(m => m.Selection).ClientTemplate("<input type=\"checkbox\" #=Selection ? checked='checked' :  '' # class=\"chkbox2\" id=\"#=WtPowergenSubId#\" /> ")
+                                                                                   .HtmlAttributes(new { style = "text-align:center" }).Title(Resources.Langues.Select).HeaderHtmlAttributes(new { style = "width:3%;", @class = "headerCheckbox" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                columns.Bound(p => p.WindSpeed).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.WindSpeed).Format("{0:#,##}");
+                columns.Bound(p => p.Output).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Output).Format("{0:n2}");
+                columns.Bound(p => p.WtPowergenSubId).Hidden();
+                columns.Command(command =>
+                {
+                    command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                    command.Custom(Resources.Langues.Delete).Click("deletePowergentSub").HtmlAttributes(new { @class = "btn-danger" });
+                }).HtmlAttributes(new { style = "text-align:center;" });
+            })
+            .ToolBar(toolbar =>
+            {
+            //toolbar.Create().Text(@Resources.Langues.AddNewRecord).HtmlAttributes(new { @class = "pull-right" });
+            toolbar.Template(@<text>
+                        <div class="form-group">
+                            <div class="form-group pull-right">
+                                <a class="k-button k-button-icontext k-grid-add" href="Admin/WTParameterManagement/Read_PowergenSub?WTPowergenSubGrid-mode=insert"><span class="k-icon k-i-add"></span>@Resources.Langues.AddNewRecord</a>
+                                <button class="k-button k-button-icontext" type="button" onclick="onDelete2()">@Resources.Langues.DeleteAll</button>
+                            </div>
+                        </div>
+                </text>);
+            })
+            //.Editable(editable => editable.Mode(GridEditMode.InLine))
+            .Pageable()
+                            .Resizable(rz => rz.Columns(true))
+                            .Scrollable(rz => rz.Enabled(false))
+            .HtmlAttributes(new { style = "height:auto;" })
+                .Resizable(rz => rz.Columns(true))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(20)
+                            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                            .Model(model => { model.Id(p => p.WtPowergenSubId); })
+                            .Read(read => read.Action("Read_PowergenSub", "WTParameterManagement").Data("dataPowergen"))
+                            .Create(update => update.Action("Create_PowergenSub", "WTParameterManagement").Data("dataPowergen"))
+                            .Update(update => update.Action("Update_PowergenSub", "WTParameterManagement").Data("dataPowergen"))
+                            //.Destroy(update => update.Action("DestroyModelMap", "ModelManagement"))
+                            )
+                    )
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var checkedItems1 = [];
+        var $selectColumn1 = $('#WTPowergen th:first');
+
+        var checkedItems2 = [];
+        var $selectColumn2 = $('#WTPowergenSubGrid th:first');
+
+        $(document).ready(function () {
+            var powergenGrid = $("#WTPowergen").data("kendoGrid");
+
+            $("#powergenFilter").keyup(function () {
+                var value = $("#powergenFilter").val();
+                if (value) {
+                    powergenGrid.dataSource.filter({ field: "ModelName", operator: "contains", value: value });
+                } else {
+                    powergenGrid.dataSource.filter({});
+                }
+            });
+
+            $('#resetPowergenGrid').click(function () {
+                $('#powergenFilter').val('');
+                powergenGrid.dataSource.filter({});
+            });
+
+            var data = $selectColumn1.html();
+            data = data + '<input id="selectAll1" type="checkbox">';
+            $selectColumn1.html('');
+            $selectColumn1.html(data);
+            $selectColumn1.attr("style", "vertical-align: middle;text-align: center;");
+
+            $(document).on('click', '.chkbox1', function (e) {
+                var checked = this.checked,
+                    row = $(this).closest("tr");
+                var id = row.find('input[type="checkbox"]').attr('id');
+
+                if (checked) {
+                    row.addClass("k-state-selected");
+                    checkedItems1.push(id);
+                } else {
+                    row.removeClass("k-state-selected");
+                    var index = checkedItems1.indexOf(id);
+                    checkedItems1.splice(index, 1);
+                }
+
+                console.log(checkedItems1)
+            });
+
+            $('#selectAll1').click(function () {
+                if ($(this).is(':checked')) {
+                    checkedItems1 = [];
+                    var data = $("#WTPowergen").data('kendoGrid').dataSource.view();
+                    $(".chkbox1").prop("checked", true);
+                    for (var i = 0; i < data.length; i++) {
+                        var id = data[i].id;
+                        //$('#' + id).prop("checked", true);
+                        checkedItems1.push(id);
+                    }
+                } else {
+                    var data = $("#WTPowergen").data('kendoGrid').dataSource.view();
+                    $(".chkbox1").prop("checked", false);
+                    for (var i = 0; i < data.length; i++) {
+                        var id = data[i].id;
+                        //$('#' + id).prop("checked", false);
+                        checkedItems1.splice(id);
+                    }
+                    checkedItems1 = [];
+                }
+                console.log(checkedItems1)
+            });
+
+            var data1 = $selectColumn2.html();
+            data1 = data1 + '<input id="selectAll2" type="checkbox">';
+            $selectColumn2.html('');
+            $selectColumn2.html(data1);
+            $selectColumn2.attr("style", "vertical-align: middle;text-align: center;");
+
+            $(document).on('click', '.chkbox2', function (e) {
+                var checked = this.checked,
+                    row = $(this).closest("tr");
+                var id = row.find('input[type="checkbox"]').attr('id');
+
+                if (checked) {
+                    row.addClass("k-state-selected");
+                    checkedItems2.push(id);
+                } else {
+                    row.removeClass("k-state-selected");
+                    var index = checkedItems2.indexOf(id);
+                    checkedItems2.splice(index, 1);
+                }
+
+                console.log(checkedItems2)
+            });
+
+            $('#selectAll2').click(function () {
+                if ($(this).is(':checked')) {
+                    checkedItems2 = [];
+                    var data2 = $("#WTPowergenSubGrid").data('kendoGrid').dataSource.view();
+                    $(".chkbox2").prop("checked", true);
+                    for (var i = 0; i < data2.length; i++) {
+                        var id = data2[i].id;
+                        //$('#' + id).prop("checked", true);
+                        checkedItems2.push(id);
+                    }
+                } else {
+                    var data1 = $("#WTPowergenSubGrid").data('kendoGrid').dataSource.view();
+                    $(".chkbox2").prop("checked", false);
+                    for (var i = 0; i < data2.length; i++) {
+                        var id = data2[i].id;
+                        //$('#' + id).prop("checked", false);
+                        checkedItems2.splice(id);
+                    }
+                    checkedItems2 = [];
+                }
+                console.log(checkedItems2)
+            });
+        });
+
+        function deletePowergentSub(e) {
+            var powergenSubGrid = $("#WTPowergenSubGrid").data("kendoGrid");
+            var dataItem = powergenSubGrid.dataItem($(e.currentTarget).closest("tr"));
+            var powergenId = $("#PowergenSelectedId").val();
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("Destroy_PowergenSub", "WTParameterManagement")', { powergenId: powergenId, powergenSubId: dataItem.WtPowergenSubId },
+                        function (result) {
+                            if (result) {
+                                powergenSubGrid.dataSource.read({ powergenId: powergenId });
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function dataPowergen() {
+            var powergenId = $("#PowergenSelectedId").val();
+            return {
+                powergenId: powergenId
+            };
+        }
+
+        function deletePowergent(e) {
+            var powergenGrid = $("#WTPowergen").data("kendoGrid");
+            var dataItem = powergenGrid.dataItem($(e.currentTarget).closest("tr"));
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("Destroy_Powergen", "WTParameterManagement")', { powergenId: dataItem.WtPowergenId },
+                        function (result) {
+                            if (result) {
+                                powergenGrid.dataSource.read();
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function onDataBound(e) {
+            var powergenGrid = $("#WTPowergen").data("kendoGrid");
+            var row = powergenGrid.tbody.find("tr[role='row']:first");
+            if (row != null) {
+                powergenGrid.select(e.sender.tbody.find("tr:first"));
+            }
+        }
+
+        function onChange(e) {
+            var powergenGird = $("#WTPowergen").data("kendoGrid");
+            var powergenSubGrid = $("#WTPowergenSubGrid").data("kendoGrid");
+            var powergenSelected = powergenGird.dataItem(powergenGird.select());
+            var modelName = powergenSelected.ModelName;
+            var powergenId = powergenSelected.WtPowergenId;
+            $('#PowergenSelected').text(modelName);
+            $('#PowergenSelectedId').val(powergenId);
+            powergenSubGrid.dataSource.read({ powergenId: powergenId });
+        }
+
+        function onEdit(e) {
+            if (e.model.isNew() == false) {
+                $(e.container).find('input[name=FullUserName]').prop("readonly", true);
+                $(e.container).find('input[name=HowReg]').prop("readonly", true);
+            }
+            else {
+                $(e.container).find('input[name=FullUserName]').css("display", "none");
+                $(e.container).find('input[name=HowReg]').css("display", "none");
+            }
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                             message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+
+        function onDelete1() {
+            bootbox.confirm({
+                message: '@Resources.Langues.HolidayMess1',
+                className: 'my-custom-class',
+                buttons: {
+                    confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success classYes',
+                    }, cancel: {
+                        label: '@Resources.Langues.No',
+                        className: 'btn-danger pull-right'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        if (checkedItems1.length == 0) {
+                            bootbox.alert({
+                                "message": '@Resources.Langues.HolidayMess2',
+                                "className": "my-custom-class",
+                            });
+                        } else {
+                            $.blockUI();
+                            $.post("@Url.Action("DeleteListWT", "WTParameterManagement", new { area="Admin" })", { list: checkedItems1 }, function (result) {
+                                if (result.success) {
+                                    $.unblockUI();
+                                    bootbox.alert({
+                                        "message": '@Resources.Langues.RemoveSuccess',
+                                        "className": "my-custom-class",
+                                    });
+                                    $('#WTPowergen').data('kendoGrid').dataSource.read();
+                                    $('#selectAll1').prop("checked", false);
+                                } else {
+                                    $.unblockUI();
+                                    bootbox.alert({
+                                        "message": '@Resources.Langues.Error',
+                                        "className": "my-custom-class",
+                                    });
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.ContactAdmin',
+                                    "className": "my-custom-class",
+                                });
+                            }).always(function () {
+                                $.unblockUI();
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        function onDelete2() {
+            bootbox.confirm({
+                message: '@Resources.Langues.HolidayMess1',
+                className: 'my-custom-class',
+                buttons: {
+                    confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success classYes',
+                    }, cancel: {
+                        label: '@Resources.Langues.No',
+                        className: 'btn-danger pull-right'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        if (checkedItems2.length == 0) {
+                            bootbox.alert({
+                                "message": '@Resources.Langues.HolidayMess2',
+                                "className": "my-custom-class",
+                            });
+                        } else {
+                            $.blockUI();
+                            $.post("@Url.Action("DeleteListWTSub", "WTParameterManagement", new { area="Admin" })", { list: checkedItems2 }, function (result) {
+                                if (result.success) {
+                                    $.unblockUI();
+                                    bootbox.alert({
+                                        "message": '@Resources.Langues.RemoveSuccess',
+                                        "className": "my-custom-class",
+                                    });
+                                    $('#WTPowergenSubGrid').data('kendoGrid').dataSource.read();
+                                    $('#selectAll2').prop("checked", false);
+                                } else {
+                                    $.unblockUI();
+                                    bootbox.alert({
+                                        "message": '@Resources.Langues.Error',
+                                        "className": "my-custom-class",
+                                    });
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.ContactAdmin',
+                                    "className": "my-custom-class",
+                                });
+                            }).always(function () {
+                                $.unblockUI();
+                            });
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+}

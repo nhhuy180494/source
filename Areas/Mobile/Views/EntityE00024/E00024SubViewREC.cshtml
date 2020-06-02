@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "E00024SubViewREC";
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+<div class="modal-body">
+    <div class="i_section mt20">
+        <div class="center" style="margin:10px">
+            <h4 class="tit_h6 bu_cross1">@Resources.Langues.RenewableEnergySupplyCertificateWeight</h4>
+        </div>
+        <div>
+            <table class="table table-bordered tblMultiRow" style="vertical-align:middle">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="center">@Resources.Langues.Division</th>
+                        <th rowspan="2" class="bd_right center">@Resources.Langues.SupplyCertificateWeights</th>
+                        <th colspan="2" class="center">@Resources.Langues.Targetenergyandreference</th>
+                    </tr>
+
+                    <tr>
+                        <th>@Resources.Langues.InstallationType</th>
+                        <th>@Resources.Langues.Detailedcriteria</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="ESS">
+                        <td rowspan="4" class="bd_right center">ESS</td>
+                        <td class="center">5.0</td>
+                        <td rowspan="2" class="left"> @Resources.Langues.Solarconnection</td>
+                        <td>2018 ~ 2019</td>
+                    </tr>
+                    <tr class="ESS">
+                        <td class="center">4.0</td>
+                        <td>2020</td>
+                    </tr>
+                    <tr class="ESS">
+                        <td class="center">4.5</td>
+                        <td rowspan="2" class="left"> @Resources.Langues.Windconnection</td>
+                        <td>2018 ~ 2019</td>
+                    </tr>
+                    <tr class="ESS">
+                        <td class="center">4.0</td>
+                        <td>2020</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="float:right;margin-bottom:5px">@Resources.Langues.Source</div>
+        </div>
+    </div>
+</div>

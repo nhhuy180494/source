@@ -1,0 +1,1002 @@
+﻿<!-- Modal -->
+<style>
+    .E00018 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .input-validation-error {
+        border: 1px solid red !important;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    input {
+        width: 100%;
+    }
+
+    .close {
+        position: absolute;
+        margin-left: 10px;
+    }
+
+        .close:hover {
+            background-color: #f44336;
+            color: white;
+        }
+</style>
+
+@if (Request.Params["modelCode"] == "M00003")
+{
+    using (Html.BeginForm("SaveEntityE00018PopupData", "EntityE00018Popup", FormMethod.Post, new { @role = "form", @id = "M00003Form" }))
+    {
+        <div class="modal fade E00018" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">@Resources.Langues.Enterfacilitycosts</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!--Popup Name -->
+                        <br />
+                        @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                   })
+                        @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The ModelCode field is required.",
+                       @data_val_length = "The field ModelCode must be a string with a maximum length of 6.",
+                       @data_val_length_max = "6",
+                   })
+                        <!--Input field -->
+                        <div>
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <tbody>
+                                    <tr class="CP0001">
+                                        <td width="15%" rowspan="2" class="active grp-CP0001" style="vertical-align:middle">PV @Resources.Langues.Cost</td>
+                                        <td width="40%" class="active">@Resources.Langues.FacilityCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[0].FacilityCostItem", "1000", new
+                                       {
+                                           @data_val = "true",
+                                           id = "PVFacilityCost",
+                                           @data_val_number = "The field FacilityCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0001", "", new { })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="CP0001">
+                                        <td width="40%" class="active">@Resources.Langues.InstallCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[0].InstallCostItem", "500", new
+                                       {
+                                           id = "PVInstallCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InstallCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="orther-CP0001" style="display:none">
+                                        <td width="40%" class="active">@Resources.Langues.E18Orther3</td>
+                                        <td width="30%">
+                                            <input style="text-align:right;" />
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon) <span onclick="removeOrther('CP0001')" class="close">×</span></td>
+                                    </tr>
+                                    <tr class="CP0002">
+                                        <td width="15%" rowspan="2" class="active grp-CP0002" style="vertical-align:middle">WT @Resources.Langues.Cost</td>
+                                        <td width="40%" class="active">@Resources.Langues.FacilityCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[1].FacilityCostItem", "1000", new
+                                       {
+                                           id = "WTFacilityCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field FacilityCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0002", "", new { })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="CP0002">
+                                        <td width="40%" class="active">@Resources.Langues.InstallCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[1].InstallCostItem", "500", new
+                                       {
+                                           id = "WTInstallCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InstallCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="orther-CP0002" style="display:none">
+                                        <td width="40%" class="active">@Resources.Langues.E18Orther3</td>
+                                        <td width="30%">
+                                            <input style="text-align:right;" />
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon) <span onclick="removeOrther('CP0002')" class="close">×</span></td>
+                                    </tr>
+                                    <tr class="CP0003">
+                                        <td width="15%" rowspan="4" class="active grp-CP0003" style="vertical-align:middle">ESS @Resources.Langues.Cost</td>
+                                        <td width="40%" class="active">@Resources.Langues.BAT</td>
+                                        <td width="30%">
+                                            @Html.TextBox("BatCost", "500", new
+                                       {
+                                           id = "BatCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field BatCost must be a number.",
+                                           @style = "text-align:right;",
+                                       })
+                                            @Html.Hidden("CP0003", "", new { })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwonh)</td>
+                                    </tr>
+                                    <tr class="CP0003">
+                                        <td width="40%" class="active">@Resources.Langues.PCS</td>
+                                        <td width="30%">
+                                            @Html.TextBox("PcsCost", "230", new
+                                       {
+                                           id = "PcsCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field PcsCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="CP0003">
+                                        <td width="40%" class="active">@Resources.Langues.EMS *</td>
+                                        <td width="30%">
+                                            @Html.TextBox("EmsCost", "100", new
+                                       {
+                                           id = "EmsCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field EmsCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.TWon)</td>
+                                    </tr>
+                                    <tr class="CP0003">
+                                        <td width="40%" class="active">@Resources.Langues.InstallCost **</td>
+                                        <td width="30%">
+                                            @Html.TextBox("InstallCost", "100", new
+                                       {
+                                           id = "EssInstallCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InstallCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="orther-CP0003" style="display:none">
+                                        <td width="40%" class="active">@Resources.Langues.E18Orther3</td>
+                                        <td width="30%">
+                                            <input style="text-align:right;" />
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon) <span onclick="removeOrther('CP0003')" class="close">×</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+
+                        @Resources.Langues.E18Mess1 <br />
+                        @Resources.Langues.E18Mess2 <br />
+                        <div class="row">
+                            <div class="form-group">
+                                <br />
+                                <h4>
+                                    @Resources.Langues.E18Orther1
+                                </h4>
+                                <div class="col-md-3">
+                                    <label>
+                                        @Resources.Langues.E18Orther2
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="orther-com">
+                                        <option style="display:none;" value="CP0001">PV</option>
+                                        <option style="display:none;" value="CP0002">WT</option>
+                                        <option style="display:none;" value="CP0003">ESS</option>
+                                        <option style="display:none;" value="CP0004">FC</option>
+                                        <option style="display:none;" value="CP0005">CHP</option>
+                                        <option style="display:none;" value="CP0006">@Resources.Langues.DieselGen</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="add-orther" class="btn btn-primary">@Resources.Langues.E18Orther3</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="list-inline pull-right">
+                                <button type="button" id="submitM00003Form" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+            var $modal = $('.E00018');
+            var caseId = @Request.Params["caseId"];
+            var $M0003Form = $('#M00003Form');
+        $(document).ready(function () {
+            $('.CP0001').hide();
+            $('.CP0002').hide();
+            $('.CP0003').hide();
+            $('.CP0004').hide();
+            $('.CP0005').hide();
+            $('.CP0006').hide();
+
+            $('.E00018').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+            $('.E00018').on('hide.bs.modal', function () {
+                if (lstEntityNextStep.length != 0) {
+                    historyClick(lstEntityNextStep[0]);
+                    lstEntityNextStep.shift();
+                    console.log(lstEntityNextStep)
+                }
+            });
+            $modal.on('show.bs.modal', function () {
+                $.blockUI();
+                $.post("@Url.Action("GetListLocationCode", "EntityE00018Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                    if (result.success) {
+                        if(result.listLocationCode){
+                            result.listLocationCode.forEach(function (item) {
+                                $('#orther-com option[value=' + item + ']').show()
+                                //$('#orther-com').append("<option value='" + item + "'>" + item + "</option>");
+                                $('#'+ item).val(item);
+                                $('.' + item).show();
+                            });
+                        }
+                    }
+                }).fail(function () {
+                    showMess('@Resources.Langues.ContactAdmin')
+                }).always(function () {
+                    $.unblockUI();
+                });
+
+                $.blockUI();
+                $.post("@Url.Action("GetBatteryVal", "EntityE00018Popup")", { caseId: caseId }, function (result) {
+                    if (result.success) {
+                        $.unblockUI();
+                        $('#BatCost').val(result.data);
+                    }
+                }).fail(function () {
+                    $.unblockUI();
+                }).always(function () {
+                    $.unblockUI();
+                });
+            });
+
+            $.blockUI();
+            $.post("@Url.Action("GetListI00010FacilityCostByCaseId", "EntityE00018Popup")", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    result.list.forEach(function (item) {
+                        if (item.ComponentCode == "CP0001") {
+                            $('#PVInstallCost').val(item.InstallCost.toLocaleString('en'));
+                            $('#PVFacilityCost').val(item.FacilityCost.toLocaleString('en'));
+                        }
+                        if (item.ComponentCode == "CP0002") {
+                            $('#WTInstallCost').val(item.InstallCost.toLocaleString('en'));
+                            $('#WTFacilityCost').val(item.FacilityCost.toLocaleString('en'));
+                        }
+                        if (item.ComponentCode == "CP0003") {
+                            $('#EssInstallCost').val(item.InstallCost.toLocaleString('en'));
+                            $('#BatCost').val(item.BatCost.toLocaleString('en'));
+                            $('#PcsCost').val(item.PcsCost.toLocaleString('en'));
+                            $('#EmsCost').val(item.EmsCost.toLocaleString('en'));
+                        }
+                    });
+                } else {
+                    var lang =window.location.pathname.split('/')[1];
+                    if (lang != "en"){
+                        $('#PVInstallCost').val('500');
+                        $('#PVFacilityCost').val('1,000');
+                        $('#WTInstallCost').val('500');
+                        $('#WTFacilityCost').val('1,000');
+                        $('#EssInstallCost').val('100');
+                        $('#BatCost').val('500');
+                        $('#PcsCost').val('230');
+                        $('#EmsCost').val('100');
+                        $('#FCInstallCost').val('500');
+                        $('#FCFacilityCost').val('1,000');
+                        $('#CHPInstallCost').val('500');
+                        $('#CHPFacilityCost').val('1,000');
+                        $('#DInstallCost').val('500');
+                        $('#DFacilityCost').val('1,000');
+                    } else {
+                        $.post("@Url.Action("GetExchangeRate", "Case", new { area="Case"})", { caseId: caseId }, function (result) {
+                            var ex = result.exchange;
+                            $('#PVFacilityCost').val((1000 / ex).toFixed(2));
+                            $('#PVInstallCost').val((500 / ex).toFixed(2));
+                            $('#WTInstallCost').val((500 / ex).toFixed(2));
+                            $('#WTFacilityCost').val((1000 / ex).toFixed(2));
+                            $('#EssInstallCost').val((100 / ex).toFixed(2));
+                            $('#BatCost').val((500 / ex).toFixed(2));
+                            $('#PcsCost').val((230 / ex).toFixed(2));
+                            $('#EmsCost').val((100 / ex).toFixed(2));
+                            $('#FCInstallCost').val((500 / ex).toFixed(2));
+                            $('#FCFacilityCost').val((1000 / ex).toFixed(2));
+                            $('#CHPInstallCost').val((500 / ex).toFixed(2));
+                            $('#CHPFacilityCost').val((1000 / ex).toFixed(2));
+                            $('#DInstallCost').val((500 / ex).toFixed(2));
+                            $('#DFacilityCost').val((1000 / ex).toFixed(2));
+                        }).fail(function () {
+                            $.unblockUI();
+                        }).always(function () {
+                            $.unblockUI();
+                        });
+
+                    }
+                }
+            }).fail(function () {
+                @*bootbox.alert('@Resources.Langues.ContactAdmin');*@
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $('#submitM00003Form').click(function(){
+                var valid = $M0003Form.valid();
+                if(valid){
+                    $M0003Form.submit();
+                }
+            });
+
+            $M0003Form.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $M0003Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        showMess('@Resources.Langues.ContactAdmin')
+                    }
+                }).always(function () {
+                    //$.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        updateHistory(result.html)
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00018').modal('hide');
+                    });
+                                $("#btn_E00018").addClass("democlass");
+                    } else {
+                        $.unblockUI();
+                        showMess('@Resources.Langues.Error')
+                    }
+                });
+                e.preventDefault();
+            });
+        });
+        $('#add-orther').click(function () {
+            var item = $('#orther-com').val();
+            $('.orther-' + item).show();
+            if (item == "CP0003") {
+                $('.grp-' + item).attr("rowspan", "5");
+            } else {
+                $('.grp-' + item).attr("rowspan", "3");
+            }
+        })
+
+        function removeOrther(item) {
+            $('.orther-' + item).hide();
+            $('.orther-' + item).val('');
+            if (item == "CP0003") {
+                $('.grp-' + item).attr("rowspan", "4");
+            } else {
+                $('.grp-' + item).attr("rowspan", "2");
+            }
+        }
+    </script>
+}
+else
+{
+    using (Html.BeginForm("SaveEntityE00018PopupData", "EntityE00018Popup", FormMethod.Post, new { @role = "form", @id = "M00001Form" }))
+    {
+        <div class="modal fade E00018" role="dialog">
+            <div class="modal-dialog" style="width:40%">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">@Resources.Langues.Enterfacilitycosts</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!--Popup Name -->
+                        <br />
+                        @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                   })
+
+                        @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The ModelCode field is required.",
+                       @data_val_length = "The field ModelCode must be a string with a maximum length of 6.",
+                       @data_val_length_max = "6",
+                       @style = "text-align:right;"
+                   })
+                        <!--Input field -->
+                        <div>
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <tbody>
+                                    <tr class="CP0001">
+                                        <td width="15%" rowspan="2" class="active grp-CP0001" style="vertical-align:middle">PV @Resources.Langues.Cost</td>
+                                        <td width="40%" class="active">@Resources.Langues.FacilityCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[0].FacilityCostItem", "1000", new
+                                       {
+                                           id = "PVFacilityCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field FacilityCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0001", "", new { })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="CP0001">
+                                        <td width="40%" class="active">@Resources.Langues.InstallCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[0].InstallCostItem", "500", new
+                                       {
+                                           id = "PVInstallCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InstallCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="orther-CP0001" style="display:none;">
+                                        <td width="40%" class="active">@Resources.Langues.E18Orther3</td>
+                                        <td width="30%">
+                                            <input style="text-align:right;" />
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon) <span onclick="removeOrther('CP0001')" class="close">×</span></td>
+                                    </tr>
+                                    <tr class="CP0002">
+                                        <td width="15%" rowspan="2" class="active grp-CP0002" style="vertical-align:middle">WT @Resources.Langues.Cost</td>
+                                        <td width="40%" class="active">@Resources.Langues.FacilityCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[1].FacilityCostItem", "1000", new
+                                       {
+                                           id = "WTFacilityCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field FacilityCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0002", "", new { })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="CP0002">
+                                        <td width="40%" class="active">@Resources.Langues.InstallCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[1].InstallCostItem", "500", new
+                                       {
+                                           id = "WTInstallCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InstallCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="orther-CP0002" style="display:none">
+                                        <td width="40%" class="active">@Resources.Langues.E18Orther3</td>
+                                        <td width="30%">
+                                            <input style="text-align:right;" />
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon) <span onclick="removeOrther('CP0002')" class="close">×</span></td>
+                                    </tr>
+                                    <tr class="CP0003">
+                                        <td width="15%" rowspan="4" class="active grp-CP0003" style="vertical-align:middle">ESS @Resources.Langues.Cost</td>
+                                        <td width="40%" class="active">@Resources.Langues.BAT</td>
+                                        <td width="30%">
+                                            @Html.TextBox("BatCost", "500", new
+                                       {
+                                           id = "BatCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field BatCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0003", "", new { })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwonh)</td>
+                                    </tr>
+                                    <tr class="CP0003">
+                                        <td width="40%" class="active">@Resources.Langues.PCS</td>
+                                        <td width="30%">
+                                            @Html.TextBox("PcsCost", "230", new
+                                       {
+                                           id = "PcsCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field PcsCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="CP0003">
+                                        <td width="40%" class="active">@Resources.Langues.EMS *</td>
+                                        <td width="30%">
+                                            @Html.TextBox("EmsCost", "100", new
+                                       {
+                                           id = "EmsCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field EmsCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.TWon)</td>
+                                    </tr>
+                                    <tr class="CP0003">
+                                        <td width="40%" class="active">@Resources.Langues.InstallCost **</td>
+                                        <td width="30%">
+                                            @Html.TextBox("InstallCost", "100", new
+                                       {
+                                           id = "EssInstallCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InstallCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="orther-CP0003" style="display:none">
+                                        <td width="40%" class="active">@Resources.Langues.E18Orther3</td>
+                                        <td width="30%">
+                                            <input style="text-align:right;" />
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon) <span onclick="removeOrther('CP0003')" class="close">×</span></td>
+                                    </tr>
+                                    <tr class="CP0004">
+                                        <td width="15%" rowspan="2" class="active grp-CP0004" style="vertical-align:middle">FC @Resources.Langues.Cost</td>
+                                        <td width="40%" class="active">@Resources.Langues.FacilityCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[2].FacilityCostItem", "3500", new
+                                       {
+                                           id = "FCFacilityCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field FacilityCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0004", "", new { })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="CP0004">
+                                        <td width="40%" class="active">@Resources.Langues.InstallCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[2].InstallCostItem", "500", new
+                                       {
+                                           id = "FCInstallCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InstallCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="orther-CP0004" style="display:none">
+                                        <td width="40%" class="active">@Resources.Langues.E18Orther3</td>
+                                        <td width="30%">
+                                            <input style="text-align:right;" />
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon) <span onclick="removeOrther('CP0004')" class="close">×</span></td>
+                                    </tr>
+                                    <tr class="CP0005">
+                                        <td width="15%" rowspan="2" class="active grp-CP0005" style="vertical-align:middle">CHP @Resources.Langues.Cost</td>
+                                        <td width="40%" class="active">@Resources.Langues.FacilityCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[3].FacilityCostItem", "1000", new
+                                       {
+                                           id = "CHPFacilityCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field FacilityCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0005", "", new { })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="CP0005">
+                                        <td width="40%" class="active">@Resources.Langues.InstallCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[3].InstallCostItem", "500", new
+                                       {
+                                           id = "CHPInstallCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InstallCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="orther-CP0005" style="display:none">
+                                        <td width="40%" class="active">@Resources.Langues.E18Orther3</td>
+                                        <td width="30%">
+                                            <input style="text-align:right;" />
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon) <span onclick="removeOrther('CP0005')" class="close">×</span></td>
+                                    </tr>
+                                    <tr class="CP0006">
+                                        <td width="15%" rowspan="2" class="active grp-CP0006" style="vertical-align:middle;word-break: keep-all;">
+                                            디젤발전기 비용
+                                        </td>
+                                        <td width="40%" class="active">@Resources.Langues.FacilityCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[4].FacilityCostItem", "1000", new
+                                       {
+                                           id = "DFacilityCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field FacilityCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0006", "", new { })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="CP0006">
+                                        <td width="40%" class="active">@Resources.Langues.InstallCost</td>
+                                        <td width="30%">
+                                            @Html.TextBox("ListItems[4].InstallCostItem", "500", new
+                                       {
+                                           id = "DInstallCost",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InstallCost must be a number.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                                    </tr>
+                                    <tr class="orther-CP0006" style="display:none">
+                                        <td width="40%" class="active">@Resources.Langues.E18Orther3</td>
+                                        <td width="30%">
+                                            <input style="text-align:right;" />
+                                        </td>
+                                        <td width="15%" class="active" style="text-align:left;">@Html.Raw(Resources.Langues.Thousandwon) <span onclick="removeOrther('CP0006')" class="close">×</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @Resources.Langues.E18Mess1 <br />
+                        @Resources.Langues.E18Mess2 <br />
+                        <div class="form-group">
+                            <br />
+                            <h4>
+                                @Resources.Langues.E18Orther1
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>
+                                        @Resources.Langues.E18Orther2
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="orther-com">
+                                        <option style="display:none;" value="CP0001">PV</option>
+                                        <option style="display:none;" value="CP0002">WT</option>
+                                        <option style="display:none;" value="CP0003">ESS</option>
+                                        <option style="display:none;" value="CP0004">FC</option>
+                                        <option style="display:none;" value="CP0005">CHP</option>
+                                        <option style="display:none;" value="CP0006">@Resources.Langues.DieselGen</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="add-orther" class="btn btn-primary">@Resources.Langues.E18Orther3</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="list-inline pull-right">
+                                <button type="button" id="submitM00001Form" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var $modal = $('.E00018');
+            var caseId = @Request.Params["caseId"];
+            var $M0001Form = $('#M00001Form');
+        $(document).ready(function () {
+            $('.CP0001').hide();
+            $('.CP0002').hide();
+            $('.CP0003').hide();
+            $('.CP0004').hide();
+            $('.CP0005').hide();
+            $('.CP0006').hide();
+
+            $('.E00018').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+            $('.E00018').on('hide.bs.modal', function () {
+                if (lstEntityNextStep.length != 0) {
+                    historyClick(lstEntityNextStep[0]);
+                    lstEntityNextStep.shift();
+                    console.log(lstEntityNextStep)
+                }
+            });
+            $modal.on('show.bs.modal', function () {
+                $.blockUI();
+                $.post("@Url.Action("GetListLocationCode", "EntityE00018Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                    if (result.success) {
+                        if(result.listLocationCode){
+                            result.listLocationCode.forEach(function (item) {
+                                $('#orther-com option[value=' + item + ']').show()
+                                //$('#orther-com').append("<option value='" + item + "'>" + item + "</option>");
+                                $('#'+ item).val(item);
+                                $('.' + item).show();
+                            });
+                        }
+                    }
+                }).fail(function () {
+                    showMess('@Resources.Langues.ContactAdmin')
+                }).always(function () {
+                    $.unblockUI();
+                });
+
+                $.blockUI();
+                $.post("@Url.Action("GetBatteryVal", "EntityE00018Popup")", { caseId: caseId }, function (result) {
+                    if (result.success) {
+                        $.unblockUI();
+                        $('#BatCost').val(result.data);
+                    }
+                }).fail(function () {
+                    $.unblockUI();
+                }).always(function () {
+                    $.unblockUI();
+                });
+            });
+
+            $.blockUI();
+            $.post("@Url.Action("GetListI00010FacilityCostByCaseId", "EntityE00018Popup")", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    result.list.forEach(function (item) {
+                        if (item.ComponentCode == "CP0001") {
+                            $('#PVInstallCost').val(item.InstallCost.toLocaleString('en'));
+                            $('#PVFacilityCost').val(item.FacilityCost.toLocaleString('en'));
+                        }
+                        if (item.ComponentCode == "CP0002") {
+                            $('#WTInstallCost').val(item.InstallCost.toLocaleString('en'));
+                            $('#WTFacilityCost').val(item.FacilityCost.toLocaleString('en'));
+                        }
+                        if (item.ComponentCode == "CP0003") {
+                            $('#EssInstallCost').val(item.InstallCost.toLocaleString('en'));
+                            $('#BatCost').val(item.BatCost.toLocaleString('en'));
+                            $('#PcsCost').val(item.PcsCost.toLocaleString('en'));
+                            $('#EmsCost').val(item.EmsCost.toLocaleString('en'));
+                        }
+                        if (item.ComponentCode == "CP0004") {
+                            $('#FCInstallCost').val(item.InstallCost.toLocaleString('en'));
+                            $('#FCFacilityCost').val(item.FacilityCost.toLocaleString('en'));
+                        }
+                        if (item.ComponentCode == "CP0005") {
+                            $('#CHPInstallCost').val(item.InstallCost.toLocaleString('en'));
+                            $('#CHPFacilityCost').val(item.FacilityCost.toLocaleString('en'));
+                        }
+                        if (item.ComponentCode == "CP0006") {
+                            $('#DInstallCost').val(item.InstallCost.toLocaleString('en'));
+                            $('#DFacilityCost').val(item.FacilityCost.toLocaleString('en'));
+                        }
+                    });
+                } else {
+                    var lang =window.location.pathname.split('/')[1];
+                    if (lang != "en"){
+                        $('#PVInstallCost').val('500');
+                        $('#PVFacilityCost').val('1,000');
+                        $('#WTInstallCost').val('500');
+                        $('#WTFacilityCost').val('1,000');
+                        $('#EssInstallCost').val('100');
+                        $('#BatCost').val('500');
+                        $('#PcsCost').val('230');
+                        $('#EmsCost').val('100');
+                        $('#FCInstallCost').val('500');
+                        $('#FCFacilityCost').val('3,500');
+                        $('#CHPInstallCost').val('500');
+                        $('#CHPFacilityCost').val('1,000');
+                        $('#DInstallCost').val('500');
+                        $('#DFacilityCost').val('1,000');
+                    } else {
+                        $.post("@Url.Action("GetExchangeRate", "Case", new { area="Case"})", { caseId: caseId }, function (result) {
+                            var ex = result.exchange;
+                            $('#PVFacilityCost').val((1000 / ex).toFixed(2));
+                            $('#PVInstallCost').val((500 / ex).toFixed(2));
+                            $('#WTInstallCost').val((500 / ex).toFixed(2));
+                            $('#WTFacilityCost').val((1000 / ex).toFixed(2));
+                            $('#EssInstallCost').val((100 / ex).toFixed(2));
+                            $('#BatCost').val((500 / ex).toFixed(2));
+                            $('#PcsCost').val((230 / ex).toFixed(2));
+                            $('#EmsCost').val((100 / ex).toFixed(2));
+                            $('#FCInstallCost').val((500 / ex).toFixed(2));
+                            $('#FCFacilityCost').val((3500 / ex).toFixed(2));
+                            $('#CHPInstallCost').val((500 / ex).toFixed(2));
+                            $('#CHPFacilityCost').val((1000 / ex).toFixed(2));
+                            $('#DInstallCost').val((500 / ex).toFixed(2));
+                            $('#DFacilityCost').val((1000 / ex).toFixed(2));
+                        }).fail(function () {
+                            $.unblockUI();
+                        }).always(function () {
+                            $.unblockUI();
+                        });
+                    }
+                }
+            }).fail(function () {
+                @*bootbox.alert('@Resources.Langues.ContactAdmin');*@
+            }).always(function() {
+                $.unblockUI();
+            });
+
+            $('#submitM00001Form').click(function(){
+                var valid = $M0001Form.valid();
+                if (valid)
+                {
+                    $M0001Form.submit();
+                }
+            });
+
+            $M0001Form.on('keyup keypress', function(e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13)
+                {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $M0001Form.submit(function(e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function() {
+                        $.unblockUI();
+                        showMess('@Resources.Langues.ContactAdmin')
+                    }
+                }).always(function() {
+                    //$.unblockUI();
+                }).success(function(result) {
+                        if (result.success)
+                        {
+                            updateHistory(result.html)
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00018').modal('hide');
+                    });
+                                $("#btn_E00018").addClass("democlass");
+                        }
+                        else
+                        {
+                            $.unblockUI();
+                            showMess('@Resources.Langues.Error')
+                        }
+                });
+                e.preventDefault();
+            });
+        });
+
+        $("input").on('keyup', function (evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8 || charCode == 13) {
+                var a = $(this).val()
+                if (a == 'NaN' || a == '') {
+                    $(this).val('')
+                } else {
+                    var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                    if (isNaN(n)) {
+                        $(this).val('')
+                    } else {
+                        $(this).val(n.toLocaleString());
+                    }
+                }
+            } else {
+                $(this).val($(this).val().slice(0, -1))
+            }
+        });
+
+        $('#add-orther').click(function () {
+            debugger
+            var item = $('#orther-com').val();
+            $('.orther-' + item).show();
+            if (item == "CP0003") {
+                $('.grp-' + item).attr("rowspan", "5");
+            } else {
+                $('.grp-' + item).attr("rowspan", "3");
+            }
+        })
+
+        function removeOrther(item) {
+            $('.orther-' + item).hide();
+            $('.orther-' + item).val('');
+            if (item == "CP0003") {
+                $('.grp-' + item).attr("rowspan", "4");
+            } else {
+                $('.grp-' + item).attr("rowspan", "2");
+            }
+        }
+    </script>
+}

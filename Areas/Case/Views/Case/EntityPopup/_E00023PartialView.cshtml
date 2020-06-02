@@ -1,0 +1,340 @@
+﻿<style>
+    .E00023 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade E00023" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.SalesunitpriceSelecttheyear</h4>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="row">
+                    <div class="form-horizontal">
+                        <label class="control-label col-md-2 lbWT"></label>
+                        <div class="col-md-10 row">
+                            <div class="col-sm-6 col-md-6">
+                                <label class="control-label" style="width:100%;text-align:center;font-size:14px">@Resources.Langues.Area</label>
+                            </div>
+                            <div class="col-sm-6 col-md-6 form-horizontal">
+                                <label class="control-label" style="width:100%;text-align:center;font-size:14px">@Resources.Langues.YearBase</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-horizontal" id="SA0001">
+                        <label class="control-label col-md-2 lbWT">SMP :</label>
+                        <div class="col-md-10 row">
+                            <div class="col-sm-6 col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("SMPChargeList")
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("SMPYearList")
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-horizontal" style="margin-top:5%" id="SA0002">
+                        <label class="control-label col-md-2 lbWT">REC :</label>
+                        <div class="col-md-10 row">
+                            <div class="col-sm-6 col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("RECChargeList")
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("RECYearList")
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" onclick="FormE00023Save()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var caseId = @Request.Params["caseId"];
+    var salesTypeCodeSMP = "SA0001";
+    var salesTypeCodeREC = "SA0002";
+    var recDropdown = $("#RECChargeList").data("kendoDropDownList");
+    var smpDropdown = $("#SMPChargeList").data("kendoDropDownList");
+    var recYearDropdown = $("#RECYearList").data("kendoDropDownList");
+    var smpYearDropdown = $("#SMPYearList").data("kendoDropDownList");
+    var $modal = $('.E00023');
+
+    $(document).ready(function () {
+        $('#SA0001').hide();
+        $('#SA0002').hide();
+
+        $('.E00023').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $('.E00023').on('shown.bs.modal', function () {
+            $(document).off('focusin.modal');
+        });
+
+        $modal.on('show.bs.modal', function () {
+            $.blockUI();
+            $.post("@Url.Action("GetSalesTypeCodeByCaseId", "EntityE00023Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    if(result.list){
+                        result.list.forEach(function (item) {
+                            if ('@Request.Params["modelCode"]' != "M00004" || item != "SA0002") {
+                                $('#' + item).show();
+                            }
+                        });
+                    }
+                }
+            }).fail(function () {
+                showMess('@Resources.Langues.ContactAdmin')
+            }).always(function () {
+                $.unblockUI();
+            });
+        });
+
+        $.post("@Url.Action("CheckSalesTypeCodeInI00012Sub", "EntityE00023Popup", new { area="Case" })", { caseId : caseId, salesTypeCode : salesTypeCodeSMP }, function (result) {
+            if(result.success){
+                smpDropdown.enable(true);
+                smpYearDropdown.enable(true);
+                $("#SMPChargeList").kendoDropDownList({
+                    dataValueField: "Value",
+                    dataTextField: "Text",
+                    dataSource: {
+                        transport: {
+                            read: {
+                                dataType: "json",
+                                url: "@Url.Action("Read_SMPCharge", "EntityE00023Popup", new { area = "Case" })"
+                            }
+                        }
+                    }
+                });
+
+                $("#SMPYearList").kendoDropDownList({
+                    dataValueField: "Value",
+                    dataTextField: "Text",
+                    serverFiltering: true,
+                    dataSource: {
+                        transport: {
+                            read: {
+                                dataType: "json",
+                                url: "@Url.Action("Get_SMPChargeYear", "EntityE00023Popup", new { area = "Case" })"
+                            }
+                        }
+                    },
+                    filter:"contains",
+                });
+            }else{
+                smpDropdown.enable(false);
+                smpYearDropdown.enable(false);
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function(){
+            $.unblockUI();
+        });
+
+        $.post("@Url.Action("CheckSalesTypeCodeInI00012Sub", "EntityE00023Popup", new { area="Case" })", { caseId : caseId, salesTypeCode : salesTypeCodeREC }, function (result) {
+            if(result.success){
+                recDropdown.enable(true);
+                recYearDropdown.enable(true);
+                $("#RECYearList").kendoDropDownList({
+                    dataValueField: "Value",
+                    dataTextField: "Text",
+                    serverFiltering: true,
+                    dataSource: {
+                        transport: {
+                            read: {
+                                dataType: "json",
+                                url: "@Url.Action("Get_RECChargeYear", "EntityE00023Popup", new { area = "Case" })"
+                            }
+                        }
+                    },
+                    filter:"contains",
+                });
+
+                $("#RECChargeList").kendoDropDownList({
+                    dataValueField: "Value",
+                    dataTextField: "Text",
+                    dataSource: {
+                        transport: {
+                            read: {
+                                dataType: "json",
+                                url: "@Url.Action("Read_RECCharge", "EntityE00023Popup", new { area = "Case" })"
+                            }
+                        }
+                    }
+                });
+            }else{
+                recDropdown.enable(false);
+                recYearDropdown.enable(false);
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function(){
+            $.unblockUI();
+        });
+
+        var year = 2019;
+        $.blockUI();
+        $.post("@Url.Action("GetListI00012SubByCaseId", "EntityE00023Popup")", { caseId: caseId }, function (result) {
+            if (result.success) {
+                result.list.forEach(function (item) {
+                    if (item.SalesTypeCode == "SA0002") {
+                        if (item.RECChargeId != null && item.RECYear != 0) {
+                            $('#RECChargeList').data('kendoDropDownList').value(item.RECChargeId);
+                            $('#RECYearList').data('kendoDropDownList').value(item.RECYear + "");
+                        }
+
+                    }
+                    if (item.SalesTypeCode == "SA0001") {
+                        if (item.SMPChargeId != null && item.SMPYear != 0) {
+                            $('#SMPChargeList').data('kendoDropDownList').value(item.SMPChargeId);
+                            $('#SMPYearList').data('kendoDropDownList').value(item.SMPYear + "");
+                        } else {
+                            if (modelCode == 'M00004') {
+                                $('#SMPChargeList').data('kendoDropDownList').value("SMP001");
+                                $('#SMPYearList').data('kendoDropDownList').value(year + "");
+                            }
+                        }
+                    }
+                    else {
+                        setTimeout(function () {
+                            $.blockUI();
+                            $.post("@Url.Action("GetBaseYear", "EntityE00023Popup")", { caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    year = result.year;
+                                    $('#SMPChargeList').data('kendoDropDownList').value("SMP001");
+                                    $('#RECChargeList').data('kendoDropDownList').value("CHR001");
+                                    $('#RECYearList').data('kendoDropDownList').value(year + "");
+                                    $('#SMPYearList').data('kendoDropDownList').value(year + "");
+                                    $.unblockUI();
+                                }
+                                else{
+                                    $('#SMPChargeList').data('kendoDropDownList').value("SMP001");
+                                    $('#RECChargeList').data('kendoDropDownList').value("CHR001");
+                                    $('#RECYearList').data('kendoDropDownList').value(year + "");
+                                    $('#SMPYearList').data('kendoDropDownList').value(year + "");
+                                    $.unblockUI();
+                                    bootbox.alert('Cannot get base year');
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                            }).always(function () {
+                            });
+                        }, 1000);
+                    }
+                });
+            }
+            else{
+                $.unblockUI();
+            }
+        }).fail(function () {
+            $.unblockUI();
+        }).always(function () {
+
+        });
+    });
+
+    function FormE00023Save(){
+        var modelCode = '@Request.Params["modelCode"]';
+
+        if ((recDropdown.value() == "" && smpDropdown.value() == "") || (smpYearDropdown.value() == "" && recYearDropdown.value() == "")) {
+            showMess('@Resources.Langues.FailedToSave')
+            return false;
+        }
+
+        $.blockUI();
+        $.post("@Url.Action("SaveEntityE00023PopupData", "EntityE00023Popup")", {
+            RECChargeId: $('#RECChargeList').val(),
+            SMPChargeId: $('#SMPChargeList').val(),
+            caseId: getUrlParameter('caseId'),
+            SalesTypeCode: "SA0000",
+            ModelCode: modelCode,
+            yearSMP: smpYearDropdown.value(),
+            yearREC: recYearDropdown.value(),
+            ComSubName: smpDropdown.text(),
+            ComSubCode: smpDropdown.value()
+        }, function (result) {
+            if (result.success) {
+                updateHistory(result.html)
+                    $('.E00023').modal('hide');
+                        $("#btn_E00023").addClass("democlass");
+                        showMess('@Resources.Langues.Successful')
+                        $.unblockUI();
+            } else {
+                $.unblockUI();
+                showMess('@Resources.Langues.Error')
+            }
+            }).fail(function () {
+                $.unblockUI();
+                showMess('@Resources.Langues.ContactAdmin')
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        return { comCode: comCode }
+    };
+</script>

@@ -1,0 +1,526 @@
+﻿
+@using System.Security.Claims
+@using DPDSP.Services
+@using BotDetect.Web.Mvc;
+@{
+    ViewBag.Title = Resources.Langues.Home;
+    Layout = "~/Areas/Case/Views/Shared/_CaseLayout.cshtml";
+}
+
+ 
+
+@section styles {
+    <style>
+        /*#menu-not-loged-in a {
+            pointer-events: none;
+            cursor: pointer;
+        }
+
+        .input-validation-error {
+            border: 1px solid red;
+        }
+
+        .box {
+            width: 100%;
+            height: 297px;
+            background-color: rgb(67, 71, 80);
+        }
+
+        .news {
+            list-style-type: none;
+            line-height: 20px;
+            padding-left: 20px;
+        }
+
+            .news li span {
+                float: right;
+            }
+
+        #carousel-example-generic {
+            top: -80px;
+            right: 0;
+        }
+
+        #popup01 {
+            top: 5%;
+        }*/
+        .btn {
+            border: 2px solid transparent;
+            border-radius: 0px;
+        }
+
+        a#NoticeTitle {
+            color: black;
+        }
+
+            a#NoticeTitle:hover {
+                color: blue;
+            }
+
+        .classButton {
+            background-color: white;
+            border-color: #ea6b48;
+            color: #ea6b48;
+        }
+        /*2018-08-24, icpark*/
+        .myButton {
+	-moz-box-shadow: -1px 0px 0px 0px #f0f7fa;
+	-webkit-box-shadow: -1px 0px 0px 0px #f0f7fa;
+	box-shadow: -1px 0px 0px 0px #f0f7fa;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #33bdef), color-stop(1, #019ad2));
+	background:-moz-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+	background:-webkit-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+	background:-o-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+	background:-ms-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+	background:linear-gradient(to bottom, #33bdef 5%, #019ad2 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bdef', endColorstr='#019ad2',GradientType=0);
+	background-color:#33bdef;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #057fd0;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:18px;
+	font-weight:bold;
+	padding:9px 46px;
+	text-decoration:none;
+	text-shadow:2px 2px 6px #5b6178;
+}
+.myButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #019ad2), color-stop(1, #33bdef));
+	background:-moz-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+	background:-webkit-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+	background:-o-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+	background:-ms-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+	background:linear-gradient(to bottom, #019ad2 5%, #33bdef 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#019ad2', endColorstr='#33bdef',GradientType=0);
+	background-color:#019ad2;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+    /*2018-08-24, icpark*/
+}
+    </style>
+}
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using DPDSP.Models
+
+@*<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="box"><img src="~/img/main_img.jpg" style="width:100%;" height="297" alt="" /></div>
+                <div class="carousel-caption">
+                    <h2>Creating Value for the world</h2>
+                </div>
+            </div>
+            <div class="item">
+                <div class="box"><img src="~/img/main_img02.jpg" style="width:100%;" height="297" alt="" /></div>
+                <div class="carousel-caption">
+                    <h2>
+                        <span style="color:#31B4FD;">First</span> in KOREA!<br>
+                        <span style="color:#FF8906;">Best</span> in the World!
+                    </h2>
+                </div>
+            </div>
+            <div class="item">
+                <div class="box"><img src="~/img/main_img03.jpg" style="width:100%;" height="297" alt="" /></div>
+                <div class="carousel-caption">
+                    <h2>Creating Value for the world</h2>
+                    <h3>
+                        <span style="color:#31B4FD;">First</span> in KOREA!<br>
+                        <span style="color:#FF8906;">Best</span> in the World!
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="page-title">
+            <h2><i class="fa fa-home" aria-hidden="true"></i> @ViewBag.Title</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12   ">
+                <legend style="margin-top:20px;padding-bottom:5px;font-size:16px;margin-bottom:10px"> <i class="fa fa-bullhorn"></i> <strong>  @Resources.Langues.Notifications</strong>  <span style="float:right;margin-right:20px"><a href="@Url.Action("Notice","Community")" style="text-decoration: underline;;color:#299c62">more</a></span></legend>
+                <ul class="news">
+                    @foreach (var item in ViewBag.ListNotice)
+                    {
+                        <li class="list-inline">
+                            <div class="row">
+                                @Html.Hidden("Content", (object)item.NoticeContent)
+                                @Html.Hidden("FullUserName", (object)item.FullUserName)
+                                @Html.Hidden("NoticeIdSelect", (object)item.NoticeId)
+                                <a class="col-xs-8 col-sm-8 col-md-9" onclick="showPopup(this)" id="NoticeTitle" role="button"><i class="fa fa-hand-o-right" aria-hidden="true"></i> @item.NoticeTitle</a>
+                                <div class="col-xs-4 col-sm-4 col-md-3">
+                                    <span id="RegDate">@item.RegDate.ToString("yyyy-MM-dd")</span>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 ">
+                <legend style="margin-top:20px;padding-bottom:5px;font-size:16px;margin-bottom:10px"> <i class="fa fa-building"></i> <strong>@Resources.Langues.DistributedSoft</strong>  <span style="float:right;margin-right:20px"><a href="@Url.Action("ServiceIntroduction", "Community")" style="text-decoration: underline;color:#299c62">more</a></span></legend>
+                <div style="padding-bottom:5px;font-size:20px;line-height:20px !important">@Html.Raw(ViewBag.SystemInfor)</div>
+            </div>
+            <div class="col-sm-12 text-right feature" style="padding-top:20px;">
+                <a onclick="createCase()" class="btn btn-primary btn-lg classButton"><span class="glyphicon glyphicon-check"></span> Create Case</a>
+            </div>
+        </div>
+        @using (Html.BeginForm("CreateComment", "Sub2", new { area = "" }, FormMethod.Post, new { role = "form", id = "comment_form" }))
+        {
+            <div class="modal fade" id="popup01" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" style="color:#1e5687"> <i class="fa fa-check-circle"></i> <text>@Resources.Langues.Title:</text> <text id="Title"> </text></h4>
+
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group" style="overflow-x:scroll;">
+                                <table class="table" style="border-top:solid 2px #31708f;border-bottom:solid 1px #31708f;margin-top:10px;">
+                                    <tbody>
+                                        <tr>
+
+                                            <td class="active text-center text-muted ">@Resources.Langues.Writer</td>
+                                            <td id="UserName">@Resources.Langues.Writer</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="active text-center text-muted">@Resources.Langues.DateCreated </td>
+                                            <td id="Date">@Resources.Langues.DateCreated</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="active text-center text-muted">@Resources.Langues.Views </td>
+                                            <td id="View"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="active text-center text-muted">@Resources.Langues.Attachments </td>
+                                            <td id="file-content" class="scroll-style-7" style="overflow-y:scroll;max-height:100px;"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="padding:25px;" class="active">
+                                                @(Html.Kendo().Editor()
+                                                                                                                                            .Name("NoticeContent")
+                                                                                                                                            .Tools(tools => tools.Clear())
+                                                                                                                                            .HtmlAttributes(new { style = "height:300px", aria_label = "Content" })
+                                                                                                                                            .Resizable(rz => rz.Content(true))
+
+                                                )
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="post-footer">
+                            <input id="NoticeId" hidden name="NoticeId" />
+
+                            <div class="input-group">
+                                @Html.TextBox("Comment", "", new { @class = "form-control input-md comment", placeholder = Resources.Langues.AddAComment })
+                                <span class="input-group-addon" id="send_comment"> <a><i class="fa fa-edit"></i></a></span>
+                            </div>
+
+                            <!--Comment-->
+                            <div class="form-group scroll-style-7"
+                                 style="padding-top:10px; padding-left:10px; max-height:180px;
+                                 overflow:hidden; overflow-y:scroll; padding-right:10px;"
+                                 id="comment_content">
+                            </div>
+
+                        </div>
+                        <div class="modal-footer" style="border-top:none;">
+                            <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>*@
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <div class="item active">
+            <div class="box"><img src="~/img/nav1-1.png" style="width:100%" @*width="1900"*@ height="555" alt="" /></div>
+            <div class="carousel-caption">
+                @*<h2><span style="color:#ff8000">Creating Value</span> for  <span style="color:#0cc5f3">the world</span><span class="box"></span></h2>*@
+                <h2>Creating value for the world</h2>
+            </div>
+        </div>
+        <div class="item">
+            <div class="box"><img src="~/img/nav2-2.png" @*width="1900"*@ style="width:100%" height="555" alt="" /></div>
+            <div class="carousel-caption">
+                @*<h2><span style="color:#ff8000">Creating Value</span> for  <span style="color:#0cc5f3">the world</span><span class="box"></span></h2>*@
+                <h2>Creating value for the world</h2>
+            </div>
+        </div>
+        <div class="item">
+            <div class="box"><img src="~/img/nav3.png" @*width="1900"*@ style="width:100%" height="555" alt="" /></div>
+            <div class="carousel-caption">
+                @*<h2><span style="color:#ff8000">Creating Value</span> for  <span style="color:#0cc5f3">the world</span><span class="box"></span></h2>*@
+                <h2>Creating value for the world</h2>
+            </div>
+        </div>
+    </div>
+   
+    <!-- Controls -->
+    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+</div>
+@*<div class="jumbotron1" style="background-color:#333">*@ @*2018-08-24, icpark*@
+<div class="jumbotron" style="background-color:#fff">
+    @* @*<h3 class="alert-heading title-hiden" align="center" style="font-size:30px;font-weight:bolder">분산전원 설계 프로그램</h3>*@
+    <h3 class="alert-heading" align="center" style="background:url(/img/title.png) no-repeat center;background-size:290px 30px;height:30px"></h3>
+    <h3 class="alert-heading" align="center" style="font-size:20px">Modeling and Design of Distributed Energy Resources</h3>
+    <br />
+    <div class="col-sm-12 text-center feature" style="padding-top:20px;">
+        @*<a href="@Url.Action("ServiceIntroduction", "Community")" class="btn btn-primary btn-lg active" role="button" aria-pressed="true" style="color: #fff !important; background-color: #777 !important; border-color: #fff !important; width:210px">@Resources.Langues.Introduc</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="@Url.Action("Index", "Case")" class="btn btn-primary btn-lg active" role="button" aria-pressed="true" style="color: #fff !important; background-color: #777 !important; border-color: #fff !important; width:210px">@Resources.Langues.CaseCreate</a>*@
+        @*2018-08-24, icpark*@
+        <a href="@Url.Action("ServiceIntroduction", "Community")" class="myButton" style="@Resources.Langues.Btnen1"  @*style="background:url(/img/en1.png) no-repeat center;background-size:200px 48px;height:48px;width:200px;border:none"*@></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="@Url.Action("Index", "Case")" class="myButton" style="@Resources.Langues.Btnen2" @*style="background:url(/img/en1.png) no-repeat center;background-size:200px 48px;height:48px;width:200px;border:none"*@></a>
+    </div>
+</div> 
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        var $formComment = $('#comment_form');
+        var $comment = $('#Comment');
+        var $commentContent = $('#comment_content');
+        var $loginModal = $('#login');
+        var $myForm = $('#myForm');
+        var $emailInput = $('#UserRegister_Email');
+        var emailNotExist = false;
+        var $IsLogin = '@Request.IsAuthenticated.ToString()'
+
+        $(document).ready(function () {
+            //if ($IsLogin == "False") {
+            //    $('#login').modal('show');
+            //}
+            var myModal = '#popup01';
+            $('#IsLogin').val(true);
+            $(myModal).on('hidden.bs.modal', function () {
+                // do something…
+                clearModal();
+                var editor = $('#NoticeContent').data('kendoEditor');
+                editor.body.contentEditable = false;
+            });
+
+            $(myModal).on('hidden.bs.modal', function () {
+                $('#comment_content').children().remove();
+                $formComment[0].reset();
+            });
+
+
+            $('#send_comment').click(function () {
+                var isValid = $formComment.valid();
+                if (isValid) {
+                    $formComment.submit();
+                } else {
+                    $comment.focus();
+                }
+            });
+
+            $('form').on('click', '.btnDelete', function (e) {
+                var $comment = $(this).closest('p');
+                var commentId = $comment.attr('id');
+                bootbox.confirm({
+                    message: '@Resources.Langues.AreYouSure',
+                    buttons: {
+                        cancel: {
+                            label: '@Resources.Langues.No',
+                            className: 'btn-sm'
+                        }, confirm: {
+                            label: '@Resources.Langues.Yes',
+                            className: 'btn-success btn-sm'
+                        }
+                    },
+                    callback: function (callback) {
+                        if (callback) {
+                            $.blockUI();
+                            $.post('@Url.Action("DeleteComment", "Sub2", new { area = "" })', { commentId: commentId }, function (result) {
+                                if (result.success) {
+                                    $comment.remove();
+                                }
+                            }).always(function () {
+                                $.unblockUI();
+                            }).fail(function () {
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            });
+                        }
+                    }
+                });
+            });
+
+        $formComment.submit(function (e) {
+            $.blockUI();
+            //var formData = new FormData(this);
+            var formObj = $(this);
+            var data = new FormData(this);
+            var urlAction = formObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                $.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                    var date = formatDate(parseInt(result.newComment.CommentDate.substr(6)));
+                    var comment = createCommentHmtl(result.newComment.CommentId, result.newComment.CommentUserName, result.newComment.Comment, date, result.newComment.isDeleted);
+                    $commentContent.prepend(comment);
+                    $comment.val('');
+                    $comment.removeClass('input-validation-error');
+                    $comment.blur();
+                }
+            });
+            e.preventDefault();
+        });
+
+            @*$('#loginButton').click(function () {
+                if ($('#Email').val() == "" && $('#Password').val() == "") {
+                    $('#loginErrorMsg').removeClass('hide')
+                } else {
+                    var data = { Email: $('#Email').val(), Password: $('#Password').val(), Language: $('#Language').val(), RememberMe: $('#RememberMe').val() };
+                    $.blockUI();
+                    $.post('@Url.Action("HomeLogin", "Account", new { area="Case" })', { Email: $('#Email').val(), Password: $('#Password').val(), Language: $('#Language').val(), RememberMe: $('#RememberMe').val() }, function (result) {
+                        if (result.success) {
+
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                }
+            });*@
+
+        });
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        function clearModal() {
+            $('#Title').text('');
+            $('#UserName').text('');
+            $('#Date').text('');
+            var $fileChild = $('#file-content').children();
+            $fileChild.remove();
+            $("#file-content").contents().filter(function () {
+                return this.nodeType === 3;
+            }).remove();
+        }
+
+        function createCase() {
+            var href = '@Url.Action("Index", "Case")';
+            window.open(href, '_blank');
+        }
+
+        function showPopup(e) {
+            var li = $(e).closest('li');
+            $.blockUI();
+            var myModal = '#popup01';
+            $(myModal).modal('show');
+            var title = '#Title', writer = '#UserName', date = '#Date', $view = $('#View'), $content = $('#NoticeContent').data('kendoEditor');
+            $(title).text($(li).find('#NoticeTitle').text());
+            $(writer).text($(li).find('#FullUserName').val());
+            $(date).text($(li).find('#RegDate').text());
+            var noticeId = $(li).find('#NoticeIdSelect').val();
+
+            $('#NoticeId').val(noticeId)
+
+            $content.value('');
+            $content.value($(li).find('#Content').val());
+            $.post('@Url.Action("GetFileAndCommentListByNoticeId", "CommunityManagement", new { area="Admin" })', { noticeId: noticeId }, function (result) {
+                if (result.success) {
+                    $('#popup01').modal('show');
+                    var listFile = result.listFile;
+                    listFile.forEach(function (item) {
+                        var linkFile = createLinkHtml(item.NoticeFileId, item.FilePath, item.FileName, item.FieSize);
+                        $('#file-content').append(linkFile);
+                    });
+                    var listComment = result.listComment;
+                    listComment.forEach(function (item) {
+                        var date = formatDate(parseInt(item.CommentDate.substr(6)));
+                        var comment = createCommentHmtl(item.CommentId, item.CommentUserName, item.Comment, date);
+                        $('#comment_content').append(comment);
+                    });
+                    $view.text(result.view);
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+        }
+
+        function createCommentHmtl(commentId, commentUserName, comment, date) {
+            var style = "style='justify-content:center;align-items: center;padding: 3px 5px;margin-bottom:0px;'";
+            return "<p style='justify-content: space-between;display:flex;' id='"
+                + commentId + "'><label><i class='fa fa-user'></i> "
+                + commentUserName + ": "
+                + comment + "</label> <span style='justify-content: space-between;display:flex;height:25px;min-width: 135px;'>("
+                + (date) + ") <a role='button'"
+                + style + " class='btn btn-danger btn-xs btnDelete'><i class='fa fa-times'></i> @Resources.Langues.Delete</a></span></p>";
+        }
+
+        function createLinkHtml(noticeFileId, filePath, fileName, fileSize) {
+            var style = style = "style='display:initial; padding: 0px 4px;'";
+            return "<span><a id=" + noticeFileId + " target='_blank' href="
+            + getFilePath(filePath)
+            + "><i class='fa fa-save'></i> "
+            + fileName + " ("
+            + convertMBFileSize(fileSize) + "MB) </a> <button "
+            + style + " type='button' class='btnDeleteFile btn btn-danger btn-xs'>&times;</button> / </span> ";
+        };
+
+        function getFilePath(path) {
+            return path.substr(1);
+        }
+
+        function convertMBFileSize(size) {
+            return ((size / 1024) / 1024).toFixed(2);
+        }
+        $comment.keyup(function () {
+            if ($(this).val()) {
+                $(this).removeClass('input-validation-error');
+            }
+        });
+
+    </script>
+}

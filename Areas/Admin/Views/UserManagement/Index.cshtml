@@ -1,0 +1,634 @@
+﻿
+@model DPDSP.Models.EditAccountViewModel
+
+@{
+    ViewBag.Title = Resources.Langues.UserManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        input[type="checkbox"][readonly] {
+            pointer-events: none;
+        }
+        #SerchButton {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        .input-validation-error {
+            border: 1px solid red !important;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+
+        .classYes {
+            margin-right:10px;
+        }
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.EditAccountViewModel>()
+                        .Name("grid")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(m => m.UserAccountId).Hidden();
+                            columns.Bound(m => m.Selection).ClientTemplate("<input type=\"checkbox\" #=Selection ? checked='checked' :  '' # class=\"chkbox\" id=\"#=UserAccountId#\" /> ")
+    .HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Selection);
+                            columns.Bound(member => member.FullName).Title(Resources.Langues.FullName).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.Email).Title(Resources.Langues.Email).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(model => model.IsActive).ClientTemplate("<input type=\"checkbox\" readonly  #=IsActive ? '' : checked='checked' # />")
+        .HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.AccountStatus);
+                            columns.Bound(member => member.UserCompany).Title(Resources.Langues.Affiliation).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.UserCountry).Title(Resources.Langues.Nationality).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.UserJob).Title(Resources.Langues.Job).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.UserTel).Title(Resources.Langues.Tel).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.LastLoginDate).Format("{0: yyyy/MM/dd HH:mm:ss}").Title(Resources.Langues.LastLogin).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Command(command => { command.Custom(Resources.Langues.ViewDetails).Click("DetailsUser").HtmlAttributes(new { @class = "btn-info" }); }).HtmlAttributes(new { style = "text-align:center;" });
+
+                        })
+                        .ToolBar(tools =>
+                        { /*tools.Excel();*/
+                        tools.Template(@<text>
+            <div class="row">
+                <div class="col-xs-12 col-md-5">
+                    <input type="text" class="k-input k-textbox input-opal" id="Name" placeholder="@Resources.Langues.Name" />
+                    <input type="text" class="k-input k-textbox input-opal" id="EmailSearch" placeholder="@Resources.Langues.Email" />
+                    <button class="k-button btn-opal" onclick="onClick()">@Resources.Langues.Search</button>
+                </div>
+                <div class="col-md-6" style="float:right;">
+                    <button class="k-button k-button-icontext k-grid-excel pull-right" type="button"><span class="k-icon k-i-excel"></span>@Resources.Langues.ExportToExcel</button>
+                    <button id="LogUser" class="k-button k-button-icontext pull-right">@Resources.Langues.LogUser</button>
+                    <button id="UnlogUser" class="k-button k-button-icontext pull-right">@Resources.Langues.UnlogUser</button>
+                    <button id="DeleteUser" onclick="onDelete()" class="k-button k-button-icontext pull-right">@Resources.Langues.DeleteAll</button>
+                </div>
+            </div>
+                        </text>);
+                        })
+                        .Excel(excel => excel
+                            .FileName("Information Member.xlsx")
+                            .Filterable(true)
+                            .ProxyURL(Url.Action("Excel_Export_Save", "UserManagement"))
+                        )
+                        //.Events(ev => ev.DataBound("onDataBound"))
+                        .Editable(editable => editable.Mode(GridEditMode.InLine))
+                        .Pageable()
+                        .Sortable()
+                        .Scrollable(rz => rz.Enabled(false))
+                        .Resizable(rz => rz.Columns(true))
+                        .HtmlAttributes(new { style = "height:auto;" })
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(10)
+                            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                            .Model(model => { model.Id(p => p.UserAccountId); })
+                            .Read(read => read.Action("Read", "UserManagement", new { area = "Admin" }))
+                    )
+        )
+    </div>
+</div>
+
+<div id="UpdateUserInfoModal" class="wrap">
+    @using (Html.BeginForm("EditUser", "UserManagement", new { area = "Admin" }, FormMethod.Post, new { @role = "form", @id = "formChangeInfors" }))
+    {
+        @Html.AntiForgeryToken()
+    <!--login member-->
+        <div id="member" class="modal modal-wide fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">@Resources.Langues.ViewDetails</h4>
+                    </div>
+                    <div class="modal-body" style="overflow:auto;">
+                        <div class="form-horizontal">
+                            <fieldset>
+                                <h5>※ √ @Resources.Langues.InputFieldsAreRequried</h5>
+                                @Html.HiddenFor(m => m.UserAccountId)
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label"> √  @Resources.Langues.Email</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.HiddenFor(m => m.Email)
+                                        @Html.TextBox("EmailDisplay", "", new { @class = "form-control input-md", @disabled = "disabled" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="LastName">√ @Resources.Langues.LastName</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="FirstName,">√ @Resources.Langues.FirstName</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="UserCompany">√ @Resources.Langues.Affiliation</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.UserCompany, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="UserCountry">√ @Resources.Langues.Nationality</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.DropDownListFor(m => m.UserCountry, new SelectList(ViewBag.ListCountries, "Value", "Text"), Resources.Langues.PleaseSelect, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="UserJob">  @Resources.Langues.Job</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.UserJob, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="UserDepartmentName">  @Resources.Langues.DepartmentName</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.UserDepartmentName, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="UserPositon">  @Resources.Langues.Position</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.UserPositon, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="UserTel">  @Resources.Langues.PhoneNumber</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.UserTel, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="UserCompanyAddress">  @Resources.Langues.CompanyAddress</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.UserCompanyAddress, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="UserBusinessArea">  @Resources.Langues.BusinessField</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.UserBusinessArea, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="Role">  @Resources.Langues.Role</label>
+                                    <div class="col-xs-6 col-md-6" style="padding-top:8px;">
+                                        @Html.RadioButtonFor(m => m.IsAdmin, true, new { @id = "AdminUser" }) @Resources.Langues.Admin
+                                        @Html.RadioButtonFor(m => m.IsAdmin, false, new { @id = "RegularUser" }) @Resources.Langues.User
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="Active">  @Resources.Langues.AccountStatus</label>
+                                    <div class="col-xs-6 col-md-6" style="padding-top:8px;">
+                                        @Html.RadioButtonFor(m => m.IsActive, true, new { @id = "Active" }) @Resources.Langues.Active
+                                        @Html.RadioButtonFor(m => m.IsActive, false, new { @id = "Inactive" }) @Resources.Langues.InActive
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="UserWebsite">@Resources.Langues.CompanyOrPersonalHomepage</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.TextBoxFor(m => m.UserWebsite, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="row text-center">
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="Password">√ @Resources.Langues.Password</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.PasswordFor(m => m.Password, new
+                                   {
+                                       @class = "form-control input-md",
+                                       @data_val = "true",
+                                       @data_val_password = Resources.Langues.ValidatePasswordMessage,
+                                       @data_val_password_min = "6",
+                                       @data_val_password_nonalphamin = "1",
+                                       @data_val_required = " "
+                                   })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 col-md-4 control-label" for="ConfirmPassword">√ @Resources.Langues.ConfirmPass</label>
+                                    <div class="col-xs-6 col-md-6">
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row text-center">
+                                        ※ @Resources.Langues.ValidatePasswordMessage
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="submitFormInfors" class="btn btn-primary">@Resources.Langues.Save</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    <!-- /.modal -->
+    }
+
+
+</div>
+
+
+@*@Html.AntiForgeryToken()*@
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @*<script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+    <script type="text/javascript">
+        //var $UpdateUserInfoModal = $('#UpdateUserInfoModal');
+        //var $UpdateUserContent = $UpdateUserInfoModal.find('.modal-body');
+
+        $('#UnlogUser').addClass('k-state-disabled');
+        $('#LogUser').addClass('k-state-disabled');
+
+        var $btnGet_file = $('#get_file'),
+            $btnDeleteUser = $('#deleteUser'),
+            $btnSubmitFormInfors = $('#submitFormInfors');
+        var $modalPopup01 = $('#member');
+        var userGrid = $("#grid").data("kendoGrid");
+        //$modalPopup01.find('[class="modal-content"]').wrapAll('<form id="formChangeInfors"></form>');
+        var $formInfors = $('#formChangeInfors');
+
+        $btnSubmitFormInfors.on('click', function () {
+            if ($('#Password').val().length === 0) {
+                $('#Password').attr('disabled', 'disabled');
+            }
+            var isValid = $formInfors.valid();
+            if (isValid) {
+                $formInfors.submit();
+            } else {
+                $('#Password').removeAttr('disabled');
+            }
+        })
+
+
+
+        $btnDeleteUser.on('click', function () {
+
+        })
+
+        var checkedItems = [];
+
+        $(document).ready(function () {
+            var userGrid = $("#grid").data("kendoGrid");
+            var $inforsModal = $('#member');
+            var $inforsForm = $('#formChangeInfors');
+
+            function callback(e) {
+                // PLACE CALLBACK CODE HERE
+                onDataBound(userGrid, checkedItems);
+            }
+
+            $("#grid").data("kendoGrid").dataSource.bind("change", callback);
+            $("#grid").data("kendoGrid").dataSource.fetch();
+
+            $inforsModal.on('hidden.bs.modal', function () {
+                clearInforsModal($inforsForm);
+            });
+
+            $(document).on('click', '.chkbox', function (e) {
+                var checked = this.checked,
+                    row = $(this).closest("tr");
+                var userId = row.find('input[type="checkbox"]').attr('id');
+
+                //checkedItems[dataItem.id] = checked;
+                if (checked) {
+                    //-select the row
+                    row.addClass("k-state-selected");
+                    checkedItems.push(userId);
+                } else {
+                    //-remove selection
+                    row.removeClass("k-state-selected");
+                    var index = checkedItems.indexOf(userId);
+                    checkedItems.splice(index, 1);
+                }
+
+                if (checkedItems.length > 0) {
+                    $('#UnlogUser').removeClass('k-state-disabled');
+                    $('#LogUser').removeClass('k-state-disabled');
+                } else {
+                    $('#UnlogUser').addClass('k-state-disabled');
+                    $('#LogUser').addClass('k-state-disabled');
+                }
+            });
+
+            $('#UnlogUser').click(function () {
+                $.blockUI();
+                $.post('@Url.Action("Unlog","UserManagement",new { area="Admin" })', { listUserId: checkedItems }, function (result) {
+                    if (result.success) {
+                        userGrid.dataSource.read();
+                        checkedItems = [];
+                        $('.chkbox').val(false);
+                        $('#UnlogUser').addClass('k-state-disabled');
+                        $('#LogUser').addClass('k-state-disabled');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                });
+            });
+
+            $('#LogUser').click(function () {
+                $.blockUI();
+                $.post('@Url.Action("LogUsers","UserManagement",new { area="Admin" })', { listUserId: checkedItems }, function (result) {
+                    if (result.success) {
+                        userGrid.dataSource.read();
+                        checkedItems = [];
+                        $('.chkbox').val(false);
+                        $('#UnlogUser').addClass('k-state-disabled');
+                        $('#LogUser').addClass('k-state-disabled');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                });
+            });
+
+        });
+
+        $formInfors.submit(function (e) {
+            $.blockUI();
+            var data = new FormData($formInfors[0]);
+            var urlAction = $formInfors.attr('action');
+            //var data = new FormData(this);
+            //var $formObj = $(this);
+            //var urlAction = $formObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: 'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data
+            }).success(function (result) {
+                if (result.success) {
+                    var rw = $("#grid").data("kendoGrid").tbody.find('tr[data-id="' +
+                        result.Model.UserAccountId + '"]');
+
+                    $("#grid").data("kendoGrid").dataSource.read();
+                    //var avatarUrl = result.UserPhotoUrl;
+                    //$('#avatar').attr('src', getImagePath(avatarUrl));
+                    //$('#userFullName').text(result.FullUserName);
+                    //$('#userJob').text(result.UserJob);
+                    //$inforsModal.modal('hide');
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $('#Password').removeAttr('disabled');
+                $('#member').modal('toggle');
+                $.unblockUI();
+            });
+            e.preventDefault();
+        });
+
+        function clearInforsModal(form) {
+            form[0].reset();
+            form.find('input, label, select').removeClass('input-validation-error');
+            form.find('input, label, select, .form-group').removeClass('has-error');
+            $('span .text-danger').removeClass("field-validation-error");
+            $('span .text-danger').addClass("field-validation-valid");
+            $('#Password-error').remove();
+        }
+
+        function DetailsUser(e) {
+            $('#member').modal('show');
+            var row = $(e.currentTarget).closest("tr"),
+                grid = $("#grid").data("kendoGrid"),
+                dataItem = grid.dataItem(row);
+            var $FirstName = $('#FirstName'),
+                $LastName = $('#LastName'),
+                $UserCompany = $('#UserCompany'),
+                $UserCountry = $('#UserCountry'),
+                $UserJob = $('#UserJob'),
+                $UserDepartmentName = $('#UserDepartmentName'),
+                $UserPositon = $('#UserPositon'),
+                $UserTel = $('#UserTel'),
+                $UserCompanyAddress = $('#UserCompanyAddress'),
+                $UserBusinessArea = $('#UserBusinessArea'),
+                $UserWebsite = $('#UserWebsite'),
+                $UserPhoto = $('#UserPhoto'),
+                $EmailDisplay = $('#EmailDisplay'),
+                $UserID = $('#UserAccountId'),
+                $AdminUser = $('#AdminUser'),
+                $Active = $('#Active'),
+                $Inactive = $('#Inactive');
+            $RegularUser = $('#RegularUser'),
+
+        $Email = $('#Email');
+
+            if (dataItem.IsAdmin) {
+                $AdminUser.prop("checked", true);
+            } else {
+                $RegularUser.prop("checked", true);
+            }
+
+            if (!dataItem.IsActive) {
+                $Active.prop("checked", true);
+            } else {
+                $Inactive.prop("checked", true);
+            }
+
+            $UserID.val(dataItem.UserAccountId);
+            $FirstName.val(dataItem.FirstName);
+            $LastName.val(dataItem.LastName);
+            $UserCompany.val(dataItem.UserCompany);
+            $UserCountry.val(dataItem.UserCountry);
+            $UserJob.val(dataItem.UserJob);
+            $UserDepartmentName.val(dataItem.UserDepartmentName);
+            $UserPositon.val(dataItem.UserPositon);
+            $UserTel.val(dataItem.UserTel);
+            $UserCompanyAddress.val(dataItem.UserCompanyAddress);
+            $UserBusinessArea.val(dataItem.UserBusinessArea);
+            $UserWebsite.val(dataItem.UserWebsite);
+            $UserPhoto.val(dataItem.UserPhoto);
+            $Email.val(dataItem.Email);
+            $EmailDisplay.val(dataItem.Email);
+            $formInfors = $('#formChangeInfors');
+        }
+
+        $("#splitter").kendoSplitter({
+            panes: [{ collapsible: true, resizable: false, size: 200 }, {}]
+        });
+
+
+        //on dataBound event restore previous selected rows:
+        function onDataBound(grid, array) {
+            if (grid != null && array != null) {
+                for (var i = 0; i < array.length; i++) {
+                    var checkbox = grid.table.find('input[type="checkbox"][id=' + array[i] + ']');
+                    checkbox.prop('checked', 'checked')
+                    var row = checkbox.closest("tr[role=row]");
+                    row.addClass('k-state-selected');
+                }
+            }
+        }
+
+        function onClick() {
+            var name = $('#Name').val();
+            var email = $("#EmailSearch").val();
+            var kgrid = $("#grid").data("kendoGrid");
+            selecteditem = name.toUpperCase();
+            var selectedArray = name.split(" ");
+            if (name && email) {
+                //kgrid.dataSource.filter({ field: "UserName", operator: "eq", value: selecteditem });
+                var orfilter = { logic: "or", filters: [] };
+                var andfilter = { logic: "and", filters: [] };
+                $.each(selectedArray, function (i, v) {
+                    if (v.trim() == "") {
+                    }
+                    else {
+                        $.each(selectedArray, function (i, v1) {
+                            if (v1.trim() == "") {
+                            }
+                            else {
+                                orfilter.filters.push({ field: "FullName", operator: "contains", value: v1 },
+                                    { field: "Email", operator: "contains", value: v1 });
+                                andfilter.filters.push(orfilter);
+                                orfilter = { logic: "or", filters: [] };
+                            }
+
+                        });
+                    }
+                });
+                kgrid.dataSource.filter(andfilter);
+            }
+            else if (name) {
+                kgrid.dataSource.filter({ field: "FullName", operator: "contains", value: name });
+            } else if (email) {
+                kgrid.dataSource.filter({ field: "Email", operator: "contains", value: email });
+            } else {
+                kgrid.dataSource.filter({});
+            }
+
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                             message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+
+        //even Log, Unlog
+        function renameClick() {
+            $.blockUI();
+            $.post('@Url.Action("Rename","UserManagement",new { area="Admin" })', function (result) {
+                if (result.success) {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.Successful');
+                } else {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.Error');
+                }
+            }).always(function () {
+                $.unblockUI();
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            });
+        }
+
+        function onClickUnLog() {
+
+        }
+
+        function onDelete() {
+            bootbox.confirm({
+                message: '@Resources.Langues.DeleteUser',
+                className: 'my-custom-class',
+                buttons: {
+                    confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success classYes',
+                    },cancel: {
+                        label: '@Resources.Langues.No',
+                        className: 'btn-danger pull-right'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        if (checkedItems.length == 0) {
+                            bootbox.alert({
+                                "message":'@Resources.Langues.MessDeleteCase',
+                                "className": "my-custom-class",
+                            });
+                        } else {
+                            $.blockUI();
+                            $.post("@Url.Action("DeleteListUser", "UserManagement", new { area="Admin" })", { list: checkedItems }, function (result) {
+                                if (result.success) {
+                                    bootbox.alert({
+                                        "message":'@Resources.Langues.RemoveSuccess',
+                                        "className": "my-custom-class",
+                                    });
+                                    $('#grid').data('kendoGrid').dataSource.read();
+                                } else {
+                                    bootbox.alert({
+                                        "message":'@Resources.Langues.Error',
+                                        "className": "my-custom-class",
+                                    });
+                                }
+                            }).fail(function () {
+                                bootbox.alert({
+                                    "message":'@Resources.Langues.ContactAdmin',
+                                    "className": "my-custom-class",
+                                });
+                            }).always(function () {
+                                $.unblockUI();
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+    </script>
+}

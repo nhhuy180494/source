@@ -1,0 +1,552 @@
+﻿@using System.Configuration;
+@model DPDSP.Models.ISmartExcelViewModel
+<style>
+    .E00003 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: inline-block;
+        font-size: 20px;
+        color: blue;
+        border: 1px solid blue;
+        text-align:center;
+    }
+</style>
+@if (Request.Params["modelCode"] != "M00002")
+{
+    <!-- Modal -->
+    <div class="modal fade E00003" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="title-3">@Resources.Langues.ISMARTInformation</h4>
+                </div>
+                <div class="modal-body" style="padding:40px">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="radio">
+                                <input type="radio" name="optradio" value="option1" checked="checked">  <h4>@Resources.Langues.E00003Tiltle1 <span style="float:right">@Resources.Langues.NoId  @Html.CheckBox("UseSampleData", new { @class = "input-md", @style = "float:right", @checked = "checked" })</span></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="form-option-1">
+                        <div class="form-horizontal upload-form hidden">
+                            <div class="form-group hidden-cp2">
+                                <label class="control-label col-md-5 lbWT">iSmart ID:</label>
+                                <div class="col-md-5">
+                                    @Html.TextBox("SMARTID", "", new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group hidden-cp2">
+                                <label class="control-label col-md-5 lbWT">iSmart Password:</label>
+                                <div class="col-md-5">
+                                    @Html.Password("SMARTPW", "", new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-horizontal" id="load-type">
+                            <div class="form-group">
+                                <label class="control-label col-md-4 lbWT">@Resources.Langues.LoadType</label>
+                                <label class="control-label col-md-1 lbWT"> </label>
+                                <div class="col-md-5"  style="padding-left:0px">
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("LoadType")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .DataSource(source =>
+                                        {
+                                            source.Read(read =>
+                                            {
+                                                read.Action("GetCommonSubByComCode", "EntityE00003Popup", new { area = "Case" });
+                                            });
+                                        })
+                                        .HtmlAttributes(new { @class = "form-control input-md" })
+                                    )
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-4 lbWT" style="padding-right: 0px;">@Resources.Langues.WorkLoad</label>
+                                <label class="col-md-1" style="padding-left:1px; padding-top:3px"><span onclick="helpOnclick('Manual')" class="dot">?</span>@*<button type="button" onclick="helpOnclick('Manual')" class="btn button-help" style="padding-left:0px"><img src="~/Content/images/question_icon.png" style="height:20px"  /></button>*@</label>
+                                <div class="col-md-5" style="padding-left:0px">
+                                    @Html.TextBox("WorkLoad", "", new { @class = "form-control input-md", @style = "text-align: right;" })
+                                </div>
+                                <div class="col-md-1" style="padding-top: 5px;padding-left: 0px;">
+                                    kWh
+                                </div>
+                            </div>
+                            <div class="form-group hidden-cp2">
+                                <label class="control-label col-md-4 lbWT" style="padding-right: 0px;">@Resources.Langues.AnnualPeakLoad</label>
+                                <label class="col-md-1" style="padding-left:1px; padding-top:3px"><span onclick="helpOnclick('Automatic')" class="dot">?</span>@*<button type="button" onclick="helpOnclick('Automatic')" class="btn button-help" style="padding-left:0px"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@</label>
+                                <div class="col-md-5"  style="padding-left:0px">
+                                    @Html.TextBox("AnnualPeakLoad", "", new { @class = "form-control input-md", @style = "text-align: right;" })
+                                </div>
+                                <div class="col-md-1" style="padding-top: 5px;padding-left: 0px;">
+                                    kWh
+                                </div>
+                            </div>
+                        </div>
+                        <!-- New content-->
+                        <div class="row hidden" id="detail">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="control-label  col-md-1" style="text-align:right;padding:5px">*</label>
+                                    <div class="control-label  col-md-10">@Html.Raw(@Resources.Langues.IsmartMess1)</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="control-label  col-md-1" style="text-align:right;padding:5px">*</label>
+                                    <div class="control-label  col-md-10">
+                                        <a href="https://pccs.kepco.co.kr/iSmart/" target="_blank">@Resources.Langues.IsmartMess2</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="control-label  col-md-1" style="text-align:right;padding:5px">*</label>
+                                    <div class="control-label  col-md-10">@Resources.Langues.IsmartMess3</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="control-label  col-md-1" style="text-align:right;padding:5px">*</label>
+                                    <div class="control-label  col-md-10">@Resources.Langues.IsmartMess4</div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="form-group pull-right">
+                                    <button type="button" onclick="E00003onSave()" id="auto-save" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                    <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="radio">
+                                <input type="radio" name="optradio" value="option2">  <h4>@Resources.Langues.E00003Tiltle2  </h4>
+                            </div>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("UploadFile", "EntityE00003Popup", FormMethod.Post, new { @role = "form", area = "Case", @id = "upload", @enctype = "multipart/form-data" }))
+                    {
+                        <div id="form-option-2" class="hidden">
+                            <div class="form-horizontal ">
+                                <div class="form-group">
+                                    @Html.HiddenFor(m => m.CaseUploadId)
+                                    @Html.HiddenFor(m => m.ModelCode)
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-6">
+                                                @Html.TextBoxFor(m => m.File, "", new
+                                                {
+                                                    @data_val = "true",
+                                                    @data_val_required = "The Excel File field is required.",
+                                                    @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                                                    @class = "form-control",
+                                                    @placeholder = "Excel File...",
+                                                    @type = "file"
+                                                })
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <a type="button" class="btn btn-primary" href="@Url.Content("~/Content/TemplateForm/iSmart_form_M00005.xlsx")">@Resources.Langues.Format</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="form-group pull-right">
+                                        <button type="button" onclick="E00003AUtoSave()" class="btn btn-primary">@Resources.Langues.Save</button>
+                                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="modal fade E00003" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="title-m2">@Resources.Langues.Loaddatainput</h4>
+                </div>
+                <div class="modal-body" style="padding:40px">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="radio">
+                                <input type="radio" name="optradio" value="option1" checked="checked">  <h4 id="select-1">@Resources.Langues.E00003Tiltle11</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="form-option-1">
+                        <!-- New content-->
+                        <div class="form-horizontal" id="load-type">
+                            <div class="form-group">
+                                <label class="control-label col-md-5 lbWT">@Resources.Langues.LoadType</label>
+                                <div class="col-md-5">
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("LoadType")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .DataSource(source =>
+                                        {
+                                            source.Read(read =>
+                                            {
+                                                read.Action("GetCommonSubByComCode", "EntityE00003Popup", new { area = "Case", modelCode = Request.Params["modelCode"] });
+                                            });
+                                        })
+                                        .HtmlAttributes(new { @class = "form-control input-md" })
+                                    )
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-5 lbWT">@Resources.Langues.WorkLoad</label>
+                                <div class="col-md-5">
+                                    @Html.Hidden("AnnualPeakLoad", "0")
+                                    @Html.TextBox("WorkLoad", "", new { @class = "form-control input-md", @style = "text-align: right;" })
+                                </div>
+                                <div class="col-md-1" style="padding-top: 5px;padding-left: 0px;">
+                                    kWh
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="form-group pull-right">
+                                    <button type="button" onclick="E00003onSave()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                    <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="radio">
+                                <input type="radio" name="optradio" value="option2">  <h4>@Resources.Langues.E00003Tiltle2</h4>
+                            </div>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("UploadFile", "EntityE00003Popup", FormMethod.Post, new { @role = "form", area = "Case", @id = "upload", @enctype = "multipart/form-data" }))
+                    {
+                        <div id="form-option-2" class="hidden">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    @Html.HiddenFor(m => m.CaseUploadId)
+                                    @Html.HiddenFor(m => m.ModelCode)
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-6">
+                                                @Html.TextBoxFor(m => m.File, "", new
+                                                {
+                                                    @data_val = "true",
+                                                    @data_val_required = "The Excel File field is required.",
+                                                    @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                                                    @class = "form-control",
+                                                    @placeholder = "Excel File...",
+                                                    @type = "file"
+                                                })
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <a type="button" class="btn btn-primary" href="@Url.Content("~/Content/TemplateForm/iSmart_form_M00002.xlsx")">@Resources.Langues.Format</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="form-group pull-right">
+                                            <button type="button" onclick="E00003AUtoSave()" class="btn btn-primary">@Resources.Langues.Save</button>
+                                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    var caseId = @Request.Params["caseId"];
+    var $modal = $('.E00003');
+    var status = 1;
+    var useDataSam = true
+    var modelCode = '@Request.Params["modelCode"]';
+
+    $('#CaseUploadId').val(caseId)
+    $('#ModelCode').val(modelCode)
+
+    if ('@Request.Params["modelCode"]' == "M00001") {
+        $('#title-3').html('@Resources.Langues.Inputpowerdemanddata')
+    }
+
+    if ('@Request.Params["modelCode"]' == "M00004") {
+        $('#title-3').html('@Resources.Langues.Inputpowerdemanddata')
+    }
+
+    if ('@Request.Params["modelCode"]' == "M00005") {
+        $('#title-3').html('@Resources.Langues.SelectApplicablePlan')
+    }
+
+    $('.E00003').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+
+    $('#UseSampleData').change(function () {
+        if ($('#UseSampleData').is(":checked")) {
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+            $('#SMARTID').val('');
+            $('#SMARTPW').val('');
+            $('#load-type').removeClass('hidden')
+            $('.upload-form').addClass('hidden')
+            $('input:radio[name=optradio]').filter('[value=option1]').prop('checked', true);
+            $('#detail').addClass('hidden')
+            useDataSam = true;
+        } else {
+            $('#load-type').addClass('hidden')
+            $('.upload-form').removeClass('hidden')
+            $('#detail').removeClass('hidden')
+            useDataSam = false;
+        }
+    });
+
+    $('.E00003').on('hide.bs.modal', function () {
+        if (lstEntityNextStep.length != 0) {
+            historyClick(lstEntityNextStep[0]);
+            lstEntityNextStep.shift();
+            console.log(lstEntityNextStep)
+        }
+
+    });
+
+    $('.E00003').on('show.bs.modal', function () {
+        setTimeout(function () { $('#WorkLoad').focus(); }, 500);
+    });
+
+    function E00003onSave() {
+        if (($('#SMARTID').val() == "" || $('#SMARTPW').val() == "") && useDataSam == false) {
+            showMess('저장하지 못하였습니다. 입력 값들을 확인하십시오.')
+            return false;
+        }
+
+        if (useDataSam == true && ($('#LoadType').val() == "" || $('#AnnualPeakLoad').val() == "")) {
+            showMess('저장하지 못하였습니다. 입력 값들을 확인하십시오.​')
+            return false;
+        }
+
+        var modelCode= '@Request.Params["modelCode"]';
+        var caseId= @Request.Params["caseId"];
+        var iSmartId = $('#SMARTID').val();
+        var iSmartPass = $('#SMARTPW').val();
+        var comSubCode = $('#LoadType').val();
+        var workLoad = $('#WorkLoad').val() == "" ? 0 : $('#WorkLoad').val();
+        var annualPeakLoad = $('#AnnualPeakLoad').val() == "" ? "0" : $('#AnnualPeakLoad').val();
+        var menthod = $('input[type=radio][name=optradio]').val();
+
+        $.blockUI();
+        $.post("@Url.Action("UpdateISmartIdAndISmartPass", "EntityE00003Popup", new { area="Case" })", { modelCode: modelCode,
+            caseId: caseId,
+            iSmartId: iSmartId,
+            iSmartPass: iSmartPass,
+            UseSampleData: useDataSam,
+            comSubCode: comSubCode,
+            workLoad: workLoad,
+            annualPeakLoad: annualPeakLoad}, function (result) {
+            if (result.success) {
+                updateHistory(result.html)
+                if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00003').modal('hide');
+                    });
+                    $("#btn_E00003").addClass("democlass");
+            } else {
+                showMess(result.alert)
+                $.unblockUI();
+            }
+        }).fail(function(){
+            $.unblockUI();
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function(){
+            //$.unblockUI();
+        });
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        return { comCode: comCode }
+    };
+
+    function isNumberKey(el, evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        var number = el.value.split('.');
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        //just one dot
+        if(number.length>1 && charCode == 46){
+            return false;
+        }
+        //get the carat position
+        var caratPos = getSelectionStart(el);
+        var dotPos = el.value.indexOf(".");
+        if( caratPos > dotPos && dotPos>-1 && (number[1].length > 1)){
+            return false;
+        }
+        return true;
+    }
+
+    function getSelectionStart(o) {
+        if (o.createTextRange) {
+            var r = document.selection.createRange().duplicate()
+            r.moveEnd('character', o.value.length)
+            if (r.text == '') return o.value.length
+            return o.value.lastIndexOf(r.text)
+        } else return o.selectionStart
+    }
+
+    $('input[type=radio][name=optradio]').change(function () {
+        if (this.value == 'option1') {
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+            if (modelCode != "M00002") {
+                $('#load-type').addClass('hidden')
+                $('.upload-form').removeClass('hidden')
+            }
+        }
+        else if (this.value == 'option2') {
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+            $('#UseSampleData').prop('checked', false)
+        }
+    });
+
+    function E00003AUtoSave() {
+            $('#upload').submit();
+    }
+
+    $('#upload').submit(function (e) {
+        $.blockUI();
+        var data = new FormData(this);
+        var $fromObj = $(this);
+        var urlAction = $fromObj.attr('action');
+        $.ajax({
+            url: urlAction,
+            type: 'POST',
+            dataType: "Json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: data,
+            fail: function () {
+                $.unblockUI();
+                showMess('@Resources.Langues.ContactAdmin')
+            }
+        }).always(function () {
+        }).success(function (result) {
+            if (result.success) {
+                updateHistory(result.html)
+                $.blockUI();
+                $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00003",modelCode: '@Request.Params["modelCode"]'}, function (result) {
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00003').modal('hide');
+                    });
+                    $("#btn_E00003").addClass("democlass");
+                }).fail(function () {
+                    $.unblockUI();
+                    showMess('@Resources.Langues.ContactAdmin')
+                }).always(function () {
+                    $.unblockUI();
+                });
+            } else {
+                showMess('@Resources.Langues.FormatFileWrong')
+                $.unblockUI();
+            }
+        });
+        e.preventDefault();
+    });
+
+    function helpOnclick(obj) {
+        if (obj == 'Automatic') {
+            showMess('@Resources.Langues.HelpMaximumDayPattern')
+        } else {
+            showMess('@Resources.Langues.HelpWorkingDayPattern')
+        }
+    }
+    $("#WorkLoad").on('keyup', function (evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode == 13) {
+            return false;
+        } else if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8 || charCode == 13) {
+            var a = $("#valueFilter").val()
+            if (a == 'NaN' || a == '') {
+                $("#WorkLoad").val('')
+            } else {
+                var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                if (isNaN(n)) {
+                    $("#WorkLoad").val('')
+                } else {
+                    $(this).val(n.toLocaleString());
+                }
+            }
+        } else {
+            $("#WorkLoad").val($("#WorkLoad").val().slice(0, -1))
+        }
+    });
+
+    $("#AnnualPeakLoad").on('keyup', function (evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8 || charCode == 13) {
+            var a = $("#valueFilter").val()
+            if (a == 'NaN' || a == '') {
+                $("#AnnualPeakLoad").val('')
+            } else {
+                var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                if (isNaN(n)) {
+                    $("#AnnualPeakLoad").val('')
+                } else {
+                    $(this).val(n.toLocaleString());
+                }
+            }
+        } else {
+            $("#AnnualPeakLoad").val($("#AnnualPeakLoad").val().slice(0, -1))
+        }
+    });
+</script>

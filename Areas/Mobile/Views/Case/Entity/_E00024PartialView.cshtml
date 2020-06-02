@@ -1,0 +1,257 @@
+﻿<style>
+    .bootbox.modal {
+        z-index: 999999999999999999 !important;
+    }
+</style>
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    .bu_cross1 {
+        display: inline-block;
+        zoom: 1;
+        padding-left: 20px;
+        background: url(../../../../../img/bu_cross1.png) no-repeat 0 0;
+    }
+
+    .center {
+        text-align: center !important;
+    }
+
+    .rgt_section .tit_h6 {
+        font-size: 18px;
+        font-weight: 500;
+        color: #555;
+        letter-spacing: -0.4px;
+        padding-bottom: 15px;
+    }
+
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        padding: 8px;
+        vertical-align: middle;
+        border-top: 1px solid black;
+    }
+</style>
+
+<div align="center" class="container">
+    <h4><strong>@Resources.Langues.RECweightinput</strong></h4>
+    <div class="row cp3">
+        <div class="col-xs-12">
+            <label class="control-label col-xs-2 lbWT">ESS:</label>
+            <div class="col-xs-6 row" style="padding-right:5px !important">
+                <div class="col-sm-12 col-xs-12" style="padding-right:5px !important">
+                    @Html.TextBox("EssValue", "4.5", new { @class = "form-control input-md", @style = "text-align:right;", @type = "tel" })
+                </div>
+            </div>
+            <button type="button" onclick="helpOnclick('ESS')" class="btn btn-sm btn-primary">?</button>
+        </div>
+    </div>
+    <br />
+    <div class="row cp1">
+        <div class="col-xs-12">
+            <label class="control-label col-xs-2 lbWT">PV:</label>
+            <div class="col-xs-6 row" style="padding-right:5px !important">
+                <div class="col-sm-12 col-xs-12" style="padding-right:5px !important">
+                    @Html.TextBox("PvValue", "0.7", new { @class = "form-control input-md", @style = "text-align:right;", @type = "tel" })
+                </div>
+            </div>
+            <button type="button" onclick="helpOnclick('PV')" class="btn btn-sm btn-primary">?</button>
+        </div>
+    </div>
+    <br />
+    <div class="row cp2">
+        <div class="col-xs-12">
+            <label class="control-label col-xs-2 lbWT">WT:</label>
+            <div class="col-xs-6 row" style="padding-right:5px !important">
+                <div class="col-sm-12 col-xs-12" style="padding-right:5px !important">
+                    @Html.TextBox("WTValue", "0.7", new { @class = "form-control input-md", @style = "text-align:right;", @type = "tel" })
+                </div>
+            </div>
+            <button type="button" onclick="helpOnclick('WT')" class="btn btn-sm btn-primary">?</button>
+        </div>
+    </div>
+    <br />
+    <label style="color:red;margin:20px">*저장을 하셔야 다음단계로 넘어 갑니다.</label>
+    <div>
+        <button type="button" onclick="FormE00024Save()" class="button button-gray">@Resources.Langues.Save</button>
+    </div>
+
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]';
+    var ComponentCodePv = "CP0001";
+    var ComponentCodeWT = "CP0002";
+    var ComponentCodeEss = "CP0003";
+    var PvRec = "";
+    var EssRec = "";
+    var WtRec = "";
+    var PvStatus = 0;
+    var EssStatus = 0;
+    var WtStatus = 0;
+
+    $(document).ready(function () {
+        //$('.E00024').modal({
+        //    backdrop: 'static',
+        //    keyboard: false
+        //})
+        $('#btn_E00024').removeClass('progress-bar-warning');
+
+        $.blockUI();
+        $.post("@Url.Action("CheckComponentCodeInI00001Sub", "EntityE00024Popup", new { area="Case" })", { caseId: caseId, ComponentCode: ComponentCodePv }, function (result) {
+            if(result.success){
+                PvRec = "CP0001";
+                PvStatus = 1;
+            }else{
+                PvRec = "";
+                $("#PvValue").attr("disabled", "disabled");
+                $(".cp1").addClass("hidden");
+            }
+        }).fail(function(){
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function(){
+            $.unblockUI();
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("CheckComponentCodeInI00001Sub", "EntityE00024Popup", new { area="Case" })", { caseId: caseId, ComponentCode: ComponentCodeWT }, function (result) {
+            if(result.success){
+                WtRec = "CP0002";
+                WtStatus = 1;
+            }else{
+                WtRec = "";
+                $("#WTValue").attr("disabled", "disabled");
+                $(".cp2").addClass("hidden");
+            }
+        }).fail(function(){
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function(){
+            $.unblockUI();
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("CheckComponentCodeInI00001Sub", "EntityE00024Popup", new { area="Case" })", { caseId: caseId, ComponentCode: ComponentCodeEss }, function (result) {
+            if(result.success){
+                EssRec = "CP0003";
+                EssStatus = 1;
+            }else{
+                EssRec = "";
+                $('#EssValue').val('');
+                $("#EssValue").attr("disabled", "disabled");
+                $(".cp3").addClass("hidden");
+            }
+        }).fail(function(){
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function(){
+            $.unblockUI();
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetSA0003ByCaseId", "EntityE00024Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if(result.success){
+                if (EssStatus == 1){
+                    $('#EssValue').val("5");
+                }
+            }
+        }).fail(function(){
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function(){
+            $.unblockUI();
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetI00012RecByCaseId", "EntityE00024Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if(result.success){
+                $('#EssValue').val(result.data.EssValue);
+                $('#PvValue').val(result.data.PvValue);
+                $('#WTValue').val(result.data.WTValue);
+            }else{
+            }
+        }).fail(function(){
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function(){
+            $.unblockUI();
+        });
+    });
+
+    function helpOnclick(obj) {
+       // $('.HelpPopup').modal('show');
+        if (obj == 'REC') {
+            window.open('@Url.Action("E00024SubViewESS", "EntityE00024", new { area = "Mobile" })', '_blank');
+        } else if (obj == 'ESS') {
+            window.open('@Url.Action("E00024SubViewREC", "EntityE00024", new { area = "Mobile" })', '_blank');
+        } else {
+            window.open('@Url.Action("E00024SubViewWT", "EntityE00024", new { area = "Mobile" })', '_blank');
+        }
+    }
+
+    function FormE00024Save(){
+        if (($('#PvValue').val() == "" && PvStatus == 1) || ($('#EssValue').val() == "" && EssStatus == 1) || ($('#WtValue').val() == "" && WtStatus == 1) || (EssRec == "" && PvRec == "" && WtRec == "")) {
+            bootbox.alert('@Resources.Langues.FailedToSave');
+            return false;
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: '@Url.Action("SaveEntityE00024PopupData", "EntityE00024Popup",new { area="Case"})',
+            cache: false,
+            type: 'POST',
+            data: {
+                PvValue: $('#PvValue').val(),
+                EssValue: $('#EssValue').val(),
+                WTValue: $('#WTValue').val(),
+                WtRec: WtRec,
+                caseId: getUrlParameter('caseId'),
+                PvRec: PvRec,
+                EssRec: EssRec,
+                modelCode: modelCode
+            },
+            success: function (result) {
+                if (result.success) {
+                    $.unblockUI();
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                            if (lstEntityNextStep.length != 0) {
+                                nextStepEntity(lstEntityNextStep[0]);
+                                lstEntityNextStep.shift();
+                                console.log(lstEntityNextStep)
+                            } else {
+                                nextEntity()
+                            }
+                } else {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.Error');
+                }
+            },
+            error: function (response) {
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        return { comCode: comCode }
+    };
+</script>
+
+

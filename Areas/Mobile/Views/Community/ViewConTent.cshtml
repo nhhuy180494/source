@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewBag.Title = "ViewConTent";
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+
+<div align="center">
+
+    <table class="table" style="border-top:solid 2px #eee;border-bottom:solid 1px #eee;margin-top:10px;">
+        <tbody>
+            <tr>
+                <td class="active text-center text-muted " style="width:30%">@Resources.Langues.Title </td>
+                <td id="Title">@Resources.Langues.Title</td>
+            </tr>
+            <tr>
+                <td class="active text-center text-muted " style="width:30%">@Resources.Langues.Writer </td>
+                <td id="UserName">@Resources.Langues.Writer</td>
+            </tr>
+            <tr>
+                <td class="active text-center text-muted" style="width:30%">@Resources.Langues.DateCreated </td>
+                <td id="RegDate">@Resources.Langues.DateCreated</td>
+            </tr>
+            <tr>
+                <td class="active text-center text-muted" style="width:30%">@Resources.Langues.Views </td>
+                <td id="View"></td>
+            </tr>
+            <tr>
+                <td class="active text-center text-muted" style="width:30%">@Resources.Langues.Attachments </td>
+                <td id="file-content" class="scroll-style-7" style="overflow-y:scroll;max-height:100px;margin-top: 10px;"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="active">
+                    @(Html.Kendo().Editor()
+                        .Name("Content")
+                        .Tools(tools => tools.Clear())
+                        .HtmlAttributes(new { style = "height:auto", aria_label = "Content" })
+                        .Resizable(rz => rz.Content(false))
+                        .Encode(false)
+                    )
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    @using (Html.BeginForm("CreateComment", "CommunityManagement", new { area = "Admin" }, FormMethod.Post, new { role = "form", id = "comment_form" }))
+    {
+        @Html.Hidden("NoticeId", Request.Params["noticeId"])
+        <div class="post-footer" style="padding:5px">
+            @if (Request.IsAuthenticated)
+            {
+                <div class="input-group">
+                    @Html.TextBox("Comment", "", new { @class = "form-control input-md comment", placeholder = Resources.Langues.AddAComment })
+                    <span class="input-group-addon" id="send_comment"> <a><i class="fa fa-edit"></i></a></span>
+                </div>
+            }
+            <!--Comment-->
+            <div class="form-group scroll-style-7" style="margin-top:10px;padding-left:10px;max-height:300px;overflow:hidden;overflow-y:scroll; padding-right:10px;" id="comment_content">
+            </div>
+        </div>
+    }
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var noticeId = @Request.Params["noticeId"];
+    var $formComment = $('#comment_form')
+    var $comment = $('#Comment');
+    var $commentContent = $('#comment_content');
+
+    $(document).ready(function () {
+        var title = '#Title', date = '#RegDate', $view = $('#View'), $content = $('#Content').data('kendoEditor'), writer = $("#UserName");
+        $.blockUI();
+        $.post('@Url.Action("GetFileAndCommentListByNoticeId", "CommunityManagement", new { area="Admin" })', { noticeId: noticeId }, function (result) {
+            if (result.success) {
+                var listFile = result.listFile;
+                listFile.forEach(function (item) {
+                    var linkFile = createLinkHtml(item.NoticeFileId, item.FilePath, item.FileName, item.FieSize);
+                    $('#file-content').append(linkFile);
+                });
+                var listComment = result.listComment;
+                listComment.forEach(function (item) {
+                    var date = item.CommentDateString;
+                    var comment = createCommentHmtl(item.CommentId, item.CommentUserName, item.Comment, date);
+                    $('#comment_content').append(comment);
+                });
+
+                $view.text(result.view);
+                $(title).text(result.title);
+                $(date).text(result.date);
+                $(writer).text(result.writer);
+
+                //console.log(result.content)
+                //var decoded = $('<textarea/>').html(result.content).text();
+                //console.log(decoded)
+                //str = $(decoded).prop('outerHTML')
+                //console.log(str)
+
+                var parser = new DOMParser;
+                var dom = parser.parseFromString(
+                    '<!doctype html><body>' + result.content,
+                    'text/html');
+                var decodedString = dom.body.textContent;
+                console.log(decodedString)
+
+                $('#Content').data('kendoEditor').value('');
+                $('#Content').data('kendoEditor').value(result.content);
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    })
+
+    $(function () {
+        $($('#Content').data().kendoEditor.body).attr('contenteditable', false)
+    })
+
+    function createCommentHmtl(commentId, commentUserName, comment, date) {
+        var style = "style='justify-content:center;align-items: center;padding: 3px 5px;margin-bottom:0px;'";
+        return "<p style='justify-content: space-between;display:flex;' id='"
+            + commentId + "'><label><i class='fa fa-user'></i> "
+            + commentUserName + ": ("
+            + date + ")   </label> </p><textarea  style='margin: -15px auto 10px auto;width: 100%;box-sizing:border-box;display:block;max-width:100%;padding: 15px 15px 30px;border-radius:3px;transition:box-shadow 0.5s ease;box-shadow:0 4px 6px rgba(0,0,0,0.1);font-smoothing:subpixel-antialiased;background:-o-linear-gradient(#F9EFAF, #F7E98D);background:-ms-linear-gradient(#F9EFAF, #F7E98D);background:-moz-linear-gradient(#F9EFAF, #F7E98D);background:-webkit-linear-gradient(#F9EFAF, #F7E98D);'>"
+            + comment + "</textarea>";
+    }
+
+    function createLinkHtml(noticeFileId, filePath, fileName, fileSize) {
+        var style = style = "style='display:initial; padding: 0px 4px;'";
+        return "<span><a id=" + noticeFileId + " href="
+        + getFilePath(filePath)
+        + "><i class='fa fa-save'></i> "
+        + fileName + " ("
+        + convertMBFileSize(fileSize) + "MB) </a> / </span> ";
+    };
+
+    function convertMBFileSize(size) {
+        return ((size / 1024) / 1024).toFixed(2);
+    }
+
+    function getFilePath(path) {
+        return path.substr(1);
+    }
+
+    $('#send_comment').click(function () {
+        var isValid = $formComment.valid();
+        if (isValid) {
+            $formComment.submit();
+        } else {
+            $comment.focus();
+        }
+    });
+
+    $formComment.submit(function (e) {
+        $.blockUI();
+        var formObj = $(this);
+        var data = new FormData(this);
+        var urlAction = formObj.attr('action');
+        $.ajax({
+            url: urlAction,
+            type: 'POST',
+            dataType: "Json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: data,
+            fail: function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }
+        }).always(function () {
+            $.unblockUI();
+        }).success(function (result) {
+            if (result.success) {
+                var date = formatDate(parseInt(result.newComment.CommentDate.substr(6)));
+                var comment = createCommentHmtl(result.newComment.CommentId, result.newComment.CommentUserName, result.newComment.Comment, date, result.newComment.isDeleted);
+                $commentContent.prepend(comment);
+                $comment.val('');
+                $comment.removeClass('input-validation-error');
+                $comment.blur();
+            }
+        });
+        e.preventDefault();
+    });
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
+    function createCommentHmtl(commentId, commentUserName, comment, date) {
+        return '<p style="justify-content: space-between;display:flex;" id="'+ commentId +'"><label><i class="fa fa-user"></i>'+ commentUserName +' '+ date +
+            ' </label> </p><textarea readonly style="margin: -15px auto 10px auto;width: 100%;box-sizing:border-box;display:block;max-width:100%;padding: 15px'+
+            ' 15px 30px;border-radius:3px;transition:box-shadow 0.5s ease;box-shadow:0 4px 6px rgba(0,0,0,0.1);font-smoothing:subpixel-antialiased;background:-o-linear-gradient'+
+            '(#F9EFAF, #F7E98D);background:-ms-linear-gradient(#F9EFAF, #F7E98D);background:-moz-linear-gradient(#F9EFAF, #F7E98D);background:-webkit-linear-gradient(#F9EFAF, #F7E98D);">'+ comment +'</textarea>';
+    }
+</script>

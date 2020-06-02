@@ -1,0 +1,488 @@
+﻿@using System.Configuration;
+@model DPDSP.Models.ISmartExcelViewModel
+<style>
+    .form-horizontal .form-group {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+
+    .bootbox.modal {
+        z-index: 999999999999999999 !important;
+    }
+
+    .radio {
+        margin-left: 50px;
+    }
+</style>
+
+
+@if (Request.Params["modelCode"] != "M00002")
+{
+<h4 style="text-align:center">
+    @if (Request.Params["modelCode"] == "M00001")
+    {
+        @Resources.Langues.SelectApplicablePlan
+    }
+    else
+    {
+        @Resources.Langues.ISMARTInformation
+    }
+</h4>
+    <div class="row">
+        <div class="form-group hidden">
+            <div class="radio">
+                @*<input type="radio" name="optradio" value="option1" checked="checked"> <h4>@Resources.Langues.E00003Tiltle1</h4>*@
+                <h4><input type="checkbox" id="option1" name="optcheckbox" checked> @Resources.Langues.E00003Tiltle1</h4>
+            </div>
+        </div>
+    </div>
+    <div id="form-option-1">
+        <div class="form-horizontal">
+            <div class="form-group hidden-cp2">
+                <label class="control-label col-xs-5 lbWT">iSmart ID:</label>
+                <div class="col-xs-5">
+                    @Html.TextBox("SMARTID", "", new { @class = "form-control input-md" })
+                </div>
+            </div>
+            <div class="form-group hidden-cp2">
+                <label class="control-label col-xs-5 lbWT">iSmart Password:</label>
+                <div class="col-xs-5">
+                    @Html.Password("SMARTPW", "", new { @class = "form-control input-md" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5 lbWT">iSmart 계정 없음</label>
+                <div class="col-xs-5">
+                    @Html.CheckBox("UseSampleData")
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal hidden" id="load-type">
+            <div class="form-group">
+                <label class="control-label col-xs-5 lbWT">부하종류:</label>
+                <div class="col-xs-5">
+                    @(Html.Kendo().DropDownList()
+                                                                                                                                                                                                         .Name("LoadType")
+                                                                                                                                                                                                         .DataTextField("Text")
+                                                                                                                                                                                                         .DataValueField("Value")
+                                                                                                                                                                                                         .DataSource(source =>
+                                                                                                                                                                                                         {
+                                                                                                                                                                                                             source.Read(read =>
+                                                                                                                                                                                                             {
+                                                                                                                                                                                                                 read.Action("GetCommonSubByComCode", "EntityE00003Popup", new { area = "Case" });
+                                                                                                                                                                                                             });
+                                                                                                                                                                                                         })
+                                                                                                                                                                                                         .HtmlAttributes(new { @class = "form-control input-md" })
+                    )
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5 lbWT">근무일 평균부하:</label>
+                <div class="col-xs-5">
+                    @Html.TextBox("WorkLoad", "", new { @class = "form-control input-md", @onkeypress = "return isNumberKey(this,event)", @style = "text-align: right;", @type = "tel" })
+                </div>
+                <div class="col-xs-1" style="padding-top: 5px;padding-left: 0px;">
+                    [kWh]
+                </div>
+            </div>
+            <div class="form-group hidden-cp2">
+                <label class="control-label col-xs-5 lbWT">연간 최대 피크부하:</label>
+                <div class="col-xs-5">
+                    @Html.TextBox("AnnualPeakLoad", "", new { @class = "form-control input-md", @onkeypress = "return isNumberKey(this,event)", @style = "text-align: right;", @type = "tel" })
+                </div>
+                <div class="col-xs-1" style="padding-top: 5px;padding-left: 0px;">
+                    [kW]
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal hidden">
+            <div class="form-group">
+                <label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>
+                <div class="control-label  col-xs-10" style="text-align:left;padding:5px">@Html.Raw(@Resources.Langues.IsmartMess1)</div>
+            </div>
+            <div class="form-group">
+                <label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>
+                <div class="control-label  col-xs-10 " style="text-align:left;padding:5px">
+                    <a href="https://pccs.kepco.co.kr/iSmart/" target="_blank">@Resources.Langues.IsmartMess2</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>
+                <div class="control-label  col-xs-10" style="text-align:left;padding:5px">@Resources.Langues.IsmartMess3 </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>
+                <div class="control-label  col-xs-10" style="text-align:left;padding:5px">@Resources.Langues.IsmartMess4</div>
+            </div>
+        </div>
+        <div style="text-align:center">
+            <label style="color:red;text-align:center">*저장을 하셔야 다음단계로 넘어 갑니다.</label>
+        </div>
+        <div class="form-group" style="text-align:center">
+            <button type="button" onclick="E00003onSave()" class="button button-gray">@Resources.Langues.Save</button>
+        </div>
+    </div>
+}
+else
+{
+    <h4 style="text-align:center">@Resources.Langues.Loaddatainput</h4>
+    <div class="row">
+        <div class="form-group">
+            <div class="radio">
+                @*<input type="radio" name="optradio" value="option1" checked="checked">  <h4>@Resources.Langues.E00003Tiltle11</h4>*@
+                <h4><input type="checkbox" id="option1" name="optcheckbox" checked> @Resources.Langues.E00003Tiltle11</h4>
+            </div>
+        </div>
+    </div>
+    <div id="form-option-1">
+        <div class="form-horizontal" id="load-type">
+            <div class="form-group">
+                <label class="control-label col-xs-5 lbWT">부하종류:</label>
+                <div class="col-xs-5">
+                    @(Html.Kendo().DropDownList()
+                                                                                                                                                                                                 .Name("LoadType")
+                                                                                                                                                                                                 .DataTextField("Text")
+                                                                                                                                                                                                 .DataValueField("Value")
+                                                                                                                                                                                                 .DataSource(source =>
+                                                                                                                                                                                                 {
+                                                                                                                                                                                                     source.Read(read =>
+                                                                                                                                                                                                     {
+                                                                                                                                                                                                         read.Action("GetCommonSubByComCode", "EntityE00003Popup", new { area = "Case", modelCode = Request.Params["modelCode"] });
+                                                                                                                                                                                                     });
+                                                                                                                                                                                                 })
+                                                                                                                                                                                                 .HtmlAttributes(new { @class = "form-control input-md" })
+                    )
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5 lbWT">근무일 평균부하:</label>
+                <div class="col-xs-5">
+                    @Html.Hidden("AnnualPeakLoad", "0")
+                    @Html.TextBox("WorkLoad", "", new { @class = "form-control input-md", @onkeypress = "return isNumberKey(this,event)", @style = "text-align: right;", @type = "tel" })
+                </div>
+                <div class="col-xs-1" style="padding-top: 5px;padding-left: 0px;">
+                    [kW]
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center">
+            <label style="color:red;text-align:center">*저장을 하셔야 다음단계로 넘어 갑니다.</label>
+        </div>
+        <div class="form-group" style="text-align:center">
+            <button type="button" onclick="E00003onSave()" class="button button-gray">@Resources.Langues.Save</button>
+        </div>
+    </div>
+}
+
+<div class="row hidden">
+    <div class="form-group">
+        <div class="radio">
+            @*<input type="radio" name="optradio" value="option2">  <h4>@Resources.Langues.E00003Tiltle2</h4>*@
+            <h4><input type="checkbox" id="option2" name="optcheckbox"> @Resources.Langues.E00003Tiltle2</h4>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm("UploadFile", "EntityE00003Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", area = "Case", @id = "upload", @enctype = "multipart/form-data" }))
+{
+    <div id="form-option-2" class="hidden">
+        <div class="form-horizontal ">
+            <div class="form-group">
+                @Html.HiddenFor(m => m.CaseUploadId)
+                @Html.HiddenFor(m => m.ModelCode)
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(m => m.File, "", new
+                       {
+                           @data_val = "true",
+                           @data_val_required = "The Excel File field is required.",
+                           @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                           @class = "form-control",
+                           @placeholder = "Excel File...",
+                           @type = "file"
+                       })
+                        </div>
+
+                        <div class="col-xs-4">
+                            <a type="button" class="btn btn-primary" href="@Url.Content("~/Content/TemplateForm/iSmart_form_M00005.xlsx")">@Resources.Langues.Format</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-horizontal" style="width: 100vw;text-align:center">
+                <div class="form-group">
+                    <div class="form-group">
+                        <button type="button" onclick="E00003AUtoSave()" class="button button-gray">@Resources.Langues.Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var caseId = @Request.Params["caseId"];
+var status = 1;
+var useDataSam = false
+    var modelCode = '@Request.Params["modelCode"]';
+
+    $('#CaseUploadId').val(caseId)
+    $('#ModelCode').val(modelCode)
+
+    $('#btn_E00003').removeClass('progress-bar-warning');
+
+    $('#UseSampleData').change(function () {
+    if ($('#UseSampleData').is(":checked")) {
+            $('#SMARTID').val('');
+            $('#SMARTPW').val('');
+            $('#SMARTID').prop("readonly","readonly")
+            $('#SMARTPW').prop("readonly","readonly")
+            $('#load-type').removeClass('hidden')
+            useDataSam = true;
+    } else {
+            $('#SMARTID').removeAttr("readonly")
+            $('#SMARTPW').removeAttr("readonly")
+            $('#load-type').addClass('hidden')
+            useDataSam = false;
+    }
+});
+
+    function E00003onSave() {
+    if (($('#SMARTID').val() == "" || $('#SMARTPW').val() == "") && useDataSam == false) {
+        bootbox.alert('저장하지 못하였습니다. 입력 값들을 확인하십시오.​');
+        return false;
+    }
+
+    if (useDataSam == true && ($('#LoadType').val() == "" || $('#AnnualPeakLoad').val() == "")) {
+        bootbox.alert('저장하지 못하였습니다. 입력 값들을 확인하십시오.​');
+        return false;
+    }
+
+    var modelCode= '@Request.Params["modelCode"]';
+    var caseId= @Request.Params["caseId"];
+    var iSmartId = $('#SMARTID').val();
+    var iSmartPass = $('#SMARTPW').val();
+    var comSubCode = $('#LoadType').val();
+    var workLoad = $('#WorkLoad').val() == "" ? 0 : $('#WorkLoad').val();
+    var annualPeakLoad = $('#AnnualPeakLoad').val() == "" ? 0 : $('#AnnualPeakLoad').val();
+
+        $.blockUI();
+        $.post("@Url.Action("UpdateISmartIdAndISmartPass", "EntityE00003Popup", new { area="Case" })", { modelCode: modelCode,
+            caseId: caseId,
+            iSmartId: iSmartId,
+            iSmartPass: iSmartPass,
+            UseSampleData: useDataSam,
+            comSubCode: comSubCode,
+            workLoad: workLoad,
+            annualPeakLoad: annualPeakLoad}, function (result) {
+        if (result.success) {
+                    $.unblockUI();
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    if (lstEntityNextStep.length != 0) {
+                        nextStepEntity(lstEntityNextStep[0]);
+                        lstEntityNextStep.shift();
+                        console.log(lstEntityNextStep)
+                    } else {
+                        nextEntity()
+                    }
+        } else {
+                    bootbox.alert({message: result.alert,
+                     title: " ",buttons: {
+                        ok: {
+                            label: '@Resources.Langues.OK', className: 'btn-gray',
+                            className: 'btn-gray'
+                        }
+                    }
+                });
+                        $.unblockUI();
+        }
+    }).fail(function(){
+                $.unblockUI();
+        bootbox.alert('@Resources.Langues.ContactAdmin');
+        //
+                @*while (status > 0) {
+                    $.post("@Url.Action("ExportCSV", "Case", new { area="Case" })", { modelCode: '@Request.Params["modelCode"]',
+                        caseId: @Request.Params["caseId"],
+                        iSmartId: $('#SMARTID').val(),
+                        iSmartPass: $('#SMARTPW').val()}, function (result) {
+                            if (result.success) {
+                                status = 0
+                                $('.E00003').modal('hide');
+                                $("#btn_E00003").addClass("democlass");
+                                bootbox.alert('@Resources.Langues.Successful');
+                                $.unblockUI();
+                                result.list.forEach(function(item) {
+                                    $("#btn_" + item).removeClass("democlass");
+                                });
+                            }else{
+                                console.log('Zô ' + status + " lần")
+                                status= status + 1;
+                            }
+                    }).fail(function () {
+                        status= status + 1;
+                    }).always(function () {
+                    });
+
+                    if (status == 5) {
+                        break;
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }
+                $.unblockUI();*@
+            }).always(function(){
+                //$.unblockUI();
+            });
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        return { comCode: comCode }
+    };
+
+    function isNumberKey(el, evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        var number = el.value.split('.');
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        //just one dot
+        if(number.length>1 && charCode == 46){
+            return false;
+        }
+        //get the carat position
+        var caratPos = getSelectionStart(el);
+        var dotPos = el.value.indexOf(".");
+        if( caratPos > dotPos && dotPos>-1 && (number[1].length > 1)){
+            return false;
+        }
+        return true;
+    }
+
+    function getSelectionStart(o) {
+        if (o.createTextRange) {
+            var r = document.selection.createRange().duplicate()
+            r.moveEnd('character', o.value.length)
+            if (r.text == '') return o.value.length
+            return o.value.lastIndexOf(r.text)
+        } else return o.selectionStart
+    }
+
+    $('input[type=radio][name=optradio]').change(function () {
+        if (this.value == 'option1') {
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+        }
+        else if (this.value == 'option2') {
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+        }
+    });
+
+    $('#option1').change(function () {
+        if ($('#option1').is(":checked")) {
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+            $('#option2').prop("checked", false);
+        }
+        else {
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+            $('#option2').prop("checked", true);
+        }
+    });
+
+    $('#option2').change(function () {
+        if ($('#option2').is(":checked")) {
+            $('#form-option-2').removeClass('hidden', 'hidden');
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#option1').prop("checked", false);
+        }
+        else {
+            $('#form-option-2').addClass('hidden', 'hidden');
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#option1').prop("checked", true);
+        }
+    });
+
+    function E00003AUtoSave() {
+        $('#upload').submit();
+    }
+
+    $('#upload').submit(function (e) {
+        $.blockUI();
+        var data = new FormData(this);
+        var $fromObj = $(this);
+        var urlAction = $fromObj.attr('action');
+        $.ajax({
+            url: urlAction,
+            type: 'POST',
+            dataType: "Json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: data,
+            fail: function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }
+        }).always(function () {
+        }).success(function (result) {
+            if (result.success) {
+                $.unblockUI();
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    if (lstEntityNextStep.length != 0) {
+                        nextStepEntity(lstEntityNextStep[0]);
+                        lstEntityNextStep.shift();
+                        console.log(lstEntityNextStep)
+                    } else {
+                        nextEntity()
+                    }
+            } else {
+                bootbox.alert('@Resources.Langues.FormatFileWrong');
+                $.unblockUI();
+            }
+        });
+        e.preventDefault();
+    });
+
+    $("#WorkLoad").on('keyup', function (evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8) {
+            var a = $("#valueFilter").val()
+            if (a == 'NaN' || a == '') {
+                $("#WorkLoad").val('')
+            } else {
+                var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                if (isNaN(n)) {
+                    $("#WorkLoad").val('')
+                } else {
+                    $(this).val(n.toLocaleString());
+                }
+            }
+        } else {
+            $("#WorkLoad").val($("#WorkLoad").val().slice(0, -1))
+        }
+    });
+
+    $("#AnnualPeakLoad").on('keyup', function (evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8) {
+            var a = $("#valueFilter").val()
+            if (a == 'NaN' || a == '') {
+                $("#AnnualPeakLoad").val('')
+            } else {
+                var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                if (isNaN(n)) {
+                    $("#AnnualPeakLoad").val('')
+                } else {
+                    $(this).val(n.toLocaleString());
+                }
+            }
+        } else {
+            $("#AnnualPeakLoad").val($("#AnnualPeakLoad").val().slice(0, -1))
+        }
+    });
+</script>

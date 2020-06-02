@@ -1,0 +1,362 @@
+﻿<style>
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .modal-dialog1 {
+        width: 98%;
+    }
+
+    /*@@font-face {
+        font-family: 'Korean Font';
+        src: url('../../../../fonts/h2mjre.ttf') format('truetype');
+    }*/
+
+    .k-grid-header th.k-header {
+        vertical-align: middle;
+    }
+
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    th.k-header {
+        white-space: normal !important;
+        vertical-align: middle !important;
+    }
+
+    /*.k-widget {
+        font-family: "Korean Font";
+    }*/
+
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    .modal-content1 {
+        height: auto;
+        min-height: 100%;
+        border-radius: 0;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    @@media print {
+        body.modal-open {
+            visibility: hidden;
+        }
+
+            body.modal-open .modal .modal-body {
+                visibility: visible; /* make visible modal body and header */
+            }
+    }
+
+    .page-template {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+
+        .page-template .header {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            right: 30px;
+            border-bottom: 1px solid #888;
+            color: #888;
+        }
+
+        .page-template .footer {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            border-top: 1px solid #888;
+            text-align: center;
+            color: #888;
+        }
+
+        .page-template .watermark {
+            font-weight: bold;
+            font-size: 400%;
+            text-align: center;
+            margin-top: 30%;
+            color: #aaaaaa;
+            opacity: 0.1;
+            transform: rotate(-35deg) scale(1.7, 1.5);
+        }
+
+    .classButton {
+        background-color: white;
+        border-color: #ea6b48;
+        color: #ea6b48;
+    }
+    #PopupGrid{
+        width:200%
+    }
+
+    table > th {
+        white-space: nowrap !important
+    } 
+</style>
+
+<script>
+    var caseId =  @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]';
+    var grid = $("#PopupGrid").data("kendoGrid");
+    var $modal = $('.E00037');
+    
+    function onExportDetail() {
+        window.location = '@Url.Action("CaseDetail", "CaseManagement", new { area = "Admin" })?caseId=' + caseId + "&modelCode=" + modelCode;
+    };
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            bootbox.alert(message);
+        }
+    };
+
+    function sync_handler(e) {
+        this.read();
+    };
+</script>
+
+<div class="outer" style="font-size: 10px;">
+    <h4 style="text-align:center"><strong>@Resources.Langues.Vieweconomicanalysisresult</strong></h4>
+    <div class="outer">
+        @Html.Hidden("sts", "ess")
+        @(Html.Kendo().Grid<DPDSP.Models.I00012DetailViewModel>()
+                                                                                    .Name("PopupGrid")
+                                                                                    .Pdf(pdf => pdf
+                                                                                        .AllPages()
+                                                                                        .AvoidLinks()
+                                                                                        .PaperSize("A3")
+                                                                                        .Scale(0.7)
+                                                                                        .Landscape()
+                                                                                        .RepeatHeaders()
+                                                                                        .TemplateId("page-template")
+                                                                                        .FileName("CaseResult.pdf")
+                                                                                        .ProxyURL(Url.Action("Pdf_Export_Save", "MyCase"))
+                                                                                    )
+                                                                                    .Columns(columns =>
+                                                                                    {
+                                                                                        columns.Bound(cas => cas.Order).Title(Resources.Langues.Order).HtmlAttributes(new { @style = "text-align:center;background-color:white" }).Format("{0:#,##}");
+                                                                                        columns.Group(group => group
+                                                                                           .Title(Resources.Langues.Capacity)
+                                                                                           .Columns(info =>
+                                                                                           {
+                                                                                               info.Bound(cas => cas.PvValue).Title("PV[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                               info.Bound(cas => cas.WtValue).Title("WT[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                               info.Bound(cas => cas.FCValue).Title("FC[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                               info.Bound(cas => cas.CHPValue).Title("CHP[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                               info.Bound(cas => cas.PcsValue).Title("PCS[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                               info.Bound(cas => cas.EssValue).Title("Battery[kWh]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                               info.Bound(cas => cas.DieselValue).Title("Diesel[kWh]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                           })
+                                                                                       );
+
+                                                                                        columns.Bound(cas => cas.MaintananceInitialCost).Title(Resources.Langues.Investment + " [" + Resources.Langues.won + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                        columns.Bound(cas => cas.TotalBenefit).Title(Resources.Langues.TotalBenefit).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+
+                                                                                        columns.Group(group => group
+                                                                                           .Title(Resources.Langues.Economics)
+                                                                                           .Columns(info =>
+                                                                                           {
+                                                                                               info.Bound(cas => cas.PaybackPeriod).Title(Resources.Langues.PaybackPeriod).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                               info.Bound(cas => cas.IRR).Title(Resources.Langues.IRR).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                                           })
+                                                                                       );
+                                                                                        //columns.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"#=I00010Id#\" onclick='loadData(#=I00010Id#)'>" + Resources.Langues.Proceeding + "</button> ").Title(Resources.Langues.ESSCharge).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                                        //columns.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"ess#=I00010Id#\" onclick='loadDataBM3(#=I00010Id#, \"ess\")'>조회</button> ").Title(Resources.Langues.ChargePattern).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                                        //.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"sale#=I00010Id#\" onclick='loadDataBM3(#=I00010Id#,\"sale\")'>조회</button> ").Title(Resources.Langues.SalePattern).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                                        //columns.Bound(m => m.I00012DetailId).ClientTemplate("<button class=\"btn-info\" onclick='viewCashFlow(#=I00012DetailId#)'>실행</ button> ").Title("Cash Flow").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                                    })
+                                                                                    .Pageable(p => p.Enabled(false))
+                                                                                    .Sortable()
+                                                                                    .Scrollable(rz => rz.Enabled(false))
+                                                                                    .DataSource(dataSource => dataSource
+                                                                                        .Ajax()
+                                                                                        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                                                                        .Model(cas => { cas.Id(p => p.CaseId); })
+                                                                                        .Read(read => read.Action("GetI00012DetailByCaseId", "MyCase", new { caseId = @Request.Params["caseId"], area= "Case" }))
+                                                                                    )
+                                                                                    .HtmlAttributes(new { style = "height: auto" })
+        )
+    </div>
+    <br />
+    <div style="text-align:center">
+        <button type="button" onclick="onExportReport()" class="btn btn-sm btn-primary classButton">@Resources.Langues.ViewReport</button>
+        <button type="button" onclick="onExportDetail()" class="btn btn-sm btn-primary classButton">@Resources.Langues.SaveReport</button>
+    </div>
+</div>
+
+
+<script>
+    var $modal = $('.E00037');
+    var modelCode = '@Request.Params["modelCode"]';
+    var grid = $("#PopupGrid").data("kendoGrid");
+    $(document).ready(function () {
+        $("#btn_E00037").removeClass('progress-bar-warning');
+        Load(caseId);
+        $('.k-link').attr('style', 'border-top-width: 1px;padding:0 0 0 0')
+        if (modelCode != "M00003" && modelCode != "M00002") {
+            $.post("@Url.Action("GetListFile", "MyCase", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    var array = result.list;
+                    console.log(array)
+                    array.forEach(function (item) {
+                        console.log(item)
+                        var name = item.FileName,
+                            id = item.I00010Id;
+                        $.post("@Url.Action("ReadFolder", "MyCase", new { area = "Case" })", { caseId: caseId, name: name, id: id, modelCode: modelCode, }, function (result1) {
+                            $('#' + item.I00010Id).text('조회')
+                            $('#' + item.I00010Id).attr('onclick', 'viewData(' + item.I00010Id + ')')
+                        }).fail(function () {
+                        }).always(function () {
+                            $.unblockUI();
+                        });
+                    });
+                }
+                else {
+
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+            });
+        }
+        
+    });
+
+    function Load(caseId) {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        if (modelCode == "M00003" || modelCode == "M00002") {
+            grid.hideColumn(grid.columns[5])
+        } else {
+            grid.hideColumn(grid.columns[6])
+            grid.hideColumn(grid.columns[7])
+        }
+        $.blockUI();
+        $.post("@Url.Action("LoadDataByCaseId", "EntityE00002Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                if (result.CP0001) {
+                    grid.showColumn(grid.columns[1].columns[0])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[0])
+                }
+                if (result.CP0002) {
+                    grid.showColumn(grid.columns[1].columns[1])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[1])
+                }
+
+                if (result.CP0003) {
+                    grid.showColumn(grid.columns[1].columns[4])
+                    grid.showColumn(grid.columns[1].columns[5])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[4])
+                    grid.hideColumn(grid.columns[1].columns[5])
+                }
+
+                if (result.CP0004) {
+                    grid.showColumn(grid.columns[1].columns[2])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[2])
+                }
+
+                if (result.CP0005) {
+                    grid.showColumn(grid.columns[1].columns[3])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[3])
+                }
+
+                if (result.CP0006) {
+                    grid.showColumn(grid.columns[1].columns[6])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[6])
+                }
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+    function OkClick(){
+        bootbox.alert('@Html.Raw(Resources.Langues.E37Mess)');
+    }
+
+    function loadData(e) {
+        $.blockUI();
+        $.post("@Url.Action("GetDataSelect", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode, id: e }, function (result) {
+            if (result.success) {
+                $('#' + e).text('조회')
+                $('#' + e).removeAttr('onclick')
+                $('#' + e).attr('onclick', 'viewData(' + e + ')')
+                $('input:radio[name=optradio][value=w]').click();
+                $('#' + e).click()
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+    function loadDataBM3(id, sts) {
+        $('#sts').val(sts);
+        $.blockUI();
+        $.post("@Url.Action("ReadDebugBM3", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode, id: id, sts:sts }, function (result) {
+            if (result.success) {
+                $('#' + sts + id).removeAttr('onclick')
+                $('#' + sts + id).attr('onclick', 'viewDataBM3(' + id + ',\"' + sts + '\")')
+                $('input:radio[name=optradio2][value=w]').click();
+                $('#' + sts + id).click()
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+    function onExportReport() {
+        $.blockUI();
+        $.post("@Url.Action("ExportReport", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+            if (result.success) {
+                location.href = result.path;
+            } else {
+                bootbox.alert('@Resources.Langues.ReportFaild');
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+    function viewData(id) {
+        window.open('@Url.Action("EntityE00037Result", "EntityE000037", new { area = "Mobile" })' + "?id=" + id, '_blank');
+    }
+
+    function viewDataBM3(id, sts) {
+        window.open('@Url.Action("EntityE00037BM3Result", "EntityE000037", new { area = "Mobile" })' + "?id=" + id + "&sts=" + sts, '_blank');
+    }
+
+    function viewCashFlow(id) {
+        window.open('@Url.Action("CashFlow", "MyCase", new { area = "Mobile" })' + "?i00012Id=" + id + "&modelCode=" + '@Request.Params["modelCode"]' + "&caseId=" + @Request.Params["caseId"], '_blank');
+    }
+</script>

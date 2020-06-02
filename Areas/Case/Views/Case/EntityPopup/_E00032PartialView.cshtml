@@ -1,0 +1,313 @@
+﻿<style>
+    .E00001 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+</style>
+
+<script>
+    function onDataGAL() {
+        var year = $('#YearSelect').val();
+        return { year: year };
+    }
+
+    function onDataGAC() {
+        var year = $('#YearSelect').val();
+        var GAL = $('#GALSelect').val();
+        return { year: year, GAL: GAL };
+    }
+
+    function Changedrdyear() {
+        $("#GALSelect").data("kendoDropDownList").dataSource.read();
+    }
+
+    function ChangedrdGAL() {
+        $("#GACSelect").data("kendoDropDownList").dataSource.read();
+    }
+
+    function ChangedrdGAC() {
+        //$("#GACSelect").data("kendoDropDownList").dataSource.read();
+    }
+</script>
+
+<div class="modal fade E00032" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.Fuelcostinput</h4>
+            </div>
+            <div class="modal-body" style="padding: 0 40px 0 40px">
+                <br />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="radio">
+                            <input type="radio" name="optradio" value="option1" checked="checked">  <h4 id="title-32">@Resources.Langues.E32T1</h4>
+                        </div>
+                    </div>
+                </div>
+                <div id="form-option-1">
+                    <div class="form-horizontal col-md-offset-1">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 lbWT">@Resources.Langues.SelectYear</label>
+                            <div class="col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                                                                                                                                    .Name("YearSelect")
+                                                                                                                                                    .DataTextField("Text")
+                                                                                                                                                    .DataValueField("Value")
+                                                                                                                                                    .DataSource(source =>
+                                                                                                                                                    {
+                                                                                                                                                        source.Read(read =>
+                                                                                                                                                        {
+                                                                                                                                                            read.Action("GetListYear", "EntityE00032Popup", new { area = "Case" });
+                                                                                                                                                        });
+                                                                                                                                                    })
+                                                                                                                                                    .Events(e => e.Change("Changedrdyear"))
+                                                                                                                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 lbWT">@Resources.Langues.SelectLoc</label>
+                            <div class="col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                                                                                                                                    .Name("GALSelect")
+                                                                                                                                                    .DataTextField("Text")
+                                                                                                                                                    .DataValueField("Value")
+                                                                                                                                                    //.Filter(FilterType.Contains)
+                                                                                                                                                    .DataSource(source =>
+                                                                                                                                                    {
+                                                                                                                                                        source.Read(read =>
+                                                                                                                                                        {
+                                                                                                                                                            read.Action("GetListGAL", "EntityE00032Popup", new { area = "Case" }).Data("onDataGAL");
+                                                                                                                                                        });
+                                                                                                                                                    })
+                                                                                                                                                    .Events(e => e.Change("ChangedrdGAL"))
+                                                                                                                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 lbWT">@Resources.Langues.SelectCityGasCompany</label>
+                            <div class="col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                                                                                                                                    .Name("GACSelect")
+                                                                                                                                                    .DataTextField("Text")
+                                                                                                                                                    .DataValueField("Value")
+                                                                                                                                                    //.Filter(FilterType.Contains)
+                                                                                                                                                    .DataSource(source =>
+                                                                                                                                                    {
+                                                                                                                                                        source.Read(read =>
+                                                                                                                                                        {
+                                                                                                                                                            read.Action("GetListGAC", "EntityE00032Popup", new { area = "Case" }).Data("onDataGAC");
+                                                                                                                                                        });
+                                                                                                                                                    })
+                                                                                                                                                    .Events(e => e.Change("ChangedrdGAC"))
+                                                                                                                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="radio">
+                            <input type="radio" name="optradio" value="option2">  <h4>@Resources.Langues.E32T2</h4>
+                        </div>
+                    </div>
+                </div>
+                @using (Html.BeginForm("UploadFile", "EntityE00032Popup", FormMethod.Post, new { @role = "form", area = "Case", @id = "upload", @enctype = "multipart/form-data" }))
+                {
+                    <div id="form-option-2" class="hidden">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            @Html.Hidden("CaseId", @Request.Params["caseId"])
+                                            @Html.Hidden("ModelCode", @Request.Params["modelCode"])
+                                            @Html.TextBox("File", "", new
+                                       {
+                                           @data_val = "true",
+                                           @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                                           @class = "form-control",
+                                           @placeholder = "Excel File...",
+                                           @type = "file"
+                                       })
+                                        </div>
+
+                                        <div class="col-xs-4">
+                                            <a type="button" class="btn btn-primary" href="@Url.Content("~/Content/TemplateForm/Sample_Fuel_Cost.xlsx")">@Resources.Langues.Format</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <br />
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" onclick="FormE00032Save()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var isUpload = false;
+    //$('.k-textbox[aria-owns="GALSelect_listbox"]').unbind();
+    //$('.k-textbox[aria-owns="GACSelect_listbox"]').unbind();
+
+    $(document).ready(function () {
+        if ('@Request.Params["modelCode"]' == "M00001") {
+            $('#title-32').html('@Resources.Langues.Fuelcostautoinput')
+        }
+
+        setTimeout(function () {
+            $.blockUI();
+            $.post("@Url.Action("GetBaseYear", "EntityE00023Popup")", { caseId: @Request.Params["caseId"] }, function (result) {
+                if (result.success) {
+                    year = result.year;
+                    $('#YearSelect').data('kendoDropDownList').value(year + "");
+                    $.unblockUI();
+                }
+            }).fail(function () {
+                $.unblockUI();
+            }).always(function () {
+            });
+        }, 1000);
+
+        $('.E00032').on('hide.bs.modal', function () {
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+    });
+
+    function FormE00032Save() {
+        if (isUpload) {
+            var valid = $('#upload').valid();
+            if (valid) {
+                $('#upload').submit();
+            }
+        } else {
+            $.blockUI();
+            $.post("@Url.Action("SaveEntityE00032PopupData", "EntityE00032Popup", new { area="Case" })", {
+                year: $('#YearSelect').val(), GAL: $('#GALSelect').val(), modelCode: '@Request.Params["modelCode"]', caseId: @Request.Params["caseId"], GAC: $('#GACSelect').val()}, function (result) {
+                    if (result.success) {
+                        updateHistory(result.html)
+                        $("#btn_E00032").addClass("democlass");
+                        if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00032').modal('hide');
+                    });
+                } else {
+                        $.unblockUI();
+                        bootbox.alert({ message:'@Resources.Langues.Error',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }).always(function () {
+            });
+        }
+    }
+
+    $('#upload').submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        $.unblockUI();
+                        bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        updateHistory(result.html)
+                            $("#btn_E00032").addClass("democlass");
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00032').modal('hide');
+                    });
+                    } else {
+                        $.unblockUI();
+                        bootbox.alert({ message:'@Resources.Langues.Error',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                    }
+                });
+                e.preventDefault();
+            });
+
+    $('input[type=radio][name=optradio]').change(function () {
+        if (this.value == 'option1') {
+            $("#file").val('');
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+            isUpload = false;
+        }
+        else if (this.value == 'option2') {
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+            isUpload = true;
+        }
+    });
+
+
+</script>

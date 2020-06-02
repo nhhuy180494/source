@@ -1,0 +1,308 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using DPDSP.Models
+@using DPDSP.Services
+@using System.Configuration;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - @Resources.Langues.KERI</title>
+    @*@Styles.Render("~/Content/css")*@
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.common-bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.blueopal.min.css")" rel="stylesheet" type="text/css" />
+
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/angular.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.aspnetmvc.min.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/cultures/kendo.culture.ko-KR.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/cultures/kendo.culture.en-US.min.js")"></script>
+
+    <script type="text/javascript">
+        var baseUrl = '@Url.Content("~/")';
+    </script>
+
+    <script src="~/Scripts/BEN.js"></script>
+
+    @*Naver Analysis Tool*@
+    <script type="text/javascript" src="http://wcs.naver.net/wcslog.js"></script>
+    <script type="text/javascript">
+        if (!wcs_add) var wcs_add = {};
+        wcs_add["wa"] = "830a41f791bde";
+        wcs_do();
+    </script>
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/admin_site_css/bootstrap.min.css")" />
+    <link href="@Url.Content("~/Content/admin_site_css/font-awesome/css/font-awesome.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/admin_site_css/nprogress.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/admin_site_css/custom.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/admin_site_css/jqvmap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/admin_site_css/green.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/admin_site_css/bootstrap-progressbar-3.3.4.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/admin_site_css/daterangepicker.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/font-awesome.min.css")" rel="stylesheet" />
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("styles", required: false)
+</head>
+<body class="nav-md">
+    @if (Request.IsAuthenticated)
+    {
+        var userStore = new UserStore<ApplicationUser>(new DPDSPDbContext());
+        var userManager = new UserManager<ApplicationUser>(userStore);
+        var user = userManager.FindById(User.Identity.GetUserId());
+        try
+        {
+            user.FirstName = StringCipher.Decrypt(user.FirstName, ConfigurationManager.AppSettings["passEncrytp"]);
+            user.LastName = StringCipher.Decrypt(user.LastName, ConfigurationManager.AppSettings["passEncrytp"]);
+            user.UserExtend.UserTel = StringCipher.Decrypt(user.UserExtend.UserTel, ConfigurationManager.AppSettings["passEncrytp"]);
+        }
+        catch
+        {
+            user.FirstName = "Unknown";
+            user.LastName = "Unknown";
+            user.UserExtend.UserTel = "Unknown";
+        }
+
+        ViewBag.CurrentUser = user;
+
+        <div class="container body">
+            <div class="main_container">
+                @using (Html.BeginForm("LogOff", "Home", new { area = "Admin" }, FormMethod.Post, new { id = "logoutForm", }))
+                {
+                @Html.AntiForgeryToken()
+                <div class="col-md-3 left_col">
+                    <div class="left_col scroll-view scroll-style-7">
+                        <div class="navbar nav_title" style="border: 0;">
+                            <a class="site_title"><i class="fa fa-cog" aria-hidden="true"></i> <span> Admin Page</span></a>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <!-- menu profile quick info -->
+                        <div class="profile clearfix">
+                            <div class="profile_pic">
+                                <img src="@Url.Content(@ViewBag.CurrentUser.UserExtend.UserPhotoUrl)" alt="..." class="img-circle profile_img">
+                            </div>
+                            <div class="profile_info">
+                                <span>@Resources.Langues.Welcome,</span>
+                                <h2>@ViewBag.CurrentUser.LastName @ViewBag.CurrentUser.FirstName</h2>
+                            </div>
+                        </div>
+                        <!-- /menu profile quick info -->
+
+                        <br />
+
+                        <!-- sidebar menu -->
+                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu sys-menu">
+                            <div class="menu_section">
+                                <ul class="nav side-menu">
+                                    <li class="@Html.isNavMenuActive("Index", "CaseManagement")">
+                                        <a href="@Url.Action("Index", "CaseManagement", new { area="Admin" })"><i class="fa fa-clone" aria-hidden="true"></i> @Resources.Langues.Case </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "UserManagement")">
+                                        <a href="@Url.Action("Index", "UserManagement", new { area="Admin" })"><i class="fa fa-users" aria-hidden="true"></i> @Resources.Langues.User </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "ModelManagement")">
+                                        <a href="@Url.Action("Index", "ModelManagement", new { area="Admin" })"><i class="fa fa-codepen" aria-hidden="true"></i> @Resources.Langues.Model </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "ItemManagement")">
+                                        <a href="@Url.Action("Index", "ItemManagement", new { area="Admin" })"><i class="fa fa-indent" aria-hidden="true"></i> @Resources.Langues.Item </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "EntityManagement")">
+                                        <a href="@Url.Action("Index", "EntityManagement", new { area="Admin" })"><i class="fa fa-empire" aria-hidden="true"></i> @Resources.Langues.Entity </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "CommonCodeManagement")">
+                                        <a href="@Url.Action("Index", "CommonCodeManagement", new { area="Admin" })"><i class="fa fa-creative-commons" aria-hidden="true"></i> @Resources.Langues.CommonCode </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "ComponentManagement")">
+                                        <a href="@Url.Action("Index", "ComponentManagement", new { area="Admin" })"><i class="fa fa-bus" aria-hidden="true"></i> @Resources.Langues.ComponentManagement </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "SystemInfoManagement")">
+                                        <a href="@Url.Action("Index", "SystemInfoManagement", new { area="Admin" })"><i class="fa fa-cogs" aria-hidden="true"></i> @Resources.Langues.SysInfo </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "CommunityManagement")">
+                                        <a href="@Url.Action("Index", "CommunityManagement", new { area="Admin" })"><i class="fa fa-sticky-note-o" aria-hidden="true"></i> @Resources.Langues.Community </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "PvEssSchedulerManagement")">
+                                        <a href="@Url.Action("Index", "PvEssSchedulerManagement", new { area="Admin" })"><i class="fa fa-calendar" aria-hidden="true"></i> @Resources.Langues.PvEssScheduler </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu bas-menu hidden">
+                            <div class="menu_section">
+                                <ul class="nav side-menu">
+                                    <li class="@Html.isNavMenuActive("Index", "HolidayInfomationManagement")">
+                                        <a href="@Url.Action("Index", "HolidayInfomationManagement", new { area="Admin" })"><i class="fa fa-font-awesome" aria-hidden="true"></i> @Resources.Langues.HolidayInfomation </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "ElectricChargesManagement")">
+                                        <a href="@Url.Action("Index", "ElectricChargesManagement", new { area="Admin" })"><i class="fa fa-tasks" aria-hidden="true"></i> @Resources.Langues.ElectricCharge </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "FuelCostManagement")">
+                                        <a href="@Url.Action("Index", "FuelCostManagement", new { area="Admin" })"><i class="fa fa-tasks" aria-hidden="true"></i> @Resources.Langues.Fuelcostmanagement </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "InsolationManagement")">
+                                        <a href="@Url.Action("Index", "InsolationManagement", new { area="Admin" })"><i class="fa fa-sun-o" aria-hidden="true"></i> @Resources.Langues.Insolation </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "CulminationAltitudeManagement")">
+                                        <a href="@Url.Action("Index", "CulminationAltitudeManagement", new { area="Admin" })"><i class="fa fa-font-awesome" aria-hidden="true"></i> @Resources.Langues.CulminationAltitude </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "WindSpeedManagement")">
+                                        <a href="@Url.Action("Index", "WindSpeedManagement", new { area="Admin" })"><i class="fa fa-industry" aria-hidden="true"></i> @Resources.Langues.WindSpeed </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "RecChargeManagement")">
+                                        <a href="@Url.Action("Index", "RecChargeManagement", new { area="Admin" })"><i class="fa fa-chain-broken" aria-hidden="true"></i> @Resources.Langues.RECChargeManagement </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "SMPChargeManagement")">
+                                        <a href="@Url.Action("Index", "SMPChargeManagement", new { area="Admin" })"><i class="fa fa-link" aria-hidden="true"></i> @Resources.Langues.SMPChargeManagement </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu par-menu hidden">
+                            <div class="menu_section">
+                                <ul class="nav side-menu">
+                                    <li class="@Html.isNavMenuActive("Index", "ESSParameterManagement")">
+                                        <a href="@Url.Action("Index", "ESSParameterManagement", new { area="Admin" })"><i class="fa fa-tasks" aria-hidden="true"></i> @Resources.Langues.ESSParameter </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "WTParameterManagement")">
+                                        <a href="@Url.Action("Index", "WTParameterManagement", new { area="Admin" })"><i class="fa fa-google-wallet" aria-hidden="true"></i> @Resources.Langues.WTParameter </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "FCParameterManagement")">
+                                        <a href="@Url.Action("Index", "FCParameterManagement", new { area="Admin" })"><i class="fa fa-font-awesome" aria-hidden="true"></i> @Resources.Langues.FCparameter </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "CHPParameterManagement")">
+                                        <a href="@Url.Action("Index", "CHPParameterManagement", new { area="Admin" })"><i class="fa fa-codiepie" aria-hidden="true"></i> @Resources.Langues.CHPparameter </a>
+                                    </li>
+                                    <li class="@Html.isNavMenuActive("Index", "DieselGenParameterManagement")">
+                                        <a href="@Url.Action("Index", "DieselGenParameterManagement", new { area="Admin" })"><i class="fa fa-beer" aria-hidden="true"></i> @Resources.Langues.DieselGenParameter </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /sidebar menu -->
+                    </div>
+                </div>
+                
+                <div class="top_nav">
+                    <div class="nav_menu">
+                        <nav>
+                            <div class="nav toggle">
+                                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                            </div>
+
+                            <ul class="nav navbar-nav">
+                                <li id="li-sys" class="@Html.isNavMenuActiveTopSys()" onclick="changeMenu('sys')"><a>@Resources.Langues.SystemAdministration</a></li>
+                                <li id="li-bas" class="@Html.isNavMenuActiveTopBas()" onclick="changeMenu('bas')"><a>@Resources.Langues.BasicDataManagement</a></li>
+                                <li id="li-par" class="@Html.isNavMenuActiveTopPar()" onclick="changeMenu('par')"><a>@Resources.Langues.ParameterManagement</a></li>
+                            </ul>
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="@Url.Content(@ViewBag.CurrentUser.UserExtend.UserPhotoUrl)" alt="...">@ViewBag.CurrentUser.LastName @ViewBag.CurrentUser.FirstName
+                                        <span class="fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <li><a role="button" onclick="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out pull-right"></i> @Resources.Langues.Logout</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                }
+                <!-- /top navigation -->
+                <!-- page content -->
+                <div class="right_col" role="main" style="min-height:890px;">
+                    @RenderBody()
+                </div>
+                <!-- /page content -->
+            </div>
+        </div>
+    }
+    else
+    {
+        @RenderBody()
+    }
+    <!-- footer content -->
+    <footer>
+        <div class="pull-right">
+            <p class="navbar-text pull-left">Copyrightⓒ2017 Korea Electro technology Research Institute  | @Resources.Langues.DistributedPowerDesignSoftwareHomepage </p>
+        </div>
+        <div class="clearfix"></div>
+    </footer>
+    <!-- /footer content -->
+  
+
+    <script type="text/javascript">
+        //language calendar
+        var current = $(location).attr('pathname');
+        if (current.search("ko") == true) {
+            kendo.culture("ko-KR");
+        } else {
+            kendo.culture("en-AU");
+        }
+
+        $(document).ready(function () {
+            $('#menu_toggle').click(function () {
+                var className = $('body').attr('class');
+                if (className === 'nav-sm') {
+                    $('body').attr('class', 'nav-md');
+                } else {
+                    $('body').attr('class', 'nav-sm');
+                }
+            });
+            
+            if ($('#li-sys')[0].classList[0] == 'active') {
+                $('.sys-menu').removeClass('hidden');
+                $('.bas-menu').addClass('hidden');
+                $('.par-menu').addClass('hidden');
+            }
+            if ($('#li-bas')[0].classList[0] == 'active') {
+                $('.sys-menu').addClass('hidden');
+                $('.bas-menu').removeClass('hidden');
+                $('.par-menu').addClass('hidden');
+            }
+            if ($('#li-par')[0].classList[0] == 'active') {
+                $('.sys-menu').addClass('hidden');
+                $('.bas-menu').addClass('hidden');
+                $('.par-menu').removeClass('hidden');
+            }
+        });
+
+        function changeMenu(code) {
+            if (code == 'sys') {
+                $('.sys-menu').removeClass('hidden');
+                $('.bas-menu').addClass('hidden');
+                $('.par-menu').addClass('hidden');
+                location.href = '@Url.Action("Index", "CommunityManagement", new { area = "Admin" })'
+            } else if (code == 'bas') {
+                $('.sys-menu').addClass('hidden');
+                $('.bas-menu').removeClass('hidden');
+                $('.par-menu').addClass('hidden');
+                location.href = '@Url.Action("Index", "HolidayInfomationManagement", new { area="Admin" })'
+            } else {
+                $('.sys-menu').addClass('hidden');
+                $('.bas-menu').addClass('hidden');
+                $('.par-menu').removeClass('hidden');
+                location.href = '@Url.Action("Index", "ESSParameterManagement", new { area = "Admin" })'
+            }
+        }
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

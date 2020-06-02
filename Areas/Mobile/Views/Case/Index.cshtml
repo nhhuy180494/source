@@ -1,0 +1,45 @@
+﻿@model DPDSP.Models.InsertCaseViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+@using (Html.BeginForm("InsertCase", "Case", new { area = "Mobile" }, FormMethod.Post, new { @role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div align="center" class="container TL" style="padding-top:50px">
+        <div>
+            <h4><strong>@ViewBag.ModelName</strong></h4>
+            <br>
+            <img src="~/Theme/images/computer.png" class="img-polaroid">
+            @Html.HiddenFor(m => m.ModelCode)
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Case 이름을 등록 하세요</label>
+                            @Html.TextBoxFor(m => m.CaseName, new { @class = "form-control" })
+                        </div>
+                        <h5>선택한 모형으로 Case를 진행 할까요?</h5>
+                    </div>
+                </div>
+                <div class="" style="border-top:none;">
+                    <button type="submit" class="button button-gray" id="submitCase" data-dismiss="modal" @*onclick="location.href='EntityE00001View'"*@>저장 </button>
+
+                    @*<button type="button" class="btn btn-gray " data-dismiss="modal">취소 </button>*@
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@*<div class="show_E001" hidden>
+        @Html.Partial("~/Areas/Mobile/Views/Case/Entity/_E00001PartialView.cshtml")
+    </div>
+*@
+<script>
+    @*var modelCode = '@Request.Params["modelCode"]';
+    $('#submitCase').on('click', function (e) {
+        var url = '@Url.Action("CaseReferences", "Case", new { area = "Mobile"})' + "?modelCode=" + modelCode + "&caseId=178";
+        window.location.href = url
+    })*@
+
+</script>

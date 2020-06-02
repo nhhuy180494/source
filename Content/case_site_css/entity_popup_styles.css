@@ -1,0 +1,28 @@
+﻿
+.tblRow .active {
+    text-align: center;
+}
+
+.radio label {
+    font-weight: 700 !important;
+}
+
+.tblMultiRow .active {
+    text-align: center;
+}
+
+.tblMultiRow input {
+    border: 0px;
+    display:block;
+    width:100%;
+}
+
+.tblRow input {
+    border: 0px;
+    display:block;
+    width:100%;
+}
+
+.democlass {
+    background-color: gray;
+}

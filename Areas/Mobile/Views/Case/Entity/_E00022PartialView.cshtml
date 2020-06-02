@@ -1,0 +1,146 @@
+﻿<style>
+    .bootbox.modal {
+        z-index: 999999999999999999 !important;
+    }
+</style>
+
+<table class="table table-bordered tblMultiRow" style="font-size:12px !important">
+    <thead>
+        <tr>
+            <th class="active" style="text-align: center">@Resources.Langues.Select<br><input type="checkbox" id="selectAll" name="optcheckbox"></th>
+            <th class="active" style="width:80%;vertical-align:middle">@Resources.Langues.Salesrevenuetype</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="active" style="text-align: center">
+                <input type="checkbox" id="SA0001" name="optcheckbox" style="text-align: center">
+            </td>
+            <td class="active" style="vertical-align: middle"> System Marginal Price (SMP) <button type="button" onclick="helpOnclick('SMP')" class="btn btn-primary">?</button></td>
+        </tr>
+        <tr>
+            <td class="active" style="text-align: center">
+                <input type="checkbox" id="SA0002" style="text-align: center" name="optcheckbox">
+            </td>
+            <td class="active" style="vertical-align: middle"> Renewable Energy Certificate (REC) <button type="button" onclick="helpOnclick('REC')" class="btn btn-primary">?</button></td>
+        </tr>
+
+    </tbody>
+</table>
+<div class="col-sm-12" style="text-align:center">
+    <button type="button" onclick="FormE00022Save()" class="button button-gray">@Resources.Langues.Save</button>
+    @* <button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">Close</button>*@
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var caseId = @Request.Params["caseId"];
+    var SA0001 = "";
+    var SA0002 = "";
+    var SA0003 = "";
+
+    $(document).ready(function () {
+
+        $('#btn_E00022').removeClass('progress-bar-warning');
+
+        $.blockUI();
+        $.post("@Url.Action("GetSalesTypeCodeByCaseId", "EntityE00022Popup",new { area="Case"})", { caseId: caseId }, function (result) {
+            if (result.success) {
+                result.list.forEach(function (item) {
+                    if (item == "SA0001") {
+                        $('#SA0001').prop("checked", true);
+                    }
+                    if (item == "SA0002") {
+                        $('#SA0002').prop("checked", true);
+                    }
+                    if (item == "SA0003") {
+                        $('#SA0003').prop("checked", true);
+                    }
+                });
+            } else{
+                $('#SA0001').prop("checked", true);
+                $('#SA0002').prop("checked", true);
+                $('#selectAll').prop("checked", true);
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+    });
+
+    $('#selectAll').click(function () {
+        if ($(this).is(':checked')) {
+            $('#SA0001').prop("checked", true);
+            $('#SA0002').prop("checked", true);
+            $('#SA0003').prop("checked", true);
+        } else {
+            $('#SA0001').prop("checked", false);
+            $('#SA0002').prop("checked", false);
+            $('#SA0003').prop("checked", false);
+        }
+    });
+
+    function FormE00022Save(){
+        if (!$('#SA0001').is(":checked") && !$('#SA0002').is(":checked")) {
+            bootbox.alert(' @Resources.Langues.FailedToSave​');
+            return false;
+        }
+
+        if ($('#SA0001').is(":checked")) {
+            SA0001 = "SA0001";
+        }
+
+        if ($('#SA0002').is(":checked")) {
+            SA0002 = "SA0002";
+        }
+
+        if ($('#SA0003').is(":checked")) {
+            SA0003 = "SA0003";
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: '@Url.Action("SaveEntityE00022PopupData", "EntityE00022Popup", new { area = "Case" })',
+            cache: false,
+            type: 'POST',
+            data: {
+                SA0001: SA0001,
+                SA0002: SA0002,
+                SA0003: SA0003,
+                caseId: caseId
+            },
+            success: function (result) {
+                if (result.success) {
+                    $.unblockUI();
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                            if (lstEntityNextStep.length != 0) {
+                                nextStepEntity(lstEntityNextStep[0]);
+                                lstEntityNextStep.shift();
+                                console.log(lstEntityNextStep)
+                            } else {
+                                nextEntity()
+                            }
+                } else {
+                    $.unblockUI();
+                }
+            },
+            error: function (response) {
+
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    function helpOnclick(obj) {
+        if (obj == 'SMP') {
+            var win = window.open('http://www.kpx.or.kr/www/contents.do?key=225', '_blank');
+            win.focus();
+        } else {
+            var win = window.open('http://rec.kmos.kr/index.do', '_blank');
+            win.focus();
+        }
+    }
+</script>
+

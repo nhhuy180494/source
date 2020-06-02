@@ -1,0 +1,313 @@
+﻿<style>
+    .E00033 {
+        top: 5%;
+    }
+
+    .tblRow .active {
+        text-align: center;
+    }
+
+    .lbWT {
+        font-weight: 400;
+    }
+
+    .tblMultiRow th, td {
+        text-align: center;
+    }
+
+    .text {
+        padding-top: 7px;
+    }
+
+    .formData label {
+        font-weight: 400;
+    }
+
+    .formCHPPara label {
+        font-weight: 400;
+    }
+
+    .formCHPPara input {
+        border: none;
+        box-shadow: none;
+        pointer-events: none;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    @@media print {
+        body.modal-open {
+            visibility: hidden;
+        }
+
+        body.modal-open .modal .modal-body {
+            visibility: visible; /* make visible modal body and header */
+        }
+    }
+</style>
+<link href="@Url.Content("~/Content/case_site_css/entity_popup_styles.css")" rel="stylesheet" type="text/css" />
+
+@using (Html.BeginForm("PrintEntityE00033PopupData", "EntityE00033Popup", FormMethod.Post, new { @role = "form", @id = "EntityE00033Form" }))
+{
+    <div class="modal fade E00033" id="" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">@Resources.Langues.CHPparameterlookup</h4>
+                </div>
+                <div class="modal-body" id="printDiv">
+                    <br />
+                    @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                    {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                    })
+                    <div class="form-horizontal formCHPPara">
+                        <div class="form-group">
+                            <label class="control-label col-xs-3">@Resources.Langues.Company</label>
+                            <div class="col-xs-10 col-md-6">
+                                @Html.TextBox("Company", "", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3">@Resources.Langues.ModelName</label>
+                            <div class="col-xs-10 col-md-6">
+                                @Html.TextBox("ModelName", "", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3">@Resources.Langues.Volume</label>
+                            <div class="col-xs-10 col-md-6">
+                                @Html.TextBox("Volume", "", new { @class = "form-control", @style = "text-align:right;" })
+                            </div>
+                            <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                <span class="">kW</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-md-3">@Resources.Langues.ThemRatio</label>
+                            <div class="col-xs-10 col-md-6">
+                                @Html.TextBox("ThemRatio", "", new { @class = "form-control", @style = "text-align:right;" })
+                            </div>
+                            <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                <span>@Resources.Langues.won</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table table-bordered tblMultiRow">
+                            <thead>
+                                <tr>
+                                    <th class="active">@Resources.Langues.Load + (%)</th>
+                                    <th class="active">@Resources.Langues.Fuelconsumption (m³/h)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>0.0%</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>25.0%</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>50.0%</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>75.0%</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>100.0%</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="list-inline pull-right">
+                            @*<button onclick="PrintModal()" type="button" class="btn btn-primary">@Resources.Langues.Print</button>*@
+                            <button type="button" class="btn btn-gray save-class" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/printThis/printThis.js"></script>
+<script>
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+
+        $('.E00033').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+        $('.E00033').on('hide.bs.modal', function () {
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+
+        $('.E00033').on('show.bs.modal',function(){
+            clearModal();
+        });
+
+        $('#EntityE00033Form').submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                   updateHistory(result.html)
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00033').modal('hide');
+                    });
+                    $("#btn_E00033").addClass("democlass");
+                        
+                }
+                $.unblockUI();
+            });
+            e.preventDefault();
+        });
+
+        $('#E00033FormPrint').click(function(){
+            if(chpDropdown.value()){
+                $('#EntityE00033Form').submit();
+            }
+        });
+
+        $('#EntityE00033Form').on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetCHPParameterIdByCaseId", "EntityE00031Popup", new { area="Case" })", { caseId:caseId }, function (result) {
+            if(result.success){
+                var tbody = $('.tblMultiRow').find('tbody');
+                var id = result.id;
+                $.blockUI();
+                $.post("@Url.Action("GetCHPParameterSubList", "EntityE00033Popup", new { area = "Case" })", { chpparameterId:id }, function (result) {
+                    if(result.success){
+                        clearModal();
+                        var list = result.listCHPParaSub;
+                        var chpParameter = result.chpParameter;
+                        $('#Company').val(chpParameter.Company);
+                        $('#ModelName').val(chpParameter.ModelName);
+                        $('#Volume').val(chpParameter.Volume);
+                        $('#ThemRatio').val(chpParameter.ThemRatio);
+                        var order = 0;
+                        list.forEach(function( item ) {
+                            var html = createCustomHtmlParaSub(order,item);
+                            tbody.append(html);
+                            order++;
+                        });
+                    }
+                }).fail(function(){
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function(){
+                    $.unblockUI();
+                });
+            }
+        }).fail(function(){
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function(){
+            $.unblockUI();
+        });
+    });
+
+    function onCHPChange(){
+        var tbody = $('.tblMultiRow').find('tbody');
+        var value = this.value();
+        if(value === ""){
+            clearModal();
+        }
+        else {
+            $.blockUI();
+            $.post("@Url.Action("GetCHPParameterSubList", "EntityE00033Popup", new { area = "Case" })", { chpparameterId:value }, function (result) {
+                if(result.success){
+                    clearModal();
+                    var list = result.listCHPParaSub;
+                    var chpParameter = result.chpParameter;
+                    var order = 0;
+                    list.forEach(function( item ) {
+                        var html = createCustomHtmlParaSub(order,item);
+                        tbody.append(html);
+                        order++;
+                    });
+
+                    $('#Company').val(chpParameter.Company);
+                    $('#ModelName').val(chpParameter.ModelName);
+                    $('#Volume').val(chpParameter.Volume);
+                    $('#ThemRatio').val(chpParameter.ThemRatio);
+                }
+            }).fail(function(){
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function(){
+                $.unblockUI();
+            });
+        }
+    };
+
+    function PrintModal() {
+        $("#printDiv").printThis();
+    }
+
+    function createCustomHtmlParaSub(order,item){
+        return '<tr><td><input type="text" data-val="true" style = "text-align:right;" data-val-number="The field Load must be a number." '+
+            ' data-val-range="Invalid Target Price; Max 4 digits" data-val-range-max="999.9" data-val-range-min="0"'+
+            ' data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$"'+
+            ' data-val-required="The Load field is required." name = "ListCHPParameterSubs['+order+'].Load" value= "'+item.Load+'" '+
+            'style="text-align:center;" readonly="readonly" /></td>'+
+            '<td><input data-val="true" style = "text-align:right;" data-val-number="The field FuelInput must be a number." data-val-range="Invalid Target Price; Max 5 digits"'+
+            ' data-val-range-max="999.99" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum Two Decimal Points."'+
+            ' data-val-regex-pattern="^\d+(\.\d{1,2})?$" data-val-required="The FuelConsum field is required." type="text" '+
+            ' name = "ListCHPParameterSubs['+order+'].FuelConsum" value= "'+item.FuelConsum+'" '+
+            'style="text-align:center;" readonly="readonly" /></td></tr>';
+    }
+
+    function clearModal(){
+        $('.tblRow').find('input').not('.loadInput').val("");
+        $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+        $('.tblRow').find('input').prop("readonly","readonly");
+        $('.tblRow').find('input').removeClass("input-validation-error");
+        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+        $('.paraSubRow').find('input').not('.loadInput').val("");
+        $('.paraSubRow').addClass('hidden');
+        $('.paraSubRow').find('input').attr('disabled','disabled');
+        $('.formCHPPara').find('input').val('');
+    };
+</script>

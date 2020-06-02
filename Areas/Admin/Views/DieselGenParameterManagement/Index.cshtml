@@ -1,0 +1,323 @@
+﻿
+@{
+    ViewBag.Title = Resources.Langues.DieselGenParameterManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section styles{
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        .displayModelCode {
+            font-size: 20px;
+        }
+
+        input[type="checkbox"][readonly] {
+            pointer-events: none;
+        }
+
+        .k-grid-content {
+            overflow-x: scroll;
+        }
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent">
+    <div class="form-group">
+        <div class="col-md-12 col-lg-6">
+            <div class="form-group">
+                @(Html.Kendo().Grid<DPDSP.Models.DieselGenParameterViewModel>()
+            .Name("DieselGenParameterGrid")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Company).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Company);
+                columns.Bound(p => p.ModelName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ModelName);
+                //columns.Bound(p => p.ModelNameEng).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ModelName + " (Eng)");
+                columns.Bound(p => p.FullUserName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.FullUserName);
+                columns.Bound(p => p.DieselParameterId).Hidden();
+                columns.Command(command =>
+                {
+                    command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                    command.Custom(Resources.Langues.Delete).Click("deleteDieselGenParameter").HtmlAttributes(new { @class = "btn-danger" });
+                })/*.Title("Management")*/.HtmlAttributes(new { style = "text-align:center;" });
+            })
+            .ToolBar(toolbar =>
+            {
+                toolbar.Template(@<text>
+                    <div class="form-group">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon btn-opal"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                                    <input type="text" class="form-control boder-opal" id='dieselGenParameterFilter' placeholder="제품명">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-opal" id="resetDieselGenParameterGrid" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group pull-right">
+                            <a class="k-button k-button-icontext k-grid-add" href="/Admin/DieselGenParameterManagement/Read_DieselGenParameter?DieselGenParameterGrid-mode=insert"><span class="k-icon k-i-add"></span>@Resources.Langues.AddNewRecord</a>
+                        </div>
+                    </div>
+                </text>);
+        })
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Pageable(p => p.Enabled(true))
+        .Sortable()
+        .Scrollable(rz => rz.Enabled(false))
+        .HtmlAttributes(new { style = "height:650px;" })
+        .Selectable(selectable => selectable
+              .Mode(GridSelectionMode.Multiple)
+              .Type(GridSelectionType.Row))
+        .Events(ev =>
+        {
+            ev.Change("onChange");
+            ev.Edit("onEdit");
+            ev.DataBound("onDataBound");
+        })
+        .Resizable(rz => rz.Columns(true))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+            .Model(model => { model.Id(p => p.DieselParameterId); })
+        .Read(read => read.Action("Read_DieselGenParameter", "DieselGenParameterManagement"))
+        .Create(update => update.Action("Create_DieselGenParameter", "DieselGenParameterManagement"))
+           .Update(update => update.Action("Update_DieselGenParameter", "DieselGenParameterManagement"))
+        )
+                )
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-6">
+            <div class="form-group">
+                <div class="form-inline" style="padding:20px;">
+                    <label class="form-group displayModelCode">@Resources.Langues.ModelSelection</label>
+                    <p class="form-group displayModelCode" id="DiesenlGenParameterSelected"></p>
+                    @Html.Hidden("DiesenlGenParameterSelectedId")
+                </div>
+                <div class="row">
+                    @(Html.Kendo().Grid<DPDSP.Models.DieselGenParamSubViewModel>()
+                .Name("DieselGenParamSubGrid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.RatedOuputCom).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.RatedOuputCom).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.MinOperOutput).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.MinOperOutput).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.MaxOperOutput).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.MaxOperOutput).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.RatedOyputEmr).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.RatedOutputEmr).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.MinOperEmr).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.MinOperEmr).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.MaxOperEmr).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.MaxOperEmr).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.OperTimeCom).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.OperTimeCom).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.OperTimeEmr).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.OperTimeEmr).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.Co2Emiisions).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Co2Emiisions).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.Coefficient).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Coefficient).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.ConstWaterPort).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.ConstWaterPort).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.RunningCost).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.RunningCost).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.ReferenceCapacity).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.ReferenceCapacity).Format("{0:n2}").Width(150);
+                    columns.Bound(p => p.DieselGenParamSubId).Hidden();
+                    columns.Command(command =>
+                    {
+                        command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                        //command.Custom(Resources.Langues.Delete).Click("deleteDieselGenParamSub").HtmlAttributes(new { @class = "btn-danger" });
+                    }).HtmlAttributes(new { style = "text-align:center;" }).Width(250);
+                })
+                //.Editable(editable => editable.Mode(GridEditMode.InLine))
+                .Pageable(p => p.Enabled(false))
+                .Scrollable()
+                .Resizable(resizable => resizable.Columns(false))
+                .HtmlAttributes(new { style = "height:100px;" })
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(20)
+                    .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                    .Model(model => { model.Id(p => p.DieselGenParamSubId); })
+                    .Read(read => read.Action("Read_DieselGenParamSub", "DieselGenParameterManagement").Data("dataDieselGenParameter"))
+                    //.Create(update => update.Action("Create_DieselGenParamSub", "DieselGenParameterManagement").Data("dataDieselGenParameter"))
+                    .Update(update => update.Action("Update_DieselGenParamSub", "DieselGenParameterManagement").Data("dataDieselGenParameter"))
+                    )
+                    )
+                </div>
+                <br />
+                <div class="row">
+                    @(Html.Kendo().Grid<DPDSP.Models.DieselParamCostViewModel>()
+                        .Name("DieselParamCostGrid")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(p => p.DieselParamCostId).Hidden();
+                            columns.Bound(p => p.Month).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Month).Width(60);
+                            columns.Bound(p => p.FuelCost).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Price).Format("{0:n2}").Width(100);
+                            columns.Command(command =>
+                            {
+                                command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                            }).HtmlAttributes(new { style = "text-align:center;" }).Width(100);
+                        })
+                        .Editable(editable => editable.Mode(GridEditMode.InLine))
+                        .Pageable(p => p.Enabled(false))
+                        .HtmlAttributes(new { style = "height:100%;" })
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(20)
+                            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                            .Model(model => { model.Id(p => p.DieselParamCostId);
+                                model.Field(r => r.Month).Editable(false);
+                            })
+                            .Read(read => read.Action("Read_DieselParamCost", "DieselGenParameterManagement").Data("dataDieselGenParameter"))
+                            .Update(update => update.Action("Update_DieselParamCost", "DieselGenParameterManagement"))
+                            )
+                    )
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            var dieselGenParameterGrid = $("#DieselGenParameterGrid").data("kendoGrid");
+
+            $("#dieselGenParameterFilter").keyup(function () {
+                var value = $("#dieselGenParameterFilter").val();
+                if (value) {
+                    dieselGenParameterGrid.dataSource.filter({ field: "ModelName", operator: "contains", value: value });
+                } else {
+                    dieselGenParameterGrid.dataSource.filter({});
+                }
+            });
+
+            $('#resetDieselGenParameterGrid').click(function () {
+                $('#dieselGenParameterFilter').val('');
+                dieselGenParameterGrid.dataSource.filter({});
+            });
+        });
+
+        function deleteDieselGenParamSub(e) {
+            var dieselParamSubGrid = $("#DieselGenParamSubGrid").data("kendoGrid");
+            var dataItem = dieselParamSubGrid.dataItem($(e.currentTarget).closest("tr"));
+            var dieselParameterId = $("#DiesenlGenParameterSelectedId").val();
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("Destroy_DieselGenParamSub", "DieselGenParameterManagement")', { dieselParameterId: dieselParameterId, dieselGenParamSubId: dataItem.DieselGenParamSubId },
+                        function (result) {
+                            if (result) {
+                                dieselParamSubGrid.dataSource.read({ dieselParameterId: dieselParameterId });
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function dataDieselGenParameter() {
+            var dieselParameterId = $("#DiesenlGenParameterSelectedId").val();
+            return {
+                dieselParameterId: dieselParameterId
+            };
+        }
+
+        function deleteDieselGenParameter(e) {
+            var dieselParamSubGrid = $("#DieselGenParamSubGrid").data("kendoGrid");
+            var dieselGenParameterGrid = $("#DieselGenParameterGrid").data("kendoGrid");
+            var dataItem = dieselGenParameterGrid.dataItem($(e.currentTarget).closest("tr"));
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("Destroy_DieselGenParameter", "DieselGenParameterManagement")', { dieselParameterId: dataItem.DieselParameterId },
+                        function (result) {
+                            if (result) {
+                                $("#DiesenlGenParameterSelected").text("");
+                                dieselGenParameterGrid.dataSource.read();
+                                dieselParamSubGrid.dataSource.read(dataDieselGenParameter());
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function onDataBound(e) {
+            var dieselGenParameterGrid = $("#DieselGenParameterGrid").data("kendoGrid");
+            var row = dieselGenParameterGrid.tbody.find("tr[role='row']:first");
+            if (row != null) {
+                dieselGenParameterGrid.select(e.sender.tbody.find("tr:first"));
+            }
+        }
+
+        function onChange(e) {
+            var dieselGenParameterGrid = $("#DieselGenParameterGrid").data("kendoGrid");
+            var dieselParamSubGrid = $("#DieselGenParamSubGrid").data("kendoGrid");
+            var dieselParamCostGrid = $("#DieselParamCostGrid").data("kendoGrid");
+            var chpParameterSelected = dieselGenParameterGrid.dataItem(dieselGenParameterGrid.select());
+            var modelName = chpParameterSelected.ModelName;
+            var dieselParameterId = chpParameterSelected.DieselParameterId;
+            $('#DiesenlGenParameterSelected').text(modelName);
+            $('#DiesenlGenParameterSelectedId').val(dieselParameterId);
+            dieselParamSubGrid.dataSource.read({ dieselParameterId: dieselParameterId });
+            dieselParamCostGrid.dataSource.read({ dieselParameterId: dieselParameterId });
+        }
+
+        function onEdit(e) {
+            if (e.model.isNew() == false) {
+                $(e.container).find('input[name=FullUserName]').prop("readonly", true);
+                $(e.container).find('input[name=HowReg]').prop("readonly", true);
+            }
+            else {
+                $(e.container).find('input[name=FullUserName]').css("display", "none");
+                $(e.container).find('input[name=HowReg]').css("display", "none");
+            }
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+    </script>
+}
+

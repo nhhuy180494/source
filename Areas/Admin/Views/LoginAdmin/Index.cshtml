@@ -1,0 +1,111 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using DPDSP.Models
+@using DPDSP.Services
+@using System.Configuration;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - @Resources.Langues.KERI</title>
+    @*@Styles.Render("~/Content/css")*@
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/jquery.min.js")"></script>
+
+    <script type="text/javascript">
+        var baseUrl = '@Url.Content("~/")';
+    </script>
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/admin_site_css/bootstrap.min.css")" />
+    <link href="@Url.Content("~/Content/admin_site_css/font-awesome/css/font-awesome.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/font-awesome.min.css")" rel="stylesheet" />
+
+    <style>
+        .mar-cen {
+            margin-left: 35%;
+            margin-right: 35%;
+            margin-top: 10%;
+        }
+
+        label input button {
+            margin-bottom: 10px !important;
+        }
+    </style>
+
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+
+<body>
+@using (Html.BeginForm("AdminLogin", "LoginAdmin", new { area = "Admin" }, FormMethod.Post, new { role = "form", @id = "myForm", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="mar-cen well">
+        <div class="panel-heading">
+            <h5 class="panel-title" style="background:url(/img/ci3_1.png) no-repeat top left;height:40px;padding-top:20px;"></h5>
+        </div>
+        <p class="text-danger" id="login-message"></p>
+        <div class="form-group">
+            <label class="control-label">@Resources.Langues.Email</label>
+            @Html.TextBox("Email", "", new
+       {
+           @class = "form-control",
+           @placeholder = @Resources.Langues.Email,
+           @data_val_required = " "
+       })
+        </div>
+        <div class="form-group" style="margin-bottom:40px">
+            <label class="control-label">@Resources.Langues.Password</label>
+            @Html.Password("Password", "", new
+       {
+           @class = "form-control",
+           @placeholder = @Resources.Langues.Password,
+           @data_val_required = " "
+       })
+        </div>
+
+        <input type="submit" id="login-submit" value="@Resources.Langues.Login" class="btn btn-primary btn-block" style="margin-bottom:10px"/>
+        <input type="button" value="@Resources.Langues.Cancel" class="btn btn-default btn-block" data-dismiss="modal" />
+    </div>
+}
+</body>
+</html>
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var $myForm = $('#myForm');
+
+    $('#myForm').submit(function (e) {
+        var isValid = $myForm.valid();
+        if (isValid) {
+            $.blockUI();
+            var formObj = $(this);
+            var data = new FormData(this);
+            var urlAction = formObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                $.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                    window.location.href = '@Url.Action("Index", "CommunityManagement", new { area = "Admin" })';
+                }
+                else {
+                    bootbox.alert(result.alert);
+                }
+            });
+        } else {
+            $emailInput.addClass('input-validation-error');
+            $emailInput.removeClass('valid');
+        }
+        event.preventDefault();
+    });
+</script>

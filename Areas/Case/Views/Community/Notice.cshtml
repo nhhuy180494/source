@@ -1,0 +1,879 @@
+﻿@*@model DPDSP.Models.NoticeManagementViewModel*@
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using DPDSP.Models
+@model DPDSP.Models.NoticeCommentViewModel
+@{
+    ViewBag.Title = Resources.Langues.Notice;
+    Layout = "~/Areas/Case/Views/Shared/_CommunityMenuLayout.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+    @*<link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />*@
+    @*2018.08.29, icpark create kendo office 365*@
+    <link href="@Url.Content("~/Content/KendoGridOff365.css")" rel="stylesheet" type="text/css" />
+    <style>
+        .input-validation-error {
+            border: 1px solid red !important;
+        }
+
+        .comment {
+            border: 1px solid #ccc !important;
+        }
+
+        #RegDate_validationMessage {
+            display: none !important;
+        }
+
+        #RegDateCreate, #RegDate {
+            pointer-events: none;
+        }
+
+        .k-input k-invalid input-validation-error {
+            border: 1px solid red !important;
+        }
+    </style>
+}
+@Scripts.Render("~/bundles/jqueryval")
+
+<div class="row">
+    <h3 class="sub_tit" style="text-align:center"> @Resources.Langues.Notice</h3>
+    <br />
+    <div>
+        @(Html.Kendo().Grid<DPDSP.Models.NoticeManagementViewModel>()
+                                                        .Name("NoticeGrid")
+                                                        .Columns(columns =>
+                                                        {
+                                                            columns.Template(t => { }).ClientTemplate("#= renderNumber() #").Title("No.").HeaderHtmlAttributes(new { style = "text-align:center;font-weight: bold;" }).HtmlAttributes(new { style = "text-align:center;" }).Width(40);
+                                                            columns.Bound(notice => notice.NoticeId).Hidden();
+                                                            columns.Bound(notice => notice.NoticeTitle).Title(Resources.Langues.Title).HeaderHtmlAttributes(new { style = "text-align:center;font-weight: bold;" });
+                                                            columns.Bound(notice => notice.FullUserName).HeaderHtmlAttributes(new { style = "text-align:center;font-weight: bold;" }).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Writer).Width(120)/*.Width(85)*/;
+                                                            columns.Bound(notice => notice.RegDate).HeaderHtmlAttributes(new { style = "text-align:center;font-weight: bold;" }).Format("{0:yyyy-MM-dd}").HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Date).Width(90)/*.Width(90)*/;
+                                                            columns.Command(command => { command.Custom(Resources.Langues.Views).Click("detailNotice").HtmlAttributes(new { @class = "btn-info" }); }).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Details).Width(150).Hidden();
+                                                            columns.Bound(notice => notice.View).Title(Resources.Langues.ViewsCount).Width(70).HeaderHtmlAttributes(new { style = "text-align:center;font-weight: bold;" }).HtmlAttributes(new { style = "text-align:center;" });
+                                                        })
+                                .Events(ev => ev.DataBound("onDataBound"))
+                                .Pageable()
+                                .Sortable()
+                                .Events(events => events
+                                    .Change("onChange")
+                                )
+                                .Selectable(selectable => selectable
+                                    .Mode(GridSelectionMode.Single)
+                                    .Type(GridSelectionType.Row))
+                                .Resizable(rz => rz.Columns(true))
+                                .Scrollable()
+                                .HtmlAttributes(new { style = "height:500px;" })
+                                .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(20)
+                                .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                .Model(notice => { notice.Id(p => p.NoticeId); notice.Field(p => p.NoticeId).Editable(false); })
+                                .Read(read => read.Action("EditingInline_ReadNotice", "Community"))
+                                )
+)
+    </div>
+</div>
+@using (Html.BeginForm("CreateComment", "CommunityManagement", new { area = "Admin" }, FormMethod.Post, new { role = "form", id = "comment_form" }))
+{
+    <!--popup 01-->
+    <div class="modal fade" id="popup01" style="overflow:scroll;z-index:1100" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" style="color:#1e5687"> <i class="fa fa-check-circle"></i> <text>@Resources.Langues.Title:</text> <text id="Title"> </text></h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table" style="border-top:solid 2px #31708f;border-bottom:solid 1px #31708f;margin-top:10px;">
+                        <tbody>
+                            <tr>
+                                <td class="active text-center text-muted ">@Resources.Langues.Writer </td>
+                                <td id="UserName">@Resources.Langues.Writer</td>
+                            </tr>
+                            <tr>
+                                <td class="active text-center text-muted">@Resources.Langues.DateCreated </td>
+                                <td id="RegDate">@Resources.Langues.DateCreated</td>
+                            </tr>
+                            <tr>
+                                <td class="active text-center text-muted">@Resources.Langues.Views </td>
+                                <td id="View"></td>
+                            </tr>
+                            <tr>
+                                <td class="active text-center text-muted">@Resources.Langues.Attachments </td>
+                                <td id="file-content" class="scroll-style-7" style="overflow-y:scroll;max-height:100px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding:25px;" class="active">
+                                    @(Html.Kendo().Editor()
+                                                                  .Name("Content")
+                                                                  .Tools(tools => tools.Clear())
+                                                                  .HtmlAttributes(new { style = "height:300px", aria_label = "Content" })
+                                                                  .Resizable(rz => rz.Content(true))
+                                    )
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="post-footer">
+                        @Html.HiddenFor(m => m.NoticeId)
+
+                        <div class="input-group">
+                            @Html.TextBoxFor(m => m.Comment, new { @class = "form-control input-md comment", placeholder = Resources.Langues.AddAComment })
+                            @*<input class="form-control" id="comment_content" placeholder="Add a comment" type="text">*@
+                            <span class="input-group-addon" id="send_comment"> <a><i class="fa fa-edit"></i></a></span>
+                        </div>
+
+                        <!--Comment-->
+                        <div class="form-group scroll-style-7"
+                             style="padding-top:10px; padding-left:10px; max-height:180px;
+                             overflow:hidden; overflow-y:scroll; padding-right:10px;"
+                             id="comment_content">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="border-top:none;">
+                        @*<button type="button" id="btnEditNotice" class="btn btn-warning">@Resources.Langues.Edit</button>*@
+                        @*2018-08-24, icpark*@ @*<button type="button" id="btnDeleteNotice" class="btn btn-danger">@Resources.Langues.Delete</button>*@
+                        <button type="button" class="btn btn-gray " data-dismiss="modal" onclick="closePopup()">@Resources.Langues.Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /popup 01 -->
+}
+
+@if (Request.IsAuthenticated)
+{
+    var userStore = new UserStore<ApplicationUser>(new DPDSPDbContext());
+    var userManager = new UserManager<ApplicationUser>(userStore);
+    var user = userManager.FindById(User.Identity.GetUserId());
+    ViewBag.CurrentUser = user;
+
+    using (Html.BeginForm("CreateNoticeAndNoticeFiles", "Community", new { area = "" }, FormMethod.Post, new { role = "form", @id = "writing_form" }))
+    {
+        <!-- popup02 modal -->
+        <div class="modal fade" id="popup02" style="overflow:scroll;z-index:1100" @*tabindex="-1"*@ role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table" style="border-top:solid 2px #31708f;border-bottom:solid 1px #31708f;margin-top:10px;">
+                            <tbody>
+                                @*<tr>
+                                        <td class="active text-center text-muted col-md-2 col-xs-2" style="padding-top:12px;">Category </td>
+                                        <td>
+                                            @Html.DropDownList("NoticeType", new SelectList(ViewBag.NoticeCategoryList, "Value", "Text"), Resources.Langues.PleaseSelect,
+                                           new
+                                           {
+                                               @class = "form-control input-opal",
+                                               @data_val = "true",
+                                               @data_val_required = "The NiticeType field is required."
+                                           })
+                                        </td>
+                                    </tr>*@
+                                @Html.Hidden("NoticeType", "BD0001",
+                                new
+                                {
+                                })
+                                <tr>
+                                    <td class="active text-center text-muted col-md-2 col-xs-2" style="padding-top:12px;">@Resources.Langues.Title </td>
+                                    <td>
+                                        @Html.TextBox("NoticeTitle", "",
+                                new
+                                {
+                                    @class = "form-control input-sm input-opal",
+                                    @data_val_length = "The Title field must be a string with a maximum length of 250.",
+                                    @data_val_length_max = "250",
+                                    @data_val = "true",
+                                    @data_val_required = "The Title field is required."
+                                })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted col-md-2 col-xs-2" style="padding-top:12px;">@Resources.Langues.Attachments @*첨부파일 등록1*@ </td>
+                                    <td>
+                                        <div class="form-inline scroll-style-7" style="width:100%;overflow-y:scroll;max-height:250px;">
+                                            @(Html.Kendo().Upload()
+                                                                    .Name("Files")
+                                                                    .HtmlAttributes(new { aria_label = "Files", @class = "Files" })
+                                                                    .Validation(val =>
+                                                                    {
+                                                                        val.MaxFileSize(314572800);
+                                                                                            //val.AllowedExtensions(new string[] { ".pdf", ".csv", ".xls", ".xlsx", ".doc", ".docx", ".ppt", ".pptx", ".txt" });
+                                                                                        })
+                                            )
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted col-md-2 col-xs-2" style="padding-top:12px;">@Resources.Langues.Content @*첨부파일 등록1*@ </td>
+                                    <td colspan="2" style="padding:25px; line-height:25px" class="active">
+                                        <div id="editorasc">
+                                            @(Html.Kendo().Editor()
+                                                                    .Name("NoticeContent")
+                                                                    .Encode(true)
+                                                                    .Tools(tools => tools.Clear().FontName().FontSize().Bold().Italic().Underline().JustifyLeft().JustifyCenter().JustifyRight().FontColor().BackColor().InsertImage())
+                                                                    .HtmlAttributes(new { style = "height:300px", aria_label = "NoticeContent" })
+                                                                    .Events(events => events.KeyUp("EditorTextChange"))
+                                                                    .Resizable(rz => rz.Content(true))
+                                                                        .ImageBrowser(imageBrowser => imageBrowser
+                                                                        .Image("~/Content/NoticeContentImages/" + ViewBag.CurrentUser.Id + "/{0}")
+                                                                        .Read("Read", "ImageBrowser")
+                                                                        //.Create("Create", "ImageBrowser")
+                                                                        .Destroy("Destroy", "ImageBrowser")
+                                                                        .Upload("Upload", "ImageBrowser")
+                                                                        .Thumbnail("Thumbnail", "ImageBrowser")
+                                                                        )
+                                            )
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="modal-footer" style="border-top:none;">
+                            <button type="button" id="btnWriteNotice" class="btn btn-primary">@Resources.Langues.Save @*등록*@</button>
+                            @*<button type="button" class="btn btn-danger " data-dismiss="modal">@Resources.Langues.Delete</button>*@
+                            <button type="button" class="btn btn-gray " data-dismiss="modal">@Resources.Langues.Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal -->
+    }
+
+    using (Html.BeginForm("UpdateNoticeAndAddNoticeFiles", "CommunityManagement", new { area = "Admin" }, FormMethod.Post, new { role = "form", @id = "formUpdateNotice" }))
+    {
+        <!-- popup03 modal -->
+        <div class="modal fade" id="popup03" style="overflow:scroll;z-index:1100" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" style="color:#1e5687"> <i class="fa fa-check-circle"></i> @Resources.Langues.Edit</h4>
+                    </div>
+                    <div class="modal-body">
+                        @Html.Hidden("NoticeUpdateId")
+                        <table class="table" style="border-top:solid 2px #31708f;border-bottom:solid 1px #31708f;margin-top:10px;">
+                            <tbody>
+                                <tr>
+                                    <td class="active text-center text-muted col-md-2 col-xs-2" style="padding-top:12px;">@Resources.Langues.Title </td>
+                                    <td>
+                                        @Html.TextBox("NoticeUpdateTitle", "",
+                                       new
+                                       {
+                                           @class = "form-control input-sm input-opal",
+                                           @data_val_length = "The Title field must be a string with a maximum length of 250.",
+                                           @data_val_length_max = "250",
+                                           @data_val = "true",
+                                           @data_val_required = "The Title field is required."
+                                       })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted col-md-2 col-xs-2" style="padding-top:12px;">@Resources.Langues.Attachments @*첨부파일 등록1*@ </td>
+                                    <td>
+                                        <div class="form-inline scroll-style-7" style="width:100%;overflow-y:scroll;max-height:250px;">
+                                            @(Html.Kendo().Upload()
+                                                                            .Name("AdditionFiles")
+                                                                            .HtmlAttributes(new { aria_label = "AdditionFiles", @class = "AdditionFiles" })
+                                                                            .Validation(val =>
+                                                                            {
+                                                                                val.MaxFileSize(314572800);
+                                                                                                    //val.AllowedExtensions(new string[] { ".pdf", ".csv", ".xls", ".xlsx", ".doc", ".docx", ".ppt", ".pptx", ".txt" });
+                                                                                                })
+                                            )
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active text-center text-muted col-md-2 col-xs-2" style="padding-top:12px;">@Resources.Langues.Content @*첨부파일 등록1*@ </td>
+                                    <td colspan="2" style="padding:25px; line-height:25px" class="active">
+                                        <div>
+                                            @(Html.Kendo().Editor()
+                                                                  .Name("NoticeUpdateContent")
+                                                                  .Encode(true)
+                                                                  .Tools(tools => tools.Clear().FontName().FontSize().Bold().Italic().Underline().JustifyLeft().JustifyCenter().JustifyRight().FontColor().BackColor().InsertImage())
+                                                                  .HtmlAttributes(new { style = "height:300px", aria_label = "NoticeUpdateContent" })
+                                                                  .Events(events => events
+                                                                  .KeyUp("EditorTextChange"))
+                                                                  .Resizable(rz => rz.Content(true))
+                                                                     .ImageBrowser(imageBrowser => imageBrowser
+                                                                        .Image("~/Content/NoticeContentImages/" + ViewBag.CurrentUser.Id + "/{0}")
+                                                                        .Read("Read", "ImageBrowser")
+                                                                        .Destroy("Destroy", "ImageBrowser")
+                                                                        .Upload("Upload", "ImageBrowser")
+                                                                        .Thumbnail("Thumbnail", "ImageBrowser")
+                                                                        )
+                                            )
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="modal-footer" style="border-top:none;">
+                            <button type="button" id="btnUpdateNotice" class="btn btn-primary">@Resources.Langues.Save </button>
+                            <button type="button" class="btn btn-gray " data-dismiss="modal">@Resources.Langues.Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal -->
+    }
+}
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var noticeGrid = $('#NoticeGrid').data('kendoGrid');
+            var $detailModal = $('#popup01');
+            var $comment = $('#Comment');
+            var $formComment = $('#comment_form');
+            var $commentContent = $('#comment_content');
+
+            var $formWriting = $('#writing_form');
+            var $writingContent = $('#NoticeContent');
+            var $writingTitle = $('#NoticeTitle');
+            var $writingModal = $('#popup02');
+
+            var $updateModal = $('#popup03');
+            var $formUpdateNotice = $('#formUpdateNotice');
+            var $updateTitle = $('#NoticeUpdateTitle');
+
+            var $notUpdateEditor = $('#NoticeUpdateContent').data('kendoEditor');
+            var $NoticeEditor = $('#NoticeContent').data('kendoEditor');
+
+            $("#itemFilter").keyup(function () {
+                var value = $("#itemFilter").val();
+                if (value) {
+                    noticeGrid.dataSource.filter({ field: "NoticeTitle", operator: "contains", value: value });
+                } else {
+                    noticeGrid.dataSource.filter({});
+                }
+            });
+
+            $('#resetNoticeGrid').click(function () {
+                $('#itemFilter').val('');
+                noticeGrid.dataSource.filter({});
+            });
+
+            $('#btnUpdateNotice').click(function () {
+                var isValid = $formUpdateNotice.valid();
+
+                if (isValid && $notUpdateEditor.value() && $notUpdateEditor.value().length <= 4000) {
+                    $formUpdateNotice.submit();
+                }
+
+                if (!$notUpdateEditor.value() || $notUpdateEditor.value().length > 4000) {
+                    $formUpdateNotice.find('.k-editable-area').addClass('input-validation-error');
+                }
+            });
+
+            $formUpdateNotice.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                $notUpdateEditor.value().replace(/(<([^>]+)>)/ig, "");
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        $updateModal.modal('hide');
+                        noticeGrid.dataSource.read();
+                    }
+                });
+                e.preventDefault();
+            });
+
+            $updateTitle.keyup(function () {
+                if ($(this).val()) {
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+            $formUpdateNotice.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $('#btnEditNotice').click(function (e) {
+                var noticeId = $('#NoticeId').val();
+                $.post('@Url.Action("GetNoticeInfors", "CommunityManagement", new { area= "Admin" })', { noticeId: noticeId }, function (result) {
+                    if (result.success) {
+                        $detailModal.modal('hide');
+                        var noticeUpdate = result.noticeUpdate;
+                        $('#NoticeUpdateId').val(noticeUpdate.NoticeUpdateId);
+                        $('#NoticeUpdateTitle').val(noticeUpdate.NoticeUpdateTitle);
+                        $notUpdateEditor.value(noticeUpdate.NoticeUpdateContent);
+                        $updateModal.modal('show');
+                    }
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    $.unblockUI();
+                });
+                e.preventDefault();
+            });
+
+            $updateModal.on('hidden.bs.modal', function () {
+                clearUpdateNoticeModal($formUpdateNotice);
+            });
+
+            $detailModal.on('hidden.bs.modal', function () {
+                clearModal($formComment);
+                $formComment[0].reset();
+            });
+
+            $('#send_comment').click(function () {
+                var isValid = $formComment.valid();
+                if (isValid) {
+                    $formComment.submit();
+                } else {
+                    $comment.focus();
+                }
+            });
+
+            $('#btnWriteNotice').click(function () {
+                var isValid = $formWriting.valid();
+                if (isValid && $NoticeEditor.value() && $NoticeEditor.value().length <= 4000) {
+                    $formWriting.submit();
+                }
+
+                if (!$NoticeEditor.value() || $NoticeEditor.value().length > 4000) {
+                    $formWriting.find('.k-editable-area').addClass('input-validation-error');
+                }
+            });
+
+            $formWriting.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $writingTitle.keyup(function () {
+                if ($(this).val()) {
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+            $formWriting.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                $NoticeEditor.value().replace(/(<([^>]+)>)/ig, "");
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        clearModal($formWriting);
+                        noticeGrid.dataSource.read();
+                    }
+                });
+                e.preventDefault();
+            });
+
+            $writingContent.keyup(function () {
+                if ($(this).val()) {
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+            $formWriting.on('change', '.Files', function () {
+                if ($('.Files').val()) {
+                    $('.k-upload-button').removeClass('input-validation-error');
+                }
+            });
+
+            $writingModal.on('hidden.bs.modal', function () {
+                clearModal($formWriting);
+            });
+
+            $('#addNotice').click(function (e) {
+                $writingModal.modal('show');
+            });
+
+            $comment.keyup(function () {
+                if ($(this).val()) {
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+            $formComment.submit(function (e) {
+                $.blockUI();
+                //var formData = new FormData(this);
+                var formObj = $(this);
+                var data = new FormData(this);
+                var urlAction = formObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        var date = formatDate(parseInt(result.newComment.CommentDate.substr(6)));
+                        var comment = createCommentHmtl(result.newComment.CommentId, result.newComment.CommentUserName, result.newComment.Comment, date, result.newComment.isDeleted);
+                        $commentContent.prepend(comment);
+                        $comment.val('');
+                        $comment.removeClass('input-validation-error');
+                        $comment.blur();
+                    }
+                });
+                e.preventDefault();
+            });
+
+            $('.k-select').on('click', function () {
+                $('#RegDateCreate').prop('readonly', true);
+                $('#RegDate').prop('readonly', true);
+            });
+
+            $('#btnDeleteNotice').click(function () {
+                var noticeId = $('#NoticeId').val();
+                bootbox.confirm({
+                    message: '@Resources.Langues.AreYouSure',
+                    buttons: {
+                        cancel: {
+                            label: '@Resources.Langues.No',
+                            className: 'btn-sm'
+                        }, confirm: {
+                            label: '@Resources.Langues.Yes',
+                            className: 'btn-success btn-sm'
+                        }
+                    },
+                    callback: function (callback) {
+                        if (callback) {
+                            $.blockUI();
+                            $.post('@Url.Action("DeleteNotice", "CommunityManagement", new { area="Admin" })', { noticeId: noticeId }, function (result) {
+                                if (result.success) {
+                                    noticeGrid.dataSource.read();
+                                    $detailModal.modal('hide');
+                                }
+                            }).fail(function () {
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            })
+                            .always(function () {
+                                $.unblockUI();
+                            });
+                        }
+                    }
+                });
+            });
+
+            $formComment.on('click', '.btnDeleteFile', function () {
+                var span = $(this).closest('span');
+                var fileId = span.find('a').attr('id');
+                bootbox.confirm({
+                    message: '@Resources.Langues.AreYouSure',
+                    buttons: {
+                        cancel: {
+                            label: '@Resources.Langues.No',
+                            className: 'btn-sm'
+                        }, confirm: {
+                            label: '@Resources.Langues.Yes',
+                            className: 'btn-success btn-sm'
+                        }
+                    },
+                    callback: function (callback) {
+                        if (callback) {
+                            $.blockUI();
+                            $.post('@Url.Action("DeleteFile", "CommunityManagement", new { area="Admin" })', { fileId: fileId }, function (result) {
+                                if (result.success) {
+                                    span.remove();
+                                }
+                            })
+                            .fail(function () {
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            })
+                            .always(function () {
+                                $.unblockUI();
+                            });
+                        }
+                    }
+                });
+            });
+
+            $('form').on('click', '.btnDelete', function (e) {
+                var $comment = $(this).closest('p');
+                var commentId = $comment.attr('id');
+                bootbox.confirm({
+                    message: '@Resources.Langues.AreYouSure',
+                    buttons: {
+                        cancel: {
+                            label: '@Resources.Langues.No',
+                            className: 'btn-sm'
+                        }, confirm: {
+                            label: '@Resources.Langues.Yes',
+                            className: 'btn-success btn-sm'
+                        }
+                    },
+                    callback: function (callback) {
+                        if (callback) {
+                            $.blockUI();
+                            $.post('@Url.Action("DeleteComment", "CommunityManagement", new { area = "Admin" })', { commentId: commentId }, function (result) {
+                                if (result.success) {
+                                    $comment.remove();
+                                }
+                            }).always(function () {
+                                $.unblockUI();
+                            }).fail(function () {
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        var counter = 1;
+
+        function renderNumber() {
+            return counter++;
+        };
+
+        function onDataBound() {
+            counter = 1;
+        };
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        function EditorTextChange(e) {
+            if (e.sender.body.innerHTML.length > 4000) {
+                var $tr = $(e.sender.wrapper);
+                $tr.find('.k-editable-area').addClass('input-validation-error');
+                return;
+            }
+            $('.k-editable-area').removeClass('input-validation-error');
+        }
+
+        function detailNotice(e) {
+            var noticeGrid = $('#NoticeGrid').data('kendoGrid');
+            var row = $(e.currentTarget).closest('tr');
+            var dataItem = noticeGrid.dataItem(row);
+            var title = '#Title', writer = '#UserName', date = '#RegDate', $noticeId = $('#NoticeId'), $view = $('#View'), $content = $('#Content').data('kendoEditor');
+            $(title).text(dataItem.NoticeTitle);
+            $(writer).text(dataItem.FullUserName);
+            $(date).text(formatDate(dataItem.RegDate));
+            $noticeId.val(dataItem.NoticeId);
+            $content.value('');
+            $content.value(dataItem.NoticeContent);
+            //$.post('@Url.Action("GetFileAndCommentListByNoticeId", "CommunityManagement", new { area="Admin" })', { noticeId: $noticeId.val() }, function (result) {
+            //    if (result.success) {
+            //        $('#popup01').modal('show');
+            //        var listFile = result.listFile;
+            //        listFile.forEach(function (item) {
+            //            var linkFile = createLinkHtml(item.NoticeFileId, item.FilePath, item.FileName, item.FieSize);
+            //            $('#file-content').append(linkFile);
+            //        });
+            //        var listComment = result.listComment;
+            //        listComment.forEach(function (item) {
+            //            var date = formatDate(parseInt(item.CommentDate.substr(6)));
+            //            var comment = createCommentHmtl(item.CommentId, item.CommentUserName, item.Comment, date);
+            //            $('#comment_content').append(comment);
+            //        });
+            //        $view.text(result.view);
+            //    }
+            //}).fail(function () {
+            //    bootbox.alert('@Resources.Langues.ContactAdmin');
+            //}).always(function () {
+            //    $.unblockUI();
+            //});
+
+           
+
+        }
+
+        $(function () {
+            $($('#Content').data().kendoEditor.body).attr('contenteditable', false)
+        })
+
+        function createCommentHmtl(commentId, commentUserName, comment, date) {
+            var style = "style='justify-content:center;align-items: center;padding: 3px 5px;margin-bottom:0px;'";
+            return "<p style='justify-content: space-between;display:flex;' id='"
+                + commentId + "'><label><i class='fa fa-user'></i> "
+                + commentUserName + ": "
+                + comment + "</label> <span style='justify-content: space-between;display:flex;height:25px;min-width: 135px;'>("
+                + (date) + ") <a role='button'"
+                + style + " class='btn btn-danger btn-xs btnDelete'><i class='fa fa-times'></i> @Resources.Langues.Delete</a></span></p>";
+        }
+
+        //function createLinkHtml(noticeFileId, filePath, fileName, fileSize) {
+        //    var style = style = "style='display:initial; padding: 0px 4px;'";
+        //    return "<span><a id=" + noticeFileId + " target='_blank' href="
+        //    + getFilePath(filePath)
+        //    + "><i class='fa fa-save'></i> "
+        //    + fileName + " ("
+        //    + convertMBFileSize(fileSize) + "MB) </a> <button "
+        //    + style + " type='button' class='btnDeleteFile btn btn-danger btn-xs'>&times;</button> / </span> ";
+        //};
+
+        function createLinkHtml(noticeFileId, filePath, fileName, fileSize) {
+            var style = style = "style='display:initial; padding: 0px 4px;'";
+            console.log(getFilePath(filePath));
+            return "<span><a id=" + noticeFileId + " href="
+            + getFilePath(filePath)
+            + "><i class='fa fa-save'></i> "
+            + fileName + " ("
+            + convertMBFileSize(fileSize) + "MB) </a> / </span> ";
+        };
+
+        function clearUpdateNoticeModal($form) {
+            $form.find('input, label, select, .form-group').removeClass('has-error');
+            $form.find('input, textarea').not('.k-fontName, .k-fontSize').val('');
+            var upload = $('.AdditionFiles').data('kendoUpload');
+            //upload.clearAllFiles();
+            $form.find('input, textarea, .k-upload-button').removeClass('input-validation-error');
+            $form.find('.k-editable-area').removeClass('input-validation-error');
+            $('#NoticeType').val('BD0001');
+        }
+
+        function clearModal($form) {
+            $('#Title').text('');
+            $('#UserName').text('');
+            $('#RegDate').text('');
+            var $fileChild = $('#file-content').children();
+            $fileChild.remove();
+            $("#file-content").contents().filter(function () {
+                return this.nodeType === 3;
+            }).remove();
+            $('#View').text('');
+            $('#comment_content').children().remove();
+            $form.find('input, textarea, select, .k-upload-button').removeClass('input-validation-error');
+            //$form[0].reset();
+            $form.find('input, textarea, select').not('.k-fontName, .k-fontSize').val('');
+            $('#CommunityGrid .k-grid-content tr').removeClass('k-state-selected');
+            var upload = $('.Files').data('kendoUpload');
+            //upload.clearAllFiles();
+            $form.find('input, label, select, .form-group').removeClass('has-error');
+            $('#NoticeContent').data('kendoEditor').value('');
+            $('.k-editable-area').removeClass('input-validation-error');
+            $('#NoticeType').val('BD0001');
+        }
+
+        function convertMBFileSize(size) {
+            return ((size / 1024) / 1024).toFixed(2);
+        }
+
+        function getFilePath(path) {
+            return path.substr(1);
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                             message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        };
+
+        function sync_handler(e) {
+            this.read();
+        };
+
+        function onChange(e) {
+            var dataItem = this.dataItem(this.select());
+            var noticeGrid = $('#NoticeGrid').data('kendoGrid');
+            var title = '#Title', writer = '#UserName', date = '#RegDate', $noticeId = $('#NoticeId'), $view = $('#View'), $content = $('#Content').data('kendoEditor');
+            $(title).text(dataItem.NoticeTitle);
+            $(writer).text(dataItem.FullUserName);
+            $(date).text(formatDate(dataItem.RegDate));
+            $noticeId.val(dataItem.NoticeId);
+            $content.value('');
+            $content.value(dataItem.NoticeContent);
+                @*$.post('@Url.Action("GetFileAndCommentListByNoticeId", "CommunityManagement", new { area="Admin" })', { noticeId: $noticeId.val() }, function (result) {
+                    if (result.success) {
+                        $('#popup01').modal('show');
+                        var listFile = result.listFile;
+                        listFile.forEach(function (item) {
+                            var linkFile = createLinkHtml(item.NoticeFileId, item.FilePath, item.FileName, item.FieSize);
+                            $('#file-content').append(linkFile);
+                        });
+                        var listComment = result.listComment;
+                        listComment.forEach(function (item) {
+                            var date = formatDate(parseInt(item.CommentDate.substr(6)));
+                            var comment = createCommentHmtl(item.CommentId, item.CommentUserName, item.Comment, date);
+                            $('#comment_content').append(comment);
+                        });
+                        $view.text(result.view);
+                    }
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    $.unblockUI();
+                });*@
+
+            @*$.post('@Url.Action("NoticeDetail", "Community", new { area="Case" })', {
+                noticeId: $noticeId.val()
+            })*@
+            window.location.href = '@Url.Action("NoticeDetail", "Community", new { area = "Case" })?Id=' + $noticeId.val() + "&type=" + '@ViewBag.Type';
+        }
+
+        function closePopup() {
+            $('#NoticeGrid').data('kendoGrid').dataSource.read();
+        }
+
+    </script>
+}

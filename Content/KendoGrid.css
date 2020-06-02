@@ -1,0 +1,132 @@
+﻿.k-grid-header .k-header .k-link {
+    /*color: white;*/
+    text-align: center;
+    /*font-size: 15px;*/
+}
+
+/*h4 {
+    font-weight: 400;
+    padding: 15px;
+}*/
+
+.bg-header {
+}
+
+.k-editor a {
+    padding: 0 !important;
+    width: inherit !important;
+}
+
+.k-pager-numbers .k-link {
+    padding: 0;
+    font-size: inherit;
+    border-color: #a3d0e4;
+    font-weight: inherit;
+}
+
+/*.k-grid-header .k-header {
+    background-color: black;
+    padding: 15px 0 15px 0 !important;
+    background-repeat: repeat-x;
+}*/
+
+/*.k-grid-toolbar, .k-grouping-header {
+    margin: 0;
+    padding: 1em 0 0 1em;
+    cursor: default;
+}*/
+
+.k-grid .k-state-selected {
+    background-color: #66ccff;
+    color: black;
+}
+
+.k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td {
+    background-color: #66ccff;
+}
+
+.adminSiteContent {
+    margin-top: 30px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+.onlyOneGrid {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.adminSiteHeader {
+    background-color: #fff;
+}
+
+.btn-opal {
+    color: #003f59 !important;
+    border-color: #a3d0e4 !important;
+    border-radius: 4px;
+    background-color: #daecf4;
+}
+
+    .btn-opal:hover {
+        color: #003f59;
+        border-color: #8bc4dd;
+        background-color: #7bd2f6;
+    }
+
+.boder-opal {
+    color: #003f59 !important;
+    border-color: #a3d0e4 !important;
+}
+
+.input-opal {
+    color: #003f59 !important;
+    border-color: #a3d0e4 !important;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.k-grid-edit {
+    background-image: none;
+    font-weight: 600;
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+
+    .k-grid-edit:hover {
+        color: #fff !important;
+        font-weight: 600;
+        background-color: #ec971f;
+        border-color: #d58512;
+    }
+
+.k-grid-Delete {
+    color: #fff;
+    font-weight: 600;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+    .k-grid-Delete:hover {
+        color: #fff !important;
+        font-weight: 600;
+        background-color: #c9302c;
+        border-color: #ac2925;
+    }
+
+.k-grid-content .btn-info {
+    color: #fff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+}
+
+    .k-grid-content .btn-info:hover {
+        color: #fff;
+        background-color: #31b0d5;
+        border-color: #269abc;
+    }
+
+.hide-border {
+    border: none !important;
+}

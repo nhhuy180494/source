@@ -1,0 +1,29 @@
+﻿<div class="well">
+    <div class="panel-heading">
+        <h5 class="panel-title" style="background:url(/img/ci3_1.png) no-repeat top left;height:40px;padding-top:20px;"></h5>
+    </div>
+    <p class="text-danger" id="login-message"></p>
+
+    <div class="form-group">
+        <label for="UserLogin_Email" class="control-label">Login Information</label>
+        <input class="form-control" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required=" " id="UserLogin_Email" name="UserLogin.Email" placeholder="Email Address" type="text" value="">
+
+        <span class="help-block"></span>
+    </div>
+    <div class="form-group">
+        <input class="form-control" data-val="true" data-val-required=" " id="UserLogin_Password" name="UserLogin.Password" placeholder="Password" type="password">
+        <span class="field-validation-valid text-danger" data-valmsg-for="UserLogin.Password" data-valmsg-replace="true"></span>
+        <span class="help-block"></span>
+    </div>
+    <div class="form-group">
+        <label for="UserLogin_Language" class="control-label">Language</label>
+        <select class="form-control" data-val="true" data-val-required="The Language field is required." id="UserLogin_Language" name="UserLogin.Language">
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+    <div id="loginErrorMsg" class="alert alert-error hide">Wrong username or password</div>
+    <input type="submit" id="login-submit" value="Login" class="btn btn-primary btn-block">
+    <input type="button" value="Close" class="btn btn-default btn-block" data-dismiss="modal">
+
+</div>

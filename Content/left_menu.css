@@ -1,0 +1,72 @@
+ @charset 'euc-kr';
+ 
+/* CSS Document */
+
+#page-wrapper {
+	padding: 0 15px;
+	min-height:768px;
+	background-color: #fff;
+}
+
+@media(min-width:768px) {
+#page-wrapper {
+	position:inherit; 
+	margin: 0 0 0 170px;
+	padding: 0 30px;
+	/*border-left: 1px solid #e7e7e7;*/
+    border-left:0;
+}
+}
+.sidebar {
+	font-family: '±¼¸²', Dotum, AppleGothic, sans-serif;
+	min-height: 768px;
+	background: #2e353d;
+	font-size: 13px;
+}
+.sidebar .sidebar-nav.navbar-collapse {
+	padding-right: 0;
+	padding-left: 0;
+}
+.sidebar .sidebar-search {
+	padding: 15px;
+}
+.sidebar ul {
+	background: #2e353d;
+}
+.sidebar ul li {
+	border-bottom: 1px solid #3c454e;
+	line-height: 20px;
+}
+.sidebar ul li a {
+	background-color: #2e353d;
+	color: #fff;
+	font-weight: bold;
+	display: block;
+}
+.sidebar ul li .am {
+	background-color: #212329;
+	color: #fff;
+	font-weight: bold;
+}
+
+@media(min-width:768px) {
+.sidebar {
+	z-index: 1;
+	position: absolute;
+	width: 170px;
+	margin-top: 51px;		
+}
+}
+
+@media (max-width:767px) {
+.sidebar {
+	display: none!important
+}
+}
+
+.sidebar ul li .over:hover, .over:after {
+    font-weight: bold;
+    color: #b8bbc2;
+    background: #212329;
+    display: block;
+}

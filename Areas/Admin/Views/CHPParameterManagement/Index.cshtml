@@ -1,0 +1,284 @@
+﻿
+@{
+    ViewBag.Title = Resources.Langues.CHPParameterManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section styles{
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        .displayModelCode {
+            font-size: 20px;
+        }
+
+        input[type="checkbox"][readonly] {
+            pointer-events: none;
+        }
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent">
+    <div class="form-group">
+        <div class="col-md-12 col-lg-6">
+            <div class="form-group">
+                @(Html.Kendo().Grid<DPDSP.Models.CHPParameterViewModel>()
+    .Name("CHPParameterGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Company).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Company);
+        columns.Bound(p => p.ModelName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ModelName);
+        //columns.Bound(p => p.ModelNameEng).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ModelName + " (Eng)");
+        columns.Bound(p => p.Volume).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.ChpParamVolumn).Format("{0:n2}");
+        columns.Bound(p => p.ThemRatio).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.ThemRatio).Format("{0:n2}");
+        columns.Bound(p => p.FullUserName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.FullUserName);
+        columns.Bound(p => p.HowReg).ClientTemplate("#=HowReg ? 'Admin' : 'User' #").HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.HowReg);
+        columns.Bound(p => p.ChpParameterId).Hidden();
+        columns.Command(command =>
+        {
+            command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+            command.Custom(Resources.Langues.Delete).Click("deleteCHPParameter").HtmlAttributes(new { @class = "btn-danger" });
+        })/*.Title("Management")*/.HtmlAttributes(new { style = "text-align:center;" });
+    })
+    .ToolBar(toolbar =>
+    {
+    toolbar.Template(@<text>
+                    <div class="form-group">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon btn-opal"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                                    <input type="text" class="form-control boder-opal" id='chpParameterFilter' placeholder="제품명">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-opal" id="resetCHPParameterGrid" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group pull-right">
+                            <a class="k-button k-button-icontext k-grid-add" href="/Admin/CHPParameterManagement/Read_CHPParameter?CHPParameterGrid-mode=insert"><span class="k-icon k-i-add"></span>@Resources.Langues.AddNewRecord</a>
+                        </div>
+                    </div>
+    </text>);
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:650px;" })
+    .Selectable(selectable => selectable
+          .Mode(GridSelectionMode.Multiple)
+          .Type(GridSelectionType.Row))
+    .Events(ev =>
+    {
+        ev.Change("onChange");
+        ev.Edit("onEdit");
+        ev.DataBound("onDataBound");
+    })
+    .Resizable(rz => rz.Columns(true))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+        .Model(model => { model.Id(p => p.ChpParameterId); })
+    .Read(read => read.Action("Read_CHPParameter", "CHPParameterManagement"))
+    .Create(update => update.Action("Create_CHPParameter", "CHPParameterManagement"))
+       .Update(update => update.Action("Update_CHPParameter", "CHPParameterManagement"))
+    )
+                )
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-6">
+            <div class="form-group">
+                <div class="form-inline" style="padding:20px;">
+                    <label class="form-group displayModelCode">@Resources.Langues.ModelSelection</label>
+                    <p class="form-group displayModelCode" id="CHPParameterSelected"></p>
+                    @Html.Hidden("CHPParameterSelectedId")
+                </div>
+                <div class="row">
+                    @(Html.Kendo().Grid<DPDSP.Models.CHPParameterSubViewModel>()
+        .Name("CHPParameterSubGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Load).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Load).Format("{0:n2}");
+            columns.Bound(p => p.FuelConsum).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.FuelConsum).Format("{0:n2}");
+            columns.Bound(p => p.ChpParameterSubId).Hidden();
+            columns.Command(command =>
+            {
+                command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                command.Custom(Resources.Langues.Delete).Click("deleteCHPParameterSub").HtmlAttributes(new { @class = "btn-danger" });
+            }).HtmlAttributes(new { style = "text-align:center;" });
+        })
+        .ToolBar(toolbar =>
+        {
+            toolbar.Create().Text(Resources.Langues.AddNewRecord).HtmlAttributes(new { @class = "pull-right" });
+        })
+        //.Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Pageable()
+        .Sortable()
+        .Scrollable(rz => rz.Enabled(false))
+        .HtmlAttributes(new { style = "height:600px;" })
+        .Resizable(rz => rz.Columns(true))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .PageSize(10)
+                        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                        .Model(model => { model.Id(p => p.ChpParameterSubId); })
+                        .Read(read => read.Action("Read_CHPParameterSub", "CHPParameterManagement").Data("dataCHPParameter"))
+                        .Create(update => update.Action("Create_CHPParameterSub", "CHPParameterManagement").Data("dataCHPParameter"))
+                        .Update(update => update.Action("Update_CHPParameterSub", "CHPParameterManagement").Data("dataCHPParameter"))
+                        )
+                    )
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            var chpParameterGrid = $("#CHPParameterGrid").data("kendoGrid");
+
+            $("#chpParameterFilter").keyup(function () {
+                var value = $("#chpParameterFilter").val();
+                if (value) {
+                    chpParameterGrid.dataSource.filter({ field: "ModelName", operator: "contains", value: value });
+                } else {
+                    chpParameterGrid.dataSource.filter({});
+                }
+            });
+
+            $('#resetCHPParameterGrid').click(function () {
+                $('#chpParameterFilter').val('');
+                chpParameterGrid.dataSource.filter({});
+            });
+        });
+
+        function deleteCHPParameterSub(e) {
+            var chpParameterSubGrid = $("#CHPParameterSubGrid").data("kendoGrid");
+            var dataItem = chpParameterSubGrid.dataItem($(e.currentTarget).closest("tr"));
+            var chpParameterId = $("#CHPParameterSelectedId").val();
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("Destroy_CHPParameterSub", "CHPParameterManagement")', { chpParameterId: chpParameterId, chpParameterSubId: dataItem.ChpParameterSubId },
+                        function (result) {
+                            if (result) {
+                                chpParameterSubGrid.dataSource.read({ chpParameterId: chpParameterId });
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function dataCHPParameter() {
+            var chpParameterId = $("#CHPParameterSelectedId").val();
+            return {
+                chpParameterId: chpParameterId
+            };
+        }
+
+        function deleteCHPParameter(e) {
+            var chpParameterSubGrid = $("#CHPParameterSubGrid").data("kendoGrid");
+            var chpParameterGrid = $("#CHPParameterGrid").data("kendoGrid");
+            var dataItem = chpParameterGrid.dataItem($(e.currentTarget).closest("tr"));
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("Destroy_CHPParameter", "CHPParameterManagement")', { chpParameterId: dataItem.ChpParameterId },
+                        function (result) {
+                            if (result) {
+                                $("#CHPParameterSelected").text("");
+                                chpParameterGrid.dataSource.read();
+                                chpParameterSubGrid.dataSource.read(dataCHPParameter());
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function onDataBound(e) {
+            var chpParameterGrid = $("#CHPParameterGrid").data("kendoGrid");
+            var row = chpParameterGrid.tbody.find("tr[role='row']:first");
+            if (row != null) {
+                chpParameterGrid.select(e.sender.tbody.find("tr:first"));
+            }
+        }
+
+        function onChange(e) {
+            var chpParameterGrid = $("#CHPParameterGrid").data("kendoGrid");
+            var chpParameterSubGrid = $("#CHPParameterSubGrid").data("kendoGrid");
+            var chpParameterSelected = chpParameterGrid.dataItem(chpParameterGrid.select());
+            var modelName = chpParameterSelected.ModelName;
+            var chpParameterId = chpParameterSelected.ChpParameterId;
+            $('#CHPParameterSelected').text(modelName);
+            $('#CHPParameterSelectedId').val(chpParameterId);
+            chpParameterSubGrid.dataSource.read({ chpParameterId: chpParameterId });
+        }
+
+        function onEdit(e) {
+            if (e.model.isNew() == false) {
+                $(e.container).find('input[name=FullUserName]').prop("readonly", true);
+                $(e.container).find('input[name=HowReg]').prop("readonly", true);
+            }
+            else {
+                $(e.container).find('input[name=FullUserName]').css("display", "none");
+                $(e.container).find('input[name=HowReg]').css("display", "none");
+            }
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+    </script>
+}
+

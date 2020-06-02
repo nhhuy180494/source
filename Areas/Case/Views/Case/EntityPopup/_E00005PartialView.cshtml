@@ -1,0 +1,388 @@
+﻿@model DPDSP.Models.I00002ViewModel
+
+<style>
+    .E00005 {
+        top: 5%;
+        /*width: 50%;*/
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .text {
+        padding-top: 7px;
+    }
+
+    .input-validation-error {
+        border: 1px solid red !important;
+    }
+
+    .modal-dialog1 {
+        width: 20%;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: inline-block;
+        font-size: 20px;
+        color: blue;
+        border: 1px solid blue;
+        text-align: center;
+    }
+</style>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var $modal = $('.E00005');
+        var caseId = @Request.Params["caseId"];
+        var modelCode = '@Request.Params["modelCode"]';
+        var $E00005Form = $('#E00005Form');
+    $(document).ready(function () {
+
+        if ('@Request.Params["modelCode"]' == "M00001" || '@Request.Params["modelCode"]' == "M00004") {
+            $('#title-5').html('@Resources.Langues.Electricitybill')
+        }
+        if ('@Request.Params["modelCode"]' == "M00005") {
+            $('.base-rate').html('@Resources.Langues.BaseRateUnitPrice')
+        }
+
+        $('#CaseId').val(caseId)
+        $('#ModelCode').val(modelCode)
+
+        $('.E00005').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+        $modal.on('hide.bs.modal', function () {
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+
+        $modal.on('show.bs.modal', function () {
+            $('#submitE00005Form').click(function(){
+                var valid = $E00005Form.valid();
+
+                if(valid){
+                    $E00005Form.submit();
+                }
+            });
+
+            $E00005Form.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $E00005Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        $.unblockUI();
+                        showMess('@Resources.Langues.ContactAdmin')
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        updateHistory(result.html)
+                        if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                        $.unblockUI();
+                        showMess('@Resources.Langues.Successful', function () {
+                            $('.modal-backdrop').remove();
+                            $('.E00005').modal('hide');
+                        });
+                            $("#btn_E00005").addClass("democlass");
+                    } else {
+                        $.unblockUI();
+                        showMess('@Resources.Langues.Error')
+                    }
+                });
+                e.preventDefault();
+            });
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetI00002", "EntityE00005Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#E00005ComSubName').data('kendoDropDownList').value(result.PaymentCode);
+                $("#PaymentCode").val(result.PaymentCode);
+            }else {
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function () {
+            $.unblockUI();
+        });
+    });
+    function onChange() {
+        $("#PaymentCode").val($('#E00005ComSubName').val());
+    }
+
+    function dataComCode() {
+        var comCode = "PY0000"; //Requirement
+        var filter = $('.k-textbox[aria-owns="E00005ComSubName_listbox"]').val();
+        return { comCode: comCode, filter: filter }
+    };
+
+    $('input[type=radio][name=optradio]').change(function () {
+        if (this.value == 'option1') {
+            $("#file").val('');
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+        }
+        else if (this.value == 'option2') {
+            $("#PaymentCode").val('');
+            //$("#ContractPower").val('');
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+        }
+    });
+
+    function helpOnclick() {
+        if (modelCode == 'M00005') {
+            $('.HelpPopup').modal('show');
+        } else {
+            showMess('@Resources.Langues.E5Manual')
+            $('.bootbox-body').html($('.bootbox-body').html().replace(/\./g, '.<br/>'));
+        }
+
+    }
+</script>
+
+<!-- Modal -->
+@using (Html.BeginForm("SaveEntityE00005PopupData", "EntityE00005Popup", FormMethod.Post, new { @role = "form", @id = "E00005Form", enctype = "multipart/form-data" }))
+{
+    if (Request.Params["modelCode"] == "M00005" || Request.Params["modelCode"] == "M00001" || Request.Params["modelCode"] == "M00004")
+    {
+        <div class="modal fade E00005" role="dialog">
+            <div class="modal-dialog modal-dialog1" style="width:50%">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="title-5">@Resources.Langues.SelectApplicablePlan </h4>
+                    </div>
+                    <div class="modal-body" style="padding:40px">
+                        @Html.HiddenFor(m => m.CaseId)
+                        @Html.HiddenFor(m => m.ModelCode)
+                        @Html.HiddenFor(m => m.PaymentCode)
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="radio">
+                                    <input type="radio" name="optradio" value="option1" checked="checked">  <h4>@Resources.Langues.SelectKEPCO</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="form-option-1">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-3 col-md-3 lbWT">@Resources.Langues.ApplicablePlan</label>
+                                    <div class="col-md-8">
+                                        @(Html.Kendo().DropDownListFor(m => m.E00005ComSubName)
+                                            .DataTextField("Text")
+                                            .DataValueField("Value")
+                                            .Filter(FilterType.Contains).Height(500)
+                                            .DataSource(source =>
+                                            {
+                                                source.Read(read =>
+                                                {
+                                                    read.Action("Read_ComSub", "EntityE00005Popup", new { area = "Case" }).Data("dataComCode");
+                                                });
+                                            })
+                                            .OptionLabel("– Select –").HtmlAttributes(new { style = "text-align:left;" })
+                                            .HtmlAttributes(new { style = "width: 100%" })
+                                            .Events(e => e.Change("onChange"))
+                                        )
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="radio">
+                                    <input type="radio" name="optradio" value="option2">  <h4>@Resources.Langues.ManualInput <span onclick="helpOnclick()" class="dot">?</span>@*<button type="button" onclick="helpOnclick()" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="form-option-2" class="hidden">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-6">
+                                                @Html.TextBoxFor(m => m.file, "", new
+                                               {
+                                                   @data_val = "true",
+                                                   @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                                                   @class = "form-control",
+                                                   @placeholder = "Excel File...",
+                                                   @type = "file"
+                                               })
+                                            </div>
+
+                                            <div class="col-xs-4">
+                                                <a type="button" class="btn btn-primary" href="@Url.Content("~/Content/TemplateForm/rates_form.xlsx")">@Resources.Langues.Format</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="bWT base-rate">@Resources.Langues.BaseRate</label>
+                                    @Html.TextBoxFor(m => m.BaseRate, "0", new
+                                       {
+                                           @class = "input-md",
+                                           @style = "text-align:right;width:30%;"
+                                       })<span>원/kW</span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="form-group pull-right">
+                                    <button type="button" id="submitE00005Form" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                    <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="modal fade E00005" role="dialog">
+            <div class="modal-dialog" style="width:50%">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="title-5">@Resources.Langues.SelectApplicablePlan </h4>
+                    </div>
+                    <div class="modal-body">
+                        @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                           {
+                               @data_val = "true",
+                               @data_val_required = "The CaseId field is required."
+                           })
+                        @Html.Hidden("modelCode", @Request.Params["modelCode"], new
+                           {
+                               @data_val = "true",
+                               @data_val_required = "The CaseId field is required."
+                           })
+                        @Html.Hidden("PaymentCode", "", new
+                           {
+                               @data_val = "true",
+                               @data_val_required = "The PaymentCode field is required.",
+                               @data_val_length = "The field PaymentCode must be a string with a maximum length of 6.",
+                               @data_val_length_max = "6",
+                           })
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-xs-3 col-md-3 lbWT">@Resources.Langues.ApplicablePlan</label>
+                                <div class="col-md-8">
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("E00005ComSubName")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .Filter(FilterType.Contains)
+                                        .Height(500)
+                                        .DataSource(source =>
+                                        {
+                                            source.Read(read =>
+                                            {
+                                                read.Action("Read_ComSub", "EntityE00005Popup", new { area = "Case" }).Data("dataComCode");
+                                            });
+                                        })
+                                        .OptionLabel("– Select –").HtmlAttributes(new { style = "text-align:left;" })
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        .Events(e => e.Change("onChange"))
+                                    )
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="form-group pull-right">
+                                    <button type="button" id="submitE00005Form" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                    <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<div class="modal fade HelpPopup" role="dialog">
+    <div class="modal-dialog" style="width:40%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin:10px;font-size: 14px;word-break: keep-all;">
+                    @Html.Raw(@Resources.Langues.HelpE52)
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:10px">
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.k-textbox[aria-owns="E00005ComSubName_listbox"]').unbind();
+    $(document).ready(function () {
+        if ('@Request.Params["modelCode"]' == "M00001" || '@Request.Params["modelCode"]' == "M00004" ||'@Request.Params["modelCode"]' == "M00005") {
+            $('#title-5').html('@Resources.Langues.Electricitybill')
+        }
+
+        $('.E00005').on('shown.bs.modal', function () {
+            $(document).off('focusin.modal');
+        });
+
+        $('.E00005').on('hide.bs.modal', function () {
+            $('.k-textbox[aria-owns="E00005ComSubName_listbox"]').remove();
+        });
+    });
+
+    $(".k-textbox").on('keyup', function (evt) {
+        $('#E00005ComSubName').data('kendoDropDownList').dataSource.read();
+    });
+</script>

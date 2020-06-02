@@ -1,0 +1,151 @@
+﻿<style>
+    .form-group {
+        margin-right: 0px !important
+    }
+</style>
+
+<script>
+    function onDataGAL() {
+        var year = $('#YearSelect').val();
+        return { year: year };
+    }
+
+    function onDataGAC() {
+        var year = $('#YearSelect').val();
+        var GAL = $('#GALSelect').val();
+        return { year: year, GAL: GAL };
+    }
+
+    function Changedrdyear() {
+        $("#GALSelect").data("kendoDropDownList").dataSource.read();
+    }
+
+    function ChangedrdGAL() {
+        $("#GACSelect").data("kendoDropDownList").dataSource.read();
+    }
+
+    function ChangedrdGAC() {
+        //$("#GACSelect").data("kendoDropDownList").dataSource.read();
+    }
+</script>
+
+<h4 style="text-align:center">@Resources.Langues.Fuelcostinput</h4>
+
+<div class="form-horizontal" style="padding:0 5px 0 5px; font-size:12px !important">
+    <div class="form-group">
+        <label class="control-label col-xs-5 lbWT">@Resources.Langues.SelectYear</label>
+        <div class="col-xs-6">
+            @(Html.Kendo().DropDownList()
+                                                                .Name("YearSelect")
+                                                                .DataTextField("Text")
+                                                                .DataValueField("Value")
+                                                                .Filter(FilterType.Contains)
+                                                                .DataSource(source =>
+                                                                {
+                                                                    source.Read(read =>
+                                                                    {
+                                                                        read.Action("GetListYear", "EntityE00032Popup", new { area = "Case" });
+                                                                    });
+                                                                })
+            .Events(e => e.Change("Changedrdyear"))
+                                                                .HtmlAttributes(new { style = "width: 100%;" })
+            )
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-5 lbWT">@Resources.Langues.SelectLoc</label>
+        <div class="col-xs-6">
+            @(Html.Kendo().DropDownList()
+                                                                .Name("GALSelect")
+                                                                .DataTextField("Text")
+                                                                .DataValueField("Value")
+                                                                .Filter(FilterType.Contains)
+                                                                .DataSource(source =>
+                                                                {
+                                                                    source.Read(read =>
+                                                                    {
+                                                                        read.Action("GetListGAL", "EntityE00032Popup", new { area = "Case" }).Data("onDataGAL");
+                                                                    });
+                                                                })
+            .Events(e => e.Change("ChangedrdGAL"))
+                                                                .HtmlAttributes(new { style = "width: 100%" })
+            )
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-5 lbWT">@Resources.Langues.SelectCityGasCompany</label>
+        <div class="col-xs-6">
+            @(Html.Kendo().DropDownList()
+                                                                .Name("GACSelect")
+                                                                .DataTextField("Text")
+                                                                .DataValueField("Value")
+                                                                .Filter(FilterType.Contains)
+                                                                .DataSource(source =>
+                                                                {
+                                                                    source.Read(read =>
+                                                                    {
+                                                                        read.Action("GetListGAC", "EntityE00032Popup", new { area = "Case" }).Data("onDataGAC");
+                                                                    });
+                                                                })
+            .Events(e => e.Change("ChangedrdGAC"))
+                                                                .HtmlAttributes(new { style = "width: 100%" })
+            )
+        </div>
+    </div>
+
+    <div style="text-align:center">
+        <label style="color:red;text-align:center">*저장을 하셔야 다음단계로 넘어 갑니다.</label>
+
+    </div>
+    <div class="col-xs-12">
+        <div class="list-inline" style="text-align:center">
+            <button type="button" onclick="FormE00032Save()" class="button button-gray">@Resources.Langues.Save</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#btn_E00032').removeClass('progress-bar-warning');
+    })
+    function onData() {
+        var filter = $('.k-textbox[aria-owns="LocationCode_listbox"]').val();
+        return { filter: filter };
+    }
+
+    function onData1() {
+        var filter = $('.k-textbox[aria-owns="LocationCode1_listbox"]').val();
+        return { filter: filter };
+    }
+
+    function onData2() {
+        var filter = $('.k-textbox[aria-owns="LocationCode2_listbox"]').val();
+        return { filter: filter };
+    }
+
+    function FormE00032Save() {
+        $.blockUI();
+        $.post("@Url.Action("SaveEntityE00032PopupData", "EntityE00032Popup", new { area="Case" })", {
+            year: $('#YearSelect').val(), GAL: $('#GALSelect').val(), modelCode: '@Request.Params["modelCode"]', caseId: @Request.Params["caseId"], GAC: $('#GACSelect').val()}, function (result) {
+                if (result.success) {
+                     $.unblockUI();
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                            if (lstEntityNextStep.length != 0) {
+                                nextStepEntity(lstEntityNextStep[0]);
+                                lstEntityNextStep.shift();
+                                console.log(lstEntityNextStep)
+                            } else {
+                                nextEntity()
+                            }
+                } else {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.Error');
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+    }
+</script>

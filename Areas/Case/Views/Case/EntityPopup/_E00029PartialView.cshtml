@@ -1,0 +1,694 @@
+﻿<style>
+    .E00029 {
+        top: 5%;
+    }
+
+    .input-validation-error {
+        border: 1px solid red !important;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .k-list-optionlabel {
+        text-align: center;
+    }
+
+    .lbWT {
+        font-weight: 400;
+    }
+
+    .tblMultiRow th, td {
+        text-align: center;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .modal-dialog1 {
+        width:30%
+    }
+</style>
+<link href="@Url.Content("~/Content/case_site_css/entity_popup_styles.css")" rel="stylesheet" type="text/css" />
+
+<script>
+    
+    function onData() {
+        var filter =  $('.k-textbox[aria-owns="ModelNameDrop_listbox"]').val();
+        return { filter: filter};
+    }
+
+    function onChange(e){
+        var value = $("#ModelNameDrop").data("kendoDropDownList").value();
+        var tbody = $('.tblMultiRow').find('tbody');
+
+        if(value === ""){
+            clearModal();
+        }
+        else if(value ==="custom"){
+            clearModal();
+            $('.tblRow').find('input').removeAttr("readonly");
+            $('.paraSubRow').removeClass('hidden');
+            $('.paraSubRow').find('input').removeAttr('disabled');
+        }else {
+            clearModal();
+            $('.tblRow').find('input').removeAttr("readonly");
+            $('.paraSubRow').removeClass('hidden');
+            $('.paraSubRow').find('input').removeAttr('disabled');
+            $.blockUI();
+            $.post("@Url.Action("GetFCParameterSubList", "EntityE00029Popup", new { area="Case" })", { fcparameterId:value }, function (result) {
+                if (result.success) {
+                    $('.tblRow').find('input').not('.loadInput').val("");
+                    $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+                    $('.tblRow').find('input').removeClass("input-validation-error");
+                    $('.tblMultiRow').find('input').removeClass("input-validation-error");
+                    $('.paraSubRow').find('input').not('.loadInput').val("");
+                    $('.paraSubRow').addClass('hidden');
+                    $('.paraSubRow').find('input').attr('disabled', 'disabled');
+                    var list = result.listFCParaSub;
+                    var dem = 0;
+                    list.forEach(function (item) {
+                        var html = createHtmlParaSub(item, dem);
+                        dem++;
+                        tbody.append(html);
+                    });
+
+                    $('#FuelCostM1').val(result.fcMonth.FuelCostM1)
+                    $('#FuelCostM2').val(result.fcMonth.FuelCostM2)
+                    $('#FuelCostM3').val(result.fcMonth.FuelCostM3)
+                    $('#FuelCostM4').val(result.fcMonth.FuelCostM4)
+                    $('#FuelCostM5').val(result.fcMonth.FuelCostM5)
+                    $('#FuelCostM6').val(result.fcMonth.FuelCostM6)
+                    $('#FuelCostM7').val(result.fcMonth.FuelCostM7)
+                    $('#FuelCostM8').val(result.fcMonth.FuelCostM8)
+                    $('#FuelCostM9').val(result.fcMonth.FuelCostM9)
+                    $('#FuelCostM10').val(result.fcMonth.FuelCostM10)
+                    $('#FuelCostM11').val(result.fcMonth.FuelCostM11)
+                    $('#FuelCostM12').val(result.fcMonth.FuelCostM12)
+
+                    $.blockUI();
+                    $.post("@Url.Action("GetFCParameter", "EntityE00029Popup", new { area="Case" })", { fcparameterId:value }, function (result) {
+                        if (result.success) {
+                            $('#Company').val(result.listFCPara.Company);
+                            $('#ModelName').val(result.listFCPara.ModelName);
+                            $('#VolumeS').val(result.listFCPara.Volume.toLocaleString('en'));
+                            $.unblockUI();
+                        } else {
+                            $.unblockUI();
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                    }).always(function(){
+                        //$.unblockUI();
+                    });
+            } else {
+                    $.unblockUI();
+    }
+    }).fail(function () {
+        $.unblockUI();
+        bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+    }).always(function(){
+        //$.unblockUI();
+    });
+    }
+    };
+</script>
+
+@using (Html.BeginForm("SaveEntityE00029PopupData", "EntityE00029Popup", FormMethod.Post, new { @role = "form", @id = "EntityE00029Form" }))
+{
+    <div class="modal fade E00029" id="" role="dialog">
+        <div class="modal-dialog modal-dialog1">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="title-29">@Resources.Langues.E00029Title</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                    {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                    })
+
+                    @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+                    {
+                       @data_val = "true",
+                       @data_val_required = "The ModelCode field is required."
+                    })
+                    <br />
+                    <div class="row">
+                        <div class="form-horizontal">
+                            <label class="control-label col-md-4 lbWT">@Resources.Langues.FCparameterselection</label>
+                            <div class="col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                          .Name("ModelNameDrop")
+                                           .DataTextField("Text")
+                                                                            .DataValueField("Value")
+                                          .HtmlAttributes(new { style = "width: 100%" })
+                                          .Filter(FilterType.Contains)
+                                        .DataSource(source =>
+                                        {
+                                            source.Read(read =>
+                                            {
+                                                read.Action("Read_FCParameter", "EntityE00029Popup", new { area = "Case" }).Data("onData");
+                                            });
+                                        })
+                                        .Events(ev => ev.Change("onChange"))
+                                        .OptionLabel("- Select -")
+                                )
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <table class="table table-bordered tblRow">
+                            <tbody>
+                                <tr>
+                                    <td class="active col-xs-3">@Resources.Langues.Company</td>
+                                    <td>
+                                        @Html.TextBox("Company", "", new
+                                        {
+                                           @data_val = "true",
+                                           @data_val_length = "The field Company must be a string with a maximum length of 200.",
+                                           @data_val_length_max = "200",
+                                           @style = "text-align:center"
+                                        })
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <table class="table table-bordered tblRow">
+                            <tbody>
+                                <tr>
+                                    <td class="active col-xs-3">@Resources.Langues.ModelName</td>
+                                    <td>
+                                        @Html.TextBox("ModelName", "", new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_length = "The field ModelName must be a string with a maximum length of 200.",
+                                       @data_val_length_max = "200",
+                                       @data_val_required = "The ModelName field is required.",
+                                       @style = "text-align:center"
+                                   })
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row" style="margin-top:5px;">
+                        <table class="table table-bordered tblRow">
+                            <tbody>
+                                <tr>
+                                    <td class="active col-xs-3">@Resources.Langues.Volume</td>
+                                    <td>
+                                        @Html.TextBox("VolumeS", "", new
+                                        {
+                                           @data_val = "true",
+                                           @data_val_required = "The Volume field is required.",
+                                           @style = "text-align:right;"
+                                        })
+                                    </td>
+                                    <td class="active col-xs-1">kW</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @*<div class="row" style="margin-top:5px;">
+                        <table class="table table-bordered tblRow">
+                            <tbody>
+                                <tr>
+                                    <td>@Resources.Langues.Month</td>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                    <td>8</td>
+                                    <td>9</td>
+                                    <td>10</td>
+                                    <td>11</td>
+                                    <td>12</td>
+                                </tr>
+                                <tr class=" ">
+                                    <td>@Resources.Langues.Price</td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM1", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM1 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM2", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM2 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM3", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM3 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM4", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM4 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM5", new
+                                                                         {
+                                                                            @data_val = "true",
+                                                                            @data_val_number = "The field FuelCostM5 must be a number.",
+                                                                            @style = "text-align:right;"
+                                                                         })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM6", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM6 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM7", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM7 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM8", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM8 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM9", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM9 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM10", new
+                                                                         {
+                                                                            @data_val = "true",
+                                                                            @data_val_number = "The field FuelCostM10 must be a number.",
+                                                                            @style = "text-align:right;"
+                                                                         })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM11", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM11 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("FuelCostM12", new
+                                                                        {
+                                                                           @data_val = "true",
+                                                                           @data_val_number = "The field FuelCostM12 must be a number.",
+                                                                           @style = "text-align:right;"
+                                                                        })
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>*@
+
+                    <div class="row scroll-style-7" style="max-height:254px;overflow-y:scroll;">
+                        <table class="table table-bordered tblMultiRow">
+                            <thead>
+                                <tr>
+                                    <th class="active">@Resources.Langues.Load</th>
+                                    <th class="active">@Resources.Langues.Electricaloutput</th>
+                                    <th class="active">@Resources.Langues.Heat1</th>
+                                    <th class="active">@Resources.Langues.Fuelinput1</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int totalRow = 5;
+                                    double percen = 100.0;
+                                    for (int i = 0; i < totalRow; i++)
+                                    {
+                                        string path = "~/Areas/Case/Views/Case/EntityPopupForm/_E00029/_E00029ParaSubForm.cshtml";
+                                        double[] arrs = new double[] { percen, i };
+                                        @Html.Partial(path, arrs);
+                                        percen -= 25;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="list-inline pull-right">
+                            <button type="button" id="FormE00029Save" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $('.k-textbox[aria-owns="ModelNameDrop_listbox"]').unbind();
+
+    $(document).ready(function(){
+        var caseId = @Request.Params["caseId"];
+        var componentCode = "CP0004";
+        var dropdownlist = $("#ModelNameDrop").data("kendoDropDownList");
+        $('.E00029').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        if ('@Request.Params["modelCode"]' == "M00001" || '@Request.Params["modelCode"]' == "M00004"|| '@Request.Params["modelCode"]' == "M00005") {
+            $('#title-29').html('@Resources.Langues.E29Tilte')
+        }
+
+        $('.E00029').on('shown.bs.modal', function () {
+            $(document).off('focusin.modal');
+        });
+
+        $('.E00029').on('show.bs.modal',function(){
+            clearModal();
+            $.blockUI();
+            $.post("@Url.Action("Check_DropdownListAvailable", "EntityE00029Popup", new { area="Case" })", { caseId : caseId, componentCode : componentCode }, function (result) {
+                if(result.success){
+                    dropdownlist.enable(true);
+                    @*$("#ModelNameDrop").kendoDropDownList({
+                        index: 0,
+                        dataValueField: "Value",
+                        dataTextField: "Text",
+                        serverFiltering: true,
+                        change: onChange,
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    dataType: "json",
+                                    url: "@Url.Action("Read_FCParameter", "EntityE00029Popup", new { area = "Case" })"
+                                }
+                            }
+                        },
+                        filter:"contains",
+                        optionLabel: "– Select –",
+                    });*@
+
+                    $("#ModelNameDrop").data("kendoDropDownList").dataSource.read();
+                }else{
+                    dropdownlist.enable(false);
+                }
+            }).fail(function () {
+                bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }).always(function(){
+                $.unblockUI();
+            });
+        });
+
+        $('.E00029').on('hide.bs.modal', function () {
+            $('.k-textbox[aria-owns="ModelNameDrop_listbox"]').remove();
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+
+        $('#EntityE00029Form').submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                        clearModal();
+                        updateHistory(result.html)
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00029').modal('hide');
+                    });
+                    $("#btn_E00029").addClass("democlass");
+                }
+            });
+            e.preventDefault();
+        });
+
+        $('.E00029').on('hidden.bs.modal',function(){
+            dropdownlist.text(""); // clears visible text
+            dropdownlist.value(""); // clears invisible value
+            clearModal();
+        });
+
+        $('#FormE00029Save').click(function(){
+            var value = dropdownlist.value();
+            if(value != ""){
+                var valid =  $('#EntityE00029Form').valid();
+                if(valid){
+                    $('#EntityE00029Form').submit();
+                }
+            }
+        });
+
+        //$('#EntityE00029Form').on('keyup keypress', function (e) {
+        //    var keyCode = e.keyCode || e.which;
+        //    if (keyCode === 13) {
+        //        e.preventDefault();
+        //        return false;
+        //    }
+        //});
+
+        $.blockUI();
+        $.post("@Url.Action("GetFcParameterByCaseId", "EntityE00029Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                var id = result.id;
+                var tbody = $('.tblMultiRow').find('tbody');
+
+                clearModal();
+                $('.tblRow').find('input').removeAttr("readonly");
+                $('.paraSubRow').removeClass('hidden');
+                $('.paraSubRow').find('input').removeAttr('disabled');
+
+                $.blockUI();
+                $.post("@Url.Action("GetFCParameterSubList", "EntityE00029Popup", new { area="Case" })", { fcparameterId: id }, function (result) {
+                    if (result.success) {
+                        $('.tblRow').find('input').not('.loadInput').val("");
+                        $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+                        $('.tblRow').find('input').removeClass("input-validation-error");
+                        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+                        $('.paraSubRow').find('input').not('.loadInput').val("");
+                        $('.paraSubRow').addClass('hidden');
+                        $('.paraSubRow').find('input').attr('disabled', 'disabled');
+                        var list = result.listFCParaSub;
+                        var dem = 0
+                        list.forEach(function (item) {
+                            var html = createHtmlParaSub(item, dem);
+                            dem++
+                            tbody.append(html);
+                        });
+                        
+                        $('#FuelCostM1').val(result.fcMonth.FuelCostM1)
+                        $('#FuelCostM2').val(result.fcMonth.FuelCostM2)
+                        $('#FuelCostM3').val(result.fcMonth.FuelCostM3)
+                        $('#FuelCostM4').val(result.fcMonth.FuelCostM4)
+                        $('#FuelCostM5').val(result.fcMonth.FuelCostM5)
+                        $('#FuelCostM6').val(result.fcMonth.FuelCostM6)
+                        $('#FuelCostM7').val(result.fcMonth.FuelCostM7)
+                        $('#FuelCostM8').val(result.fcMonth.FuelCostM8)
+                        $('#FuelCostM9').val(result.fcMonth.FuelCostM9)
+                        $('#FuelCostM10').val(result.fcMonth.FuelCostM10)
+                        $('#FuelCostM11').val(result.fcMonth.FuelCostM11)
+                        $('#FuelCostM12').val(result.fcMonth.FuelCostM12)
+
+                        $.blockUI();
+                        $.post("@Url.Action("GetFCParameter", "EntityE00029Popup", new { area="Case" })", { fcparameterId: id }, function (result) {
+                            if (result.success) {
+                                $('#Company').val(result.listFCPara.Company);
+                                $('#ModelName').val(result.listFCPara.ModelName);
+                                $('#VolumeS').val(result.listFCPara.Volume.toLocaleString('en'));
+                                $("#ModelNameDrop").data("kendoDropDownList").value(id);
+                                $.unblockUI();
+                            } else {
+                                $.unblockUI();
+                            }
+                        }).fail(function () {
+                            $.unblockUI();
+                            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                        }).always(function () {
+                            //$.unblockUI();
+                        });
+                    } else {
+                        $.unblockUI();
+                    }
+                }).fail(function () {
+                    $.unblockUI();
+                    bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                }).always(function () {
+                    //$.unblockUI();
+                });
+
+            }
+            else {
+                $.unblockUI();
+            }
+        }).fail(function () {
+            $.unblockUI();
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function(){
+            //$.unblockUI();
+        });
+    });
+
+    function createHtmlParaSub(item, order){
+        return '<tr><td><input type="text" data-val="true" data-val-number="The field Load must be a number." style = "text-align:right;" '+
+            ' data-val-range="Invalid Target Price; Max 4 digits" data-val-range-max="999.9" data-val-range-min="0"'+
+            ' data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$"'+
+            ' data-val-required="The Load field is required." name = "ListParameterSubs['+order+'].Load" value= "'+item.Load+'" '+
+            'style="text-align:center;" readonly="readonly" /></td>'+
+            '<td><input type="text" data-val="true" data-val-number="The field ElectricOutput must be a number." style = "text-align:right;" '+
+            ' data-val-range="Invalid Target Price; Max 5 digits" data-val-range-max="9999.9" data-val-range-min="0" '+
+            'data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" '+
+            'data-val-required="The ElectricOutput field is required." name = "ListParameterSubs['+order+'].ElectricOutput" value= "'+item.ElectricOutput+'" /></td>'+
+            '<td><input data-val="true" data-val-number="The field Heat must be a number." style = "text-align:right;"data-val-range="Invalid Target Price; Max 6 digits" '+
+            ' data-val-range-max="999.999" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum Three Decimal Points." '+
+            ' data-val-regex-pattern="^\d+(\.\d{1,3})?$" data-val-required="The Heat field is required." '+
+            ' type="text" name = "ListParameterSubs['+order+'].Heat" value= "'+item.Heat+'" /></td>'+
+            '<td><input data-val="true" data-val-number="The field FuelInput must be a number." style = "text-align:right;" data-val-range="Invalid Target Price; Max 5 digits"'+
+            ' data-val-range-max="999.99" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum Two Decimal Points."'+
+            ' data-val-regex-pattern="^\d+(\.\d{1,2})?$" data-val-required="The FuelInput field is required." type="text" '+
+            ' name = "ListParameterSubs['+order+'].FuelInput" value= "'+item.FuelInput+'" /></td></tr>';
+    }
+
+    function createCustomHtmlParaSub(order,percen){
+        return '<tr><td><input type="text" data-val="true" style = "text-align:right;" data-val-number="The field Load must be a number." '+
+            ' data-val-range="Invalid Target Price; Max 3 digits" data-val-range-max="99.9" data-val-range-min="0"'+
+            ' data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$"'+
+            ' data-val-required="The Load field is required." name = "ListParameterSubs['+order+'].Load" value= "'+percen+'" '+
+            'style="text-align:center;" readonly="readonly" /></td>'+
+            '<td><input type="text" data-val="true" style = "text-align:right;" data-val-number="The field ElectricOutput must be a number." '+
+            ' data-val-range="Invalid Target Price; Max 4 digits" data-val-range-max="999.9" data-val-range-min="0" '+
+            'data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" '+
+            'data-val-required="The ElectricOutput field is required." name = "ListParameterSubs['+order+'].ElectricOutput" value= "0" /></td>'+
+            '<td><input data-val="true" style = "text-align:right;" data-val-number="The field Heat must be a number." data-val-range="Invalid Target Price; Max 3 digits" '+
+            ' data-val-range-max="0.999" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum Three Decimal Points." '+
+            ' data-val-regex-pattern="^\d+(\.\d{1,3})?$" data-val-required="The Heat field is required." '+
+            ' type="text" name = "ListParameterSubs['+order+'].Heat" value= "0" /></td>'+
+            '<td><input data-val="true" style = "text-align:right;" data-val-number="The field FuelInput must be a number." data-val-range="Invalid Target Price; Max 3 digits"'+
+            ' data-val-range-max="9.99" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum Two Decimal Points."'+
+            ' data-val-regex-pattern="^\d+(\.\d{1,2})?$" data-val-required="The FuelInput field is required." type="text" '+
+            ' name = "ListParameterSubs['+order+'].FuelInput" value= "0" /></td></tr>';
+    }
+
+    function clearModal(){
+        $('.tblRow').find('input').not('.loadInput').val("");
+        $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+        $('.tblRow').find('input').prop("readonly","readonly");
+        $('.tblRow').find('input').removeClass("input-validation-error");
+        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+        $('.paraSubRow').find('input').not('.loadInput').val("");
+        $('.paraSubRow').addClass('hidden');
+        $('.paraSubRow').find('input').attr('disabled','disabled');
+    };
+
+    $('.k-textbox[aria-owns="ModelNameDrop_listbox"]').on('keyup', function (evt) {
+        $("#ModelNameDrop").data('kendoDropDownList').dataSource.read();
+    });
+
+    $("#VolumeS").on('keyup', function (evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8 || charCode == 13) {
+            var a = $("#valueFilter").val()
+            if (a == 'NaN' || a == '') {
+                $("#VolumeS").val('')
+            } else {
+                var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                if (isNaN(n)) {
+                    $("#VolumeS").val('')
+                } else {
+                    $(this).val(n.toLocaleString());
+                }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,550 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using System.Security.Claims
+@*@model DPDSP.Models.LoginOrRegisterViewModel*@
+@*@using CaptchaMvc.HtmlHelpers*@
+@using DPDSP.Models
+@using DPDSP.Services
+@using System.Configuration;
+
+@{
+    ViewBag.Title = "PV-ESS 수요관리 모형 설계 프로그램";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<SelectListItem> ListLanguages = new List<SelectListItem>();
+    ListLanguages.Add(new SelectListItem { Value = "ko", Text = "Korea" });
+    ListLanguages.Add(new SelectListItem { Value = "en", Text = "English" });
+}
+
+@section styles{
+    @RenderSection("styles", false)
+    <style>
+        #menu-not-loged-in a {
+            pointer-events: none;
+            cursor: pointer;
+        }
+
+        .input-validation-error {
+            border: 1px solid red;
+        }
+
+        #CaptchaImage {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #CaptchaInputText {
+            width: 200px !important;
+        }
+    </style>
+}
+
+@*Naver Analysis Tool - 2017-11-27, ICPARK*@
+<script type="text/javascript" src="http://wcs.naver.net/wcslog.js"></script>
+<script type="text/javascript">
+    if (!wcs_add) var wcs_add = {};
+    wcs_add["wa"] = "830a41f791bde";
+    wcs_do();
+</script>
+
+
+
+<div class="wrap" id="content-not-loged-in">
+    <aside id="side-menu" class="aside over-y scroll-style-3" role="navigation">
+        @if (Request.IsAuthenticated)
+        {
+            var userStore = new UserStore<ApplicationUser>(new DPDSPDbContext());
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = userManager.FindById(User.Identity.GetUserId());
+
+            //user.FirstName = StringCipher.Decrypt(user.FirstName, ConfigurationManager.AppSettings["passEncrytp"]);
+            //user.LastName = StringCipher.Decrypt(user.LastName, ConfigurationManager.AppSettings["passEncrytp"]);
+            //user.UserExtend.UserTel = StringCipher.Decrypt(user.UserExtend.UserTel, ConfigurationManager.AppSettings["passEncrytp"]);
+            ViewBag.CurrentUser = user;
+
+            using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="well-sm" style="background:#222629">
+                    <div class="media">
+                        <img class="media-object pull-left" id="avatar" style="width:100px;height:100px;" src="@Url.Content(ViewBag.CurrentUser.UserExtend.UserPhotoUrl)">
+                        <div class="media-body" style="padding-left:20px;margin-top:0px;">
+                            <h4 id="userFullName">@ViewBag.CurrentUser.LastName @ViewBag.CurrentUser.FirstName</h4>
+                            <p><span><i class="glyphicon glyphicon-calendar"></i> <text id="userJob">@ViewBag.CurrentUser.UserExtend.UserJob</text></span></p>
+                            <p><a role="button" id="showMyInfors" data-toggle="modal" href="#member"><span><i class="glyphicon glyphicon-cog"></i> @Resources.Langues.InforManagement</span></a></p>
+                            <p>
+                                <a role="button" onclick="javascript:document.getElementById('logoutForm').submit()">
+                                    <span>
+                                        <i class="glyphicon glyphicon-log-out"></i> @Resources.Langues.Logout
+                                    </span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="form-group" style="padding:10px;">
+                <label for="username" class="control-label"><i class="fa fa-language"></i> @Resources.Langues.Language</label>
+                <select id="giftStatus" name="giftStatus" class="form-control">
+                    <option value="0">@Resources.Langues.PleaseSelect</option>
+                    <option value="ko">Korea</option>
+                    @*<option value="1">China</option>
+                        <option value="2">Japan</option>*@
+                    <option value="en">English</option>
+                </select>
+                <h4 class="text-center" style="padding:10px;">
+                    <a data-toggle="modal" href="#login">@Resources.Langues.Login</a> | <a data-toggle="modal" href="#member">@Resources.Langues.SignUp</a>
+                </h4>
+            </div>
+        }
+        <ul class="nav nav-list accordion" @*id="menu-not-loged-in"*@>
+            @if (Request.IsAuthenticated)
+            {
+                <li><a href="@Url.Action("Main","Home",new { area ="" })" class="@Html.isNavMenuActive("Main","Home")"><i class="fa fa-home @Html.isLeftMenuHompageActive("Main","Home")"></i> @Resources.Langues.Home</a></li>
+                <li> <a href="@Url.Action("Index","Sub1",new { area ="" })" class="@Html.isNavMenuActive("Index","Sub1")"> <i class="fa fa-th @Html.isLeftMenuHompageActive("Index","Sub1")"></i> @Resources.Langues.Introduction</a> </li>
+                <li> <a href="@Url.Action("Index","Sub2",new { area ="" })" class="@Html.isNavMenuActive("Index","Sub2")"><i class="fa fa-newspaper-o @Html.isLeftMenuHompageActive("Index","Sub2")"></i> @Resources.Langues.Notice</a> </li>
+                <li> <a href="@Url.Action("Index","Sub3",new { area ="" })" class="@Html.isNavMenuActive("Index","Sub3")"><i class="fa fa-comments-o @Html.isLeftMenuHompageActive("Index","Sub3")"></i> @Resources.Langues.Community</a> </li>
+                <li> <a href="@Url.Action("Index","Sub4",new { area ="" })" class="@Html.isNavMenuActive("Index","Sub4")"> <i class="fa fa-question-circle @Html.isLeftMenuHompageActive("Index","Sub4")"></i> FAQ</a> </li>
+                <li> <a href="@Url.Action("Index","Sub5",new { area ="" })" class="@Html.isNavMenuActive("Index","Sub5")"> <i class="fa fa-files-o @Html.isLeftMenuHompageActive("Index","Sub5")"></i> @Resources.Langues.Documents</a> </li>
+                <li> <a href="@Url.Action("Index", "Sub6", new { area = "" })" class="@Html.isNavMenuActive("Index", "Sub6")"><i class="fa fa-envelope @Html.isLeftMenuHompageActive("Index", "Sub6")"></i> @Resources.Langues.QnA</a> </li>
+            }
+            else
+            {
+                <li> <a id="NotLoginButton1" role="button"><i class="fa fa-home"></i> @Resources.Langues.Home</a></li>
+                <li> <a id="NotLoginButton2" role="button"><i class="fa fa-th"></i> @Resources.Langues.Introduction</a> </li>
+                <li> <a id="NotLoginButton3" role="button"><i class="fa fa-newspaper-o"></i> @Resources.Langues.Notice</a> </li>
+                <li> <a id="NotLoginButton4" role="button"><i class="fa fa-comments-o"></i> @Resources.Langues.Community</a> </li>
+                <li> <a id="NotLoginButton5" role="button"><i class="fa fa-question-circle"></i> FAQ</a> </li>
+                <li> <a id="NotLoginButton6" role="button"><i class="fa fa-files-o"></i> @Resources.Langues.Documents</a> </li>
+                <li> <a id="NotLoginButton7" role="button"><i class="fa fa-envelope"></i> @Resources.Langues.QnA</a> </li>
+            }
+            <li style="padding-top:270px"><a href="@Url.Action("Index","Sub7",new { area ="" })" class="@Html.isNavMenuActive("Index","Sub7")" style="border-bottom:none;"> @Resources.Langues.PrivacyStatement</a></li>
+        </ul>
+    </aside>
+    <!--Body content-->
+    <div class="content">
+        <div class="top-bar"> <a href="#menu" class="side-menu-link burger"> <span class='burger_inside' id='bgrOne'></span> <span class='burger_inside' id='bgrTwo'></span> <span class='burger_inside' id='bgrThree'></span> </a> </div>
+        <section class="content-inner" style="background:url(/img/banner.jpg); background-size:cover; padding-left:0px;padding-top:40px;overflow:hidden;overflow-y:scroll;">
+            @RenderBody()
+        </section>
+    </div>
+    @if (Request.IsAuthenticated)
+    {
+        @Html.Partial("~/Views/Shared/_ChangeMyInfors.cshtml")
+    }
+    else
+    {
+        @Html.Partial("~/Views/Shared/_LoginAndRegister.cshtml")
+    }
+
+    @Html.Partial("~/Views/Shared/_Footer.cshtml");
+</div>
+@*form*@
+
+@*scripts*@
+
+@if (Request.IsAuthenticated)
+{
+    @section scripts{
+        @RenderSection("scripts", false)
+        @Scripts.Render("~/bundles/jqueryval")
+        <script>
+            $(document).ready(function () {
+                $formInfors = $('#formChangeInfors');
+                $inforsModal = $('#member');
+                var $changePassForm = $('#changePasswordForm');
+                var $changePassModal = $('#change-password-modal');
+
+                $('#showMyInfors').click(function () {
+                    $.blockUI();
+                    $.post('@Url.Action("GetMyInfors","Account", new { area="" })', function (result) {
+                        if (result.success) {
+                            var infors = result.myInfors;
+                            $('#Email').val(infors.Email);
+                            $('#EmailDisplay').val(infors.Email);
+                            $('#FirstName').val(infors.FirstName);
+                            $('#LastName').val(infors.LastName);
+                            $('#UserCompany').val(infors.UserCompany);
+                            $('#UserCountry').val(infors.UserCountry);
+                            $('#UserJob').val(infors.UserJob);
+                            $('#UserTel').val(infors.UserTel).attr('selected', 'selected');
+                            $('#UserWebsite').val(infors.UserWebsite);
+                            $('#UserBusinessArea').val(infors.UserBusinessArea);
+                            $('#UserCompanyAddress').val(infors.UserCompanyAddress);
+                            $('#UserDepartmentName').val(infors.UserDepartmentName);
+                            $('#UserPositon').val(infors.UserPositon);
+                            $('#myPhoto').attr('src', getImagePath(infors.UserPhotoUrl));
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                })
+
+                $('#member').on('hidden.bs.modal', function () {
+                    clearInforsModal($formInfors);
+                });
+
+                $('#get_file').click(function () {
+                    $('#UserPhoto').click();
+                });
+
+                $('#UserPhoto').change(function () {
+                    if ($(this).val().length === 0) {
+                        $('#image').val('');
+                    } else {
+                        $('#image').val($(this).val());
+                    }
+                    readURL(this);
+                })
+
+                $('#update-password').click(function () {
+                    var isValid = $changePassForm.valid();
+                    if (isValid) {
+                        $changePassForm.submit();
+                    }
+                });
+
+                $changePassModal.on('hidden.bs.modal', function () {
+                    clearInforsModal($changePassForm);
+                });
+
+                $changePassForm.submit(function (e) {
+                    $.blockUI();
+                    var data = new FormData(this);
+                    var $formObj = $(this);
+                    var urlAction = $formObj.attr('action');
+                    $.ajax({
+                        url: urlAction,
+                        type: 'POST',
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        data: data
+                    }).success(function (result) {
+                        if (!result.success) {
+                            $('#changePassErrorContent').text(result.errors);
+                            $('#changePassErrorContent').css({ "margin-left": "15px", "display": "inherit" });
+                        } else {
+                            window.location.href = result.Url;
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                    e.preventDefault();
+                });
+
+                $('#submitFormInfors').click(function () {
+                    var isValid = $formInfors.valid();
+                    if (isValid) {
+                        $formInfors.submit();
+                    }
+                });
+
+                $formInfors.submit(function (e) {
+                    $.blockUI();
+                    var data = new FormData(this);
+                    var $formObj = $(this);
+                    var urlAction = $formObj.attr('action');
+                    $.ajax({
+                        url: urlAction,
+                        type: 'POST',
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        data: data
+                    }).success(function (result) {
+                        if (result.success) {
+                            var avatarUrl = result.UserPhotoUrl;
+                            $('#avatar').attr('src', getImagePath(avatarUrl));
+                            $('#userFullName').text(result.FullUserName);
+                            $('#userJob').text(result.UserJob);
+                            $inforsModal.modal('hide');
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                    e.preventDefault();
+                });
+
+                $formInfors.on('keyup keypress', function (e) {
+                    var keyCode = e.keyCode || e.which;
+                    if (keyCode === 13) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            });
+
+            function showChangePassModal() {
+                $('#member').modal('hide');
+            }
+
+            function getImagePath(path) {
+                return path.substr(1);
+            };
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#myPhoto').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    $('#myPhoto').attr('src', '/img/boss.png');
+                }
+            }
+
+            function clearInforsModal(form) {
+                form[0].reset();
+                form.find('input, label, select').removeClass('input-validation-error');
+                form.find('input, label, select, .form-group').removeClass('has-error');
+                $('#changePassErrorContent').css("display", "none");
+                $('span .text-danger').removeClass("field-validation-error");
+                $('span .text-danger').addClass("field-validation-valid");
+                $('#OldPassword-error').remove();
+                $('#Password-error').remove();
+            }
+
+        </script>
+    }
+
+}
+else
+{
+    @section scripts{
+        @RenderSection("scripts", false)
+        @Scripts.Render("~/bundles/jqueryval")
+        <script>
+            $('#CaptchaInputText').addClass('form-control');
+            var inputCaptcha = document.getElementById('CaptchaInputText');
+            var prevRow = inputCaptcha.previousElementSibling;
+            prevRow.parentNode.removeChild(prevRow);
+            $("#captcha-content").contents().filter(function () {
+                return this.nodeType === 3;
+            }).remove();
+
+            function addCaptcha(html) {
+                $("#captcha_content").children().remove();
+                $(html).find('#CaptchaImage').css({ 'border': '1px solid #ccc', 'border-radius': '4px' });
+                $(html).find('#CaptchaInputText').css('width', '200px !important');
+                $("#captcha_content").append(html);
+                $("#captcha_content").find('#CaptchaInputText').attr('class', 'form-control');
+                var inputCaptcha = document.getElementById('CaptchaInputText');
+                var prevRow = inputCaptcha.previousElementSibling;
+                prevRow.parentNode.removeChild(prevRow);
+            }
+
+            $(document).ready(function () {
+
+                var $myForm = $('#myForm');
+                var $loginMess = $('#login-message');
+                var $loginPass = $('#UserLogin_Password');
+                var $loginModal = $('#login');
+
+                var $regisModal = $('#member');
+                var emailNotExist = false;
+                var $emailInput = $('#UserRegister_Email');
+                var $IsLogin = '@Request.IsAuthenticated.ToString()'
+
+                $('#register-submit').click(function () {
+                    $('#IsLogin').val(false);
+                });
+
+                $('#NotLoginButton1').click(function () {
+                    bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+                });
+                $('#NotLoginButton2').click(function () {
+                    bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+                });
+                $('#NotLoginButton3').click(function () {
+                    bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+                });
+                $('#NotLoginButton4').click(function () {
+                    bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+                });
+                $('#NotLoginButton5').click(function () {
+                    bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+                });
+                $('#NotLoginButton6').click(function () {
+                    bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+                });
+                $('#NotLoginButton7').click(function () {
+                    bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+                });
+
+                $('#myForm').submit(function (e) {
+                    var isValid = $myForm.valid();
+                    //console.log("aaaaa");
+                    if (isValid && emailNotExist) {
+                        $.blockUI();
+                        var formObj = $(this);
+                        var data = new FormData(this);
+                        var urlAction = formObj.attr('action');
+                        $.ajax({
+                            url: urlAction,
+                            type: 'POST',
+                            dataType: "Json",
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            data: data,
+                            fail: function () {
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }
+                        }).always(function () {
+                            $.unblockUI();
+                        }).success(function (result) {
+                            //var result = $.parseJSON(res.html());
+                            if (result.isLogin) {
+                                if (result.isRedirect) {
+                                    window.location.href = result.redirectUrl;
+                                }
+                                else if (result.isLocked) {
+                                    bootbox.alert(result.message);
+                                    $loginMess.text(result.message);
+                                    $loginPass.val('');
+                                } else if (result.isError) {
+                                    bootbox.alert(result.message);
+                                    $loginMess.text(result.message);
+                                    $loginPass.val('');
+                                }
+                            }
+                            else {
+                                if (result.isRegisError) {
+                                    if (result.message.length) {
+                                        bootbox.alert(result.message);
+                                        addCaptcha(result.html);
+                                    } else {
+                                        //console.log("render:", result.html);
+                                        addCaptcha(result.html);
+                                    }
+                                } else if (result.isRegisSuccess) {
+                                    bootbox.alert(result.message);
+                                    $regisModal.modal('hide');
+                                    addCaptcha(result.html);
+                                }
+                            }
+                        });
+                    } else {
+                        //if ($('#UserRegister_UserPhoto').val().length === 0) {
+                        //    //console.log("has-class");
+                        //    $('#image').addClass('input-validation-error');
+                        //}
+                        $emailInput.addClass('input-validation-error');
+                        $emailInput.removeClass('valid');
+                    }
+                    e.preventDefault(); //Prevent Default action.
+                });
+
+                $('#login-submit').click(function () {
+                    $('#IsLogin').val(true);
+                    emailNotExist = true;
+                });
+
+                $loginModal.on('hidden.bs.modal', function () {
+                    clearLoginAndRegisterModal($myForm, emailNotExist);
+                });
+
+                $loginModal.on('show.bs.modal', function () {
+                    $('#IsLogin').val(true);
+                    //console.log( $('#IsLogin').val())
+                });
+
+                $regisModal.on('show.bs.modal', function () {
+                    $('#IsLogin').val(false);
+                    $('#UserRegister_UserCountry').val('KOR');
+                    //console.log($('#IsLogin').val())
+                });
+
+                $regisModal.on('hidden.bs.modal', function () {
+                    clearLoginAndRegisterModal($myForm, emailNotExist);
+                });
+
+                $('#UserRegister_Email').blur(function (e) {
+                    var email = $(this).val();
+                    if (email.length) {
+                        $.post('@Url.Action("DoesEmailExist","Account")', { email: email }, function (result) {
+                            if (!result)//email exist
+                            {
+                                $emailInput.addClass('input-validation-error');
+                                $emailInput.removeClass('valid');
+                                emailNotExist = result;
+                            }
+                            else //email not exist
+                            {
+                                $emailInput.addClass('valid');
+                                $emailInput.removeClass('input-validation-error');
+                                emailNotExist = result;
+                            }
+                        });
+                    }
+                });
+
+                $('#get_file').click(function () {
+                    $('#UserRegister_UserPhoto').click();
+                });
+
+                $('#UserRegister_UserPhoto').change(function () {
+                    if ($(this).val().length === 0) {
+                        //$('#image').addClass('input-validation-error');
+                        $('#image').val('');
+                    } else {
+                        //$('#image').removeClass('input-validation-error');
+                        $('#image').val($(this).val());
+                    }
+                });
+
+                $('#myForm').on('keyup keypress', function (e) {
+                    var keyCode = e.keyCode || e.which;
+                    if (keyCode === 13) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+
+                $('#giftStatus').change(function (e) {
+                    //console.log('change: ', $(this).val());
+                    var language = $(this).val();
+                    $.blockUI();
+                    $.post('@Url.Action("ChangeLanguage", "Home", new { area="" })', { language: language }, function (result) {
+                        if (result.success) {
+                            window.location.href = result.redirectUrl;
+                        }
+                    }).always(function () {
+                        $.unblockUI();
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    });
+                });
+                if ($IsLogin == "False") {
+                    $loginModal.modal('show');
+                }
+
+            });
+
+            function clearLoginAndRegisterModal(form, emailNotExist) {
+                form[0].reset();
+                form.find('input, label, select').removeClass('input-validation-error')
+                $('#login-message').text('');
+                form.find('span[id="UserLogin_Email-error"]').text('');
+                form.find('span[id="UserLogin_Password-error"]').text('');
+                emailNotExist = false;
+                form.find('input, label, select, .form-group').removeClass('has-error');
+                $('span .text-danger').removeClass("field-validation-error");
+                $('span .text-danger').addClass("field-validation-valid");
+                $('#UserRegister_Password-error').remove();
+            }
+        </script>
+    }
+}

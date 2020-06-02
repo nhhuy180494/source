@@ -1,0 +1,130 @@
+﻿@*@model DPDSP.Models.NoticeManagementViewModel*@
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using DPDSP.Models
+@model DPDSP.Models.NoticeCommentViewModel
+
+@{
+    ViewBag.Title = "Notice";
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+
+<link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/KendoGridOff365.css")" rel="stylesheet" type="text/css" />
+<style>
+    .input-validation-error {
+        border: 1px solid red !important;
+    }
+
+    .comment {
+        border: 1px solid #ccc !important;
+    }
+
+    #RegDate_validationMessage {
+        display: none !important;
+    }
+
+    #RegDateCreate, #RegDate {
+        pointer-events: none;
+    }
+
+    .k-input k-invalid input-validation-error {
+        border: 1px solid red !important;
+    }
+</style>
+
+@Scripts.Render("~/bundles/jqueryval")
+<div class="row" style="font-size: 10px;">
+    <h5 style="text-align:center"><strong><a href="@Url.Action("CaseQA","Community", new { area="Mobile"})">FAQ</a></strong><strong>&nbsp; | &nbsp;<a href="@Url.Action("Notice","Community", new { area="Mobile"})"><font color="#FF6600">공지 사항</font></a></strong><strong>&nbsp;  | &nbsp; <a href="@Url.Action("ReferenceBoard","Community", new { area="Mobile"})">자료실</a></strong></h5>
+    <br />
+    <div>
+        @(Html.Kendo().Grid<DPDSP.Models.NoticeManagementViewModel>()
+                                .Name("NoticeGrid")
+                                .Columns(columns =>
+                                {
+                                    columns.Template(t => { }).ClientTemplate("#= renderNumber() #").Title("No.").HeaderHtmlAttributes(new { style = "text-align:center;font-weight: bold;" }).HtmlAttributes(new { style = "text-align:center;" }).Width(50);
+                                    columns.Bound(notice => notice.NoticeId).Hidden();
+                                    columns.Bound(notice => notice.NoticeTitle).Title(Resources.Langues.Title).HeaderHtmlAttributes(new { style = "text-align:center;font-weight: bold;" });
+                                })
+                                .ClientRowTemplate(
+                                    "<tr data-uid='#: uid #'>" +
+                                    "<td style='vertical-align: middle;text-align: center;'>" +
+                                            "<span class='title'>#: renderNumber() #</span>" +
+                                        "</td>" +
+                                        "<td>" +
+                                        "<span class='hidden'>#: NoticeId #</span>" +
+                                            "<a class='title' onclick='RowSelected(#: NoticeId #)'>#: NoticeTitle # <span class='badge badge-warning'>#: View#</span></a><br/>" +
+                                            "<span class='description'> #: FullUserName# </span><br/>" +
+                                            "<span class='description'> #: RegDate# </span>" +
+                                        "</td>" +
+                                     "</tr>"
+                                )
+                                .ClientAltRowTemplate(
+                                    "<tr data-uid='#: uid #'>" +
+                                    "<td style='vertical-align: middle;text-align: center;'>" +
+                                            "<span class='title'>#: renderNumber() #</span>" +
+                                        "</td>" +
+                                        "<td>" +
+                                        "<span class='hidden'>#: NoticeId #</span>" +
+                                            "<a class='title' onclick='RowSelected(#: NoticeId #)'>#: NoticeTitle # <span class='badge badge-warning'>#: View#</span></a><br/>" +
+                                            "<span class='description'> #: FullUserName# </span><br/>" +
+                                            "<span class='description'> #: RegDate# </span>" +
+                                        "</td>" +
+                                     "</tr>"
+                                )
+                                .Events(ev => ev.DataBound("onDataBound"))
+                                .Pageable()
+                                .Sortable()
+                                .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+                                .Selectable(selectable => selectable
+                                    .Mode(GridSelectionMode.Single)
+                                    .Type(GridSelectionType.Row))
+                                .Resizable(rz => rz.Columns(true))
+                                .Scrollable()
+                                .HtmlAttributes(new { style = "height:500px;" })
+                                .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(20)
+                                .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                .Model(notice => { notice.Id(p => p.NoticeId); notice.Field(p => p.NoticeId).Editable(false); })
+                                .Read(read => read.Action("EditingInline_ReadNotice", "Community", new { area = "Case" }))
+                                )
+        )
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+
+    var counter = 1;
+
+    function renderNumber() {
+        return counter++;
+    };
+
+    function onDataBound() {
+        counter = 1;
+    };
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            bootbox.alert(message);
+        }
+    };
+
+    function sync_handler(e) {
+        this.read();
+    };
+
+    function RowSelected(id) {
+        window.location.href = '@Url.Action("ViewConTent", "Community", new { area = "Mobile" })' + "?noticeId=" + id;
+    }
+</script>

@@ -1,0 +1,400 @@
+﻿<!-- Modal -->
+<style>
+    .E00013 {
+        top: 5%;
+        overflow-y: auto;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .form-control {
+        background-color: white
+    }
+
+    .k-item {
+        text-align: center
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: inline-block;
+        font-size: 20px;
+        color: blue;
+        border: 1px solid blue;
+        text-align: center;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+
+        if ('@Request.Params["modelCode"]' == "M00001") {
+            $('#title-13').html('@Resources.Langues.EnterESSattributeinformation')
+        }
+        if ('@Request.Params["modelCode"]' == "M00002") {
+            $('#title-13').html('@Resources.Langues.EnterESSattributeinformation')
+        }
+        if ('@Request.Params["modelCode"]' == "M00003" || '@Request.Params["modelCode"]' == "M00004"|| '@Request.Params["modelCode"]' == "M00005") {
+            $('#title-13').html('@Resources.Langues.E13M3')
+        }
+        $('.E00013').on('hide.bs.modal', function () {
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+        $('.E00013').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $.blockUI();
+        $.post("@Url.Action("GetGetDataEssParameter", "EntityE00013Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#E00013ScoScopeMin').val(result.ScoScopeMin);
+                $('#E00013Company').val(result.Company);
+                $('#E00013ScoScopeMax').val(result.ScoScopeMax);
+                $('#E00013CycleCount').val(result.CycleCount.toLocaleString());
+                $('#E00013ModelName').val(result.ModelName);
+                $('#E00013OperDod').val(result.OperDod);
+                $('#E00013BatteryEff').data('kendoDropDownList').value(result.BatteryEff);
+                $('#E00013ModelsName').data('kendoDropDownList').value(result.EssParameterId);
+            }else {
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function () {
+            $.unblockUI();
+        });
+
+        $("#E00013CycleCount").on('keyup', function (evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8) {
+                var a = $("#E00013CycleCount").val()
+                if (a == 'NaN' || a == '') {
+                    $("#E00013CycleCount").val('')
+                } else {
+                    var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                    $(this).val(n.toLocaleString());
+                }
+            } else {
+                return false;
+            }
+        });
+    });
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        } else {
+            $('#Reset').prop("checked", false);
+            return true;
+        }
+    }
+
+    function E00013ModelsNameChange(e) {
+        var essParamId = $("#E00013ModelsName").val();
+        var $Company = $("#E00013Company");
+        var $ModelName = $("#E00013ModelName");
+        var $ScoScopeMin = $("#E00013ScoScopeMin");
+        var $ScoScopeMax = $("#E00013ScoScopeMax");
+        var $CycleCount = $("#E00013CycleCount");
+        var $OperDod = $("#E00013OperDod");
+        var $BatteryEff = $("#E00013BatteryEff");
+        if (essParamId === "") {
+            $("#errors").html('');
+            $Company.val("").prop("readonly", false);
+            $CycleCount.val("").prop("readonly", false);
+            $ModelName.val("").prop("readonly", false);
+            $OperDod.val("").prop("readonly", false);
+            return;
+        } else{
+            $.ajax({
+                url: '@Url.Action("GetEssParameter", "EntityE00013Popup")',
+                cache: false,
+                method: "GET",
+                contentType: "application/json; charset=UTF8",
+                dataType: "json",
+                data: {
+                    essParamId : essParamId,
+                },
+                success: function (result) {
+                    if (result == null) {
+                        showMess('@Resources.Langues.ContactAdmin')
+                        return;
+                    }
+                    $("#errors").html('');
+                    $Company.val(result.Company).prop("readonly", true) ;
+                    $CycleCount.val(result.CycleCount.toLocaleString()).prop("readonly", true)  ;
+                    $ModelName.val(result.ModelName).prop("readonly", true) ;
+                    $OperDod.val(result.OperDod).prop("readonly", true) ;
+                    $ScoScopeMax.val(result.ScoScopeMax)/*.prop("readonly", true)*/ ;
+                    $ScoScopeMin.val(result.ScoScopeMin)/*.prop("readonly", true)*/;
+                    $BatteryEff.data("kendoDropDownList").select(function (dataItem) {
+                        return dataItem.Value == result.BatteryEff;
+                    });
+                    $BatteryEff.data("kendoDropDownList").readonly(true);
+                },
+                error: function (response) {
+                    showMess('@Resources.Langues.ContactAdmin')
+                }
+            });
+        }
+
+        $('.form-control').attr('style', 'background-color:white;');
+        $('#E00013ScoScopeMin').attr('style', 'width:45%;text-align:right;background-color:white;');
+        $('#E00013ScoScopeMax').attr('style', 'width:45%;text-align:right;background-color:white;');
+        $('#maxmin').attr('style', 'text-align:center');
+        $('#E00013CycleCount').attr('style', 'width: 100%;text-align:right;background-color:white;');
+        $('#E00013OperDod').attr('style', 'width: 100%;text-align:right;background-color:white;');
+        $('#E00013Company').attr('style', 'text-align:center;;background-color:white;');
+    }
+
+    function E00013Save()
+    {
+        var essParamId = $("#E00013ModelsName").val();
+        var $Company = $("#E00013Company");
+        var $ModelName = $("#E00013ModelName");
+        var $ScoScopeMin = $("#E00013ScoScopeMin");
+        var $ScoScopeMax = $("#E00013ScoScopeMax");
+        var $CycleCount = $("#E00013CycleCount");
+        var $OperDod = $("#E00013OperDod");
+        var $BatteryEff = $("#E00013BatteryEff");
+        var caseId = @Request.Params["caseId"];
+        var modelCode = '@Request.Params["modelCode"]';
+
+        var url = window.location.href;
+        var res = url.split('/');
+        var a = res[3].toLowerCase()
+        var mess = "";
+        var value = $CycleCount.val();
+
+        if (res[3].toLowerCase() == 'en') {
+            mess = '@Resources.Langues.E131' + $OperDod.val() + '@Resources.Langues.E132' + value + '@Resources.Langues.E133'
+        } else {
+            mess = '@Resources.Langues.E131' + value + '@Resources.Langues.E132' + $OperDod.val() + '@Resources.Langues.E133'
+        }
+
+        bootbox.alert(mess, function(){
+            var EssParameter = {
+                Company: $Company.val(),
+                ModelName: $ModelName.val(),
+                ScoScopeMin: $ScoScopeMin.val(),
+                ScoScopeMax: $ScoScopeMax.val(),
+                CycleCount: $CycleCount.val().split(',').join(''),
+                OperDod: $OperDod.val(),
+                BatteryEff: $BatteryEff.val(),
+            };
+
+            $.blockUI();
+            $.post("@Url.Action("SaveData", "EntityE00013Popup", new { area="Case" })", { model: EssParameter, caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success) {
+                    updateHistory(result.html)
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $(".E00013").modal('hide');
+                    });
+                        $("#btn_E00013").addClass("democlass");
+                } else {
+                    $.unblockUI();
+                showMess(result.alert)  }
+            }).fail(function () {
+                $.unblockUI();
+                showMess('@Resources.Langues.ContactAdmin')
+            }).always(function () {
+                //$.unblockUI();
+            });
+        });
+    }
+
+    function onData() {
+        var filter =  $('.k-textbox[aria-owns="E00013ModelsName_listbox"]').val();
+        return { filter: filter};
+    }
+
+    function onData1() {
+        var filter =  $('.k-textbox[aria-owns="E00013BatteryEff_listbox"]').val();
+        return { filter: filter};
+    }
+</script>
+
+<div class="modal fade E00013" id="E00013" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="title-13">@Resources.Langues.EnterESSparameters</h4>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="text-danger" id="errors"></div>
+                <br />
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 lbWT">@Resources.Langues.Selectmodel</label>
+                        <div class="col-xs-4">
+                            @(Html.Kendo().DropDownList()
+                                .Name("E00013ModelsName")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .Filter(FilterType.Contains)
+                                .DataSource(ds =>
+                                {
+                                    ds.Read(r => r.Action("GetModelsName", "EntityE00013Popup", new { area = "Case" }).Data("onData"));
+                                })
+                                .OptionLabel(Resources.Langues.Custom).HtmlAttributes(new { style = "text-align:center;" })
+                                .HtmlAttributes(new { style = "width: 100% ; text-align:center;" })
+                                .Events(e => e.Change("E00013ModelsNameChange"))
+                            )
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 lbWT">@Resources.Langues.Company</label>
+                        <div class="col-xs-4">
+                            <input id="E00013Company" class="form-control" value="" style="text-align:center">
+                        </div>
+                    </div>
+                    <div class="form-group hidden">
+                        <label class="control-label col-xs-4 lbWT">@Resources.Langues.ModelName</label>
+                        <div class="col-xs-4">
+                            <input id="E00013ModelName" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-inline">
+                            <label class="control-label col-xs-4 lbWT">@Resources.Langues.SOCrange</label>
+                            <div class="col-xs-4">
+                                <input id="E00013ScoScopeMin" class="form-control" value="" style="width:45%;text-align:right;float:left">
+                                <label id="maxmin" class="control-label" style="text-align:center;align-content:center;width:10%">~</label>
+                                <input id="E00013ScoScopeMax" class="form-control" value="" style="width:45%;text-align:right;float:right">
+                            </div>
+                            <label class="control-label" style="width:10px">%</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-inline">
+                            <label class="control-label col-xs-4 lbWT" style="font-size:16px">@Resources.Langues.CycleCount </label>
+                            <div class="col-xs-4">
+                                <span onclick="helpOnclick()" class="dot">?</span>@*<button type="button" onclick="helpOnclick()" class="btn button-help"><img src="~/Content/images/question_icon.png" style="margin-left:-15px;height:20px;" /></button>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-inline">
+                            <label class="control-label col-xs-4 lbWT">@Resources.Langues.CycleNum</label>
+                            <div class="col-xs-4">
+                                <input id="E00013CycleCount" onkeypress="return isNumberKey(event)" class="form-control" value="" style="width: 100%;text-align:right">
+                            </div>
+                            <label class="control-label" style="text-align:left">@Resources.Langues.Cycles</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-inline">
+                            <label class="control-label col-xs-4 lbWT">@Resources.Langues.DrivingDOD</label>
+                            <div class="col-xs-4">
+                                <input id="E00013OperDod" class="form-control" value="" style="width: 100%;text-align:right">
+                            </div>
+                            <label class="control-label" style="text-align:left">
+                                @Resources.Langues.reducepercent
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 lbWT">@Resources.Langues.Batterychargedischargeefficiency</label>
+                        <div class="col-xs-4">
+                            @(Html.Kendo().DropDownList()
+                                .Name("E00013BatteryEff")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .HtmlAttributes(new { style = "text-align:center" })
+                                .Filter(FilterType.Contains)
+                                .DataSource(ds =>
+                                {
+                                    ds.Read(r => r.Action("GetBatteryEffs", "EntityE00013Popup", new { area = "Case" }).Data("onData1"));
+                                })
+                            )
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        <button type="button" onclick="E00013Save()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.k-textbox[aria-owns="E00013ModelsName_listbox"]').unbind();
+    $('.k-textbox[aria-owns="E00013BatteryEff_listbox"]').unbind();
+
+    $('.E00013').on('shown.bs.modal', function () {
+        $(document).off('focusin.modal');
+    });
+
+    $('.E00013').on('hide.bs.modal', function () {
+        $('.k-textbox[aria-owns="E00013ModelsName_listbox"]').remove();
+        $('.k-textbox[aria-owns="E00013BatteryEff_listbox"]').remove();
+    });
+
+    $('.k-textbox[aria-owns="E00013ModelsName_listbox"]').on('keyup', function (evt) {
+        $("#E00013ModelsName").data('kendoDropDownList').dataSource.read();
+    });
+
+    $('.k-textbox[aria-owns="E00013BatteryEff_listbox"]').on('keyup', function (evt) {
+        $("#E00013BatteryEff").data('kendoDropDownList').dataSource.read();
+    });
+
+    $('.E00013').on('show.bs.modal', function () {
+            setTimeout(function () { $('#E00013Company').focus(); }, 500);
+        });
+
+    function helpOnclick() {
+        bootbox.alert({
+            title: "@Resources.Langues.E13MesTi",
+            message: "@Resources.Langues.E13Info",
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK', className: 'btn-gray',
+                    className: 'btn-gray'
+                }
+            }
+        });
+    }
+</script>

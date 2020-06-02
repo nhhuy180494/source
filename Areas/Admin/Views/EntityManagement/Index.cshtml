@@ -1,0 +1,232 @@
+﻿
+
+@{
+    ViewBag.Title = Resources.Langues.EntityManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section styles{
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+
+    <style>
+        input[type=checkbox][readonly] {
+            pointer-events: none;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        .k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td {
+            background-color: #66ccff;
+        }
+
+        .k-grid .k-state-selected {
+            background-color: #66ccff;
+            color: black;
+        }
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.EntityManagementViewModel>()
+    .Name("EntityGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(entity => entity.Selection).ClientTemplate("<input type=\"checkbox\" #=Selection ? checked='checked' :  '' # class=\"chkbox\" id=\"#=EntityCode#\" /> ").HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Selection);
+        columns.Bound(entity => entity.EntityName).HtmlAttributes(new { style = "text-align:center;"}).Title(Resources.Langues.EntityName + "(ko)");
+        columns.Bound(entity => entity.EntityName2).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.EntityName + "(en)");
+        columns.Bound(entity => entity.EntityCode).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.EntityCode);
+        columns.Bound(entity => entity.EntityUrl).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.EntityUrl);
+        columns.Template(en => { }).ClientTemplate("<a class=\"ShowView\">View</a>").Title("View").HtmlAttributes(new { style = "text-align:center;" });
+        columns.Bound(item => item.Status).ClientTemplate("<input type=\"checkbox\" readonly  #=Status ? checked='checked' :  '' # />")
+        .HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Status);
+        columns.Command(command =>
+        {
+            command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+            command.Custom(Resources.Langues.Delete).Click("deleteEntity");
+        }).Title(Resources.Langues.Management).HtmlAttributes(new { style = "text-align:center;" });
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create().Text(Resources.Langues.AddNewRecord);
+        toolbar.Custom().Text(Resources.Langues.UseSelected).HtmlAttributes(new { id = "UseEntity", style = "float:right;margin-right:10px;" });
+        toolbar.Custom().Text(Resources.Langues.Stopusingselection).HtmlAttributes(new { id = "StopUsingEntity", style = "float:right;margin-right:10px;" });
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Scrollable(rz => rz.Enabled(false))
+    .HtmlAttributes(new { style = "height:auto;" })
+    //.Selectable(selectable => selectable
+    //      .Mode(GridSelectionMode.Multiple)
+    //      .Type(GridSelectionType.Row))
+    .Events(ev =>
+    {
+        //ev.Change("onChange");
+        ev.Edit("onEdit");
+        //ev.DataBound("onDataBound");
+    })
+    //.PersistSelection(true)
+    //.Navigatable()
+    .Resizable(rz => rz.Columns(true))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+        .Model(entity => { entity.Id(e => e.EntityCode); })
+    .Read(read => read.Action("EditingInline_ReadEntity", "EntityManagement"))
+    .Create(update => update.Action("EditingInline_CreateEntity", "EntityManagement"))
+    .Update(update => update.Action("EditingInline_UpdateEntity", "EntityManagement"))
+    //.Destroy(update => update.Action("EditingInline_DestroyModel", "ModelManagement"))
+    )
+        )
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var entityGrid = $('#EntityGrid').data('kendoGrid');
+            var entityCheckeds = [];
+
+            entityGrid.table.on('click', '.ShowView', function (e) {
+                var row = $(e.currentTarget).closest('tr');
+                var dataItem = entityGrid.dataItem(row)
+            });
+
+            entityGrid.table.on('change', '.chkbox', function (e) {
+                var checked = this.checked;
+                var row = $(e.currentTarget).closest('tr');
+                var entityCode = $(this).attr('id');
+
+                if (checked) {
+                    entityCheckeds.push(entityCode)
+                    row.addClass('k-state-selected');
+                } else {
+                    var eIndex = entityCheckeds.indexOf(entityCode);
+                    entityCheckeds.splice(eIndex, 1);
+                    row.removeClass('k-state-selected');
+                }
+            });
+
+            $('#StopUsingEntity').click(function (e) {
+                e.preventDefault();
+                var statusEntity = false;
+                $.blockUI();
+                $.post('@Url.Action("SetStatusEntity", "EntityManagement")', { listEnityCode: entityCheckeds, status: statusEntity },
+                    function (result) {
+                        if (result) {
+                            entityCheckeds = [];
+                            entityGrid.dataSource.read();
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+            });
+
+            $('#UseEntity').click(function (e) {
+                e.preventDefault();
+                var statusEntity = true;
+                $.blockUI();
+                $.post('@Url.Action("SetStatusEntity", "EntityManagement")', { listEnityCode: entityCheckeds, status: statusEntity },
+                    function (result) {
+                        if (result) {
+                            entityCheckeds = [];
+                            entityGrid.dataSource.read();
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+            });
+
+            function callback(e) {
+                onEnityGridDataBound(entityGrid, entityCheckeds);
+            };
+
+            entityGrid.dataSource.bind('change', callback);
+            entityGrid.dataSource.fetch();
+
+        });
+
+        function onEdit(e) {
+            if (!e.model.isNew()) {
+                $(e.container).find('input[name=EntityCode]').prop('readonly', 'readonly');
+            } else {
+                $(e.container).find('input[name=Selection]').prop('readonly', 'readonly');
+            }
+        };
+
+        function onEnityGridDataBound(entityGrid, entityCheckeds) {
+            if (entityGrid != null && entityCheckeds != null) {
+                for (var i = 0; i < entityCheckeds.length; i++) {
+                    var checkBox = entityGrid.table.find('input[type="checkbox"][id=' + entityCheckeds[i] + ']');
+                    checkBox.prop('checked', checked);
+                    var row = checkBox.closest('tr[role=row]');
+                    row.addClass('k-state-selected');
+                }
+            }
+        };
+
+        function deleteEntity(e) {
+            var entityGrid = $('#EntityGrid').data('kendoGrid');
+            var row = $(e.currentTarget).closest('tr');
+            var dataItem = entityGrid.dataItem(row);
+
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("DestroyEntity", "EntityManagement")', { entityCode: dataItem.EntityCode },
+                        function (result) {
+                            if (result) {
+                                entityGrid.dataSource.read();
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        };
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        };
+
+        function sync_handler(e) {
+            this.read();
+        };
+    </script>
+}

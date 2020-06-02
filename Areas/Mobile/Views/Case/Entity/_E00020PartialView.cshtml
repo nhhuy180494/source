@@ -1,0 +1,2175 @@
+﻿<!-- Modal -->
+<style>
+    .E00020 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        /*text-align: center;*/
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .input-validation-error {
+        border: 1px solid red !important;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .bootbox.modal {
+        z-index: 999999999999 !important;
+    }
+
+    .tblMultiRow {
+        font-size: 12px !important
+    }
+</style>
+<h4 style="text-align:center">@Resources.Langues.Entereconomicanalysisparameter</h4>
+@if (Request.Params["modelCode"] == "M00003")
+{
+    using (Html.BeginForm("SaveEntityE00020PopupData", "EntityE00020Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "M00003Form" }))
+    {
+        <div class="modal-body">
+
+            <!--Popup Name -->
+            <br />
+            @Html.Hidden("CaseId", @Request.Params["caseId"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The CaseId field is required."
+           })
+
+            @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The CaseId field is required."
+           })
+            <!--Input field -->
+            <h5>@Resources.Langues.E20Title1</h5>
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.Currencydiscountrate</td>
+                            <td width="35%">
+                                @Html.TextBox("DiscountRate", "4.5", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field DiscountRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The DiscountRate field is required.",
+                               @style = "text-align:right;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.RECgrowthrate</td>
+                            <td width="35%">
+                                @Html.TextBox("RECGrowthRate", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field RECGrowthRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The RECGrowthRate field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.SMPgrowthrate</td>
+                            <td width="35%">
+                                @Html.TextBox("SMPGrowthRate", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field SMPGrowthRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The SMPGrowthRate field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h5>@Resources.Langues.E20Title2</h5>
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr id="CP0001">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.PVoutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("PvReductionRate", "0.7", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field PvReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr id="CP0002">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.WToutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("WTReductionRate", "0.7", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field WTReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr id="CP0003">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.ESSoutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("EssReductionRate", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field EssReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr id="">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.ManCostRte</td>
+                            <td width="35%">
+                                @Html.TextBox("MaintenanceCostRatio", "2", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field MaintenanceCostRatio must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Html.Raw(@Resources.Langues.E20Descr1)</div>
+            </div>
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Resources.Langues.E20Descr2</div>
+            </div>
+            <br />
+            <div class="">
+                <div class="list-inline" style="text-align:center">
+                    <button type="button" id="submitM00003Form" class="button button-gray">@Resources.Langues.E20Btn</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var status = 1;
+        var modelCode = '@Request.Params["modelCode"]';
+        $(document).ready(function () {
+            $('#CP0001').hide();
+            $('#CP0002').hide();
+            $('#CP0003').hide();
+            var $modal = $('.E00020');
+            var caseId = @Request.Params["caseId"];
+            var $M0003Form = $('#M00003Form');
+            $('#btn_E00020').removeClass('progress-bar-warning');
+            var dem1 = dem2 = dem3 = 0;
+            $.blockUI();
+            $.post("@Url.Action("GetI00011ByCaseId", "EntityE00020Popup",new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+
+                    $('#DiscountRate').val(result.item.DiscountRate);
+                    $('#RECGrowthRate').val(result.item.RECGrowthRate);
+                    $('#SMPGrowthRate').val(result.item.SMPGrowthRate);
+                    $('#PvReductionRate').val(result.item.PvReductionRate);
+                    $('#WTReductionRate').val(result.item.WTReductionRate);
+                    $('#EssReductionRate').val(result.item.EssReductionRate);
+                    $('#MaintenanceCostRatio').val(result.item.MaintenanceCostRatio);
+                } else {
+                    status = 2
+                }
+            }).fail(function () {
+                @*bootbox.alert('@Resources.Langues.ContactAdmin');*@
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $.blockUI();
+            $.post("@Url.Action("GetListLocationCode", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    if(result.listComCode){
+                        result.listComCode.forEach(function(item){
+                            $('#' + item).show();
+                            if (item == "CP0001") {
+                                dem1++
+                            }
+                            if (item == "CP0002") {
+                                dem2++
+                            }
+                            if (item == "CP0003") {
+                                dem3++
+                            }
+                        });
+                        if (dem1 == 0) {
+                            $('#PvReductionRate').val(0);
+                        }
+                        if (dem2 == 0) {
+                            $('#WTReductionRate').val(0);
+                        }
+                        if (dem3 == 0){
+                            $('#EssReductionRate').val(0);
+                        }
+                    }
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $('#submitM00003Form').click(function(){
+                var valid = $M0003Form.valid();
+                if(valid){
+                    $M0003Form.submit();
+                }
+            });
+
+            $M0003Form.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $M0003Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    //$.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        if (status == 1) {
+                            bootbox.confirm({
+                                message: '@Resources.Langues.E20Messs',
+                                className: 'my-custom-class',
+                                buttons: {
+                                    cancel: {
+                                        label: '@Resources.Langues.No',
+                                        className: 'btn btn-gray pull-right'
+                                    },confirm: {
+                                        label: '@Resources.Langues.Yes',
+                                        className: 'btn btn-primary classYes'
+                                    }
+                                },
+                                callback: function (result) {
+                                    if (result) {
+                                        RunProccess(caseId,modelCode);
+                                    } else{
+                                        $.unblockUI();
+                                        
+                                    }
+                                }
+                            });
+                        } else{
+                            RunProccess(caseId,modelCode);
+                        }
+                    } else {
+                        bootbox.alert('@Resources.Langues.Error');
+                    }
+
+                });
+                e.preventDefault();
+            });
+        });
+
+        function RunProccess(caseId,modelCode){
+            $.blockUI();
+            $.post("@Url.Action("RunProcess", "EntityE00019Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.unblockUI();
+                    if (modelCode == "M00001"){
+                        bootbox.alert({
+                            "message": result.filename + ' ' + '@Resources.Langues.MessageFileNotFound',
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                        bootbox.alert({
+                            "message": result.filename + ' ' + '@Resources.Langues.MessageFileNotFound',
+                            "className": "my-custom-class",
+                        });
+                    }
+                    return false
+                } else {
+                    if (result.alert != "") {
+                        $.unblockUI();
+                        bootbox.alert({
+                            "message": result.alert,
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                        $.blockUI();
+                        $.post("@Url.Action("ReadResultFile", "EntityE00019Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                            if (result.success == false) {
+                                $.unblockUI();
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.Error',
+                                    "className": "my-custom-class",
+                                });
+                            } else {
+                                RunClick()
+                            }
+                        }).fail(function () {
+                            $.unblockUI();
+                            bootbox.alert({
+                                "message":'@Resources.Langues.ContactAdmin',
+                                "className": "my-custom-class",
+                            });
+                        }).always(function () {
+                            //$.unblockUI();
+                        });
+                    }
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert({
+                    "message":'@Resources.Langues.ContactAdmin',
+                    "className": "my-custom-class",
+                });
+            }).always(function () {
+            });
+        }
+
+        function RunClick() {
+            var modelCode = '@Request.Params["modelCode"]';
+            var caseId = '@Request.Params["caseId"]';
+            $.blockUI();
+            $.post("@Url.Action("RunProcess", "EntityE00021Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.unblockUI();
+                    if (modelCode == "M00001"){
+                        bootbox.alert('@Resources.Langues.MessageFileNotFound2');
+                    } else {
+                        bootbox.alert('@Resources.Langues.MessageFileNotFound3');
+                    }
+
+                    $.unblockUI();
+                } else {
+                    $.blockUI();
+                    $.post("@Url.Action("ReadResult20File", "EntityE00021Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                        if (result.success == false) {
+                            $.blockUI();
+                            $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: false, caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    $('.E00021').modal('hide');
+                                    $.unblockUI();
+                                    bootbox.alert('@Resources.Langues.Error');
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }).always(function () {
+                                //$.unblockUI();
+                            });
+                        } else {
+                            $.blockUI();
+                            $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: true, caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    $.blockUI();
+                                    $.post("@Url.Action("RenewEntityString", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                        
+                                    }).fail(function () {
+                                    }).always(function () {
+                                    });
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }).always(function () {
+                                $.unblockUI();
+                            });
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.MessErrorE21');
+            }).always(function () {
+                $.unblockUI();
+            });
+        };
+    </script>
+}
+else if (Request.Params["modelCode"] == "M00001")
+{
+    using (Html.BeginForm("SaveEntityE00020PopupData", "EntityE00020Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "M00001Form" }))
+    {
+        <div class="modal-body">
+            <!--Popup Name -->
+            <br />
+            @Html.Hidden("CaseId", @Request.Params["caseId"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The CaseId field is required."
+           })
+            @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The CaseId field is required."
+           })
+            <!--Input field -->
+            <h5>@Resources.Langues.E20Title11</h5>
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.Currencydiscountrate</td>
+                            <td width="35%">
+                                @Html.TextBox("DiscountRate", "4.5", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field DiscountRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The DiscountRate field is required.",
+                               @style = "text-align:right;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.ManCostRte</td>
+                            <td width="35%">
+                                @Html.TextBox("ElectIncrease", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field ElectIncrease must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The ElectIncrease field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.ElectIncrease</td>
+                            <td width="35%">
+                                @Html.TextBox("MaintenanceCostRatio", "1", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field MaintenanceCostRatio must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The MaintenanceCostRatio field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @*<h5>@Resources.Langues.E20Title2</h5>*@
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr id="CP0001">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.PVoutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("PvReductionRate", "0.7", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field PvReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr id="CP0002">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.WToutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("WtReductionRate", "1", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field WtReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr id="CP0003" class="hidden">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.ESSoutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("EssReductionRate", "0", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field EssReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Html.Raw(@Resources.Langues.E20Descr1)</div>
+            </div>
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Resources.Langues.E20Descr2</div>
+            </div>
+        </div>
+        <br />
+        <div style="text-align:center">
+
+            <button type="button" id="submitM00001Form" @*onclick="FormE00020Save()"*@ class="button button-gray">@Resources.Langues.E20Btn</button>
+
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var status = 1;
+        var modelCode = '@Request.Params["modelCode"]';
+        $(document).ready(function () {
+            $('#CP0001').hide();
+            $('#CP0002').hide();
+            $('#CP0003').hide();
+            var $modal = $('.E00020');
+            var caseId = @Request.Params["caseId"];
+            var $M0001Form = $('#M00001Form');
+            $('#btn_E00020').removeClass('progress-bar-warning');
+
+            $('.E00020').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+
+            var dem1 = dem2 = dem3 = 0;
+
+            $.blockUI();
+            $.post("@Url.Action("GetI00011ByCaseId", "EntityE00020Popup",new { area="Case"})", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    $('#DiscountRate').val(result.item.DiscountRate);
+                    $('#ElectIncrease').val(result.item.ElectIncrease);
+                    $('#PvReductionRate').val(result.item.PvReductionRate);
+                    $('#EssReductionRate').val(result.item.EssReductionRate);
+                    $('#WtReductionRate').val(result.item.WtReductionRate);
+                    $('#MaintenanceCostRatio').val(result.item.MaintenanceCostRatio);
+                } else {
+                    status = 2
+                }
+            }).fail(function () {
+                @*bootbox.alert('@Resources.Langues.ContactAdmin');*@
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $.blockUI();
+            $.post("@Url.Action("GetListLocationCode", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    if(result.listComCode){
+                        result.listComCode.forEach(function(item){
+                            $('#' + item).show();
+                            if (item == "CP0001") {
+                                dem1++
+                            }
+                            if (item == "CP0002") {
+                                dem2++
+                            }
+                            if (item == "CP0003") {
+                                dem3++
+                            }
+                        });
+                        if (dem1 == 0) {
+                            $('#PvReductionRate').val(0);
+                        }
+                        if (dem2 == 0) {
+                            $('#WtReductionRate').val(0);
+                        }
+                        if (dem3 == 0){
+                            $('#EssReductionRate').val(0);
+                        }
+                    }
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $('#submitM00001Form').click(function(){
+                var valid = $M0001Form.valid();
+                if(valid){
+                    $M0001Form.submit();
+                }
+            });
+
+            $M0001Form.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $M0001Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    //$.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        if (status == 1) {
+                            bootbox.confirm({
+                                message: '@Resources.Langues.E20Messs',
+                                className: 'my-custom-class',
+                                buttons: {
+                                    cancel: {
+                                        label: '@Resources.Langues.No',
+                                        className: 'btn btn-gray pull-right'
+                                    },confirm: {
+                                        label: '@Resources.Langues.Yes',
+                                        className: 'btn btn-primary classYes'
+                                    }
+                                },
+                                callback: function (result) {
+                                    if (result) {
+                                        RunProccess(caseId,modelCode);
+                                    } else{
+                                        $.unblockUI();
+                                        $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                                            result.list.forEach(function(item) {
+                                                $("#btn_" + item).addClass('progress-bar-warning');
+                                            });
+                                            nextEntity()
+                                            $.unblockUI();
+                                        }).fail(function () {
+                                            $.unblockUI();
+                                        }).always(function () {
+                                            $.unblockUI();
+                                        });
+                                    }
+                                }
+                            });
+                        } else{
+                            RunProccess(caseId,modelCode);
+                        }
+                    } else {
+                        bootbox.alert('@Resources.Langues.Error');
+                    }
+
+                });
+                e.preventDefault();
+            });
+        });
+
+        function RunProccess(caseId,modelCode){
+            $.blockUI();
+            $.post("@Url.Action("RunProcess", "EntityE00019Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.unblockUI();
+                    if (modelCode == "M00001"){
+                        bootbox.alert({
+                            "message": result.filename + ' ' + '@Resources.Langues.MessageFileNotFound',
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                        bootbox.alert({
+                            "message": result.filename + ' ' + '@Resources.Langues.MessageFileNotFound',
+                            "className": "my-custom-class",
+                        });
+                    }
+                    return false
+                } else {
+                    if (result.alert != "") {
+                        $.unblockUI();
+                        bootbox.alert({
+                            "message": result.alert,
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                        $.blockUI();
+                        $.post("@Url.Action("ReadResultFile", "EntityE00019Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                            if (result.success == false) {
+                                $.unblockUI();
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.Error',
+                                    "className": "my-custom-class",
+                                });
+                            } else {
+                                RunClick()
+                                @*$.blockUI();
+                                $.post("@Url.Action("RenewEntityString", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                    $.blockUI();
+                                    $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                                        $('.E00020').modal('hide');
+                                        $("#btn_E00020").addClass("democlass");
+                                        $("#btn_E00021").removeClass("democlass");
+                                        $("#btn_E00037").removeClass("democlass");
+                                        $.unblockUI();
+                                        bootbox.alert({
+                                            "message":'@Resources.Langues.Successful',
+                                            "className": "my-custom-class",
+                                        });
+                                        result.list.forEach(function(item) {
+                                            $("#btn_" + item).removeClass("democlass");
+                                        });
+                                    }).fail(function () {
+                                        $.unblockUI();
+                                    }).always(function () {
+
+                                    });
+                                }).fail(function () {
+                                    $.unblockUI();
+                                }).always(function () {
+                                    $.unblockUI();
+                                });*@
+                            }
+                        }).fail(function () {
+                            $.unblockUI();
+                            bootbox.alert({
+                                "message":'@Resources.Langues.ContactAdmin',
+                                "className": "my-custom-class",
+                            });
+                        }).always(function () {
+                            //$.unblockUI();
+                        });
+                    }
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert({
+                    "message":'@Resources.Langues.ContactAdmin',
+                    "className": "my-custom-class",
+                });
+            }).always(function () {
+            });
+        }
+
+        function RunClick() {
+            var modelCode = '@Request.Params["modelCode"]';
+            var caseId = '@Request.Params["caseId"]';
+            $.blockUI();
+            $.post("@Url.Action("RunProcess", "EntityE00021Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.unblockUI();
+                    if (modelCode == "M00001"){
+                        bootbox.alert('@Resources.Langues.MessageFileNotFound2');
+                    } else {
+                        bootbox.alert('@Resources.Langues.MessageFileNotFound3');
+                    }
+
+                    $.unblockUI();
+                } else {
+                    $.blockUI();
+                    $.post("@Url.Action("ReadResult20File", "EntityE00021Popup", new { area="Case" })", { caseId: @Request.Params["caseId"], modelCode: modelCode }, function (result) {
+                        if (result.success == false) {
+                            $.blockUI();
+                            $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: false, caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    $('.E00021').modal('hide');
+                                    $.unblockUI();
+                                    bootbox.alert('@Resources.Langues.Error');
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }).always(function () {
+                                //$.unblockUI();
+                            });
+                        } else {
+                            $.blockUI();
+                            $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: true, caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    $.blockUI();
+                                    $.post("@Url.Action("RenewEntityString", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                        $.blockUI();
+                                        $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                                            $.unblockUI();
+                                            @*bootbox.alert({
+                                                "message":'@Resources.Langues.Successful',
+                                                "className": "my-custom-class",
+                                            });*@
+                                            result.list.forEach(function(item) {
+                                                $("#btn_" + item).addClass('progress-bar-warning');
+                                            });
+                                            nextEntity()
+                                        }).fail(function () {
+                                            $.unblockUI();
+                                        }).always(function () {
+
+                                        });
+                                    }).fail(function () {
+                                    }).always(function () {
+                                    });
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }).always(function () {
+                                //$.unblockUI();
+                            });
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        //$.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.MessErrorE21');
+            }).always(function () {
+                //$.unblockUI();
+            });
+        };
+    </script>
+}
+else if (Request.Params["modelCode"] == "M00005")
+{
+    using (Html.BeginForm("SaveEntityE00020PopupData", "EntityE00020Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "M00005Form" }))
+    {
+        <div class="modal-body">
+
+            <!--Popup Name -->
+            <br />
+            @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                   })
+            @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                   })
+            <!--Input field -->
+            <h5>@Resources.Langues.E20Title11</h5>
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.Currencydiscountrate</td>
+                            <td width="35%">
+                                @Html.TextBox("DiscountRate", "4.5", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field DiscountRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The DiscountRate field is required.",
+                               @style = "text-align:right;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.RECgrowthrate</td>
+                            <td width="35%">
+                                @Html.TextBox("RECGrowthRate", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field RECGrowthRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The RECGrowthRate field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.SMPgrowthrate</td>
+                            <td width="35%">
+                                @Html.TextBox("SMPGrowthRate", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field SMPGrowthRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The SMPGrowthRate field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.ElectIncrease</td>
+                            <td width="35%">
+                                @Html.TextBox("ElectIncrease", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field ElectIncrease must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The ElectIncrease field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.Maintenancerate</td>
+                            <td width="35%">
+                                @Html.TextBox("MaintenanceCostRatio", "1", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field MaintenanceCostRatio must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The MaintenanceCostRatio field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h5>@Resources.Langues.E20Title2</h5>
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr id="CP0001">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.PVoutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("PvReductionRate", "0.7", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field PvReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr id="CP0003" class="hidden">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.FCReductionRate</td>
+                            <td width="35%">
+                                @Html.TextBox("FCReductionRate", "0", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field FCReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        @*<tr id="CP0002">
+                                <td width="50%" class="active" style="text-align:center">@Resources.Langues.ZoneCrease</td>
+                                <td width="35%">
+                                    @Html.TextBox("ZoneCrease", "1", new
+                               {
+                                   @data_val = "true",
+                                   data_val_number = "The field ZoneCrease must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 5 digits",
+                                   @data_val_range_max = "999.99",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                   @style = "text-align:right;;width:100%",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                            </tr>*@
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Html.Raw(@Resources.Langues.E20Descr1)</div>
+            </div>
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Resources.Langues.E20Descr2</div>
+            </div>
+            <br />
+            <div class="list-inline" style="text-align:center">
+                <button type="button" id="submitM00001Form" @*onclick="FormE00020Save()"*@ class="button button-gray">@Resources.Langues.E20Btn</button>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var status = 1;
+        var modelCode = '@Request.Params["modelCode"]';
+        $(document).ready(function () {
+            var $modal = $('.E00020');
+            var caseId = @Request.Params["caseId"];
+            var $M0001Form = $('#M00005Form');
+
+            $('#btn_E00020').removeClass('progress-bar-warning');
+            var dem1 = dem2 = dem3 = 0;
+
+            $.blockUI();
+            $.post("@Url.Action("GetI00011ByCaseId", "EntityE00020Popup",new { area="Case"})", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    $('#DiscountRate').val(result.item.DiscountRate);
+                    $('#ElectIncrease').val(result.item.ElectIncrease);
+                    $('#PvReductionRate').val(result.item.PvReductionRate);
+                    $('#FCReductionRate').val(result.item.FCReductionRate);
+                    $('#WtReductionRate').val(result.item.WtReductionRate);
+                    $('#RECGrowthRate').val(result.item.RECGrowRate);
+                    $('#SMPGrowthRate').val(result.item.SMPGrowthRate);
+                    $('#MaintenanceCostRatio').val(result.item.MaintenanceCostRatio);
+                } else {
+                    status = 2
+                }
+            }).fail(function () {
+                @*bootbox.alert('@Resources.Langues.ContactAdmin');*@
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $('#submitM00001Form').click(function(){
+                var valid = $M0001Form.valid();
+                if(valid){
+                    $M0001Form.submit();
+                }
+            });
+
+            $M0001Form.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $M0001Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    //$.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        if (status == 1) {
+                            bootbox.confirm({
+                                message: '@Resources.Langues.E20Messs',
+                                className: 'my-custom-class',
+                                buttons: {
+                                    cancel: {
+                                        label: '@Resources.Langues.No',
+                                        className: 'btn btn-gray pull-right'
+                                    },confirm: {
+                                        label: '@Resources.Langues.Yes',
+                                        className: 'btn btn-primary classYes'
+                                    }
+                                },
+                                callback: function (result) {
+                                    if (result) {
+                                        RunProccess(caseId,modelCode);
+                                    } else{
+                                        $.unblockUI();
+                                        $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+
+
+                                            result.list.forEach(function(item) {
+                                                $("#btn_" + item).addClass('progress-bar-warning');
+                                            });
+                                            $.unblockUI();
+                                        }).fail(function () {
+                                            $.unblockUI();
+                                        }).always(function () {
+                                            $.unblockUI();
+                                        });
+                                    }
+                                }
+                            });
+                        } else{
+                            RunProccess(caseId,modelCode);
+                        }
+                    } else {
+                        bootbox.alert('@Resources.Langues.Error');
+                    }
+
+                });
+                e.preventDefault();
+            });
+        });
+
+        function RunProccess(caseId,modelCode){
+            $.blockUI();
+            $.post("@Url.Action("RunProcess", "EntityE00019Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.unblockUI();
+                    if (modelCode == "M00001"){
+                        bootbox.alert({
+                            "message": result.filename + ' ' + '@Resources.Langues.MessageFileNotFound',
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                        bootbox.alert({
+                            "message": result.filename + ' ' + '@Resources.Langues.MessageFileNotFound',
+                            "className": "my-custom-class",
+                        });
+                    }
+                    return false
+                } else {
+                    if (result.alert != "") {
+                        $.unblockUI();
+                        bootbox.alert({
+                            "message": result.alert,
+                            "className": "my-custom-class",
+                        });
+                    } else {
+                        $.blockUI();
+                        $.post("@Url.Action("ReadResultFile", "EntityE00019Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                            if (result.success == false) {
+                                $.unblockUI();
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.Error',
+                                    "className": "my-custom-class",
+                                });
+                            } else {
+                                RunClick()
+                                @*$.blockUI();
+                                $.post("@Url.Action("RenewEntityString", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                    $.blockUI();
+                                    $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                                        $('.E00020').modal('hide');
+                                        $("#btn_E00020").addClass("democlass");
+                                        $("#btn_E00021").removeClass("democlass");
+                                        $("#btn_E00037").removeClass("democlass");
+                                        $.unblockUI();
+                                        bootbox.alert({
+                                            "message":'@Resources.Langues.Successful',
+                                            "className": "my-custom-class",
+                                        });
+                                        result.list.forEach(function(item) {
+                                            $("#btn_" + item).removeClass("democlass");
+                                        });
+                                    }).fail(function () {
+                                        $.unblockUI();
+                                    }).always(function () {
+
+                                    });
+                                }).fail(function () {
+                                    $.unblockUI();
+                                }).always(function () {
+                                    $.unblockUI();
+                                });*@
+                            }
+                        }).fail(function () {
+                            $.unblockUI();
+                            bootbox.alert({
+                                "message":'@Resources.Langues.ContactAdmin',
+                                "className": "my-custom-class",
+                            });
+                        }).always(function () {
+                            //$.unblockUI();
+                        });
+                    }
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert({
+                    "message":'@Resources.Langues.ContactAdmin',
+                    "className": "my-custom-class",
+                });
+            }).always(function () {
+            });
+        }
+
+        function RunClick() {
+            var modelCode = '@Request.Params["modelCode"]';
+            var caseId = '@Request.Params["caseId"]';
+            $.blockUI();
+            $.post("@Url.Action("RunProcess", "EntityE00021Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.unblockUI();
+                    if (modelCode == "M00001"){
+                        bootbox.alert('@Resources.Langues.MessageFileNotFound2');
+                    } else {
+                        bootbox.alert('@Resources.Langues.MessageFileNotFound3');
+                    }
+
+                    $.unblockUI();
+                } else {
+                    $.blockUI();
+                    $.post("@Url.Action("ReadResult20File", "EntityE00021Popup", new { area="Case" })", { caseId: @Request.Params["caseId"], modelCode: modelCode }, function (result) {
+                        if (result.success == false) {
+                            $.blockUI();
+                            $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: false, caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    $('.E00021').modal('hide');
+                                    $.unblockUI();
+                                    bootbox.alert('@Resources.Langues.Error');
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }).always(function () {
+                                //$.unblockUI();
+                            });
+                        } else {
+                            $.blockUI();
+                            $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: true, caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    $.blockUI();
+                                    $.post("@Url.Action("RenewEntityString", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                        $.blockUI();
+                                        $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                                            $.unblockUI();
+                                            @*bootbox.alert({
+                                                "message":'@Resources.Langues.Successful',
+                                                "className": "my-custom-class",
+                                            });*@
+                                            result.list.forEach(function(item) {
+                                                $("#btn_" + item).addClass('progress-bar-warning');
+                                            });
+                                            nextEntity()
+                                        }).fail(function () {
+                                            $.unblockUI();
+                                        }).always(function () {
+
+                                        });
+                                    }).fail(function () {
+                                    }).always(function () {
+                                    });
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }).always(function () {
+                                //$.unblockUI();
+                            });
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        //$.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.MessErrorE21');
+            }).always(function () {
+                //$.unblockUI();
+            });
+        };
+    </script>
+}
+else if (Request.Params["modelCode"] == "M00002")
+{
+    using (Html.BeginForm("SaveEntityE00020PopupData", "EntityE00020Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "M00001Form" }))
+    {
+        <div class="modal-body">
+            <!--Popup Name -->
+            <br />
+            @Html.Hidden("CaseId", @Request.Params["caseId"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The CaseId field is required."
+           })
+            @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The CaseId field is required."
+           })
+            <!--Input field -->
+            <h5>@Resources.Langues.E20Title112</h5>
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.Currencydiscountrate</td>
+                            <td width="35%">
+                                @Html.TextBox("DiscountRate", "4.5", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field DiscountRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The DiscountRate field is required.",
+                               @style = "text-align:right;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.FuelbialCrease2</td>
+                            <td width="35%">
+                                @Html.TextBox("FuelbialCrease", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field FuelbialCrease must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The FuelbialCrease field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h5>@Resources.Langues.E20Title2</h5>
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr id="CP0001">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.PVoutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("PvReductionRate", "0.7", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field PvReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr id="CP0002">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.WToutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("WtReductionRate", "1", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field WtReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr id="CP0003">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.ESSoutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("EssReductionRate", "0", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field EssReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Html.Raw(@Resources.Langues.E20Descr1)</div>
+            </div>
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Resources.Langues.E20Descr2</div>
+            </div>
+            <br />
+            <div style="text-align:center">
+                <button type="button" id="submitM00001Form" @*onclick="FormE00020Save()"*@ class="button button-gray">@Resources.Langues.E20Btn</button>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var status = 1;
+        var modelCode = '@Request.Params["modelCode"]';
+        $(document).ready(function () {
+            $('#CP0001').hide();
+            $('#CP0002').hide();
+            var $modal = $('.E00020');
+            var caseId = @Request.Params["caseId"];
+            var $M0001Form = $('#M00001Form');
+            $('#btn_E00020').removeClass('progress-bar-warning');
+
+            $('.E00020').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+
+            var dem1 = dem2 = dem3 = 0;
+
+            $.blockUI();
+            $.post("@Url.Action("GetI00011ByCaseId", "EntityE00020Popup",new { area="Case"})", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    $('#DiscountRate').val(result.item.DiscountRate);
+                    $('#PvReductionRate').val(result.item.PvReductionRate);
+                    $('#WtReductionRate').val(result.item.WtReductionRate);
+                    $('#FuelbialCrease').val(result.item.FuelbialCrease);
+                    $('#EssReductionRate').val(result.item.EssReductionRate);
+                } else {
+                    status = 2
+                }
+            }).fail(function () {
+                @*bootbox.alert('@Resources.Langues.ContactAdmin');*@
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $.blockUI();
+            $.post("@Url.Action("GetListLocationCode", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    if(result.listComCode){
+                        result.listComCode.forEach(function(item){
+                            $('#' + item).show();
+                            if (item == "CP0001") {
+                                dem1++
+                            }
+                            if (item == "CP0002") {
+                                dem2++
+                            }
+                        });
+                        if (dem1 == 0) {
+                            $('#PvReductionRate').val(0);
+                        }
+                        if (dem2 == 0) {
+                            $('#WtReductionRate').val(0);
+                        }
+                    }
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $('#submitM00001Form').click(function(){
+                var valid = $M0001Form.valid();
+                if(valid){
+                    $M0001Form.submit();
+                }
+            });
+
+            $M0001Form.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $M0001Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    //$.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        if (status == 1) {
+                            bootbox.confirm({
+                                message: '@Resources.Langues.E20Messs',
+                                className: 'my-custom-class',
+                                buttons: {
+                                    cancel: {
+                                        label: '@Resources.Langues.No',
+                                        className: 'btn btn-gray pull-right'
+                                    },confirm: {
+                                        label: '@Resources.Langues.Yes',
+                                        className: 'btn btn-primary classYes'
+                                    }
+                                },
+                                callback: function (result) {
+                                    if (result) {
+                                        RunProccess(caseId,modelCode);
+                                    } else{
+                                        $.unblockUI();
+                                        $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                                            result.list.forEach(function(item) {
+                                                $("#btn_" + item).addClass('progress-bar-warning');
+                                            });
+                                            nextEntity()
+                                            $.unblockUI();
+                                        }).fail(function () {
+                                            $.unblockUI();
+                                        }).always(function () {
+                                            $.unblockUI();
+                                        });
+                                    }
+                                }
+                            });
+                        } else{
+                            RunProccess(caseId,modelCode);
+                        }
+                    } else {
+                        bootbox.alert('@Resources.Langues.Error');
+                    }
+
+                });
+                e.preventDefault();
+            });
+        });
+
+        function RunProccess(caseId, modelCode) {
+            $.blockUI();
+            $.post("@Url.Action("RunningProccess", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.blockUI();
+                    $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: false, caseId: caseId }, function (result) {
+                        if (result.success) {
+                            $('.E00021').modal('hide');
+                            $.unblockUI();
+                            bootbox.alert('@Resources.Langues.ContactAminAnalysis');
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        //$.unblockUI();
+                    });
+                } else {
+                     $.blockUI();
+                        $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: true, caseId: caseId }, function (result) {
+                            if (result.success) {
+                                $.blockUI();
+                                $.post("@Url.Action("RenewEntityString", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                    $.blockUI();
+                                    $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+
+                                        result.list.forEach(function (item) {
+                                            $("#btn_" + item).addClass('progress-bar-warning');
+                                        });
+                                        nextEntity()
+                                    }).fail(function () {
+                                        $.unblockUI();
+                                    }).always(function () {
+
+                                    });
+                                }).fail(function () {
+                                }).always(function () {
+                                });
+                            }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        //$.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert({
+                    "message":'@Resources.Langues.ContactAdmin',
+                    "className": "my-custom-class",
+                });
+            }).always(function () {
+            });
+        }
+    </script>
+}
+else if (Request.Params["modelCode"] == "M00004")
+{
+    using (Html.BeginForm("SaveEntityE00020PopupData", "EntityE00020Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "M00005Form" }))
+    {
+        <div class="modal-body">
+
+            <!--Popup Name -->
+            <br />
+            @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                   })
+            @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                   })
+            <!--Input field -->
+            <h5>@Resources.Langues.E20Title11</h5>
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.Currencydiscountrate</td>
+                            <td width="35%">
+                                @Html.TextBox("DiscountRate", "4.5", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field DiscountRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The DiscountRate field is required.",
+                               @style = "text-align:right;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.SMPgrowthrate</td>
+                            <td width="35%">
+                                @Html.TextBox("SMPGrowthRate", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field SMPGrowthRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The SMPGrowthRate field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.ElectIncrease</td>
+                            <td width="35%">
+                                @Html.TextBox("ElectIncrease", "3", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field ElectIncrease must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The ElectIncrease field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr>
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.Maintenancerate</td>
+                            <td width="35%">
+                                @Html.TextBox("FuelbialCrease", "1", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field FuelbialCrease must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The FuelbialCrease field is required.",
+                               @style = "text-align:right;width:100%;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @*<h5>@Resources.Langues.E20Title2</h5>
+            <div>
+                <table class="table table-bordered tblMultiRow" style="">
+                    <tbody>
+                        <tr id="CP0001">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.PVoutputreductionrate</td>
+                            <td width="35%">
+                                @Html.TextBox("PvReductionRate", "0.7", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field PvReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                        <tr id="CP0003" class="hidden">
+                            <td width="50%" class="active" style="text-align:center">@Resources.Langues.FCReductionRate</td>
+                            <td width="35%">
+                                @Html.TextBox("FCReductionRate", "0", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field FCReductionRate must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @style = "text-align:right;;width:100%",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td width="15%" class="active">%/@Resources.Langues.yearss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>*@
+            <br />
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Html.Raw(@Resources.Langues.E20Descr1)</div>
+            </div>
+            <div class="form-group">
+                @*<label class="control-label  col-xs-1" style="text-align:right;padding:5px">*</label>*@
+                <div class="control-label">@Resources.Langues.E20Descr2</div>
+            </div>
+            <br />
+            <div class="list-inline" style="text-align:center">
+                <button type="button" id="submitM00001Form" @*onclick="FormE00020Save()"*@ class="button button-gray">@Resources.Langues.E20Btn</button>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var status = 1;
+        var modelCode = '@Request.Params["modelCode"]';
+        $(document).ready(function () {
+            var $modal = $('.E00020');
+            var caseId = @Request.Params["caseId"];
+            var $M0001Form = $('#M00005Form');
+
+            $('#btn_E00020').removeClass('progress-bar-warning');
+            var dem1 = dem2 = dem3 = 0;
+
+            $.blockUI();
+            $.post("@Url.Action("GetI00011ByCaseId", "EntityE00020Popup",new { area="Case"})", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    $('#DiscountRate').val(result.item.DiscountRate);
+                    $('#ElectIncrease').val(result.item.ElectIncrease);
+                    $('#SMPGrowthRate').val(result.item.SMPGrowthRate);
+                    $('#FuelbialCrease').val(result.item.FuelbialCrease);
+                } else {
+                    status = 2
+                }
+            }).fail(function () {
+                @*bootbox.alert('@Resources.Langues.ContactAdmin');*@
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $('#submitM00001Form').click(function(){
+                var valid = $M0001Form.valid();
+                if(valid){
+                    $M0001Form.submit();
+                }
+            });
+
+            $M0001Form.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $M0001Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    //$.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        if (status == 1) {
+                            bootbox.confirm({
+                                message: '@Resources.Langues.E20Messs',
+                                className: 'my-custom-class',
+                                buttons: {
+                                    cancel: {
+                                        label: '@Resources.Langues.No',
+                                        className: 'btn btn-gray pull-right'
+                                    },confirm: {
+                                        label: '@Resources.Langues.Yes',
+                                        className: 'btn btn-primary classYes'
+                                    }
+                                },
+                                callback: function (result) {
+                                    if (result) {
+                                        RunProccess(caseId,modelCode);
+                                    } else{
+                                        $.unblockUI();
+                                        $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+
+
+                                            result.list.forEach(function(item) {
+                                                $("#btn_" + item).addClass('progress-bar-warning');
+                                            });
+                                            $.unblockUI();
+                                        }).fail(function () {
+                                            $.unblockUI();
+                                        }).always(function () {
+                                            $.unblockUI();
+                                        });
+                                    }
+                                }
+                            });
+                        } else{
+                            RunProccess(caseId,modelCode);
+                        }
+                    } else {
+                        bootbox.alert('@Resources.Langues.Error');
+                    }
+
+                });
+                e.preventDefault();
+            });
+        });
+
+        function RunProccess(caseId,modelCode){
+            $.blockUI();
+            $.post("@Url.Action("RunningProccessM00004", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.blockUI();
+                    $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: false, caseId: caseId }, function (result) {
+                        if (result.success) {
+                            $('.E00021').modal('hide');
+                            $.unblockUI();
+                            bootbox.alert('@Resources.Langues.ContactAminAnalysis');
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        //$.unblockUI();
+                    });
+                } else {
+                     $.blockUI();
+                        $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: true, caseId: caseId }, function (result) {
+                            if (result.success) {
+                                $.blockUI();
+                                $.post("@Url.Action("RenewEntityString", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                    $.blockUI();
+                                    $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                                        result.list.forEach(function (item) {
+                                            $("#btn_" + item).addClass('progress-bar-warning');
+                                        });
+                                        nextEntity()
+                                        bootbox.alert({
+                                            "message":'@Resources.Langues.Successful',
+                                            "className": "my-custom-class",
+                                        });
+                                    }).fail(function () {
+                                        $.unblockUI();
+                                    }).always(function () {
+
+                                    });
+                                }).fail(function () {
+                                }).always(function () {
+                                });
+                            }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        //$.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert({
+                    "message":'@Resources.Langues.ContactAdmin',
+                    "className": "my-custom-class",
+                });
+            }).always(function () {
+            });
+        }
+
+        function RunClick() {
+            var modelCode = '@Request.Params["modelCode"]';
+            var caseId = '@Request.Params["caseId"]';
+            $.blockUI();
+            $.post("@Url.Action("RunProcess", "EntityE00021Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+                if (result.success == false) {
+                    $.unblockUI();
+                    if (modelCode == "M00001"){
+                        bootbox.alert('@Resources.Langues.MessageFileNotFound2');
+                    } else {
+                        bootbox.alert('@Resources.Langues.MessageFileNotFound3');
+                    }
+
+                    $.unblockUI();
+                } else {
+                    $.blockUI();
+                    $.post("@Url.Action("ReadResult20File", "EntityE00021Popup", new { area="Case" })", { caseId: @Request.Params["caseId"], modelCode: modelCode }, function (result) {
+                        if (result.success == false) {
+                            $.blockUI();
+                            $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: false, caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    $('.E00021').modal('hide');
+                                    $.unblockUI();
+                                    bootbox.alert('@Resources.Langues.Error');
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }).always(function () {
+                                //$.unblockUI();
+                            });
+                        } else {
+                            $.blockUI();
+                            $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: true, caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    $.blockUI();
+                                    $.post("@Url.Action("RenewEntityString", "EntityE00020Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                        $.blockUI();
+                                        $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00020",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                                            $.unblockUI();
+                                            @*bootbox.alert({
+                                                "message":'@Resources.Langues.Successful',
+                                                "className": "my-custom-class",
+                                            });*@
+                                            result.list.forEach(function(item) {
+                                                $("#btn_" + item).addClass('progress-bar-warning');
+                                            });
+                                            nextEntity()
+                                        }).fail(function () {
+                                            $.unblockUI();
+                                        }).always(function () {
+
+                                        });
+                                    }).fail(function () {
+                                    }).always(function () {
+                                    });
+                                }
+                            }).fail(function () {
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }).always(function () {
+                                //$.unblockUI();
+                            });
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        //$.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.MessErrorE21');
+            }).always(function () {
+                //$.unblockUI();
+            });
+        };
+    </script>
+}

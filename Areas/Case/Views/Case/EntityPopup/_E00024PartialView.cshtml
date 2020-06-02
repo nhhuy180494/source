@@ -1,0 +1,550 @@
+﻿<style>
+    .E00024 {
+        top: 5%;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: inline-block;
+        font-size: 20px;
+        color: blue;
+        border: 1px solid blue;
+        text-align: center;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade E00024" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.RECweightinput</h4>
+            </div>
+            <div class="modal-body">
+                @if (Request.Params["modelCode"] != "M00005")
+                {
+                    <div class="row cp3">
+                        <div class="form-horizontal  col-md-offset-1">
+                            <label class="control-label col-md-3 lbWT">ESS:</label>
+                            <div class="col-md-4 row" style="padding-right:5px !important">
+                                <div class="col-sm-12 col-md-12" style="padding-right:5px !important">
+                                    @Html.TextBox("EssValue", "5", new { @class = "form-control input-md", @style = "text-align:right;" })
+                                </div>
+                            </div>
+                            <span onclick="helpOnclick('ESS')" class="dot">?</span>@*<button type="button" onclick="helpOnclick('ESS')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row cp1">
+                        <div class="form-horizontal col-md-offset-1">
+                            <label class="control-label col-md-3 lbWT">PV:</label>
+                            <div class="col-md-4 row" style="padding-right:5px !important">
+                                <div class="col-sm-12 col-md-12" style="padding-right:5px !important">
+                                    @Html.TextBox("PvValue", "0.7", new { @class = "form-control input-md", @style = "text-align:right;" })
+                                </div>
+                            </div>
+                            <span onclick="helpOnclick('PV')" class="dot">?</span>@*<button type="button" onclick="helpOnclick('PV')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row cp2">
+                        <div class="form-horizontal col-md-offset-1">
+                            <label class="control-label col-md-3 lbWT">WT:</label>
+                            <div class="col-md-4 row" style="padding-right:5px !important">
+                                <div class="col-sm-12 col-md-12" style="padding-right:5px !important">
+                                    @Html.TextBox("WTValue", "1", new { @class = "form-control input-md", @style = "text-align:right;" })
+                                </div>
+                            </div>
+                            <span onclick="helpOnclick('WT')" class="dot">?</span> @*<button type="button" onclick="helpOnclick('WT')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row cp1">
+                        <div class="form-horizontal col-md-offset-1">
+                            <label class="control-label col-md-3 lbWT">PV:</label>
+                            <div class="col-md-4 row" style="padding-right:5px !important">
+                                <div class="col-sm-12 col-md-12" style="padding-right:5px !important">
+                                    @Html.TextBox("PvValue", "1.5", new { @class = "form-control input-md", @style = "text-align:right;" })
+                                </div>
+                            </div>
+                            <span onclick="helpOnclick('PV')" class="dot">?</span> @*<button type="button" onclick="helpOnclick('PV')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row cp4">
+                        <div class="form-horizontal col-md-offset-1">
+                            <label class="control-label col-md-3 lbWT">FC:</label>
+                            <div class="col-md-4 row" style="padding-right:5px !important">
+                                <div class="col-sm-12 col-md-12" style="padding-right:5px !important">
+                                    @Html.TextBox("FcValue", "2", new { @class = "form-control input-md", @style = "text-align:right;" })
+                                </div>
+                            </div>
+                            <span onclick="helpOnclick('WT')" class="dot">?</span>@*<button type="button" onclick="helpOnclick('WT')" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@
+                        </div>
+                    </div>
+                }
+                <hr />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" onclick="FormE00024Save()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+    .bu_cross1 {
+        display: inline-block;
+        zoom: 1;
+        padding-left: 20px;
+        background: url(../../../../../img/bu_cross1.png) no-repeat 0 0;
+    }
+    .center {
+        text-align: center !important;
+    }
+    .rgt_section .tit_h6 {
+        font-size: 18px;
+        font-weight: 500;
+        color: #555;
+        letter-spacing: -0.4px;
+        padding-bottom: 15px;
+    }
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        padding: 8px;
+        vertical-align: middle;
+        border-top: 1px solid black;
+    }
+</style>
+
+<div class="modal fade HelpPopup" role="dialog">
+    <div class="modal-dialog" style="width:50%">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="i_section mt20">
+                    <div class="center" style="margin:10px">
+                        <h4 class="tit_h6 bu_cross1">@Resources.Langues.RenewableEnergySupplyCertificateWeight</h4>
+                    </div>
+                    <div>
+                        <table class="table table-bordered tblMultiRow" style="vertical-align:middle">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" class="center">@Resources.Langues.Division</th>
+                                    <th rowspan="2" class="bd_right center">@Resources.Langues.SupplyCertificateWeights</th>
+                                    <th colspan="2" class="center">@Resources.Langues.Targetenergyandreference</th>
+                                </tr>
+
+                                <tr>
+                                    <th>@Resources.Langues.InstallationType</th>
+                                    <th>@Resources.Langues.Detailedcriteria</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="REC">
+                                    <td rowspan="10" class="bd_right center">@Html.Raw(Resources.Langues.Solarenergy)</td>
+                                    <td class="center">1.2</td>
+                                    <td rowspan="3" class="left">@Resources.Langues.Wheninstallingonaregularsite</td>
+                                    <td>@Resources.Langues.Lessthan100kw</td>
+                                </tr>
+                                <tr class="REC">
+                                    <td class="center">1.0</td>
+                                    <td>@Resources.Langues.From100kW</td>
+                                </tr>
+                                <tr class="REC">
+                                    <td class="center">0.7</td>
+                                    <td>@Resources.Langues.Above3000kW</td>
+                                </tr>
+                                <tr class="REC">
+                                    <td class="center">0.7</td>
+                                    <td>@Resources.Langues.Wheninstallingintheforest</td>
+                                    <td class="center">-</td>
+                                </tr>
+                                <tr class="REC">
+                                    <td class="center">1.5</td>
+                                    <td rowspan="2" class="left">@Resources.Langues.Whenusingexistingfacilitiessuchasbuildings</td>
+                                    <td>@Resources.Langues.orless</td>
+                                </tr>
+                                <tr class="REC">
+                                    <td class="center">1.0</td>
+                                    <td>@Resources.Langues.Above3000kW</td>
+                                </tr>
+                                <tr class="REC">
+                                    <td class="center">1.5</td>
+                                    <td class="left"> @Resources.Langues.Ifyouinstallitfloating</td>
+                                    <td class="center">-</td>
+
+                                </tr>
+                                <tr class="REC">
+                                    <td class="center">1.0</td>
+                                    <td class="left">  @Resources.Langues.Whentrading</td>
+                                    <td class="center">-</td>
+
+                                </tr>
+                                <tr class="REC">
+                                    <td class="center">5.0</td>
+                                    <td rowspan="2" class="left"> @Resources.Langues.ESSfacility</td>
+                                    <td class="center">2018 ~ 2019</td>
+                                </tr>
+                                <tr class="REC">
+                                    <td class="center">4.0</td>
+                                    <td class="center">2020</td>
+                                </tr>
+
+                                <tr class="WT">
+                                    <td rowspan="10" class="bd_right center">@Html.Raw(Resources.Langues.OtherNewandRenewableEnergy)</td>
+                                    <td class="center">0.25</td>
+                                    <td colspan="2" class="left">@Resources.Langues.Bio</td>
+                                </tr>
+                                <tr class="WT">
+                                    <td class="center">0.5</td>
+                                    <td colspan="2" class="left">@Resources.Langues.Landfill</td>
+                                </tr>
+                                <tr class="WT">
+                                    <td class="center">1.0</td>
+                                    <td colspan="2" class="left">@Resources.Langues.OtherBio</td>
+                                </tr>
+                                <tr class="WT">
+                                    <td class="center">1.5</td>
+                                    <td colspan="2" class="left">@Resources.Langues.Misuse</td>
+                                </tr>
+                                <tr class="WT">
+                                    <td class="center">2.0</td>
+                                    <td>@Resources.Langues.NonUser</td>
+                                    <td class="center">@Resources.Langues.FixedType</td>
+                                </tr>
+                                <tr class="WT">
+                                    <td class="center">1.0 ~ 2.5</td>
+                                    <td class="left">@Resources.Langues.Aids</td>
+                                    <td>@Resources.Langues.Variable</td>
+                                </tr>
+                                <tr class="WT">
+                                    <td class="center">2.0</td>
+                                    <td rowspan="4" class="left"> @Resources.Langues.Offshore</td>
+                                    <td class="center"> @Resources.Langues.Linkdistance</td>
+                                </tr>
+                                <tr class="WT">
+                                    <td class="center">2.5</td>
+                                    <td class="center">@Resources.Langues.Linkdistanceexceeding</td>
+                                </tr>
+                                <tr class="WT">
+                                    <td class="center">3.0</td>
+                                    <td class="center">@Resources.Langues.Linkdistanceexceeding1</td>
+                                </tr>
+                                <tr class="WT">
+                                    <td class="center">3.5</td>
+                                    <td class="center">@Resources.Langues.Linkdistanceexceeded</td>
+                                </tr>
+
+
+                                <tr class="ESS">
+                                    <td rowspan="4" class="bd_right center">ESS</td>
+                                    <td class="center">5.0</td>
+                                    <td rowspan="2" class="left"> @Resources.Langues.Solarconnection</td>
+                                    <td>2018 ~ 2019</td>
+                                </tr>
+                                <tr class="ESS">
+                                    <td class="center">4.0</td>
+                                    <td>2020</td>
+                                </tr>
+                                <tr class="ESS">
+                                    <td class="center">4.5</td>
+                                    <td rowspan="2" class="left"> @Resources.Langues.Windconnection</td>
+                                    <td>2018 ~ 2019</td>
+                                </tr>
+                                <tr class="ESS">
+                                    <td class="center">4.0</td>
+                                    <td>2020</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="float:right;margin-bottom:5px">@Resources.Langues.Source</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:10px">
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]';
+    var ComponentCodePv = "CP0001";
+    var ComponentCodeWT = "CP0002";
+    var ComponentCodeEss = "CP0003";
+    var ComponentCodeFc = "CP0004";
+    var PvRec = "";
+    var EssRec = "";
+    var WtRec = "";
+    var FcRec = "";
+    var PvStatus = 0;
+    var EssStatus = 0;
+    var WtStatus = 0;
+    var FcStatus = 0;
+
+    $(document).ready(function () {
+        $('.E00024').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $.blockUI();
+        $.post("@Url.Action("CheckComponentCodeInI00001Sub", "EntityE00024Popup", new { area="Case" })", { caseId: caseId, ComponentCode: ComponentCodePv }, function (result) {
+            if(result.success){
+                PvRec = "CP0001";
+                PvStatus = 1;
+            }else{
+                PvRec = "";
+                $("#PvValue").attr("disabled", "disabled");
+                $(".cp1").attr("hidden", "hidden");
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }).always(function(){
+            $.unblockUI();
+            });
+
+        $.blockUI();
+        $.post("@Url.Action("CheckComponentCodeInI00001Sub", "EntityE00024Popup", new { area="Case" })", { caseId: caseId, ComponentCode: ComponentCodeWT }, function (result) {
+            if(result.success){
+                WtRec = "CP0002";
+                WtStatus = 1;
+            }else{
+                WtRec = "";
+                $("#WTValue").attr("disabled", "disabled");
+                $(".cp2").attr("hidden", "hidden");
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }).always(function(){
+            $.unblockUI();
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("CheckComponentCodeInI00001Sub", "EntityE00024Popup", new { area="Case" })", { caseId: caseId, ComponentCode: ComponentCodeFc }, function (result) {
+            if(result.success){
+                FcRec = "CP0004";
+                FcStatus = 1;
+            }else{
+                FcRec = "";
+                $("#FcValue").attr("disabled", "disabled");
+                $(".cp4").attr("hidden", "hidden");
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }).always(function(){
+            $.unblockUI();
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("CheckComponentCodeInI00001Sub", "EntityE00024Popup", new { area="Case" })", { caseId: caseId, ComponentCode: ComponentCodeEss }, function (result) {
+            if(result.success){
+                EssRec = "CP0003";
+                EssStatus = 1;
+            }else{
+                EssRec = "";
+                $('#EssValue').val('');
+                $("#EssValue").attr("disabled", "disabled");
+                $(".cp3").attr("hidden", "hidden");
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+        }).always(function(){
+            $.unblockUI();
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetSA0003ByCaseId", "EntityE00024Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if(result.success){
+                if (EssStatus == 1){
+                    $('#EssValue').val("5");
+                }
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+        }).always(function(){
+            $.unblockUI();
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetI00012RecByCaseId", "EntityE00024Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if(result.success){
+                $('#EssValue').val(result.data.EssValue);
+                //if (PvStatus == 1) $('#PvValue').val(result.data.PvValue);
+                //if (WtStatus == 1) $('#WTValue').val(result.data.WTValue);
+                //if (FcStatus == 1) $('#FcValue').val(result.data.FcValue);
+            }else{
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+        }).always(function(){
+            $.unblockUI();
+        });
+    });
+
+    function helpOnclick(obj) {
+        $('.HelpPopup').modal('show');
+        if (obj == 'ESS') {
+            $(".REC").addClass("hidden");
+            $(".ESS").removeClass("hidden");
+            $(".WT").addClass("hidden");
+        } else if (obj == 'PV') {
+            $(".REC").removeClass("hidden");
+            $(".ESS").addClass("hidden");
+            $(".WT").addClass("hidden");
+        } else {
+            $(".REC").addClass("hidden");
+            $(".ESS").addClass("hidden");
+            $(".WT").removeClass("hidden");
+        }
+    }
+
+    function FormE00024Save(){
+        if (($('#PvValue').val() == "" && PvStatus == 1) || ($('#EssValue').val() == "" && EssStatus == 1) || ($('#WtValue').val() == "" && WtStatus == 1) || (EssRec == "" && PvRec == "" && WtRec == "")) {
+            bootbox.alert({ message:'@Resources.Langues.FailedToSave', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            return false;
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: '@Url.Action("SaveEntityE00024PopupData", "EntityE00024Popup")',
+            cache: false,
+            type: 'POST',
+            data: {
+                WTValue: $('#WTValue').val(),
+                FcValue: $('#FcValue').val(),
+                PvValue: $('#PvValue').val(),
+                EssValue: $('#EssValue').val(),
+                caseId: getUrlParameter('caseId'),
+                PvRec: PvRec,
+                WtRec: WtRec,
+                FcRec: FcRec,
+                EssRec: EssRec,
+                modelCode: modelCode
+            },
+            success: function (result) {
+                if (result.success) {
+                    updateHistory(result.html)
+                    $("#btn_E00024").addClass("democlass");
+                        $('.E00024').modal('hide');
+                        bootbox.alert({ message:'@Resources.Langues.Successful', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                        $.unblockUI();
+                } else {
+                    $.unblockUI();
+                    bootbox.alert({ message:'@Resources.Langues.Error', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                }
+            },
+            error: function (response) {
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        return { comCode: comCode }
+    };
+</script>
+
+
+

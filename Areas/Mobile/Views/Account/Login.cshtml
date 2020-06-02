@@ -1,0 +1,148 @@
+﻿@model DPDSP.Models.LoginOrRegisterViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+
+@{
+    List<SelectListItem> ListLanguages = new List<SelectListItem>();
+    ListLanguages.Add(new SelectListItem { Value = "ko", Text = Resources.Langues.Korean });
+    ListLanguages.Add(new SelectListItem { Value = "en", Text = Resources.Langues.English });
+}
+<style>
+    .well2 {
+        min-height: 20px;
+        padding: 19px;
+        margin-bottom: 20px;
+    }
+    .form-horizontal .form-group {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+</style>
+@using (Html.BeginForm("HomeLogin", "Account", new { area = "Mobile" }, FormMethod.Post, new { role = "form", @id = "myForm", enctype = "multipart/form-data",@class= "form-horizontal" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IsLogin)
+    <div class="well2">
+        <div class="panel-heading">
+            <h5 class="panel-title" style="background:url(/img/ci3_1.png) no-repeat top left;height:40px;padding-top:20px;"></h5>
+        </div>
+        <p class="text-danger" id="login-message"></p>
+
+        <div class="form-group">
+            <label for="UserLogin_Email" class="control-label">@Resources.Langues.Login</label>
+            @Html.TextBoxFor(m => m.UserLogin.Email, new
+                         {
+                             @class = "form-control",
+                             @placeholder = @Resources.Langues.Email,
+                             @data_val_required = " "
+                         })
+            <span class="help-block"></span>
+        </div>
+        <div class="form-group">
+            @Html.PasswordFor(m => m.UserLogin.Password, new
+                         {
+                             @class = "form-control",
+                             @placeholder = @Resources.Langues.Password,
+                             @data_val_required = " "
+                         })
+            @Html.ValidationMessageFor(m => m.UserLogin.Password, "", new { @class = "text-danger" })
+
+            <span class="help-block"></span>
+        </div>
+        <div class="form-group">
+            <label for="UserLogin_Language" class="control-label">@Resources.Langues.Language</label>
+            @Html.DropDownListFor(m => m.UserLogin.Language, ListLanguages, new { @class = "form-control" })
+        </div>
+        <div id="loginErrorMsg" class="alert alert-error hide">@Resources.Langues.MessLogin</div>
+        <input type="submit" id="login-submit" value="@Resources.Langues.Login" class="btn btn-primary btn-block" />
+        @*<input type="button" value="@Resources.Langues.Cancel" class="btn btn-default btn-block" data-dismiss="modal" />*@
+
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+
+    var $myForm = $('#myForm');
+    var $loginMess = $('#login-message');
+    var $loginPass = $('#UserLogin_Password');
+    var $loginModal = $('#login');
+    var $regisModal = $('#member');
+    var emailNotExist = false;
+    var $emailInput = $('#UserLogin_Email');
+    $(document).ready(function () {
+        $.validator.setDefaults({
+            onkeyup: false
+        })
+
+        $('#ReturnUrl').val(window.location);
+        $('#IsLogin').val(true);
+    
+        $('#myForm').submit(function (e) {
+            var isValid = $myForm.valid();
+            if (isValid && emailNotExist) {
+                $.blockUI();
+                var formObj = $(this);
+                var data = new FormData(this);
+                var urlAction = formObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).success(function (result) {
+                    //var result = $.parseJSON(res.html());
+                    if (result.isLogin) {
+                        if (result.isRedirect) {
+                            console.log(result.redirectUrl)
+                            window.location.href = result.redirectUrl;
+                        }
+                        else if (result.isLocked) {
+                            bootbox.alert(result.message);
+                            $loginMess.text(result.message);
+                            $loginPass.val('');
+                        } else if (result.isError) {
+                            bootbox.alert(result.message);
+                            $loginMess.text(result.message);
+                            $loginPass.val('');
+                        }
+                    }
+                    else {
+                        if (result.isRegisError) {
+                            if (result.message.length) {
+                                bootbox.alert(result.message);
+                            } else {
+                            }
+                        } else if (result.isRegisSuccess) {
+                            $regisModal.modal('hide');
+                            bootbox.alert(result.message, function () {
+                                window.location.reload()
+                            });
+                        }
+                    }
+                });
+            } else {
+                $emailInput.addClass('input-validation-error');
+                $emailInput.removeClass('valid');
+            }
+            event.preventDefault();
+        });
+
+        $('#login-submit').click(function () {
+            $('#IsLogin').val(true);
+            emailNotExist = true;
+        });
+
+    });
+</script>

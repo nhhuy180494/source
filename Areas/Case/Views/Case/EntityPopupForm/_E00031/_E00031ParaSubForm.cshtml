@@ -1,0 +1,44 @@
+﻿
+@model double[]
+
+<tr class="paraSubRow hidden">
+
+    <td class="text-center">
+        @Model[0]
+    </td>
+    <td class="hidden">
+        @Html.Hidden("ListCHPParameterSubs[" + Model[1] + "].Load", Model[0], new
+   {
+       @disabled = "disabled",
+       @data_val = "true",
+       @class = "loadInput",
+       data_val_number = "The field Load must be a number.",
+       @data_val_range = "Invalid Target Price; Max 3 digits",
+       @data_val_range_max = "999.9",
+       @data_val_range_min = "0",
+       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+       @data_val_required = "The Load field is required.",
+       @style = "text-align:right;",
+       @type = "tel"
+   })
+
+
+    </td>
+    <td>
+        @Html.TextBox("ListCHPParameterSubs[" + Model[1] + "].FuelConsum", "", new
+   {
+       @disabled = "disabled",
+       @data_val = "true",
+       data_val_number = "The field FuelConsum must be a number.",
+       @data_val_range = "Invalid Target Price; Max 4 digits",
+       @data_val_range_max = "999.9",
+       @data_val_range_min = "0",
+       @data_val_regex = "Invalid Target Price; Maximum one Decimal Points.",
+       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+       @data_val_required = "The FuelConsum field is required.",
+       @style = "text-align:right;",
+       @type = "tel"
+   })
+    </td>
+</tr>

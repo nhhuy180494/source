@@ -1,0 +1,204 @@
+﻿@model DPDSP.Models.EditAccountViewModel
+
+@using (Html.BeginForm("ChangeMyInfors", "Account", new { area = "" }, FormMethod.Post, new { @role = "form", @id = "formChangeInfors" }))
+{
+    @Html.AntiForgeryToken()
+    <!--login member-->
+    <div id="member" class="modal modal-wide fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">@Resources.Langues.SignUp</h4>
+                </div>
+                <div class="modal-body" style="overflow:auto;">
+                    <div class="form-horizontal">
+                        <fieldset>
+                            <h5>※ √ @Resources.Langues.InputFieldsAreRequried</h5>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"> √  @Resources.Langues.Email</label>
+                                <div class="col-md-6">
+                                    @Html.HiddenFor(m => m.Email)
+                                    @Html.TextBox("EmailDisplay", "", new { @class = "form-control input-md", @disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="col-md-offset-4">
+                                <h5><span class="text-primary"> <a onclick="showChangePassModal()" style="margin-left:10px; border:none;" role="button" data-toggle="modal" data-target="#change-password-modal">@Resources.Langues.ChangePassword</a></span></h5>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="FirstName,">√ @Resources.Langues.FirstName</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="LastName">√ @Resources.Langues.LastName</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserCompany">√ @Resources.Langues.Affiliation</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserCompany, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserCountry">√ @Resources.Langues.Nationality</label>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(m => m.UserCountry, new SelectList(ViewBag.ListCountries, "Value", "Text"), Resources.Langues.PleaseSelect, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserJob">  @Resources.Langues.Job</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserJob, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserDepartmentName">  @Resources.Langues.DepartmentName</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserDepartmentName, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserPositon">  @Resources.Langues.Position</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserPositon, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserTel">  @Resources.Langues.PhoneNumber</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserTel, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserCompanyAddress">  @Resources.Langues.CompanyAddress</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserCompanyAddress, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserBusinessArea">  @Resources.Langues.BusinessField</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserBusinessArea, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserWebsite">@Resources.Langues.CompanyOrPersonalHomepage</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserWebsite, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-6">
+                                    <img alt="Avatar" id="myPhoto" src="" style="width:100px; height:100px; background-color:wheat;" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="">@Resources.Langues.ImageAttach</label>
+                                <div class="col-md-6 form-inline">
+                                    <input id="image" type="text" class="form-control input-md" disabled="disabled">
+                                    @Html.TextBoxFor(m => m.UserPhoto, new { @class = "form-control input-md", accept = "image/*", type = "file", style = "display:none;" })
+                                    <a role="button" id="get_file" class="btn  btn-success btn-sm">File upload </a> @*<a role="button" class="btn btn-default btn-sm">Edit Component</a>*@
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="submitFormInfors" class="btn btn-primary">@Resources.Langues.Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+}
+
+@using (Html.BeginForm("ChangeUserPassword", "Account", new { area = "" }, FormMethod.Post, new { role = "form", id = "changePasswordForm" }))
+{
+    <div class="modal fade" id="change-password-modal" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 role="button" class="modal-title text-primary" id="myModalLabel01"><i class="fa fa-lock"> </i> Change password</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal col-md-offset-1" style="padding-top:15px;">
+                        <div class="form-group text-danger">
+                            <text style="margin-left:15px; display:none;" class="col-md-offset-4" id="changePassErrorContent"></text>
+                        </div>
+                        <div class="row text-center">
+                            @Html.ValidationMessage("OldPassword", "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="OldPassword">@Resources.Langues.CurrentPassword</label>
+                            <div class="col-md-6">
+                                @Html.Password("OldPassword", "", new
+                               {
+                                   @class = "form-control input-md",
+                                   placeholder = "Current Password",
+                                   @data_val = "true",
+                                   @data_val_password = Resources.Langues.ValidatePasswordMessage,
+                                   @data_val_password_min = "6",
+                                   @data_val_password_nonalphamin = "1",
+                                   @data_val_required = " "
+                               })
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            @Html.ValidationMessage("Password", "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="Password">@Resources.Langues.NewPass</label>
+                            <div class="col-md-6">
+                                @Html.Password("Password", "", new
+                               {
+                                   @class = "form-control input-md",
+                                   @placeholder = "New Password",
+                                   @data_val = "true",
+                                   @data_val_password = Resources.Langues.ValidatePasswordMessage,
+                                   @data_val_password_min = "6",
+                                   @data_val_password_nonalphamin = "1",
+                                   @data_val_required = " "
+                               })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="ConfirmPassword">@Resources.Langues.ConfirmPass</label>
+                            <div class="col-md-6">
+                                @Html.Password("ConfirmPassword", "", new
+                               {
+                                   @class = "form-control input-md",
+                                   @placeholder = "Confirm Password",
+                                   @data_val = "true",
+                                   @data_val_equalto = "The password and confirmation password do not match.",
+                                   @data_val_equalto_other = "*.Password"
+                               })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        </div>
+                        <div class="row text-center">
+                            ※ @Resources.Langues.ValidatePasswordMessage
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <div class="pull-right">
+                                    <button type="button" id="update-password" class="btn btn-primary">@Resources.Langues.Update</button>
+                                    <button type="button" class="btn btn-default " data-dismiss="modal">@Resources.Langues.Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

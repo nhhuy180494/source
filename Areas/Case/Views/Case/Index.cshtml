@@ -1,0 +1,186 @@
+﻿@model DPDSP.Models.InsertCaseViewModel
+
+@{
+    ViewBag.Title = "Case";
+    Layout = "~/Areas/Case/Views/Shared/_CaseLayout.cshtml";
+}
+
+@section styles{
+    <style>
+        #case-content > #basicModal01 {
+            top: 10%;
+        }
+
+        #case-content > #notification-modal {
+            top: 10%;
+        }
+
+        .input-validation-error {
+            border: 1px solid red;
+        }
+
+        .classYes {
+            margin-right: 10px;
+        }
+
+        .my-custom-class {
+            z-index: 10001;
+        }
+    </style>
+}
+<div class="container" style="padding-top:10px;">
+    <img src="~/Images/CaseTop.png" width="85%" @*height="20%"*@ />
+</div>
+
+<div class="container" id="case-content" style="padding-top:10px;padding-bottom:50px;">
+
+    <h5>@Resources.Langues.CaseMess1</h5>
+    <p>
+        @Resources.Langues.CaseMess2 <br />
+        @Resources.Langues.CaseMess3
+    </p>
+    @*<button class="btn btn-default btn-opal" onclick="Delete()" type="button">xoa</button>*@
+    <hr />
+    <div class="form-group">
+        @foreach (var item in ViewBag.ListModel)
+        {
+            if (@item.Status == true)
+            {
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-5" onclick="onShowbasicModal01(this)">
+                    <div class="offer offer-radius offer-color" style="background-color:#333;color:white;">
+                        <div class="offer-content">
+                            <input type="text" hidden class="model-code" value="@item.ModelCode" />
+                            <h4 style="margin: 50px;">@item.ModelName</h4>
+                            @*<p class="active">모형</p>*@
+                            @*<p> <a role="button" class="btn btn-md btn-primary" onclick="onShowbasicModal01(this)">@Resources.Langues.Select</a></p>*@
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-5" data-toggle="modal" data-target="#notification-modal">
+                    <div class="offer offer-radius offer-default" style="background-color:#999999;color:white">
+                        <div class="offer-content">
+                            <input type="text" hidden class="model-code" value="@item.ModelCode" />
+                            <h4 style="margin: 50px;">@item.ModelName</h4>
+                            @*<p class="active">모형</p>*@
+                            @*<p> <a role="button" class="btn btn-md  btn-default" data-toggle="modal" data-target="#notification-modal">@Resources.Langues.Select</a> </p>*@
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="modal fade" id="basicModal01" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true" style="z-index: 10000;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel01" style="color:#1e5687"><i class="fa fa-check-circle"></i> xxxx모형</h4>
+                </div>
+                @using (Html.BeginForm("InsertCase", "Case", FormMethod.Post, new { @role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>@Resources.Langues.CaseName</label>
+                                @Html.HiddenFor(m => m.ModelCode)
+                                @*@Html.HiddenFor(m=>m.ModelName)*@
+                                @Html.TextBoxFor(m => m.CaseName, new { @class = "form-control" })
+                            </div>
+                            @*<h4>선택한 모형으로 Case를 진행 할까요?</h4>*@
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top:none;">
+                        <input type="submit" id="submitCase" class="btn btn-primary" value="@Resources.Langues.Enter" />
+                        <button type="button" class="btn btn-default " data-dismiss="modal">@Resources.Langues.Close</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="notification-modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel01" style="color:#1e5687"><i class="fa fa-bell" aria-hidden="true"></i> Notification</h4>
+                </div>
+                <div class="form-group">
+                    <div class="modal-body">
+                        <p>This model is not available.</p>
+                    </div>
+                    <div class="modal-footer" style="border-top:none;">
+                        <button type="submit" class="btn btn-default " data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+@section scripts{
+    <script>
+        var basicModal01 = $('#basicModal01');
+        var isAuth = '@Request.IsAuthenticated';
+
+            function onShowbasicModal01(e) {
+                console.log(isAuth)
+                if (isAuth == 'True') {
+                    basicModal01.modal('show');
+                    var modelContent = $(e).closest('div');
+                    var modelCode = $(modelContent).find('input').val();
+                    $('#ModelCode').val(modelCode);
+                    var modelName = $(modelContent).find('h4').text();
+                    $('#myModalLabel01').text(modelName);
+                } else {
+                    bootbox.confirm({
+                        message: '@Resources.Langues.MessCreateModel',
+                        className: 'my-custom-class',
+                        buttons: {
+                            cancel: {
+                                label: '@Resources.Langues.No',
+                                className: 'btn-danger pull-right'
+                           },confirm: {
+                                label: '@Resources.Langues.Yes',
+                               className: 'btn-success classYes'
+                           }
+                        },
+                        callback: function (result) {
+                            if (result) {
+                                $('#loginTag').click()
+                            }
+                        }
+                    });
+                }
+        };
+
+        basicModal01.on('hide.bs.modal', function () {
+            var formCase = basicModal01.find('form');
+            $('#myModalLabel01').text('xxxx모형');
+            $(formCase)[0].reset();
+        });
+
+        $(document).ready(function () {
+            if (isAuth == "False") {
+                $('#login').modal('show');
+            }
+        });
+        function Delete() {
+            console.log('zzz')
+            $.blockUI();
+            $.post("@Url.Action("RemoveAllCase", "CaseManagement", new { area="Admin" })", function (result) {
+
+            }).fail(function () {
+            }).always(function () {
+                $.unblockUI();
+            });
+        }
+    </script>
+}

@@ -1,0 +1,1566 @@
+﻿<!-- Modal -->
+
+<style>
+    .E00017 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .input-validation-error {
+        border: 1px solid red !important;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body1 {
+        height: 500px;
+        overflow-y: auto;
+    }
+</style>
+
+@if (Request.Params["modelCode"] == "M00003")
+{
+    using (Html.BeginForm("SaveEntityE00017PopupDataM0003", "EntityE00017Popup", FormMethod.Post, new { @role = "form", @id = "M00003Form" }))
+    {
+        <div class="modal fade E00017" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">@Resources.Langues.ESSPVconnection</h4>
+                    </div>
+                    <div class="modal-body1">
+                        <!--Popup Name -->
+                        <br />
+                        @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                       {
+                           @data_val = "true",
+                           @data_val_required = "The CaseId field is required."
+                       })
+
+                        @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+                       {
+                           @data_val = "true",
+                           @data_val_required = "The ModelCode field is required.",
+                           @data_val_length = "The field ModelCode must be a string with a maximum length of 6.",
+                           @data_val_length_max = "6",
+                       })
+                        <div class="row">
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="control-label  col-md-12">@Html.Raw(Resources.Langues.E0174)</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="control-label  col-md-12">@Html.Raw(Resources.Langues.E0175)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div class="row">
+                            <div class="CP0003">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6"><strong>ESS</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CP0003">
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="active tb-tt" style="width:20%">번호</th>
+                                        <th colspan="4" class="active" style="width:40%">@Resources.Langues.PCSratedoutput</th>
+                                        <th colspan="4" class="active" style="width:40%">@Resources.Langues.Batterycapacity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" class="active tb-min" width="20%">1</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.Hidden("CP0003", "", new { })
+                                            @Html.TextBox("ListItems[1].MinValue1Item", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "ESSMinValue1",
+                                               @data_val = "true",
+                                               @data_val_number = "The field MinValue1 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 12 digits",
+                                               @data_val_range_max = "9999999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "MiniOnchange('ESS','MinValue','1');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td width="10%" class="active">kW</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("MinValue2", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "ESSMinValue2",
+                                               @data_val = "true",
+                                               @data_val_number = "The field MinValue2 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 12 digits",
+                                               @data_val_range_max = "9999999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "MiniOnchange('ESS','MinValue','2');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td width="10%" class="active">kWh</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="active tb-max" width="20%">2</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("ListItems[1].MaxValue1Item", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "ESSMaxValue1",
+                                               @data_val = "true",
+                                               @data_val_number = "The field MaxValue1 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 12 digits",
+                                               @data_val_range_max = "9999999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "MaxOnchange('ESS','MaxValue','1');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td width="10%" class="active">kW</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("MaxValue2", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "ESSMaxValue2",
+                                               @data_val = "true",
+                                               @data_val_number = "The field MaxValue2 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 12 digits",
+                                               @data_val_range_max = "9999999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "MaxOnchange('ESS','MaxValue','2');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td width="10%" class="active">kWh</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="active tb-in" width="20%">3</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("ListItems[1].InternvalValue1Item", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "ESSInternvalValue1",
+                                               @data_val = "true",
+                                               @data_val_number = "The field InternvalValue1 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 12 digits",
+                                               @data_val_range_max = "9999999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "IntevalOnchange('ESS','InternvalValue','1');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td width="10%" class="active">kW</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("InternvalValue2", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "ESSInternvalValue2",
+                                               @data_val = "true",
+                                               @data_val_number = "The field InternvalValue2 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 12 digits",
+                                               @data_val_range_max = "9999999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "IntevalOnchange('ESS','InternvalValue','2');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td width="10%" class="active">kWh</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="CP0001">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6"><strong>PV</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CP0001">
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <thead>
+                                    <tr>
+                                        <th class="active tb-tt" style="width:30%">번호</th>
+                                        <th class="active" style="width:60%">@Resources.Langues.PVratedpower</th>
+                                        <th class="active" style="width:00%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="active tb-min" style="width:30%">1</td>
+                                        <td style="width:60%">
+                                            @Html.Hidden("CP0001", "", new { })
+                                            @Html.TextBox("ListItems[0].MinValue1Item", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "PVMinValue1",
+                                               @data_val = "true",
+                                               @data_val_number = "The field MinValue1 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 12 digits",
+                                               @data_val_range_max = "9999999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "MiniOnchange('PV','MinValue','1');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td class="active" style="width:10%">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-max">2</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[0].MaxValue1Item", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "PVMaxValue1",
+                                               @data_val = "true",
+                                               @data_val_number = "The field MaxValue1 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 12 digits",
+                                               @data_val_range_max = "9999999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "MaxOnchange('PV','MaxValue','1');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-in">3</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[0].InternvalValue1Item", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "PVInternvalValue1",
+                                               @data_val = "true",
+                                               @data_val_number = "The field InternvalValue1 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 12 digits",
+                                               @data_val_range_max = "9999999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "IntevalOnchange('PV','InternvalValue','1');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="CP0002">
+                            <div class="row">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6">
+                                        <strong>
+                                            WT
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CP0002">
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <thead>
+                                    <tr>
+                                        <th class="active tb-tt" style="width:30%">번호</th>
+                                        <th class="active" style="width:60%">@Resources.Langues.WTratedpower</th>
+                                        <th class="active" style="width:10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="active tb-min" style="width:30%">1</td>
+                                        <td style="width:60%">
+                                            @Html.TextBox("ListItems[2].MinValue1Item", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "WTMinValue1",
+                                               @data_val = "true",
+                                               @data_val_number = "The field MinValue1 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 10 digits",
+                                               @data_val_range_max = "99999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "MiniOnchange('WT','MinValue','1');",
+                                               @style = "text-align:right;"
+                                           })
+                                            @Html.Hidden("CP0002", "", new { })
+                                        </td>
+                                        <td class="active" style="width:10%">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-max">2</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[2].MaxValue1Item", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "WTMaxValue1",
+                                               @data_val = "true",
+                                               @data_val_number = "The field MaxValue1 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 10 digits",
+                                               @data_val_range_max = "99999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "MaxOnchange('WT','MaxValue','1');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-in">3</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[2].InternvalValue1Item", "0", new
+                                           {
+                                               @class = "form-control input-md",
+                                               id = "WTInternvalValue1",
+                                               @data_val = "true",
+                                               @data_val_number = "The field InternvalValue1 must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 10 digits",
+                                               @data_val_range_max = "99999999.99",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                               //@onchange = "IntevalOnchange('WT','InternvalValue','1');",
+                                               @style = "text-align:right;"
+                                           })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="list-inline pull-right">
+                                <button type="button" id="submitM00003Form" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var status = true;
+        $(document).ready(function () {
+            $('.CP0001').hide();
+            $('.CP0002').hide();
+            $('.CP0003').hide();
+            $('.CP0004').hide();
+            $('.CP0005').hide();
+            $('.CP0006').hide();
+            var $modal = $('.E00017');
+            var caseId = @Request.Params["caseId"];
+            var $M0003Form = $('#M00003Form');
+
+            $('.E00017').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+
+            if ('@Request.Params["modelCode"]' != "M00001") {
+                $('.tb-tt').html('@Resources.Langues.Sortation');
+                $('.tb-min').html('@Resources.Langues.Minimumcapacity');
+                $('.tb-max').html('@Resources.Langues.Maximumcapacity');
+                $('.tb-in').html('@Resources.Langues.Interval');
+            }
+            $('.E00017').on('hide.bs.modal', function () {
+                if (lstEntityNextStep.length != 0) {
+                    historyClick(lstEntityNextStep[0]);
+                    lstEntityNextStep.shift();
+                    console.log(lstEntityNextStep)
+                }
+            });
+            $modal.on('show.bs.modal', function () {
+                $.blockUI();
+                $.post("@Url.Action("GetListLocationCode", "EntityE00017Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                    if (result.success) {
+                        if(result.listLocationCode){
+                            result.listLocationCode.forEach(function(item){
+                                $('#'+ item).val(item);
+                                $('.' + item).show();
+
+                                if (item == "CP0001") {
+                                    $('#PVMinValue1').val("");
+                                    $('#PVMaxValue1').val("");
+                                    $('#PVInternvalValue1').val("");
+                                }if (item == "CP0002") {
+                                    $('#WTMinValue1').val("");
+                                    $('#WTMaxValue1').val("");
+                                    $('#WTInternvalValue1').val("");
+                                }if (item == "CP0003") {
+                                    $('#ESSMinValue1').val("");
+                                    $('#ESSMaxValue1').val("");
+                                    $('#ESSInternvalValue1').val("");
+
+                                    $('#ESSMinValue2').val("");
+                                    $('#ESSMaxValue2').val("");
+                                    $('#ESSInternvalValue2').val("");
+                                }
+                            });
+
+                            $.blockUI();
+                            $.post("@Url.Action("GetListI00010CapaRangeByCaseId", "EntityE00017Popup")", { caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    result.list.forEach(function (item) {
+                                        if (item.ComponentCode == "CP0001") {
+                                            $('#PVMinValue1').val(item.MinValue1);
+                                            $('#PVMaxValue1').val(item.MaxValue1);
+                                            $('#PVInternvalValue1').val(item.InternvalValue1);
+                                        }
+                                        if (item.ComponentCode == "CP0002") {
+                                            $('#WTMinValue1').val(item.MinValue1);
+                                            $('#WTMaxValue1').val(item.MaxValue1);
+                                            $('#WTInternvalValue1').val(item.InternvalValue1);
+                                        }
+                                        if (item.ComponentCode == "CP0003") {
+                                            $('#ESSMinValue1').val(item.MinValue1);
+                                            $('#ESSMaxValue1').val(item.MaxValue1);
+                                            $('#ESSInternvalValue1').val(item.InternvalValue1);
+
+                                            $('#ESSMinValue2').val(item.MinValue2);
+                                            $('#ESSMaxValue2').val(item.MaxValue2);
+                                            $('#ESSInternvalValue2').val(item.InternvalValue2);
+                                        }
+                                    });
+                                }
+                            }).fail(function () {
+                            }).always(function () {
+                                $.unblockUI();
+                            });
+                        }
+                    }
+                }).fail(function () {
+                    showMess('@Resources.Langues.ContactAdmin')
+                }).always(function () {
+                    $.unblockUI();
+                });
+            });
+
+            $('#submitM00003Form').click(function(){
+                var valid = $M0003Form.valid();
+                @*if ($('#ESSMinValue1').val() == "" ||$('#ESSMaxValue1').val() == "" ||$('#ESSInternvalValue1').val() == "" ||
+                    $('#ESSMinValue2').val() == "" ||$('#ESSMaxValue2').val() == "" ||$('#ESSInternvalValue2').val() == "" ||
+                    $('#PVMinValue1').val() == "" ||$('#PVMaxValue1').val() == "" ||$('#PVInternvalValue1').val() == "" ||
+                    $('#WTMinValue1').val() == "" || $('#WTMaxValue1').val() == "" || $('#WTInternvalValue1').val() == "") {
+                    showMess('@Resources.Langues.MsgE000173')
+                    return false;
+                }*@
+                if(valid){
+                    if (status == "true" || status == true) {
+                        $M0003Form.submit();
+                    }
+                }
+            });
+
+            //$M0003Form.on('keyup keypress', function (e) {
+            //    var keyCode = e.keyCode || e.which;
+            //    if (keyCode === 13) {
+            //        e.preventDefault();
+            //        return false;
+            //    }
+            //});
+            $('.E00017').on('show.bs.modal', function () {
+            setTimeout(function () { $('#PVMinValue1').focus(); }, 500);
+            });
+
+            $M0003Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        showMess('@Resources.Langues.ContactAdmin')
+                    }
+                }).always(function () {
+                    //$.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        updateHistory(result.html)
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00017').modal('hide');
+                    });
+                                $("#btn_E00017").addClass("democlass");
+                    } else {
+                        showMess('@Resources.Langues.Error')
+                    }
+                });
+                e.preventDefault();
+            });
+        });
+
+        @*function MiniOnchange(header, mid, footer) {
+            if (header == 'ESS' && mid == 'MinValue') {
+                if (parseFloat($('#' + header + mid + footer).val()) == 0) {
+                    bootbox.alert('@Resources.Langues.MessageE000175');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                }
+            }
+
+            if (($('#' + header + 'MaxValue' + footer).val() != "") && (parseFloat($('#' + header + 'MaxValue' + footer).val()) < parseFloat($('#' + header + mid + footer).val()))) {
+                bootbox.alert('@Resources.Langues.MessageE000171');
+                $('#' + header + mid + footer).val("");
+                status = false;
+            }else if ($('#' + header + mid + footer).val() != "" && $('#' + header + 'InternvalValue' + footer).val() != "") {
+                if ((parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + 'InternvalValue' + footer).val()) > (parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + mid + footer).val())))) || (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + mid + footer).val())) % parseFloat($('#' + header + 'InternvalValue' + footer).val())) != 0) {
+                    bootbox.alert('@Resources.Langues.MessageE000172');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + mid + footer).val()))/ parseFloat($('#' + header + 'InternvalValue' + footer).val())) > 3) {
+                    bootbox.alert('@Resources.Langues.MessageE000173');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) == 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) != parseFloat($('#' + header + mid + footer).val())))) {
+                    bootbox.alert('@Resources.Langues.MessageE000174');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else {
+                    status = true;
+                }
+            }else {
+                status = true;
+            }
+        };
+
+        function MaxOnchange(header, mid, footer) {
+            if (($('#' + header + 'MinValue' + footer).val() != "") && (parseFloat($('#' + header + 'MinValue' + footer).val()) > parseFloat($('#' + header + mid + footer).val()))) {
+                bootbox.alert('@Resources.Langues.MessageE000171');
+                $('#' + header + mid + footer).val("");
+                status = false;
+            } else if ($('#' + header + 'MinValue' + footer).val() != "" && $('#' + header + 'InternvalValue' + footer).val() != "") {
+                if ((parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + 'InternvalValue' + footer).val()) > (parseFloat($('#' + header + mid + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val())))) || (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + mid + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val())) % parseFloat($('#' + header + 'InternvalValue' + footer).val())) != 0) {
+                    bootbox.alert('@Resources.Langues.MessageE000172');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                }else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && ((parseFloat($('#' + header + mid + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val()))/ parseFloat($('#' + header + 'InternvalValue' + footer).val())) > 3) {
+                    bootbox.alert('@Resources.Langues.MessageE000173');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) == 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) != parseFloat($('#' + header + 'MinValue' + footer).val())))) {
+                    bootbox.alert('@Resources.Langues.MessageE000174');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else {
+                    status = true;
+                }
+            }else {
+                status = true;
+            }
+        };
+
+        function IntevalOnchange(header, mid, footer) {
+            if ($('#' + header + 'MinValue' + footer).val() != "" && $('#' + header + 'MaxValue' + footer).val() != "") {
+                if ((parseFloat($('#' + header + mid + footer).val()) != 0 && (parseFloat($('#' + header + mid + footer).val()) > (parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val())))) || (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val())) % parseFloat($('#' + header + mid + footer).val())) != 0) {
+                    bootbox.alert('@Resources.Langues.MessageE000172');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                }else if (parseFloat($('#' + header + mid + footer).val()) != 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val()))/ parseFloat($('#' + header + mid + footer).val())) > 3) {
+                    bootbox.alert('@Resources.Langues.MessageE000173');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) == 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) != parseFloat($('#' + header + 'MinValue' + footer).val())))) {
+                    bootbox.alert('@Resources.Langues.MessageE000174');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else {
+                    status = true;
+                }
+            }
+        };*@
+    </script>
+}
+else
+{
+    @model DPDSP.Models.I00010CapaRangeItemViewModel
+    using (Html.BeginForm("SaveEntityE00017PopupDataM0001", "EntityE00017Popup", FormMethod.Post, new { @role = "form", @id = "M00001Form" }))
+    {
+        <div class="modal fade E00017" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">@Resources.Langues.DERSconnection</h4>
+                    </div>
+                    <div class="modal-body1">
+                        <!--Popup Name -->
+                        <br />
+                        @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                   })
+
+                        @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+                   {
+                       @data_val = "true",
+                       @data_val_required = "The ModelCode field is required.",
+                       @data_val_length = "The field ModelCode must be a string with a maximum length of 6.",
+                       @data_val_length_max = "6",
+                   })
+                        @if (Request.Params["modelCode"] == "M00001")
+                        {
+                            <div class="row">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="control-label  col-md-12">@Html.Raw(Resources.Langues.E0171)</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="control-label  col-md-12">@Html.Raw(Resources.Langues.E0172)</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="control-label  col-md-12">@Html.Raw(Resources.Langues.E0173)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="control-label  col-md-12">@Html.Raw(Resources.Langues.E0174)</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="control-label  col-md-12">@Html.Raw(Resources.Langues.E0175)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <hr />
+
+                        <div class="CP0001">
+                            <div class="row">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6"><strong>PV</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CP0001">
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <thead>
+                                    <tr>
+                                        <th class="active tb-tt" style="width:30%">번호</th>
+                                        <th class="active" style="width:60%">@Resources.Langues.PVratedpower</th>
+                                        <th class="active" style="width:00%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="active tb-min" style="width:30%">1</td>
+                                        <td style="width:60%">
+                                            @Html.TextBox("ListItems[0].MinValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "PVMinValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MinValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MiniOnchange('PV','MinValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0001", "", new { })
+                                        </td>
+                                        <td class="active" style="width:10%">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-max">2</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[0].MaxValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "PVMaxValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MaxValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MaxOnchange('PV','MaxValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-in">3</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[0].InternvalValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "PVInternvalValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InternvalValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "IntevalOnchange('PV','InternvalValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="CP0002">
+                            <div class="row">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6">
+                                        <strong>
+                                            WT
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CP0002">
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <thead>
+                                    <tr>
+                                        <th class="active tb-tt" style="width:30%">번호</th>
+                                        <th class="active" style="width:60%">@Resources.Langues.WTratedpower</th>
+                                        <th class="active" style="width:10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="active tb-min" style="width:30%">1</td>
+                                        <td style="width:60%">
+                                            @Html.TextBox("ListItems[1].MinValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "WTMinValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MinValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MiniOnchange('WT','MinValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0002", "", new { })
+                                        </td>
+                                        <td class="active" style="width:10%">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-max">2</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[1].MaxValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "WTMaxValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MaxValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MaxOnchange('WT','MaxValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-in">3</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[1].InternvalValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "WTInternvalValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InternvalValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "IntevalOnchange('WT','InternvalValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="CP0003">
+                            <div class="row">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6"><strong>ESS</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CP0003">
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="active tb-tt" style="width:20%">번호</th>
+                                        <th colspan="4" class="active" style="width:40%">@Resources.Langues.PCSratedoutput</th>
+                                        <th colspan="4" class="active" style="width:40%">@Resources.Langues.Batterycapacity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" class="active tb-min" width="20%">1</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("ListItems[2].MinValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "ESSMinValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MinValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MiniOnchange('ESS','MinValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0003", "", new { })
+                                        </td>
+                                        <td width="10%" class="active">kW</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("MinValue2", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "ESSMinValue2",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MinValue2 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MiniOnchange('ESS','MinValue','2');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="10%" class="active">kWh</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="active tb-max" width="20%">2</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("ListItems[2].MaxValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "ESSMaxValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MaxValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MaxOnchange('ESS','MaxValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="10%" class="active">kW</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("MaxValue2", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "ESSMaxValue2",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MaxValue2 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MaxOnchange('ESS','MaxValue','2');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="10%" class="active">kWh</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="active tb-in" width="20%">3</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("ListItems[2].InternvalValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "ESSInternvalValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InternvalValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "IntevalOnchange('ESS','InternvalValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="10%" class="active">kW</td>
+                                        <td colspan="3" width="30%">
+                                            @Html.TextBox("InternvalValue2", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "ESSInternvalValue2",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InternvalValue2 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "IntevalOnchange('ESS','InternvalValue','2');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td width="10%" class="active">kWh</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="CP0004">
+                            <div class="row">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6"><strong>FC</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CP0004">
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <thead>
+                                    <tr>
+                                        <th class="active tb-tt" style="width:30%">번호</th>
+                                        <th class="active" style="width:60%">@Resources.Langues.FCratedpower</th>
+                                        <th class="active" style="width:00%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="active tb-min" style="width:30%">1</td>
+                                        <td style="width:60%">
+                                            @Html.TextBox("ListItems[3].MinValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "FCMinValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MinValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MiniOnchange('FC','MinValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0004", "", new { })
+                                        </td>
+                                        <td class="active" style="width:10%">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-max">2</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[3].MaxValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "FCMaxValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MaxValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MaxOnchange('FC','MaxValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-in">3</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[3].InternvalValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "FCInternvalValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InternvalValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "IntevalOnchange('FC','InternvalValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="CP0005">
+                            <div class="row">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6"><strong>CHP</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CP0005">
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <thead>
+                                    <tr>
+                                        <th class="active tb-tt" style="width:30%">번호</th>
+                                        <th class="active" style="width:60%">@Resources.Langues.CHPratedpower</th>
+                                        <th class="active" style="width:00%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="active tb-min" style="width:30%">1</td>
+                                        <td style="width:60%">
+                                            @Html.TextBox("ListItems[4].MinValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "CHPMinValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MinValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MiniOnchange('CHP','MinValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0005", "", new { })
+                                        </td>
+                                        <td class="active" style="width:10%">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-max">2</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[4].MaxValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "CHPMaxValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MaxValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MaxOnchange('CHP','MaxValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-in">3</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[4].InternvalValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "CHPInternvalValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InternvalValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "IntevalOnchange('CHP','InternvalValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="CP0006">
+                            <div class="row">
+                                <div class="form-horizontal">
+                                    <div class="active col-xs-6"><strong>@Resources.Langues.DieselGen</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CP0006">
+                            <table class="table table-bordered tblMultiRow" style="">
+                                <thead>
+                                    <tr>
+                                        <th class="active tb-tt" style="width:30%">번호</th>
+                                        <th class="active" style="width:60%">@Resources.Langues.DGPratedpower</th>
+                                        <th class="active" style="width:00%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="active tb-min" style="width:30%">1</td>
+                                        <td style="width:60%">
+                                            @Html.TextBox("ListItems[5].MinValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "DMinValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MinValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MiniOnchange('D','MinValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                            @Html.Hidden("CP0006", "", new { })
+                                        </td>
+                                        <td class="active" style="width:10%">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-max">2</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[5].MaxValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "DMaxValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field MaxValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "MaxOnchange('D','MaxValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active tb-in">3</td>
+                                        <td>
+                                            @Html.TextBox("ListItems[5].InternvalValue1Item", "", new
+                                       {
+                                           @class = "form-control input-md",
+                                           id = "DInternvalValue1",
+                                           @data_val = "true",
+                                           @data_val_number = "The field InternvalValue1 must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 10 digits",
+                                           @data_val_range_max = "99999999.99",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                                           //@onchange = "IntevalOnchange('D','InternvalValue','1');",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="active">kW</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="list-inline pull-right">
+                                <button type="button" id="submitM00001Form" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var status = true;
+        $(document).ready(function () {
+            $('.CP0001').hide();
+            $('.CP0002').hide();
+            $('.CP0003').hide();
+            $('.CP0004').hide();
+            $('.CP0005').hide();
+            $('.CP0006').hide();
+            var $modal = $('.E00017');
+            var caseId = @Request.Params["caseId"];
+            var $M0001Form = $('#M00001Form');
+            var wtInternvalValue = 0;
+
+            $('.E00017').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+
+            if ('@Request.Params["modelCode"]' != "M00001") {
+                $('.tb-tt').html('@Resources.Langues.Sortation');
+                $('.tb-min').html('@Resources.Langues.Minimumcapacity');
+                $('.tb-max').html('@Resources.Langues.Maximumcapacity');
+                $('.tb-in').html('@Resources.Langues.Interval');
+            }
+            $('.E00017').on('hide.bs.modal', function () {
+                if (lstEntityNextStep.length != 0) {
+                    historyClick(lstEntityNextStep[0]);
+                    lstEntityNextStep.shift();
+                    console.log(lstEntityNextStep)
+                }
+            });
+            $modal.on('show.bs.modal', function () {
+                $.blockUI();
+                $.post("@Url.Action("GetListLocationCode", "EntityE00017Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                    if (result.success) {
+                        if(result.listLocationCode){
+                            result.listLocationCode.forEach(function(item){
+                                $('#'+ item).val(item);
+                                $('.' + item).show();
+                                if (item == "CP0001") {
+                                    $('#PVMinValue1').val("");
+                                    $('#PVMaxValue1').val("");
+                                    $('#PVInternvalValue1').val("");
+                                }if (item == "CP0002") {
+                                    $('#WTMinValue1').val("");
+                                    $('#WTMaxValue1').val("");
+                                    $('#WTInternvalValue1').val("");
+                                }if (item == "CP0003") {
+                                    $('#ESSMinValue1').val("");
+                                    $('#ESSMaxValue1').val("");
+                                    $('#ESSInternvalValue1').val("");
+
+                                    $('#ESSMinValue2').val("");
+                                    $('#ESSMaxValue2').val("");
+                                    $('#ESSInternvalValue2').val("");
+                                }if (item == "CP0004") {
+                                    $('#FCMinValue1').val("");
+                                    $('#FCMaxValue1').val("");
+                                    $('#FCInternvalValue1').val("");
+                                }if (item == "CP0005") {
+                                    $('#CHPMinValue1').val("");
+                                    $('#CHPMaxValue1').val("");
+                                    $('#CHPInternvalValue1').val("");
+                                }if (item == "CP0006") {
+                                    $('#DMinValue1').val("");
+                                    $('#DMaxValue1').val("");
+                                    $('#DInternvalValue1').val("");
+                                }
+                            });
+
+                            $.blockUI();
+                            $.post("@Url.Action("GetListI00010CapaRangeByCaseId", "EntityE00017Popup")", { caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    result.list.forEach(function (item) {
+                                        if (item.ComponentCode == "CP0001") {
+                                            $('#PVMinValue1').val(item.MinValue1 == 0 ? "" : item.MinValue1);
+                                            $('#PVMaxValue1').val(item.MaxValue1 == 0 ? "" : item.MaxValue1);
+                                            $('#PVInternvalValue1').val(item.InternvalValue1 == 0 ? "" : item.InternvalValue1);
+                                        }
+                                        if (item.ComponentCode == "CP0002") {
+                                            $('#WTMinValue1').val(item.MinValue1 == 0 ? "" : item.MinValue1);
+                                            $('#WTMaxValue1').val(item.MaxValue1 == 0 ? "" : item.MaxValue1);
+                                            $('#WTInternvalValue1').val(item.InternvalValue1 == 0 ? "" : item.InternvalValue1);
+                                        }
+                                        if (item.ComponentCode == "CP0003") {
+                                            $('#ESSMinValue1').val(item.MinValue1 == 0 ? "" : item.MinValue1);
+                                            $('#ESSMaxValue1').val(item.MaxValue1 == 0 ? "" : item.MaxValue1);
+                                            $('#ESSInternvalValue1').val(item.InternvalValue1 == 0 ? "" : item.InternvalValue1);
+
+                                            $('#ESSMinValue2').val(item.MinValue2 == 0 ? "" : item.MinValue2);
+                                            $('#ESSMaxValue2').val(item.MaxValue2 == 0 ? "" : item.MaxValue2);
+                                            $('#ESSInternvalValue2').val(item.InternvalValue2 == 0 ? "" : item.InternvalValue2);
+                                        }
+                                        if (item.ComponentCode == "CP0004") {
+                                            $('#FCMinValue1').val(item.MinValue1 == 0 ? "" : item.MinValue1);
+                                            $('#FCMaxValue1').val(item.MaxValue1 == 0 ? "" : item.MaxValue1);
+                                            $('#FCInternvalValue1').val(item.InternvalValue1 == 0 ? "" : item.InternvalValue1);
+                                        }
+                                        if (item.ComponentCode == "CP0005") {
+                                            $('#CHPMinValue1').val(item.MinValue1 == 0 ? "" : item.MinValue1);
+                                            $('#CHPMaxValue1').val(item.MaxValue1 == 0 ? "" : item.MaxValue1);
+                                            $('#CHPInternvalValue1').val(item.InternvalValue1 == 0 ? "" : item.InternvalValue1);
+                                        }
+                                        if (item.ComponentCode == "CP0006") {
+                                            $('#DMinValue1').val(item.MinValue1 == 0 ? "" : item.MinValue1);
+                                            $('#DMaxValue1').val(item.MaxValue1 == 0 ? "" : item.MaxValue1);
+                                            $('#DInternvalValue1').val(item.InternvalValue1 == 0 ? "" : item.InternvalValue1);
+                                        }
+                                    });
+                                }
+                            }).fail(function () {
+                            }).always(function () {
+                                $.unblockUI();
+                            });
+                        }
+                    }
+                }).fail(function () {
+                    showMess('@Resources.Langues.ContactAdmin')
+                }).always(function () {
+                    $.unblockUI();
+                });
+            });
+
+            $('.E00017').on('show.bs.modal', function () {
+            setTimeout(function () { $('#PVMinValue1').focus(); }, 500);
+            });
+
+            $('#submitM00001Form').click(function () {
+                var valid = $M0001Form.valid();
+                @*if (modelCode != "M00004" && ($('#ESSMinValue1').val() == "0" || $('#ESSMaxValue1').val() == "0" || $('#ESSInternvalValue1').val() == "0" ||
+                    $('#ESSMinValue2').val() == "0" ||$('#ESSMaxValue2').val() == "0" ||$('#ESSInternvalValue2').val() == "0" ||
+                    $('#PVMinValue1').val() == "0" ||$('#PVMaxValue1').val() == "0" ||$('#PVInternvalValue1').val() == "0" ||
+                    $('#WTMinValue1').val() == "0" ||$('#WTMaxValue1').val() == "0" ||$('#WTInternvalValue1').val() == "0" ||
+                    $('#FCMinValue1').val() == "0" ||$('#FCMaxValue1').val() == "0" ||$('#FCInternvalValue1').val() == "0" ||
+                    $('#CHPMinValue1').val() == "0" ||$('#CHPMaxValue1').val() == "0" ||$('#CHPInternvalValue1').val() == "0" ||
+                    $('#DMinValue1').val() == "0" || $('#DMaxValue1').val() == "0" || $('#DInternvalValue1').val() == "0")) {
+                    showMess('@Resources.Langues.MsgE000173')
+                    return false;
+                }*@
+
+                @*if (($('#PVInternvalValue1').val() < 10 && $('#PVInternvalValue1').val() > 0) || ($('#ESSInternvalValue1').val() < 10 && $('#ESSInternvalValue1').val() > 0) || ($('#ESSInternvalValue2').val() < 10 && $('#ESSInternvalValue2').val() > 0) || ($('#WTInternvalValue1').val() < 10 && $('#WTInternvalValue1').val() > 0)
+                    || ($('#FCInternvalValue1').val() < 10 && $('#FCInternvalValue1').val() > 0) || ($('#CHPInternvalValue1').val() < 10 && $('#CHPInternvalValue1').val() > 0)|| ($('#DInternvalValue1').val() < 10 && $('#DInternvalValue1').val() > 0))
+                {
+                    bootbox.alert('@Resources.Langues.MsgE00017');
+                    return false;
+                }
+
+                if($('#PVInternvalValue1').val() % 10 != 0 || $('#ESSInternvalValue1').val() % 10 != 0 || $('#ESSInternvalValue2').val() % 10 != 0 || $('#WTInternvalValue1').val() % 10 != 0
+                    || $('#FCInternvalValue1').val() % 10 != 0 || $('#CHPInternvalValue1').val() % 10 != 0 || $('#DInternvalValue1').val() % 10 != 0)
+                {
+                    bootbox.alert('@Resources.Langues.MsgE000172');
+                    return false;
+                }*@
+
+                if(valid){
+                    if (status == "true" || status == true) {
+                        $M0001Form.submit();
+                    }
+
+                }
+            });
+
+            //$M0001Form.on('keyup keypress', function (e) {
+            //    var keyCode = e.keyCode || e.which;
+            //    if (keyCode === 13) {
+            //        e.preventDefault();
+            //        return false;
+            //    }
+            //});
+
+            $M0001Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        $.unblockUI();
+                        showMess('@Resources.Langues.ContactAdmin')
+                    }
+                }).always(function () {
+                }).success(function (result) {
+                    if (result.success) {
+                        updateHistory(result.html)
+                        if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00017').modal('hide');
+                    });
+                            $("#btn_E00017").addClass("democlass");
+                    } else {
+                        $.unblockUI();
+                        showMess('@Resources.Langues.Error')
+                    }
+                });
+                e.preventDefault();
+            });
+        });
+
+        @*function MiniOnchange(header, mid, footer) {
+            if (header == 'ESS' && mid == 'MinValue') {
+                if (parseFloat($('#' + header + mid + footer).val()) == 0) {
+                    bootbox.alert('@Resources.Langues.MessageE000175');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                }
+            }
+
+            if (($('#' + header + 'MaxValue' + footer).val() != "") && (parseFloat($('#' + header + 'MaxValue' + footer).val()) < parseFloat($('#' + header + mid + footer).val()))) {
+                bootbox.alert('@Resources.Langues.MessageE000171');
+                $('#' + header + mid + footer).val("");
+                status = false;
+            }else if ($('#' + header + mid + footer).val() != "" && $('#' + header + 'InternvalValue' + footer).val() != "") {
+                if ((parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + 'InternvalValue' + footer).val()) > (parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + mid + footer).val())))) || (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + mid + footer).val())) % parseFloat($('#' + header + 'InternvalValue' + footer).val())) != 0) {
+                    bootbox.alert('@Resources.Langues.MessageE000172');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                }else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + mid + footer).val()))/ parseFloat($('#' + header + 'InternvalValue' + footer).val())) > 3) {
+                    bootbox.alert('@Resources.Langues.MessageE000173');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) == 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) != parseFloat($('#' + header + 'MinValue' + footer).val())))) {
+                    bootbox.alert('@Resources.Langues.MessageE000174');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else {
+                    status = true;
+                }
+            }else {
+                status = true;
+            }
+        };
+
+        function MaxOnchange(header, mid, footer) {
+            if (($('#' + header + 'MinValue' + footer).val() != "") && (parseFloat($('#' + header + 'MinValue' + footer).val()) > parseFloat($('#' + header + mid + footer).val()))) {
+                bootbox.alert('@Resources.Langues.MessageE000171');
+                $('#' + header + mid + footer).val("");
+                status = false;
+            } else if ($('#' + header + 'MinValue' + footer).val() != "" && $('#' + header + 'InternvalValue' + footer).val() != "") {
+                if ((parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + 'InternvalValue' + footer).val()) > (parseFloat($('#' + header + mid + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val())))) || (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + mid + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val())) % parseFloat($('#' + header + 'InternvalValue' + footer).val())) != 0) {
+                    bootbox.alert('@Resources.Langues.MessageE000172');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                }else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && ((parseFloat($('#' + header + mid + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val()))/ parseFloat($('#' + header + 'InternvalValue' + footer).val())) > 3) {
+                    bootbox.alert('@Resources.Langues.MessageE000173');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) == 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) != parseFloat($('#' + header + 'MinValue' + footer).val())))) {
+                    bootbox.alert('@Resources.Langues.MessageE000174');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else {
+                    status = true;
+                }
+            }else {
+                status = true;
+            }
+        };
+
+        function IntevalOnchange(header, mid, footer) {
+            if ($('#' + header + 'MinValue' + footer).val() != "" && $('#' + header + 'MaxValue' + footer).val() != "") {
+                if ((parseFloat($('#' + header + mid + footer).val()) != 0 && (parseFloat($('#' + header + mid + footer).val()) > (parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val())))) || (parseFloat($('#' + header + 'InternvalValue' + footer).val()) != 0 && (parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val())) % parseFloat($('#' + header + mid + footer).val())) != 0) {
+                    bootbox.alert('@Resources.Langues.MessageE000172');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                }else if (parseFloat($('#' + header + mid + footer).val()) != 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) - parseFloat($('#' + header + 'MinValue' + footer).val()))/ parseFloat($('#' + header + mid + footer).val())) > 3) {
+                    bootbox.alert('@Resources.Langues.MessageE000173');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else if (parseFloat($('#' + header + 'InternvalValue' + footer).val()) == 0 && ((parseFloat($('#' + header + 'MaxValue' + footer).val()) != parseFloat($('#' + header + 'MinValue' + footer).val())))) {
+                    bootbox.alert('@Resources.Langues.MessageE000174');
+                    $('#' + header + mid + footer).val("");
+                    status = false;
+                } else {
+                    status = true;
+                }
+            }
+        };*@
+    </script>
+}
+
+

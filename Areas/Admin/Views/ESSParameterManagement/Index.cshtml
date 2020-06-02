@@ -1,0 +1,357 @@
+﻿@model DPDSP.Models.EditAccountViewModel
+
+@{
+    ViewBag.Title = Resources.Langues.EssParameterManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/FaqAndNotice.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        #SerchButton {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        .input-validation-error {
+            border: 1px solid red !important;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+    </style>
+}
+<script>
+    function onData() {
+        var filter = $('.k-textbox').val();
+        return { filter: filter};
+    }
+</script>
+
+<h2>@ViewBag.Title</h2>
+
+
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.EssParameterViewModel>()
+                            .Name("grid")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(m => m.Selection).ClientTemplate("<input type=\"checkbox\" #=Selection ? checked='checked' :  '' # class=\"chkbox\" id=\"#=EssParamId#\" /> ")
+                                                                                   .HtmlAttributes(new { style = "text-align:center" }).Title(Resources.Langues.Select).HeaderHtmlAttributes(new { style = "width:3%;", @class = "headerCheckbox" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                columns.Bound(m => m.Company).Title(Resources.Langues.Company).HtmlAttributes(new { style = "text-align:center;" });
+                                columns.Bound(m => m.ModelName).Title(Resources.Langues.ModelName).HtmlAttributes(new { style = "text-align:center;" });
+                                columns.Bound(m => m.ModelNameEng).Title(Resources.Langues.ModelName + " (Eng)").HtmlAttributes(new { style = "text-align:center;" });
+                                columns.Bound(m => m.ScoScopeMin).Title(Resources.Langues.ScoScopeMin).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n2}");
+                                columns.Bound(m => m.ScoScopeMax).Title(Resources.Langues.ScoScopeMax).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n2}");
+                                columns.Bound(m => m.CycleCount).Title(Resources.Langues.CycleCount).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n2}");
+                                columns.Bound(m => m.OperDod).Title(Resources.Langues.OperDod).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n2}");
+                                //columns.Bound(m => m.BatteryEff).Title(Resources.Langues.BatteryEff).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n2}");
+                                columns.Bound(p => p.BatteryEffName).ClientTemplate("#=BatteryEffName.Text#").Sortable(false).EditorTemplateName("_CommSubDropdowList");
+                                columns.Bound(m => m.RegUser).Title(Resources.Langues.RegUser).HtmlAttributes(new { style = "text-align:center;" });
+                                columns.Bound(p => p.HowReg).ClientTemplate("#=HowReg ? 'Admin' : 'User' #").HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.HowReg);
+                                columns.Bound(m => m.EssParamId).Hidden();
+                                columns.Command(command =>
+                                {
+                                    command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                                    command.Custom(Resources.Langues.Delete).Click("DeleteEssParam").HtmlAttributes(new { @class = "btn-danger" });
+                                });
+
+                                //                        columns.Command(command => { command.Custom(Resources.Langues.ViewDetails).Click("DetailsUser").HtmlAttributes(new { @class = "btn-info" }); }).HtmlAttributes(new { style = "text-align:center;" });
+                            })
+                            .ToolBar(tools =>
+                            {
+                            tools.Template(@<text>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-5">
+                                            @(Html.Kendo().DropDownList()
+                                                  .Name("AllModelNames")
+                                                  .DataTextField("ModelName")
+                                                  .DataValueField("EssParamId")
+                                                  .Filter(FilterType.Contains)
+                                                  .DataSource(source =>
+                                                  {
+                                                      source.Read(read =>
+                                                      {
+                                                          read.Action("ReadModelName", "EssParameterManagement", new { area = "Admin" }).Data("onData");
+                                                      });
+                                                  }).OptionLabel(Resources.Langues.AllSelect)
+                                            )
+
+                                            <button class="k-button btn-opal" onclick="GetModelValueByName()">@Resources.Langues.Search</button>
+                                        </div>
+                                        <div class="form-group pull-right" style="margin-right:30px">
+                                            <a class="k-button k-button-icontext k-grid-add" href="/Admin/EssParameterManagement/Read?EssParameter-mode=insert"><span class="k-icon k-i-add"></span>@Resources.Langues.AddNewRecord</a>
+                                            <button class="k-button k-button-icontext" type="button" onclick="onDelete()">@Resources.Langues.DeleteAll</button>
+                                        </div>
+                                    </div>
+                                </text>);
+                            })
+                            //.Excel(excel => excel
+                            //    .FileName("Information Member.xlsx")
+                            //    .Filterable(true)
+                            //    .ProxyURL(Url.Action("Excel_Export_Save", "UserManagement"))
+                            //)
+                            //.Events(ev => ev.DataBound("onDataBound"))
+                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .Pageable()
+                            .Resizable(rz => rz.Columns(true))
+                            .Scrollable(rz => rz.Enabled(false))
+                            .Events(ev =>
+                            {
+                                ev.Change("onChange");
+                                ev.Edit("onEdit");
+                                ev.DataBound("onDataBound");
+                            })
+                            .Resizable(rz => rz.Columns(true))
+                            .HtmlAttributes(new { style = "height:650px;" })
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(12)
+                                .Model(model => {
+                                    model.Id(p => p.EssParamId);
+                                    model.Field(p => p.BatteryEffName).DefaultValue(
+                                        ViewBag.ListComFirst as DPDSP.Models.ItemCom);
+                                })
+                                .Read(read => read.Action("Read", "EssParameterManagement", new { area = "Admin" }))
+                                .Update(update => update.Action("Update_EssParam", "EssParameterManagement", new { area = "Admin" }))
+                                .Create(create => create.Action("Create_EssParam", "EssParameterManagement", new { area = "Admin" }))
+                                .Events(e => e.Sync("OnCRUD"))
+                        )
+        )
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var checkedItems = [];
+        var $selectColumn = $('#grid th:first');
+
+        $(document).ready(function () {
+            $("#grid").data("kendoGrid").dataSource.transport.options.read.data = OnReadGrid;
+            $('.k-textbox').unbind();
+            function OnReadGrid(e) {
+                $("#AllModelNames").data("kendoDropDownList").dataSource.read();
+            }
+
+            var data = $selectColumn.html();
+            data = data + '<input id="selectAll" type="checkbox">';
+            $selectColumn.html('');
+            $selectColumn.html(data);
+            $selectColumn.attr("style", "vertical-align: middle;text-align: center;");
+
+            $(document).on('click', '.chkbox', function (e) {
+                var checked = this.checked,
+                    row = $(this).closest("tr");
+                var id = row.find('input[type="checkbox"]').attr('id');
+
+                if (checked) {
+                    row.addClass("k-state-selected");
+                    checkedItems.push(id);
+                } else {
+                    row.removeClass("k-state-selected");
+                    var index = checkedItems.indexOf(id);
+                    checkedItems.splice(index, 1);
+                }
+
+                console.log(checkedItems)
+            });
+
+            $('#selectAll').click(function () {
+                if ($(this).is(':checked')) {
+                    checkedItems = [];
+                    var data = $("#grid").data('kendoGrid').dataSource.view();
+                    for (var i = 0; i < data.length; i++) {
+                        var id = data[i].id;
+                        $('#' + id).prop("checked", true);
+                        checkedItems.push(id);
+                    }
+                } else {
+                    var data = $("#grid").data('kendoGrid').dataSource.view();
+                    for (var i = 0; i < data.length; i++) {
+                        var id = data[i].id;
+                        $('#' + id).prop("checked", false);
+                        checkedItems.splice(id);
+                    }
+                    checkedItems = [];
+                }
+                console.log(checkedItems)
+            });
+        });
+
+        function GetModelValueByName() {
+            var $ModelName = $("#AllModelNames").val();
+            var EssParam = $("#grid").data("kendoGrid");
+            $.blockUI();
+            $.post('@Url.Action("Read", "ESSParameterManagement")', { essParamId: $ModelName },
+                function (result) {
+                    if (result) {
+                        EssParam.dataSource.read({ EssParamId: $ModelName });
+                    }
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    $.unblockUI();
+                });
+        }
+
+        function DeleteEssParam(e) {
+            var EssParam = $("#grid").data("kendoGrid");
+            var dataItem = EssParam.dataItem($(e.currentTarget).closest("tr"));
+            var essParamId = $("#EssParamId").val();
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success classYes',
+                    }, cancel: {
+                        label: '@Resources.Langues.No',
+                        className: 'btn-danger pull-right'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("DeleteEssParam", "ESSParameterManagement")', { EssParamId: dataItem.EssParamId },
+                        function (result) {
+                            if (result) {
+                                EssParam.dataSource.read({ EssParamId: essParamId });
+                                $('#AllModelNames').data("kendoDropDownList").select(0);
+                                GetModelValueByName();
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function OnCRUD(e) {
+            var $EssParam = $("#grid").data("kendoGrid");
+            $EssParam.dataSource.read();
+        }
+
+
+        function onEdit(e) {
+            if (e.model.isNew() == false) {
+                $(e.container).find('input[name=RegUser]').prop("readonly", true);
+                $(e.container).find('input[name=HowReg]').prop("readonly", true);
+            }
+            else {
+                $(e.container).find('input[name=RegUser]').css("display", "none");
+                $(e.container).find('input[name=HowReg]').css("display", "none");
+            }
+        }
+
+
+
+        function onChange(e) {
+            var $ScoScopeMin = $('#ScoScopeMin').val();
+        }
+
+        function onDataBound(e) {
+            var EssParam = $("#grid").data("kendoGrid");
+            var row = EssParam.tbody.find("tr[role='row']:first");
+            if (row != null) {
+                EssParam.select(e.sender.tbody.find("tr:first"));
+            }
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+
+        function onDelete() {
+            bootbox.confirm({
+                message: '@Resources.Langues.HolidayMess1',
+                className: 'my-custom-class',
+                buttons: {
+                    confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success classYes',
+                    }, cancel: {
+                        label: '@Resources.Langues.No',
+                        className: 'btn-danger pull-right'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        if (checkedItems.length == 0) {
+                            bootbox.alert({
+                                "message": '@Resources.Langues.HolidayMess2',
+                                "className": "my-custom-class",
+                            });
+                        } else {
+                            $.blockUI();
+                            $.post("@Url.Action("DeleteListESS", "ESSParameterManagement", new { area="Admin" })", { list: checkedItems }, function (result) {
+                                if (result.success) {
+                                    bootbox.alert({
+                                        "message": '@Resources.Langues.RemoveSuccess',
+                                        "className": "my-custom-class",
+                                    });
+                                    $('#grid').data('kendoGrid').dataSource.read();
+                                    $('#selectAll').prop("checked", false);
+                                } else {
+                                    bootbox.alert({
+                                        "message": '@Resources.Langues.Error',
+                                        "className": "my-custom-class",
+                                    });
+                                }
+                            }).fail(function () {
+                                bootbox.alert({
+                                    "message": '@Resources.Langues.ContactAdmin',
+                                    "className": "my-custom-class",
+                                });
+                            }).always(function () {
+                                $.unblockUI();
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        $(".k-textbox").on('keyup', function (evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode == 13) {
+                $("#AllModelNames").data("kendoDropDownList").dataSource.read();
+            }
+        });
+    </script>
+}

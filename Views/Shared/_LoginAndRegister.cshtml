@@ -1,0 +1,249 @@
+﻿@model DPDSP.Models.LoginOrRegisterViewModel
+@using CaptchaMvc.HtmlHelpers
+
+@{
+    List<SelectListItem> ListLanguages = new List<SelectListItem>();
+    ListLanguages.Add(new SelectListItem { Value = "ko", Text = Resources.Langues.Korean });
+    ListLanguages.Add(new SelectListItem { Value = "en", Text = Resources.Langues.English });
+}
+
+@using (Html.BeginForm("HomeLogin", "Account", new { area = "" }, FormMethod.Post, new { role = "form", @id = "myForm", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IsLogin)
+    <!--login popup-->
+    <div id="login" class="modal modal-wide fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">@Resources.Langues.Login</h4>
+                </div>
+
+                @Html.Hidden("ReturnUrl", Request.Params["returnUrl"] , new { })
+
+                <div class="modal-body">
+                    <div class="well">
+                        <div class="panel-heading">
+                            <h5 class="panel-title" style="background:url(/img/ci.png) no-repeat top left;height:70px; font-style:italic;padding-top:40px;"> @Resources.Langues.DistributedSoft</h5>
+                        </div>
+                        <p class="text-danger" id="login-message"></p>
+                        <div class="form-group">
+                            <label for="UserLogin_Email" class="control-label">@Resources.Langues.Useyouracc</label>
+                            @Html.TextBoxFor(m => m.UserLogin.Email, new
+                       {
+                           @class = "form-control",
+                           @placeholder = @Resources.Langues.Email,
+                           @data_val_required = " "
+                       })
+                            @Html.ValidationMessageFor(m => m.UserLogin.Email, "", new { @class = "text-danger" })
+                            <span class="help-block"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.PasswordFor(m => m.UserLogin.Password, new
+                       {
+                           @class = "form-control",
+                           @placeholder = @Resources.Langues.Password,
+                           @data_val_required = " "
+                       })
+                            @Html.ValidationMessageFor(m => m.UserLogin.Password, "", new { @class = "text-danger" })
+                            <span class="help-block"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="UserLogin_Language" class="control-label">@Resources.Langues.Language</label>
+                            @Html.DropDownListFor(m => m.UserLogin.Language, ListLanguages, new { @class = "form-control" })
+                        </div>
+                        <div id="loginErrorMsg" class="alert alert-error hide">@Resources.Langues.MessLogin</div>
+                        @*<div class="checkbox">
+                            <label for="UserLogin_RememberMe">
+                                @Html.CheckBoxFor(m => m.UserLogin.RememberMe) @Resources.Langues.KeepMe
+                            </label>
+                        </div>*@
+                        <input type="submit" id="login-submit" value="@Resources.Langues.Login" class="btn btn-primary btn-block" />
+                        <input type="button" value="@Resources.Langues.Cancel" class="btn btn-default btn-block" data-dismiss="modal" />
+                        @*<p style="line-height:50px;"><a href="member.html" class="text-primary"> <i class="fa fa-user-plus" aria-hidden="true"></i> @Resources.Langues.ApplyForMembership</a></p>*@
+                    </div>
+                </div>
+                <div class="modal-footer"> </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!--login member-->
+    <div id="member" class="modal modal-wide fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">@Resources.Langues.SignUp</h4>
+                </div>
+                <div class="modal-body" style="overflow:auto;">
+                    <div class="form-horizontal">
+                        <fieldset>
+                            <h5>※ √ @Resources.Langues.InputFieldsAreRequried</h5>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserRegister_Email"> √  @Resources.Langues.Email</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserRegister.Email, new { @class = "form-control input-md" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserRegister_FirstName,">√ @Resources.Langues.FirstName</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserRegister.FirstName, new { @Value = "-", @class = "form-control input-md" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserRegister_LastName">√ @Resources.Langues.LastName</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.UserRegister.LastName, new { @Value = "-", @class = "form-control input-md" })
+                                </div>
+                            </div>
+
+                            <div class="row text-center">
+                                @Html.ValidationMessageFor(m => m.UserRegister.Password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                            </div>
+                            <div class="row text-center">
+                                ※ @Resources.Langues.ValidatePasswordMessage
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserRegister_Password">√ @Resources.Langues.Password</label>
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(m => m.UserRegister.Password, new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val = "true",
+                                   @data_val_password = Resources.Langues.ValidatePasswordMessage,
+                                   @data_val_password_min = "6",
+                                   @data_val_password_nonalphamin = "1",
+                                   @data_val_required = " "
+                               })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserRegister_ConfirmPassword">√ @Resources.Langues.ConfirmPass</label>
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(m => m.UserRegister.ConfirmPassword, new
+                               {
+                                   @class = "form-control input-md"
+                               })
+                                </div>
+                            </div>
+
+                            <div class="hidden">
+                                @*<div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_FirstName,">√ @Resources.Langues.FirstName</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.FirstName, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_LastName">√ @Resources.Langues.LastName</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.LastName, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>*@
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserCompany">√ @Resources.Langues.Affiliation</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserCompany, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserCountry">√ @Resources.Langues.Nationality</label>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(m => m.UserRegister.UserCountry, new SelectList(ViewBag.ListCountries, "Value", "Text"), Resources.Langues.PleaseSelect, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserJob">  @Resources.Langues.Job</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserJob, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserDepartmentName">  @Resources.Langues.DepartmentName</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserDepartmentName, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserPositon">  @Resources.Langues.Position</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserPositon, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserTel">  @Resources.Langues.PhoneNumber</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserTel, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserCompanyAddress">  @Resources.Langues.CompanyAddress</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserCompanyAddress, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserBusinessArea">  @Resources.Langues.BusinessField</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserBusinessArea, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserWebsite">@Resources.Langues.CompanyOrPersonalHomepage</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserWebsite, new { @Value = "-", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="">@Resources.Langues.ImageAttach</label>
+                                    <div class="col-md-6 form-inline">
+                                        <input id="image" type="text" class="form-control input-md" disabled="disabled">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserPhoto, new { @class = "form-control input-md", accept = "image/*", type = "file", style = "display:none;" })
+                                        <a role="button" id="get_file" class="btn  btn-success btn-sm">File upload </a> @*<a role="button" class="btn btn-default btn-sm">Edit Component</a>*@
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="CaptchaInputText">@Resources.Langues.PleaseConfirmImageAndInput</label>
+                                <div class="col-md-4" id="captcha_content">
+                                    @Html.Captcha(@Resources.Langues.Refresh, "", 6, "", false)
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="register-submit" class="btn btn-primary">@Resources.Langues.SignUp</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+}
+
+<script>
+    $("#UserLogin_Email").on('keyup', function (e) {
+        if (e.keyCode == 13) {
+            $("#UserLogin_Password").focus()
+        }
+    });
+
+    $("#UserLogin_Password").on('keyup', function (e) {
+        if (e.keyCode == 13) {
+            $('#login-submit').click();
+        }
+    });
+</script>

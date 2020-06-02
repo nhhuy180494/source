@@ -1,0 +1,794 @@
+﻿@model DPDSP.Models.LoginOrRegisterViewModel
+@using BotDetect.Web.Mvc;
+@using DPDSP.App_Code;
+
+@{
+    List<SelectListItem> ListLanguages = new List<SelectListItem>();
+    ListLanguages.Add(new SelectListItem { Value = "ko", Text = Resources.Langues.Korean });
+    ListLanguages.Add(new SelectListItem { Value = "en", Text = Resources.Langues.English });
+}
+<style>
+    .customeClass {
+        z-index: 100000;
+    }
+    /*2018.09.03, icpark*/
+    #CaptchaImage {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    #CaptchaInputText {
+        width: 200px !important;
+    }
+</style>
+
+@using (Html.BeginForm("HomeLogin", "Account", new { area = "Case" }, FormMethod.Post, new { role = "form", @id = "myForm", enctype = "multipart/form-data" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IsLogin)
+    <!--login popup-->
+    <div id="login" class="modal modal-wide fade" style="z-index: 9999;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @Resources.Langues.DistributedSoft
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    @*<h3 class="modal-title" id="myModalLabel01" style="color:#1e5687; text-align:center;"><i class="fa fa-users"></i>  @Resources.Langues.Login</h3>*@
+                    @*<h4 class="modal-title">@Resources.Langues.Login</h4>*@
+                </div>
+
+                @Html.Hidden("ReturnUrl", "", new { })
+
+                <div class="modal-body">
+                    <div class="well">
+                        <div class="panel-heading">
+                            <h5 class="panel-title" style="background:url(/img/ci3_1.png) no-repeat top left;height:40px;padding-top:20px;"></h5>
+                        </div>
+                        <p class="text-danger" id="login-message"></p>
+                        @*<div class="form-group">
+                                 <label for="Email" class="control-label">@Resources.Langues.Useyouracc</label>
+                                 @Html.TextBox("Email", "", new
+                            {
+                                @class = "form-control",
+                                @placeholder = @Resources.Langues.Email,
+                                @data_val_required = " "
+                            })
+                                 @Html.ValidationMessage("Email", "", new { @class = "text-danger" })
+                                 <span class="help-block"></span>
+                             </div>
+                             <div class="form-group">
+                                 @Html.Password("PassWord", "", new
+                            {
+                                @class = "form-control",
+                                @placeholder = @Resources.Langues.Password,
+                                @data_val_required = " "
+                            })
+                                 @Html.ValidationMessage("PassWord", "", new { @class = "text-danger" })
+                                 <span class="help-block"></span>
+                             </div>*@
+                        <div class="form-group">
+                            <label for="UserLogin_Email" class="control-label">@Resources.Langues.Useyouracc</label>
+                            @Html.TextBoxFor(m => m.UserLogin.Email, new
+                           {
+                               @class = "form-control",
+                               @placeholder = @Resources.Langues.Email,
+                               @data_val_required = " "
+                           })
+
+                            <span class="help-block"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.PasswordFor(m => m.UserLogin.Password, new
+                           {
+                               @class = "form-control",
+                               @placeholder = @Resources.Langues.Password,
+                               @data_val_required = " "
+                           })
+                            @Html.ValidationMessageFor(m => m.UserLogin.Password, "", new { @class = "text-danger" })
+                            <span class="help-block"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="UserLogin_Language" class="control-label">@Resources.Langues.Language</label>
+                            @Html.DropDownListFor(m => m.UserLogin.Language, ListLanguages, new { @class = "form-control" })
+                        </div>
+                        <div id="loginErrorMsg" class="alert alert-error hide">@Resources.Langues.MessLogin</div>
+                        <input type="submit" @*onclick="loginSubmit()"*@ id="login-submit" value="@Resources.Langues.Login" class="btn btn-primary btn-block" />
+                        <input type="button" value="@Resources.Langues.Cancel" class="btn btn-default btn-block" data-dismiss="modal" />
+                        @*<p style="line-height:50px;"><a href="member.html" class="text-primary"> <i class="fa fa-user-plus" aria-hidden="true"></i> @Resources.Langues.ApplyForMembership</a></p>*@
+                    </div>
+                </div>
+                <div class="modal-footer">@Resources.Langues.keriFooter</div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!--login member-->
+        <div id="member" class="modal modal-wide fade" style="z-index: 9999;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body" style="overflow:auto;">
+                        <div class="form-horizontal">
+                            <fieldset>
+                                <h5>※ √ @Resources.Langues.InputFieldsAreRequried</h5>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_Email"> √  @Resources.Langues.Email</label>
+                                    <div class="col-md-6">
+                                        @Html.ValidationMessageFor(m => m.UserRegister.Email, "", new { @class = "text-danger" })
+                                        @Html.TextBoxFor(m => m.UserRegister.Email, new { @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_LastName">√ @Resources.Langues.LastName</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.LastName, new { @Value = "", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_FirstName">√ @Resources.Langues.FirstName</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.FirstName, new { @Value = "", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_UserTel">  @Resources.Langues.PhoneNumber</label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.UserRegister.UserTel, new { @Value = "", @class = "form-control input-md" })
+                                    </div>
+                                </div>
+                                <div class="row text-center">
+                                    ※ @Resources.Langues.ValidatePasswordMessage
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_Password">√ @Resources.Langues.Password</label>
+                                    <div class="col-md-6">
+                                        @Html.PasswordFor(m => m.UserRegister.Password, new
+                                   {
+                                       @class = "form-control input-md",
+                                       @data_val = "true",
+                                       @data_val_password = Resources.Langues.ValidatePasswordMessage,
+                                       @data_val_password_min = "6",
+                                       @data_val_password_nonalphamin = "1",
+                                       @data_val_required = " "
+                                   })
+                                        @Html.ValidationMessageFor(m => m.UserRegister.Password, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="UserRegister_ConfirmPassword">√ @Resources.Langues.ConfirmPass</label>
+                                    <div class="col-md-6">
+                                        @Html.PasswordFor(m => m.UserRegister.ConfirmPassword, new
+                                   {
+                                       @class = "form-control input-md"
+                                   })
+                                        @Html.ValidationMessageFor(m => m.UserRegister.ConfirmPassword, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="hidden">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="UserRegister_UserCompany">√ @Resources.Langues.Affiliation</label>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(m => m.UserRegister.UserCompany, new { @Value = "-", @class = "form-control input-md" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="UserRegister_UserCountry">√ @Resources.Langues.Nationality</label>
+                                        <div class="col-md-6">
+                                            @Html.DropDownListFor(m => m.UserRegister.UserCountry, new SelectList(ViewBag.ListCountries, "Value", "Text"), Resources.Langues.PleaseSelect, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="UserRegister_UserJob">  @Resources.Langues.Job</label>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(m => m.UserRegister.UserJob, new { @Value = "-", @class = "form-control input-md" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="UserRegister_UserDepartmentName">  @Resources.Langues.DepartmentName</label>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(m => m.UserRegister.UserDepartmentName, new { @Value = "-", @class = "form-control input-md" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="UserRegister_UserPositon">  @Resources.Langues.Position</label>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(m => m.UserRegister.UserPositon, new { @Value = "-", @class = "form-control input-md" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="UserRegister_UserCompanyAddress">  @Resources.Langues.CompanyAddress</label>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(m => m.UserRegister.UserCompanyAddress, new { @Value = "-", @class = "form-control input-md" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="UserRegister_UserBusinessArea">  @Resources.Langues.BusinessField</label>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(m => m.UserRegister.UserBusinessArea, new { @Value = "-", @class = "form-control input-md" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="UserRegister_UserWebsite">@Resources.Langues.CompanyOrPersonalHomepage</label>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(m => m.UserRegister.UserWebsite, new { @Value = "-", @class = "form-control input-md" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="">@Resources.Langues.ImageAttach</label>
+                                        <div class="col-md-6 form-inline">
+                                            <input id="image" type="text" class="form-control input-md" disabled="disabled">
+                                            @Html.TextBoxFor(m => m.UserRegister.UserPhoto, new { @class = "form-control input-md", accept = "image/*", type = "file", style = "display:none;" })
+                                            <a role="button" id="get_file" class="btn  btn-success btn-sm">File upload </a> @*<a role="button" class="btn btn-default btn-sm">Edit Component</a>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row text-center">
+                                    ※ @Resources.Langues.PleaseConfirmImageAndInput
+                                </div>
+                                @if (!Request.IsAuthenticated)
+                                {
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="CaptchaInputText"></label>
+                                        <div class="col-md-4" id="captcha_content">
+                                            <fieldset>
+                                                <div>
+                                                    @{ MvcCaptcha exampleCaptcha = new MvcCaptcha("ExampleCaptcha");
+                                                        exampleCaptcha.UserInputID = "CaptchaCode";
+                                                    }
+                                                    @Html.Captcha(exampleCaptcha)
+                                                </div>
+                                                <div class="actions">
+                                                    @Html.TextBox("CaptchaCode", "", new { @class = "form-control input-md", style = "margin-top:10px;" })
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                                        }
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @*onclick="loginSubmit()"*@ id="register-submit" class="btn btn-primary">@Resources.Langues.SignUp</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    <!-- /.modal -->
+}
+@using (Html.BeginForm("ChangeUserPassword", "Account", new { area = "" }, FormMethod.Post, new { role = "form", id = "changePasswordForm" }))
+{
+    
+        <div class="modal fade" id="change-password-modal" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 role="button" class="modal-title text-primary" id="myModalLabel01"><i class="fa fa-lock"> </i> Change password</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal col-md-offset-1" style="padding-top:15px;">
+                            <div class="form-group text-danger">
+                                <text style="margin-left:15px; display:none;" class="col-md-offset-4" id="changePassErrorContent"></text>
+                            </div>
+                            <div class="row text-center">
+                                @Html.ValidationMessageFor(m => m.UserChangePass.OldPassword, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserChangePass_OldPassword">@Resources.Langues.CurrentPassword</label>
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(m => m.UserChangePass.OldPassword, new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val = "true",
+                                   @data_val_password = Resources.Langues.ValidatePasswordMessage,
+                                   @data_val_password_min = "6",
+                                   @data_val_password_nonalphamin = "1",
+                                   @data_val_required = " "
+                               })
+                                </div>
+                            </div>
+                            <div class="row text-center">
+                                ※ @Resources.Langues.ValidatePasswordMessage
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UserChangePass_PassWordChange">√ @Resources.Langues.Password</label>
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(m => m.UserChangePass.PasswordChange, new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val = "true",
+                                   @data_val_password = Resources.Langues.ValidatePasswordMessage,
+                                   @data_val_password_min = "6",
+                                   @data_val_password_nonalphamin = "1",
+                                   @data_val_required = " "
+                               })
+                                    @Html.ValidationMessageFor(m => m.UserChangePass.PasswordChange, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="m => UserChangePass_ConfirmPasswordChange">√ @Resources.Langues.ConfirmPass</label>
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(m => m.UserChangePass.ConfirmPasswordChange, new
+                               {
+                                   @class = "form-control input-md"
+                               })
+                                    @Html.ValidationMessageFor(m => m.UserChangePass.ConfirmPasswordChange, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row text-center">
+                                ※ @Resources.Langues.PleaseConfirmImageAndInput
+                            </div>
+                            @if (Request.IsAuthenticated)
+                            {
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="CaptchaInputText"></label>
+                                <div class="col-md-4" id="captcha_content">
+                                    <fieldset>
+                                        <div>
+                                            @{ MvcCaptcha exampleCaptcha = new MvcCaptcha("ExampleCaptcha");
+                                                exampleCaptcha.UserInputID = "CaptchaCode";
+                                            }
+                                            @Html.Captcha(exampleCaptcha)
+                                        </div>
+                                        <div class="actions">
+                                            @Html.TextBox("CaptchaCode", "", new { @class = "form-control input-md", style = "margin-top:10px;" })
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                                                }
+                            @*<div class="form-group">
+                                    <div class="col-md-10">
+                                        <div class="pull-right">
+
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="update-password" class="btn btn-primary">@Resources.Langues.Update</button>
+                        <button type="button" class="btn btn-default " data-dismiss="modal">@Resources.Langues.Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                                                }
+
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    const isNumericInput = function (event) {
+        const key = event.keyCode;
+        return ((key >= 48 && key <= 57) || // Allow number line
+            (key >= 96 && key <= 105) // Allow number pad
+        );
+    };
+
+    const isModifierKey = function (event) {
+        const key = event.keyCode;
+        return (event.shiftKey === true || key === 35 || key === 36) || // Allow Shift, Home, End
+            (key === 8 || key === 9 || key === 13 || key === 46) || // Allow Backspace, Tab, Enter, Delete
+            (key > 36 && key < 41) || // Allow left, up, right, down
+            (
+                // Allow Ctrl/Command + A,C,V,X,Z
+                (event.ctrlKey === true || event.metaKey === true) &&
+                (key === 65 || key === 67 || key === 86 || key === 88 || key === 90)
+            )
+    };
+
+    const enforceFormat = function (event) {
+        // Input must be of a valid number format or a modifier key, and not longer than ten digits
+        if (!isNumericInput(event) && !isModifierKey(event)) {
+            event.preventDefault();
+        }
+    };
+
+    const formatToPhone = function (event) {
+        if (isModifierKey(event)) { return; }
+
+        // I am lazy and don't like to type things more than once
+        const target = event.target;
+        const input = event.target.value.replace(/\D/g, '').substring(0, 11); // First ten digits of input only
+        const zip = input.substring(0, 3);
+        const middle = input.substring(3, 6);
+        const last = input.substring(6, 11);
+        if (input.length > 9) {
+            const zip1 = input.substring(0, 3);
+            const middle1 = input.substring(3, 7);
+            const last1 = input.substring(7, 11);
+            target.value = zip1 + "-" + middle1 + "-" + last1;
+        }
+        else if (input.length > 6) { target.value = zip + "-" + middle + "-" + last; }
+        else if (input.length > 3) { target.value = zip + "-" + middle; }
+        else if (input.length > 0) { target.value = zip; }
+    };
+
+    const inputElement = document.getElementById('UserRegister_UserTel');
+    inputElement.addEventListener('keydown', enforceFormat);
+    inputElement.addEventListener('keyup', formatToPhone);
+
+    //$('#CaptchaInputText').addClass('form-control');
+    //var inputCaptcha = document.getElementById('CaptchaInputText');
+    //var prevRow = inputCaptcha.previousElementSibling;
+    //prevRow.parentNode.removeChild(prevRow);
+    //$("#captcha-content").contents().filter(function () {
+    //    return this.nodeType === 3;
+    //}).remove();
+
+    //function addCaptcha(html) {
+    //    $("#captcha_content").children().remove();
+    //    $(html).find('#CaptchaImage').css({ 'border': '1px solid #ccc', 'border-radius': '4px' });
+    //    $(html).find('#CaptchaInputText').css('width', '200px !important');
+    //    $("#captcha_content").append(html);
+    //    $("#captcha_content").find('#CaptchaInputText').attr('class', 'form-control');
+    //    var inputCaptcha = document.getElementById('CaptchaInputText');
+    //    var prevRow = inputCaptcha.previousElementSibling;
+    //    prevRow.parentNode.removeChild(prevRow);
+    //}
+
+    var $myForm = $('#myForm');
+    var $loginMess = $('#login-message');
+    var $loginPass = $('#UserLogin_Password');
+    var $loginModal = $('#login');
+
+    var $regisModal = $('#member');
+    var emailNotExist = false;
+    var $emailInput = $('#UserRegister_Email');
+    var $IsLogin = '@Request.IsAuthenticated.ToString()'
+
+    $(document).ready(function () {
+
+        $.validator.setDefaults({
+            onkeyup: false
+        })
+
+        $('#ReturnUrl').val(window.location);
+
+        $('#register-submit').on('click', function (event) {
+
+            $('#IsLogin').val(false);
+            // get client-side Captcha object instance
+            var captchaObj = $("#CaptchaCode").get(0).Captcha;
+
+            // gather data required for Captcha validation
+            var params = {}
+            params.CaptchaId = captchaObj.Id;
+            params.InstanceId = captchaObj.InstanceId;
+            params.UserInput = $("#CaptchaCode").val();
+
+            // make asynchronous Captcha validation request
+            $.post('@Url.Action("CheckCaptcha", "Account", new { area = "Case" })', params, function (result) {
+                if (true === result) {
+                    var isValid = $myForm.valid();
+                    if (isValid && emailNotExist) {
+                        $.blockUI();
+                        var data = new FormData($myForm[0]);
+                        var urlAction = $myForm.attr('action');
+                        //event.preventDefault();
+                        $.ajax({
+                            url: urlAction,
+                            type: 'POST',
+                            dataType: "JSON",
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            data: data,
+                            fail: function () {
+                                bootbox.alert('@Resources.Langues.ContactAdmin');
+                            }
+                        }).success(function (result) {
+                            console.log(result)
+                            if (result.isLogin) {
+                                if (result.isRedirect) {
+                                    window.location.href = result.redirectUrl;
+                                }
+                                else if (result.isLocked) {
+                                    bootbox.alert(result.message);
+                                    $loginMess.text(result.message);
+                                    $loginPass.val('');
+                                } else if (result.isError) {
+                                    bootbox.alert(result.message);
+                                    $loginMess.text(result.message);
+                                    $loginPass.val('');
+                                }
+                            }
+                            else {
+                                if (result.isRegisError) {
+                                    if (result.message.length) {
+                                        bootbox.alert(result.message);
+                                    } else {
+                                    }
+                                } else if (result.isRegisSuccess) {
+                                    $regisModal.modal('hide');
+                                    bootbox.alert(result.message, function () {
+                                        window.location.reload()
+                                    });
+                                }
+                            }
+                        }).always(function () {
+                            $.unblockUI();
+                        });
+
+                    } else {
+
+                        $emailInput.addClass('input-validation-error');
+                        $emailInput.removeClass('valid');
+                    }
+
+
+                } else {;
+                    // always change Captcha code if validation fails
+                    captchaObj.ReloadImage();
+                }
+            });
+        });
+
+        $('#NotLoginButton1').click(function () {
+            bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+        });
+        $('#NotLoginButton2').click(function () {
+            bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+        });
+        $('#NotLoginButton3').click(function () {
+            bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+        });
+        $('#NotLoginButton4').click(function () {
+            bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+        });
+        $('#NotLoginButton5').click(function () {
+            bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+        });
+        $('#NotLoginButton6').click(function () {
+            bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+        });
+        $('#NotLoginButton7').click(function () {
+            bootbox.alert('@Resources.Langues.QnANotLoginMessage');
+        });
+
+        $('#myForm').submit(function (e) {
+            var isValid = $myForm.valid();
+            if (isValid && emailNotExist) {
+                $.blockUI();
+                var formObj = $(this);
+                var data = new FormData(this);
+                var urlAction = formObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    $.unblockUI();
+                }).success(function (result) {
+                    //var result = $.parseJSON(res.html());
+                    if (result.isLogin) {
+                        if (result.isRedirect) {
+                            console.log(result.redirectUrl)
+                            window.location.href = result.redirectUrl;
+                        }
+                        else if (result.isLocked) {
+                            bootbox.alert(result.message);
+                            $loginMess.text(result.message);
+                            $loginPass.val('');
+                        } else if (result.isError) {
+                            bootbox.alert(result.message);
+                            $loginMess.text(result.message);
+                            $loginPass.val('');
+                        }
+                    }
+                    else {
+                        if (result.isRegisError) {
+                            if (result.message.length) {
+                                bootbox.alert(result.message);
+                            } else {
+                            }
+                        } else if (result.isRegisSuccess) {
+                            $regisModal.modal('hide');
+                            bootbox.alert(result.message, function () {
+                                window.location.reload()
+                            });
+                        }
+                    }
+                });
+            } else {
+                $emailInput.addClass('input-validation-error');
+                $emailInput.removeClass('valid');
+            }
+            event.preventDefault();
+        });
+
+        $('#login-submit').click(function () {
+            $('#IsLogin').val(true);
+            emailNotExist = true;
+        });
+
+        $loginModal.on('hidden.bs.modal', function () {
+            clearLoginAndRegisterModal($myForm, emailNotExist);
+        });
+
+        $loginModal.on('show.bs.modal', function () {
+            $('#IsLogin').val(true);
+            //console.log( $('#IsLogin').val())
+        });
+
+        $regisModal.on('show.bs.modal', function () {
+            $('#IsLogin').val(false);
+            $('#UserRegister_UserCountry').val('KOR');
+            //console.log($('#IsLogin').val())
+        });
+
+        $regisModal.on('hidden.bs.modal', function () {
+            clearLoginAndRegisterModal($myForm, emailNotExist);
+        });
+
+        $('#UserRegister_Email').blur(function (e) {
+            var email = $(this).val();
+            if (email.length) {
+                $.post('@Url.Action("DoesEmailExist","Account", new { area = "Case" })', { email: email }, function (result) {
+                    if (!result)//email exist
+                    {
+                        $emailInput.addClass('input-validation-error');
+                        $emailInput.removeClass('valid');
+                        emailNotExist = result;
+                    }
+                    else //email not exist
+                    {
+                        $emailInput.addClass('valid');
+                        $emailInput.removeClass('input-validation-error');
+                        emailNotExist = result;
+                    }
+                });
+            }
+        });
+        //$('#UserRegister_ConfirmPassword').change(function () {
+        //    debugger
+        //    if ($('#UserRegister_ConfirmPassword').val() == $('#UserRegister_Password').val()) {
+        //        $('.password').removeClass('has-error');
+        //    }
+        //});
+
+        $('#get_file').click(function () {
+            $('#UserRegister_UserPhoto').click();
+        });
+
+        $('#UserRegister_UserPhoto').change(function () {
+            if ($(this).val().length === 0) {
+                //$('#image').addClass('input-validation-error');
+                $('#image').val('');
+            } else {
+                //$('#image').removeClass('input-validation-error');
+                $('#image').val($(this).val());
+            }
+        });
+
+        $('#myForm').on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $('#giftStatus').change(function (e) {
+            //console.log('change: ', $(this).val());
+            var language = $(this).val();
+            $.blockUI();
+            $.post('@Url.Action("ChangeLanguage", "Home", new { area="" })', { language: language }, function (result) {
+                if (result.success) {
+                    window.location.href = result.redirectUrl;
+                }
+            }).always(function () {
+                $.unblockUI();
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            });
+        });
+
+        //if ($IsLogin == "False") {
+        //    $loginModal.modal('show');
+        //}
+
+        $("#UserLogin_Email").on('keyup', function (e) {
+            if (e.keyCode == 13) {
+                $("#UserLogin_Password").focus()
+            }
+        });
+
+        $("#UserLogin_Password").on('keyup', function (e) {
+            if (e.keyCode == 13) {
+                $('#login-submit').click();
+            }
+        });
+    });
+
+    function clearLoginAndRegisterModal(form, emailNotExist) {
+        //$('#Email').val('');
+        //$('#PassWord').val('');
+        //$('#EmailReg').val('');
+        //$('#PassWordReg').val('');
+        //$('#IsLogin').val('');
+        //$('#ConPassWord').val('');
+        //$('#FirstName').val('');
+        //$('#LastName').val('');
+        //$('#Email').val('');
+        //$('#Language').val('');
+        form[0].reset();
+        form.find('input, label, select').removeClass('input-validation-error')
+        $('#login-message').text('');
+        form.find('span[id="UserLogin_Email-error"]').text('');
+        form.find('span[id="UserLogin_Password-error"]').text('');
+        emailNotExist = false;
+        form.find('input, label, select, .form-group').removeClass('has-error');
+        $('span .text-danger').removeClass("field-validation-error");
+        $('span .text-danger').addClass("field-validation-valid");
+        $('#UserRegister_Password-error').remove();
+    }
+
+    var $changePassForm = $('#changePasswordForm');
+    $('#update-password').click(function () {
+        var captchaObj = $("#CaptchaCode").get(0).Captcha;
+
+        // gather data required for Captcha validation
+        var params = {}
+        params.CaptchaId = captchaObj.Id;
+        params.InstanceId = captchaObj.InstanceId;
+        params.UserInput = $("#CaptchaCode").val();
+
+        // make asynchronous Captcha validation request
+        $.post('@Url.Action("CheckCaptcha", "Account", new { area = "Case" })', params, function (result) {
+            if (true === result) {
+                var isValid = $changePassForm.valid();
+                if (isValid) {
+                    $.blockUI();
+                    var data = new FormData($changePassForm[0]);
+                    var urlAction = $changePassForm.attr('action');
+                    $.ajax({
+                        url: urlAction,
+                        type: 'POST',
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        data: data
+                    }).success(function (result) {
+                        if (!result.success) {
+                            $('#changePassErrorContent').text(result.errors);
+                            $('#changePassErrorContent').css({ "margin-left": "15px", "display": "inherit" });
+                        } else {
+                            $("#UserChangePass_OldPassword").val('');
+                            $("#UserChangePass_PasswordChange").val('');
+                            $("#UserChangePass_ConfirmPasswordChange").val('');
+                            $("#CaptchaCode").val('');
+                            captchaObj.ReloadImage();
+                            $('#change-password-modal').modal('hide');
+                            bootbox.alert('@Resources.Langues.Successful');
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                }
+            } else {;
+                captchaObj.ReloadImage();
+            }
+        });
+    });
+</script>
+

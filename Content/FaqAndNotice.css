@@ -1,0 +1,34 @@
+﻿.modalInput {
+    display: block;
+    width: 93%;
+    height: 20px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    color: black;
+    background-color: white;
+}
+
+/*#myForm .modalInput:focus {
+        border-bottom: 1px dotted black;
+    }*/
+
+/*.k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td {
+    background-color: #efefef !important;
+}
+
+.k-grid .k-state-selected {
+    background-color: transparent !important;
+    color: black;
+}*/

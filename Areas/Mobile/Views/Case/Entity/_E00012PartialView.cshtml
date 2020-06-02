@@ -1,0 +1,117 @@
+﻿<style>
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    .k-grid-header th.k-header {
+        vertical-align: middle;
+    }
+</style>
+<h4 style="text-align:center">@Resources.Langues.PVgenerationinquiry</h4>
+<div id="printDiv">
+    <!--Popup Name -->
+    @*<br />
+        <div class="row">
+            <div class="form-horizontal">
+                <div class="active col-xs-6"><strong>@Resources.Langues.PVgenerationinquiry</strong></div>
+            </div>
+        </div>
+        <br />*@
+    @model IEnumerable<DPDSP.Models.I00004SubValueViewModel>
+    <div class="outer">
+        @(Html.Kendo().Chart(Model)
+                                                .Name("Chart")
+                                                .Title("")
+                                                .DataSource(dataSource => dataSource
+                                                    .Read(read => read.Action("GetI00004SubValueByI00004SubId", "EntityE00012Popup", new { area = "Case", interval = 0, caseId = @Request.Params["caseId"] }))
+                                                    .Group(group => group.Add(model => model.MonthDay))
+                                                    .Sort(sort => sort.Add(model => model.Hour).Ascending())
+                                                )
+                                                .ChartArea(chartArea => chartArea
+                                                    .Background("transparent")
+                                                )
+                                                .SeriesDefaults(seriesDefaults =>
+                                                    seriesDefaults.Line()
+                                                )
+                                                .Series(series =>
+                                                {
+                                                    series.Line(model => model.SolarSysOutput).Name("#= group.items[0].MonthString #").CategoryField("Hour").Markers(x => x.Visible(false));
+                                                })
+                                                .SeriesColors("#e8a1a2", "#264d7e", "#bbc9a5", "#698b47", "#3e4630", "#428b64", "#6e4a75", "#feec04", "#9e7339", "#4c4a3c", "#dd7b00", "#dd3420")
+                                                .Legend(legend => legend
+                                                    .Position(ChartLegendPosition.Top)
+                                                )
+                                                .ValueAxis(axis => axis.Numeric()
+                                                .Title(title => title.Text(Resources.Langues.Axix10).Font("12px Arial, Helvetica, sans-serif;"))
+                                                    .Line(line => line.Visible(false))
+                                                )
+                                                .CategoryAxis(axis => axis
+                                                .Title(title => title.Text(Resources.Langues.Time + " [hour]").Font("12px Arial, Helvetica, sans-serif;"))
+                                                    .Line(line => line.Visible(true))
+
+                                                )
+                                                .Tooltip(tooltip => tooltip
+                                                    .Visible(true)
+                                                ).Pannable(pannable => pannable
+                                                    .Lock(ChartAxisLock.Y)
+                                                )
+                                                .Zoomable(zoomable => zoomable
+                                                    .Mousewheel(mousewheel => mousewheel.Lock(ChartAxisLock.Y))
+                                                    .Selection(selection => selection.Lock(ChartAxisLock.Y))
+                                                )
+        )
+    </div>
+    <br />
+    <div class="form-group" style="text-align:center">
+        <button type="button" id="show-btn" class="button1 button-gray" onclick="clickShow('show')">@Resources.Langues.E12AxMo</button>
+    </div>
+    <div class="outer grid hidden">
+        @(Html.Kendo().Grid<DPDSP.Models.I00004SubValueGridModel>
+                    ()
+                    .Name("Grid")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(member => member.Hour).Title(Resources.Langues.Time).HtmlAttributes(new { style = "text-align:center;" });
+                        columns.Bound(member => member.Jan).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Jan1 + "<br />[%]").Format("{0:n1}");
+                        columns.Bound(member => member.Feb).Title(Resources.Langues.Feb1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.Mar).Title(Resources.Langues.Mar1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.Apr).Title(Resources.Langues.Apr1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.May).Title(Resources.Langues.May1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.Jun).Title(Resources.Langues.Jun1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.Jul).Title(Resources.Langues.Jul1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.Aug).Title(Resources.Langues.Aug1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.Sep).Title(Resources.Langues.Sep1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.Oct).Title(Resources.Langues.Oct1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.Nov).Title(Resources.Langues.Nov1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        columns.Bound(member => member.Dec).Title(Resources.Langues.Dec1 + "<br />[%]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                    })
+                    //  .Sortable()
+                    //.Scrollable()
+                    // .Mobile()
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Model(model => model.Id(i00004SubValueGridModel => i00004SubValueGridModel.Hour))
+                    .Read(read => read.Action("GetGirdByCaseIdAndIntervalValue", "EntityE00012Popup", new { area = "Case", interval = 1, caseId = @Request.Params["caseId"] }))
+                    )
+        )
+    </div>
+    <br />
+    <div class="form-group" style="text-align:center">
+        <button type="button" class="button button-gray" onclick="nextEntity()">@Resources.Langues.OK</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#btn_E00012').removeClass('progress-bar-warning');
+        var caseId = @Request.Params["caseId"]
+        
+
+        $.blockUI();
+        setTimeout(function () {
+            $("#Chart").data("kendoChart").refresh();
+            $('.k-header').attr('style', 'border-top-width: 1px;padding:0 0 0 0')
+            $.unblockUI();
+        }, 2000);
+    })
+</script>

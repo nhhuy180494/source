@@ -1,0 +1,775 @@
+﻿<!-- Modal -->
+<style>
+    .E00018 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .input-validation-error {
+        border: 1px solid red !important;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+
+    .bootbox.modal {
+        z-index: 1000000000000000 !important;
+    }
+</style>
+<h4 style="text-align:center">@Resources.Langues.Enterfacilitycosts</h4>
+@if (Request.Params["modelCode"] == "M00003")
+{
+    using (Html.BeginForm("SaveEntityE00018PopupData", "EntityE00018Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "M00003Form" }))
+    {
+        <div class="E00018">
+
+            <div class="">
+                <!--Popup Name -->
+                <br />
+                @Html.Hidden("CaseId", @Request.Params["caseId"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The CaseId field is required."
+           })
+                @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The ModelCode field is required.",
+               @data_val_length = "The field ModelCode must be a string with a maximum length of 6.",
+               @data_val_length_max = "6",
+           })
+                <!--Input field -->
+                <div>
+                    <table class="table table-bordered tblMultiRow" style="">
+                        <tbody>
+                            <tr class="CP0001">
+                                <td width="15%" rowspan="2" class="active" style="vertical-align:middle">PV @Resources.Langues.Cost</td>
+                                <td width="25%" class="active">@Resources.Langues.FacilityCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[0].FacilityCostItem", "1000", new
+                               {
+                                   @data_val = "true",
+                                   id = "PVFacilityCost",
+                                   @data_val_number = "The field FacilityCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                    @Html.Hidden("CP0001", "", new { })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0001">
+                                <td width="25%" class="active">@Resources.Langues.InstallCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[0].InstallCostItem", "500", new
+                               {
+                                   id = "PVInstallCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field InstallCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0002">
+                                <td width="15%" rowspan="2" class="active" style="vertical-align:middle">WT @Resources.Langues.Cost</td>
+                                <td width="25%" class="active">@Resources.Langues.FacilityCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[1].FacilityCostItem", "1000", new
+                               {
+                                   id = "WTFacilityCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field FacilityCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                    @Html.Hidden("CP0002", "", new { })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0002">
+                                <td width="25%" class="active">@Resources.Langues.InstallCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[1].InstallCostItem", "500", new
+                               {
+                                   id = "WTInstallCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field InstallCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0003">
+                                <td width="15%" rowspan="4" class="active" style="vertical-align:middle">ESS @Resources.Langues.Cost</td>
+                                <td width="25%" class="active">@Resources.Langues.BAT</td>
+                                <td width="20%">
+                                    @Html.TextBox("BatCost", "500", new
+                               {
+                                   id = "BatCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field BatCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                    @Html.Hidden("CP0003", "", new { })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0003">
+                                <td width="25%" class="active">@Resources.Langues.PCS</td>
+                                <td width="20%">
+                                    @Html.TextBox("PcsCost", "230", new
+                               {
+                                   id = "PcsCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field PcsCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0003">
+                                <td width="25%" class="active">@Resources.Langues.EMS</td>
+                                <td width="20%">
+                                    @Html.TextBox("EmsCost", "100", new
+                               {
+                                   id = "EmsCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field EmsCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.TWon)</td>
+                            </tr>
+                            <tr class="CP0003">
+                                <td width="25%" class="active">@Resources.Langues.InstallCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("InstallCost", "100", new
+                               {
+                                   id = "EssInstallCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field InstallCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                @Resources.Langues.E18Mess1 <br />
+                @Resources.Langues.E18Mess2 <br />
+                <div class="list-inline" style="text-align:center">
+                    <button type="button" id="submitM00003Form" class="button button-gray">@Resources.Langues.Save</button>
+                    @*<button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>*@
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+        $(document).ready(function () {
+            $('.CP0001').hide();
+            $('.CP0002').hide();
+            $('.CP0003').hide();
+            $('.CP0004').hide();
+            $('.CP0005').hide();
+            $('.CP0006').hide();
+            var $modal = $('.E00018');
+            var caseId = @Request.Params["caseId"];
+            var $M0003Form = $('#M00003Form');
+            $('#btn_E00018').removeClass('progress-bar-warning');
+
+            $.blockUI();
+            $.post("@Url.Action("GetListLocationCode", "EntityE00018Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    if(result.listLocationCode){
+                        result.listLocationCode.forEach(function(item){
+                            $('#'+ item).val(item);
+                            $('.' + item).show();
+                        });
+                    }
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $.blockUI();
+            $.post("@Url.Action("GetBatteryVal", "EntityE00018Popup", new { area = "Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    $.unblockUI();
+                    $('#BatCost').val(result.data);
+                }
+            }).fail(function () {
+                $.unblockUI();
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $.blockUI();
+            $.post("@Url.Action("GetListI00010FacilityCostByCaseId", "EntityE00018Popup")", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    result.list.forEach(function (item) {
+                        if (item.ComponentCode == "CP0001") {
+                            $('#PVInstallCost').val(item.InstallCost);
+                            $('#PVFacilityCost').val(item.FacilityCost);
+                        }
+                        if (item.ComponentCode == "CP0002") {
+                            $('#WTInstallCost').val(item.InstallCost);
+                            $('#WTFacilityCost').val(item.FacilityCost);
+                        }
+                        if (item.ComponentCode == "CP0003") {
+                            $('#EssInstallCost').val(item.InstallCost);
+                            $('#BatCost').val(item.BatCost);
+                            $('#PcsCost').val(item.PcsCost);
+                            $('#EmsCost').val(item.EmsCost);
+                        }
+                    });
+                } else {
+                    var lang =window.location.pathname.split('/')[1];
+                    if (lang != "en"){
+                        $('#PVFacilityCost').val(1000);
+                        $('#PVInstallCost').val(500);
+                        $('#WTInstallCost').val(500);
+                        $('#WTFacilityCost').val(1000);
+                        $('#EssInstallCost').val(100);
+                        $('#BatCost').val(500);
+                        $('#PcsCost').val(230);
+                        $('#EmsCost').val(100);
+                    } else {
+                        var ex = '@System.Configuration.ConfigurationManager.AppSettings["exchangeRate"]';
+                        $('#PVFacilityCost').val(1000 * ex * 1000);
+                        $('#PVInstallCost').val(500 * ex * 1000);
+                        $('#WTInstallCost').val(500 * ex * 1000);
+                        $('#WTFacilityCost').val(1000 * ex * 1000);
+                        $('#EssInstallCost').val(100 * ex * 1000);
+                        $('#BatCost').val(500 * ex * 1000);
+                        $('#PcsCost').val(230 * ex * 1000);
+                        $('#EmsCost').val(100 * ex * 1000);
+                    }
+                }
+            }).fail(function () {
+                @*bootbox.alert('@Resources.Langues.ContactAdmin');*@
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $('#submitM00003Form').click(function(){
+                var valid = $M0003Form.valid();
+                if(valid){
+                    $M0003Form.submit();
+                }
+            });
+
+            $M0003Form.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $M0003Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                    //$.unblockUI();
+                }).success(function (result) {
+                    if (result.success) {
+                        if (result.success) {
+                            $.blockUI();
+                            $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00018" ,modelCode: '@Request.Params["modelCode"]'}, function (result) {
+                      $.unblockUI();
+                        if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                        if (lstEntityNextStep.length != 0) {
+                            nextStepEntity(lstEntityNextStep[0]);
+                            lstEntityNextStep.shift();
+                            console.log(lstEntityNextStep)
+                        } else {
+                            nextEntity()
+                        }
+                            }).fail(function () {
+                            }).always(function () {
+                                $.unblockUI();
+                            });
+                        } else {
+                            bootbox.alert('@Resources.Langues.Error');
+                        }
+                    }
+                });
+                e.preventDefault();
+            });
+        });
+
+    </script>
+}
+else
+{
+    using (Html.BeginForm("SaveEntityE00018PopupData", "EntityE00018Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "M00001Form" }))
+    {
+        <div class="E00018">
+            <div class="">
+                <!--Popup Name -->
+                <br />
+                @Html.Hidden("CaseId", @Request.Params["caseId"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The CaseId field is required."
+           })
+
+                @Html.Hidden("ModelCode", @Request.Params["modelCode"], new
+           {
+               @data_val = "true",
+               @data_val_required = "The ModelCode field is required.",
+               @data_val_length = "The field ModelCode must be a string with a maximum length of 6.",
+               @data_val_length_max = "6",
+               @style = "text-align:right;"
+           })
+                <!--Input field -->
+                <div>
+                    <table class="table table-bordered tblMultiRow" style="">
+                        <tbody>
+                            <tr class="CP0001">
+                                <td width="15%" rowspan="2" class="active" style="vertical-align:middle">PV @Resources.Langues.Cost</td>
+                                <td width="25%" class="active">@Resources.Langues.FacilityCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[0].FacilityCostItem", "1000", new
+                               {
+                                   id = "PVFacilityCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field FacilityCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                    @Html.Hidden("CP0001", "", new { })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0001">
+                                <td width="25%" class="active">@Resources.Langues.InstallCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[0].InstallCostItem", "500", new
+                               {
+                                   id = "PVInstallCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field InstallCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0002">
+                                <td width="15%" rowspan="2" class="active" style="vertical-align:middle">WT @Resources.Langues.Cost</td>
+                                <td width="25%" class="active">@Resources.Langues.FacilityCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[1].FacilityCostItem", "1000", new
+                               {
+                                   id = "WTFacilityCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field FacilityCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                    @Html.Hidden("CP0002", "", new { })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0002">
+                                <td width="25%" class="active">@Resources.Langues.InstallCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[1].InstallCostItem", "500", new
+                               {
+                                   id = "WTInstallCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field InstallCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0003">
+                                <td width="15%" rowspan="4" class="active" style="vertical-align:middle">ESS @Resources.Langues.Cost</td>
+                                <td width="25%" class="active">@Resources.Langues.BAT</td>
+                                <td width="20%">
+                                    @Html.TextBox("BatCost", "500", new
+                               {
+                                   id = "BatCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field BatCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                    @Html.Hidden("CP0003", "", new { })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0003">
+                                <td width="25%" class="active">@Resources.Langues.PCS</td>
+                                <td width="20%">
+                                    @Html.TextBox("PcsCost", "230", new
+                               {
+                                   id = "PcsCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field PcsCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0003">
+                                <td width="25%" class="active">@Resources.Langues.EMS</td>
+                                <td width="20%">
+                                    @Html.TextBox("EmsCost", "100", new
+                               {
+                                   id = "EmsCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field EmsCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.TWon)</td>
+                            </tr>
+                            <tr class="CP0003">
+                                <td width="25%" class="active">@Resources.Langues.InstallCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("InstallCost", "100", new
+                               {
+                                   id = "EssInstallCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field InstallCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0004">
+                                <td width="15%" rowspan="2" class="active" style="vertical-align:middle">FC @Resources.Langues.Cost</td>
+                                <td width="25%" class="active">@Resources.Langues.FacilityCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[2].FacilityCostItem", "3500", new
+                               {
+                                   id = "FCFacilityCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field FacilityCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                    @Html.Hidden("CP0004", "", new { })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0004">
+                                <td width="25%" class="active">@Resources.Langues.InstallCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[2].InstallCostItem", "500", new
+                               {
+                                   id = "FCInstallCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field InstallCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0005">
+                                <td width="15%" rowspan="2" class="active" style="vertical-align:middle">CHP @Resources.Langues.Cost</td>
+                                <td width="25%" class="active">@Resources.Langues.FacilityCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[3].FacilityCostItem", "1000", new
+                               {
+                                   id = "CHPFacilityCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field FacilityCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                    @Html.Hidden("CP0005", "", new { })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0005">
+                                <td width="25%" class="active">@Resources.Langues.InstallCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[3].InstallCostItem", "500", new
+                               {
+                                   id = "CHPInstallCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field InstallCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0006">
+                                <td width="15%" rowspan="2" class="active" style="vertical-align:middle">
+                                    @Html.Raw(@Resources.Langues.Diesel) @Resources.Langues.Cost
+                                </td>
+                                <td width="25%" class="active">@Resources.Langues.FacilityCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[4].FacilityCostItem", "1000", new
+                               {
+                                   id = "DFacilityCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field FacilityCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                    @Html.Hidden("CP0006", "", new { })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                            <tr class="CP0006">
+                                <td width="25%" class="active">@Resources.Langues.InstallCost</td>
+                                <td width="20%">
+                                    @Html.TextBox("ListItems[4].InstallCostItem", "500", new
+                               {
+                                   id = "DInstallCost",
+                                   @data_val = "true",
+                                   @data_val_number = "The field InstallCost must be a number.",
+                                   @style = "text-align:right;",
+                                   @type = "tel"
+                               })
+                                </td>
+                                <td width="40%" class="active">@Html.Raw(Resources.Langues.Thousandwon)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                @Resources.Langues.E18Mess1 <br />
+                @Resources.Langues.E18Mess2 <br />
+
+            </div>
+            <div class="modal-footer">
+                <div class="list-inline" style="text-align:center">
+                    <button type="button" id="submitM00001Form" class="button button-gray">@Resources.Langues.Save</button>
+                    @*<button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>*@
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('.CP0001').hide();
+            $('.CP0002').hide();
+            $('.CP0003').hide();
+            $('.CP0004').hide();
+            $('.CP0005').hide();
+            $('.CP0006').hide();
+            var $modal = $('.E00018');
+            var caseId = @Request.Params["caseId"];
+            var $M0001Form = $('#M00001Form');
+            $('#btn_E00018').removeClass('progress-bar-warning');
+            $.blockUI();
+            $.post("@Url.Action("GetListLocationCode", "EntityE00018Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    if(result.listLocationCode){
+                        result.listLocationCode.forEach(function(item){
+                            $('#'+ item).val(item);
+                            $('.' + item).show();
+                        });
+                    }
+
+                    $.post("@Url.Action("GetBatteryVal", "EntityE00018Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                        if (result.success) {
+                            $.unblockUI();
+                            $('#BatCost').val(result.data);
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+            
+            $.blockUI();
+            $.post("@Url.Action("GetListI00010FacilityCostByCaseId", "EntityE00018Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    result.list.forEach(function (item) {
+                        if (item.ComponentCode == "CP0001") {
+                            $('#PVInstallCost').val(item.InstallCost);
+                            $('#PVFacilityCost').val(item.FacilityCost);
+                        }
+                        if (item.ComponentCode == "CP0002") {
+                            $('#WTInstallCost').val(item.InstallCost);
+                            $('#WTFacilityCost').val(item.FacilityCost);
+                        }
+                        if (item.ComponentCode == "CP0003") {
+                            $('#EssInstallCost').val(item.InstallCost);
+                            $('#BatCost').val(item.BatCost);
+                            $('#PcsCost').val(item.PcsCost);
+                            $('#EmsCost').val(item.EmsCost);
+                        }
+                        if (item.ComponentCode == "CP0004") {
+                            $('#FCInstallCost').val(item.InstallCost);
+                            $('#FCFacilityCost').val(item.FacilityCost);
+                        }
+                        if (item.ComponentCode == "CP0005") {
+                            $('#CHPInstallCost').val(item.InstallCost);
+                            $('#CHPFacilityCost').val(item.FacilityCost);
+                        }
+                        if (item.ComponentCode == "CP0006") {
+                            $('#DInstallCost').val(item.InstallCost);
+                            $('#DFacilityCost').val(item.FacilityCost);
+                        }
+                    });
+                } else {
+                    var lang =window.location.pathname.split('/')[1];
+                    if (lang != "en"){
+                        $('#PVInstallCost').val(500);
+                        $('#PVFacilityCost').val(1000);
+                        $('#WTInstallCost').val(500);
+                        $('#WTFacilityCost').val(1000);
+                        $('#EssInstallCost').val(100);
+                        $('#BatCost').val(500);
+                        $('#PcsCost').val(230);
+                        $('#EmsCost').val(100);
+                        $('#FCInstallCost').val(500);
+                        $('#FCFacilityCost').val(3500);
+                        $('#CHPInstallCost').val(500);
+                        $('#CHPFacilityCost').val(1000);
+                        $('#DInstallCost').val(500);
+                        $('#DFacilityCost').val(1000);
+                    } else {
+                        var ex = '@System.Configuration.ConfigurationManager.AppSettings["exchangeRate"]';
+                        $('#PVInstallCost').val(500 * ex * 1000);
+                        $('#PVFacilityCost').val(1000 * ex * 1000);
+                        $('#WTInstallCost').val(500 * ex * 1000);
+                        $('#WTFacilityCost').val(1000 * ex * 1000);
+                        $('#EssInstallCost').val(100 * ex * 1000);
+                        $('#BatCost').val(500 * ex * 1000);
+                        $('#PcsCost').val(230 * ex * 1000);
+                        $('#EmsCost').val(100 * ex * 1000);
+                        $('#FCInstallCost').val(500 * ex * 1000);
+                        $('#FCFacilityCost').val(3500 * ex * 1000);
+                        $('#CHPInstallCost').val(500 * ex * 1000);
+                        $('#CHPFacilityCost').val(1000 * ex * 1000);
+                        $('#DInstallCost').val(500 * ex * 1000);
+                        $('#DFacilityCost').val(1000 * ex * 1000);
+                    }
+                }
+            }).fail(function () {
+                @*bootbox.alert('@Resources.Langues.ContactAdmin');*@
+            }).always(function() {
+                $.unblockUI();
+            });
+
+            $('#submitM00001Form').click(function(){
+                var valid = $M0001Form.valid();
+                if (valid)
+                {
+                    $M0001Form.submit();
+                }
+            });
+
+            $M0001Form.on('keyup keypress', function(e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13)
+                {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $M0001Form.submit(function(e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function() {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function() {
+                    //$.unblockUI();
+                }).success(function(result) {
+                        if (result.success)
+                        {
+                            $.unblockUI();
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                            if (lstEntityNextStep.length != 0) {
+                                nextStepEntity(lstEntityNextStep[0]);
+                                lstEntityNextStep.shift();
+                                console.log(lstEntityNextStep)
+                            } else {
+                                nextEntity()
+                            }
+                        }
+                        else
+                        {
+                            $.unblockUI();
+                            bootbox.alert('@Resources.Langues.Error');
+                        }
+                });
+                e.preventDefault();
+            });
+        });
+    </script>
+}

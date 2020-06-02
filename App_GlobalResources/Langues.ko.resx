@@ -1,0 +1,2882 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="KERI" xml:space="preserve">
+    <value>KERI</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>닫기</value>
+  </data>
+  <data name="ConfirmPass" xml:space="preserve">
+    <value>비밀번호확인</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>이메일</value>
+  </data>
+  <data name="Forgot" xml:space="preserve">
+    <value>기억나지 않으시면 클릭 하십시오.</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>홈</value>
+  </data>
+  <data name="KeepMe" xml:space="preserve">
+    <value>로그인 상태 유지</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>성</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>로그인</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>로그 아웃</value>
+  </data>
+  <data name="MyInfor" xml:space="preserve">
+    <value>내정보</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>비밀번호</value>
+  </data>
+  <data name="Photo" xml:space="preserve">
+    <value>사진</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>등록자</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>검색</value>
+  </data>
+  <data name="Tel" xml:space="preserve">
+    <value>전화</value>
+  </data>
+  <data name="UseKERIAcc" xml:space="preserve">
+    <value>KERI 계정사용</value>
+  </data>
+  <data name="ContactAdmin" xml:space="preserve">
+    <value>자세한 정보는 관리자에게 문의하십시오.</value>
+  </data>
+  <data name="PleaseSelect" xml:space="preserve">
+    <value>선택 하십시오.</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>댓글</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>수정</value>
+  </data>
+  <data name="InvalidLogin" xml:space="preserve">
+    <value>아이디 또는 비밀번호를 다시 확인하세요.</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>보내기</value>
+  </data>
+  <data name="Writer" xml:space="preserve">
+    <value>작성자</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>정말 삭제 하시겠습니까? 삭제하면 본 컨텐츠와 관련된 모든 정보가 삭제됩니다.</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>저장</value>
+  </data>
+  <data name="LastLogin" xml:space="preserve">
+    <value>최근 접속일시</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="RegistrationDate" xml:space="preserve">
+    <value>등록일</value>
+  </data>
+  <data name="EnableLockout" xml:space="preserve">
+    <value>잠금 사용</value>
+  </data>
+  <data name="EnableLogin" xml:space="preserve">
+    <value>잠금 해제 사용</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>비밀번호 변경</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>현재 비밀번호</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>제출</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>파일</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>아니요</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>예</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>상태</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>수정</value>
+  </data>
+  <data name="SaveIt" xml:space="preserve">
+    <value>저장 하시겠습니까?</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>추가</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>제거</value>
+  </data>
+  <data name="ForgotPasswordConfirmation" xml:space="preserve">
+    <value>암호 분실 확인</value>
+  </data>
+  <data name="ForgotYourPassword" xml:space="preserve">
+    <value>비밀 번호를 잊으셨나요?</value>
+  </data>
+  <data name="PleaseCheckEmailToResetPassword" xml:space="preserve">
+    <value>비밀 번호를 재설정하려면 이메일을 확인하십시오.</value>
+  </data>
+  <data name="EmailDoesNotExist" xml:space="preserve">
+    <value>이메일이 존재하지 않습니다!</value>
+  </data>
+  <data name="PleaseCheckNewEmail" xml:space="preserve">
+    <value>작성하신 내용을 관리자에게 전달하였습니다.</value>
+  </data>
+  <data name="ConfirmEmail" xml:space="preserve">
+    <value>Email 확인.</value>
+  </data>
+  <data name="LoginFailure" xml:space="preserve">
+    <value>로그인 실패</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>비밀 번호 재설정</value>
+  </data>
+  <data name="ResetPasswordConfirmation" xml:space="preserve">
+    <value>비밀 번호 재설정</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>인증</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>오류</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>전화번호</value>
+  </data>
+  <data name="VerifyPhoneNumber" xml:space="preserve">
+    <value>번호확인</value>
+  </data>
+  <data name="ClickHereToLogIn" xml:space="preserve">
+    <value>로그인하려면 여기를 클릭하십시오.</value>
+  </data>
+  <data name="EmailLink" xml:space="preserve">
+    <value>이메일 링크</value>
+  </data>
+  <data name="Please" xml:space="preserve">
+    <value>Please</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>리셋</value>
+  </data>
+  <data name="ResetYourPassword" xml:space="preserve">
+    <value>암호를 재설정하십시오.</value>
+  </data>
+  <data name="YourPasswordHasBeenReset" xml:space="preserve">
+    <value>암호가 재설정되었습니다.</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="ApplyForMembership" xml:space="preserve">
+    <value>회원가입 신청하기</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>커뮤니티</value>
+  </data>
+  <data name="CreateCase" xml:space="preserve">
+    <value>모형생성하기</value>
+  </data>
+  <data name="DistributedPowerDesignSoftware" xml:space="preserve">
+    <value>PV-ESS 수요관리 모형 설계 프로그램 홈페이지</value>
+  </data>
+  <data name="DistributedPowerExplanation" xml:space="preserve">
+    <value>PV-ESS를 설치하고자 하는 수용가를 위한 PV-ESS 수요관리 모형 설계 소프트웨어입니다.  PV 발전량 및 부하 패턴 산출, ESS 최적운전계획 수립, 경제성 평가 등의 일련의 엔지니어링 솔루션을 프로그램으로 제작하였습니다. 많은 활용 부탁드립니다.</value>
+  </data>
+  <data name="DistributedPowerSmart" xml:space="preserve">
+    <value>한국전기연구원 스마트배전연구센터</value>
+  </data>
+  <data name="DistributedPowerDesignSoftwareHomepage" xml:space="preserve">
+    <value>분산자원 설계 소프트웨어 홈페이지</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>자료실</value>
+  </data>
+  <data name="Introduction" xml:space="preserve">
+    <value>프로그램 소개</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>공지사항</value>
+  </data>
+  <data name="PrivacyStatement" xml:space="preserve">
+    <value>개인정보취급방침</value>
+  </data>
+  <data name="QnA" xml:space="preserve">
+    <value>FAQ</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>회원가입</value>
+  </data>
+  <data name="SignUpComplete" xml:space="preserve">
+    <value>회원가입이 완료 되었습니다. 관리자 승인 후 사용이 가능합니다.</value>
+  </data>
+  <data name="UnauthorizedAccount" xml:space="preserve">
+    <value>승인되지 않은 계정입니다. 관리자가 승인을 해야 합니다.</value>
+  </data>
+  <data name="Affiliation" xml:space="preserve">
+    <value>소속 회사명</value>
+  </data>
+  <data name="BusinessField" xml:space="preserve">
+    <value>업무분야</value>
+  </data>
+  <data name="CompanyAddress" xml:space="preserve">
+    <value>회사주소</value>
+  </data>
+  <data name="CompanyOrPersonalHomepage" xml:space="preserve">
+    <value>회사 또는 개인 홈페이지</value>
+  </data>
+  <data name="DepartmentName" xml:space="preserve">
+    <value>소속부서명</value>
+  </data>
+  <data name="ImageAttach" xml:space="preserve">
+    <value>사진첨부</value>
+  </data>
+  <data name="InforManagement" xml:space="preserve">
+    <value>내정보관리</value>
+  </data>
+  <data name="InputFieldsAreRequried" xml:space="preserve">
+    <value>표시는 필수 입력 항목입니다.</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>직업</value>
+  </data>
+  <data name="Nationality" xml:space="preserve">
+    <value>국적</value>
+  </data>
+  <data name="PleaseConfirmImageAndInput" xml:space="preserve">
+    <value>이미지의 정보를 확인 후 입력 하여 주십시오.</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>직위</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>새로고침</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>첨부파일</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>닫기</value>
+  </data>
+  <data name="DateCreated" xml:space="preserve">
+    <value>작성일</value>
+  </data>
+  <data name="InfringementRemedies" xml:space="preserve">
+    <value>권익침해구제방법</value>
+  </data>
+  <data name="PersonalIdentificationService" xml:space="preserve">
+    <value>본인확인서비스</value>
+  </data>
+  <data name="ProgramIntroContent" xml:space="preserve">
+    <value>● PV-ESS 수요관리 모형 설계 프로그램은  아래와 같이 7단계로 진행됩니다.</value>
+  </data>
+  <data name="ProgramIntroduction" xml:space="preserve">
+    <value>PV-ESS 수요관리 모형 설계 프로그램 소개</value>
+  </data>
+  <data name="QuestionTutorial" xml:space="preserve">
+    <value>분산자원 설계 소프트웨어에 대한 문의사항 등이 있으시면 아래에 정보를 기입 후 보내 주시면 성실히 답변 드리도록 하겠습니다.
+감사합니다.</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>제목</value>
+  </data>
+  <data name="UnauthorizedCollectionOfEmail" xml:space="preserve">
+    <value>이메일무단수집거부</value>
+  </data>
+  <data name="Views" xml:space="preserve">
+    <value>조회수</value>
+  </data>
+  <data name="Writing" xml:space="preserve">
+    <value>글쓰기</value>
+  </data>
+  <data name="AddAComment" xml:space="preserve">
+    <value>덧글 추가</value>
+  </data>
+  <data name="BulletinBoard" xml:space="preserve">
+    <value>게시판</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>내용</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>문의사항</value>
+  </data>
+  <data name="SendMessage" xml:space="preserve">
+    <value>메시지 보내기</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>메세지</value>
+  </data>
+  <data name="SelectModelToAddItem" xml:space="preserve">
+    <value>모델을 선택하여 항목 추가</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>상세 내역 보기</value>
+  </data>
+  <data name="NewPass" xml:space="preserve">
+    <value>새 암호</value>
+  </data>
+  <data name="Sortation" xml:space="preserve">
+    <value>구분</value>
+  </data>
+  <data name="CaseRedirectMessage" xml:space="preserve">
+    <value>곧 오픈할 예정입니다.</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>사용 중</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>관리자</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>전체 이름</value>
+  </data>
+  <data name="InActive" xml:space="preserve">
+    <value>사용하지 않음</value>
+  </data>
+  <data name="LogUser" xml:space="preserve">
+    <value>선택 계정 중지​</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>역할.</value>
+  </data>
+  <data name="UnlogUser" xml:space="preserve">
+    <value>선택계정사용</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>회원정보관리</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>엑셀 양식 저장</value>
+  </data>
+  <data name="Selection" xml:space="preserve">
+    <value>선택</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>환영합니다.</value>
+  </data>
+  <data name="ValidatePasswordMessage" xml:space="preserve">
+    <value>숫자+문자+특수문자 포함하여 6자리 이상 입력하십시오.</value>
+  </data>
+  <data name="QnANotLoginMessage" xml:space="preserve">
+    <value>로그인 후 사용하십시오. 계정이 없으면 회원 가입 후 승인을 받고 사용하십시오.</value>
+  </data>
+  <data name="AccountStatus" xml:space="preserve">
+    <value>계정상태</value>
+  </data>
+  <data name="BatteryEff" xml:space="preserve">
+    <value>배터리 충방전 효율​</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>제조사</value>
+  </data>
+  <data name="CycleCount" xml:space="preserve">
+    <value>Cycle효율</value>
+  </data>
+  <data name="HowReg" xml:space="preserve">
+    <value>등록방법</value>
+  </data>
+  <data name="ModelName" xml:space="preserve">
+    <value>모델명</value>
+  </data>
+  <data name="OperDod" xml:space="preserve">
+    <value>운전 DOD​</value>
+  </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>제품명</value>
+  </data>
+  <data name="RegUser" xml:space="preserve">
+    <value>등록자</value>
+  </data>
+  <data name="ScoScopeMax" xml:space="preserve">
+    <value>SOC 최대값</value>
+  </data>
+  <data name="ScoScopeMin" xml:space="preserve">
+    <value>SOC 최소값​</value>
+  </data>
+  <data name="DownloadForm" xml:space="preserve">
+    <value>양식다운로드</value>
+  </data>
+  <data name="HourDate" xml:space="preserve">
+    <value>시간</value>
+  </data>
+  <data name="MonthDate" xml:space="preserve">
+    <value>월일</value>
+  </data>
+  <data name="NameOfSite" xml:space="preserve">
+    <value>지점명</value>
+  </data>
+  <data name="UploadForm" xml:space="preserve">
+    <value>엑셀일괄등록</value>
+  </data>
+  <data name="WindSpeed" xml:space="preserve">
+    <value>풍속관리</value>
+  </data>
+  <data name="WindSpeedHeight" xml:space="preserve">
+    <value>풍력계높이(m)</value>
+  </data>
+  <data name="YearDate" xml:space="preserve">
+    <value>연도</value>
+  </data>
+  <data name="RecCharges" xml:space="preserve">
+    <value>REC 요금</value>
+  </data>
+  <data name="UploadFile" xml:space="preserve">
+    <value>엑셀일괄등록</value>
+  </data>
+  <data name="YearMonth" xml:space="preserve">
+    <value>연월</value>
+  </data>
+  <data name="Successful" xml:space="preserve">
+    <value>저장이 되었습니다.</value>
+  </data>
+  <data name="DistributedPowerExplanation2" xml:space="preserve">
+    <value>PV-ESS를 설치하고자 하는 수용가를 위한 PV-ESS 수요관리 모형 설계 소프트웨어입니다.  PV 발전량 및 부하 패턴 산출, ESS 최적운전계획 수립, 경제성 평가 등의 일련의 엔지니어링 솔루션을 프로그램으로 제작하였습니다. </value>
+  </data>
+  <data name="ProgramInformationDownload" xml:space="preserve">
+    <value>프로그램 개요 다운로드</value>
+  </data>
+  <data name="ProgramIntroContent2" xml:space="preserve">
+    <value>● 각 단계별 입력은 아래와 같이 진행됩니다.</value>
+  </data>
+  <data name="ProgramIntroContent3" xml:space="preserve">
+    <value>① 기본정보입력</value>
+  </data>
+  <data name="ProgramIntroContent4" xml:space="preserve">
+    <value>② ESS정보입력</value>
+  </data>
+  <data name="ProgramIntroContent5" xml:space="preserve">
+    <value>③ 부하패턴산정</value>
+  </data>
+  <data name="ProgramIntroContent6" xml:space="preserve">
+    <value>④ PV패턴산정</value>
+  </data>
+  <data name="ProgramIntroContent7" xml:space="preserve">
+    <value>⑤ ESS운영시뮬레이션</value>
+  </data>
+  <data name="ProgramIntroContent8" xml:space="preserve">
+    <value>⑥ ESS경제성분석</value>
+  </data>
+  <data name="ProgramIntroContent9" xml:space="preserve">
+    <value>⑦ ESS용량별수익비교</value>
+  </data>
+  <data name="RequestApprovalJoin1" xml:space="preserve">
+    <value>※ 회원가입 후 아래의 메일로 승인 요청하여 주십시오.</value>
+  </data>
+  <data name="RequestApprovalJoin2" xml:space="preserve">
+    <value>※ giddk100414@keri.re.kr 박향아 연구원</value>
+  </data>
+  <data name="TrailVersionDownload" xml:space="preserve">
+    <value>Trial Version  설치하기</value>
+  </data>
+  <data name="BottomeInCarge" xml:space="preserve">
+    <value>담당자: 전기연구원 스마트배전연구센터 박향아 연구원</value>
+  </data>
+  <data name="BottomEmailAdd" xml:space="preserve">
+    <value>이메일: giddk100414@keri.re.kr</value>
+  </data>
+  <data name="BottomeTelNumber" xml:space="preserve">
+    <value>연락처: 055-280-2438</value>
+  </data>
+  <data name="CHPbenefit" xml:space="preserve">
+    <value>CHP수익&lt;br/&gt;[원]</value>
+  </data>
+  <data name="ESSoperation" xml:space="preserve">
+    <value>ESS전력량&lt;br/&gt;요금절감&lt;br/&gt;[원]</value>
+  </data>
+  <data name="FCbenefit" xml:space="preserve">
+    <value>FC수익&lt;br/&gt;[원]</value>
+  </data>
+  <data name="Incentive1" xml:space="preserve">
+    <value>기본요금&lt;br/&gt;할인[원]</value>
+  </data>
+  <data name="Incentive2" xml:space="preserve">
+    <value>충전요금&lt;br/&gt;할인[원]</value>
+  </data>
+  <data name="Incentive3" xml:space="preserve">
+    <value>(예비용)</value>
+  </data>
+  <data name="InitialCost" xml:space="preserve">
+    <value>투자비</value>
+  </data>
+  <data name="IRR" xml:space="preserve">
+    <value>IRR[%]</value>
+  </data>
+  <data name="MaintananceCost" xml:space="preserve">
+    <value>유지보수비</value>
+  </data>
+  <data name="PaybackPeriod" xml:space="preserve">
+    <value>투자비 회수기간 [년]</value>
+  </data>
+  <data name="PeakReduce" xml:space="preserve">
+    <value>기본요금 절감</value>
+  </data>
+  <data name="PVbenefit" xml:space="preserve">
+    <value>PV수익&lt;br/&gt;[원]</value>
+  </data>
+  <data name="WTbenefit" xml:space="preserve">
+    <value>WT수익</value>
+  </data>
+  <data name="AddNewRecord" xml:space="preserve">
+    <value>Add New Record</value>
+  </data>
+  <data name="AmountSolar" xml:space="preserve">
+    <value>일사량(MJ/m2)</value>
+  </data>
+  <data name="AmountSolarkWh" xml:space="preserve">
+    <value>일사량(kWh/m2)</value>
+  </data>
+  <data name="AvgValue" xml:space="preserve">
+    <value>평균 값</value>
+  </data>
+  <data name="CaseDate" xml:space="preserve">
+    <value>생성일</value>
+  </data>
+  <data name="CaseName" xml:space="preserve">
+    <value>모형명</value>
+  </data>
+  <data name="Co2Emiisions" xml:space="preserve">
+    <value>Co2 배출량(tCo2/L)</value>
+  </data>
+  <data name="ComCode" xml:space="preserve">
+    <value>공통코드</value>
+  </data>
+  <data name="CommonSubType" xml:space="preserve">
+    <value>공통하위타입</value>
+  </data>
+  <data name="CommonType" xml:space="preserve">
+    <value>공통유형</value>
+  </data>
+  <data name="ComName" xml:space="preserve">
+    <value>코드이름</value>
+  </data>
+  <data name="ComName2" xml:space="preserve">
+    <value>코드이름2</value>
+  </data>
+  <data name="ComSubCode" xml:space="preserve">
+    <value>하위코드</value>
+  </data>
+  <data name="ComSubName" xml:space="preserve">
+    <value>지역명</value>
+  </data>
+  <data name="ComSubName2" xml:space="preserve">
+    <value>지역명2</value>
+  </data>
+  <data name="CulminationAltitude" xml:space="preserve">
+    <value>남중고도관리</value>
+  </data>
+  <data name="CumulativeRevenue" xml:space="preserve">
+    <value>누적수익</value>
+  </data>
+  <data name="DieselGenParameter" xml:space="preserve">
+    <value>디젤발전기파라매터</value>
+  </data>
+  <data name="ElectricCharge" xml:space="preserve">
+    <value>전기요금</value>
+  </data>
+  <data name="ElectricOutput" xml:space="preserve">
+    <value>출력(kWh)</value>
+  </data>
+  <data name="EntityCode" xml:space="preserve">
+    <value>Entity 코드</value>
+  </data>
+  <data name="EntityName" xml:space="preserve">
+    <value>Entity 명</value>
+  </data>
+  <data name="EntityUrl" xml:space="preserve">
+    <value>Entity 경로</value>
+  </data>
+  <data name="FaqRegDate" xml:space="preserve">
+    <value>FAQ 등록일</value>
+  </data>
+  <data name="FaqTitle" xml:space="preserve">
+    <value>FAQ 제목</value>
+  </data>
+  <data name="FuelConsum" xml:space="preserve">
+    <value>연료소비량(m³/h)</value>
+  </data>
+  <data name="FuelInput" xml:space="preserve">
+    <value>연료입력[MMBtu]</value>
+  </data>
+  <data name="FuelPrice" xml:space="preserve">
+    <value>연료가격(원/ℓ)</value>
+  </data>
+  <data name="FullUserName" xml:space="preserve">
+    <value>등록자</value>
+  </data>
+  <data name="Heat" xml:space="preserve">
+    <value>열[MMbtu]</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>높이</value>
+  </data>
+  <data name="HolidayInfomation" xml:space="preserve">
+    <value>휴일정보</value>
+  </data>
+  <data name="HourDisplay" xml:space="preserve">
+    <value>시간</value>
+  </data>
+  <data name="Insolation" xml:space="preserve">
+    <value>일사량관리</value>
+  </data>
+  <data name="InvestmentCost" xml:space="preserve">
+    <value>설비비</value>
+  </data>
+  <data name="ItemCode" xml:space="preserve">
+    <value>Item Code</value>
+  </data>
+  <data name="ItemName" xml:space="preserve">
+    <value>Item명</value>
+  </data>
+  <data name="ItemSelection" xml:space="preserve">
+    <value>선택한 항목:</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>부하[%]</value>
+  </data>
+  <data name="LocationCode" xml:space="preserve">
+    <value>위치코드</value>
+  </data>
+  <data name="MaxOperEmr" xml:space="preserve">
+    <value>비상용최대운전출력(kw)</value>
+  </data>
+  <data name="MaxOperOutput" xml:space="preserve">
+    <value>상용최대운전출력(kw)</value>
+  </data>
+  <data name="MaxValue" xml:space="preserve">
+    <value>최대값</value>
+  </data>
+  <data name="MinOperEmr" xml:space="preserve">
+    <value>비상용최소운전출력(kw)</value>
+  </data>
+  <data name="MinOperOutput" xml:space="preserve">
+    <value>상용최소운전출력(kw)</value>
+  </data>
+  <data name="MinValue" xml:space="preserve">
+    <value>최소값</value>
+  </data>
+  <data name="ModelCode" xml:space="preserve">
+    <value>모델코드</value>
+  </data>
+  <data name="ModelSelection" xml:space="preserve">
+    <value>모델선택</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>월</value>
+  </data>
+  <data name="MonthDay" xml:space="preserve">
+    <value>월일</value>
+  </data>
+  <data name="NoticeTitle" xml:space="preserve">
+    <value>공지사항제목</value>
+  </data>
+  <data name="OperTimeCom" xml:space="preserve">
+    <value>상용사용시간(h)</value>
+  </data>
+  <data name="OperTimeEmr" xml:space="preserve">
+    <value>비상용사용시간(h)</value>
+  </data>
+  <data name="PowerHour" xml:space="preserve">
+    <value>시각/월</value>
+  </data>
+  <data name="PvEssScheduler" xml:space="preserve">
+    <value>내장스케줄러</value>
+  </data>
+  <data name="RatedOuputCom" xml:space="preserve">
+    <value>상용정격출력(kw)</value>
+  </data>
+  <data name="RatedOutputEmr" xml:space="preserve">
+    <value>비상용정격출력(kw)</value>
+  </data>
+  <data name="RecCharge" xml:space="preserve">
+    <value>REC요금관리</value>
+  </data>
+  <data name="SMPCharge" xml:space="preserve">
+    <value>SMP요금관리</value>
+  </data>
+  <data name="SourceYear" xml:space="preserve">
+    <value>가져올연도</value>
+  </data>
+  <data name="TargetYear" xml:space="preserve">
+    <value>대상연도</value>
+  </data>
+  <data name="ThemRatio" xml:space="preserve">
+    <value>열전비</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>남중고도</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>용량</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>연도</value>
+  </data>
+  <data name="YearCopy" xml:space="preserve">
+    <value>연도복사</value>
+  </data>
+  <data name="YearMonthDay" xml:space="preserve">
+    <value>연월일</value>
+  </data>
+  <data name="YearOfDate" xml:space="preserve">
+    <value>해당연도</value>
+  </data>
+  <data name="AcceptedName" xml:space="preserve">
+    <value>수용가명</value>
+  </data>
+  <data name="AddAdditionalHolidays" xml:space="preserve">
+    <value>공휴일 추가지정</value>
+  </data>
+  <data name="AddedHolidays" xml:space="preserve">
+    <value>추가된 공휴일</value>
+  </data>
+  <data name="Additionaldesignatedholidays" xml:space="preserve">
+    <value>추가지정 공휴일</value>
+  </data>
+  <data name="ApplicablePlan" xml:space="preserve">
+    <value>적용요금제</value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>지역구분</value>
+  </data>
+  <data name="AutomaticCalculationofPVPowerGeneration" xml:space="preserve">
+    <value>PV 발전 패턴 자동 입력</value>
+  </data>
+  <data name="BaseYear" xml:space="preserve">
+    <value>기준연도</value>
+  </data>
+  <data name="Batterycapacity" xml:space="preserve">
+    <value>전지용량 후보</value>
+  </data>
+  <data name="Batterychargedischargeefficiency" xml:space="preserve">
+    <value>전지종류</value>
+  </data>
+  <data name="Capacity" xml:space="preserve">
+    <value>용량</value>
+  </data>
+  <data name="Capacitycombination" xml:space="preserve">
+    <value>용량조합</value>
+  </data>
+  <data name="Chargingtime" xml:space="preserve">
+    <value>충전시간</value>
+  </data>
+  <data name="CHPCapacityrangeselection" xml:space="preserve">
+    <value>CHP(열병합)용량범위 선택</value>
+  </data>
+  <data name="CHPparameter" xml:space="preserve">
+    <value>CHP매개변수</value>
+  </data>
+  <data name="CHPparameterinput" xml:space="preserve">
+    <value>CHP파라미터 입력</value>
+  </data>
+  <data name="CHPparameterlookup" xml:space="preserve">
+    <value>CHP파라미터 조회</value>
+  </data>
+  <data name="CHPparameterselection" xml:space="preserve">
+    <value>CHP파라미터 선택</value>
+  </data>
+  <data name="oclock" xml:space="preserve">
+    <value>시</value>
+  </data>
+  <data name="Commercialmaximumoperationoutput" xml:space="preserve">
+    <value>상용 최대운전출력</value>
+  </data>
+  <data name="Commercialminimumoperationoutput" xml:space="preserve">
+    <value>상용 최소운전출력</value>
+  </data>
+  <data name="Component" xml:space="preserve">
+    <value>구성요소</value>
+  </data>
+  <data name="ComponentSelection" xml:space="preserve">
+    <value>구성요소 선택</value>
+  </data>
+  <data name="ConnectionStatus" xml:space="preserve">
+    <value>접속상태:</value>
+  </data>
+  <data name="ContractPower" xml:space="preserve">
+    <value>계약전력</value>
+  </data>
+  <data name="Currencydiscountrate" xml:space="preserve">
+    <value>할인율</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>사용자정의</value>
+  </data>
+  <data name="CustomerInformation" xml:space="preserve">
+    <value>지역 정보</value>
+  </data>
+  <data name="Customschedulercharginganddischargingtimeselection" xml:space="preserve">
+    <value>충방전시간 사용자정의</value>
+  </data>
+  <data name="Datanotfound" xml:space="preserve">
+    <value>데이터를 찾을 수 없습니다.</value>
+  </data>
+  <data name="DemandManagementModel" xml:space="preserve">
+    <value>수요관리 모델</value>
+  </data>
+  <data name="DieselGen" xml:space="preserve">
+    <value>디젤발전기</value>
+  </data>
+  <data name="Dieselgeneratorcapacityrangeselection" xml:space="preserve">
+    <value>디젤발전기용량범위 선택</value>
+  </data>
+  <data name="Dischargetime" xml:space="preserve">
+    <value>방전시간</value>
+  </data>
+  <data name="Donotoverlapthechargetimeanddischargetime" xml:space="preserve">
+    <value>충전시간과 방전시간이 겹치지 않아야함.</value>
+  </data>
+  <data name="Downloadcustoms" xml:space="preserve">
+    <value>풍속 내려받기</value>
+  </data>
+  <data name="Downloadingsolarradiation" xml:space="preserve">
+    <value>일사량 내려받기</value>
+  </data>
+  <data name="DrivingDOD" xml:space="preserve">
+    <value>가용 용량</value>
+  </data>
+  <data name="Electricaloutput" xml:space="preserve">
+    <value>전기출력[kWh]</value>
+  </data>
+  <data name="Electricityrateincreaserate" xml:space="preserve">
+    <value>전기요금 인상율</value>
+  </data>
+  <data name="Emergencymaximumoperationoutput" xml:space="preserve">
+    <value>비상용 최대운전출력</value>
+  </data>
+  <data name="Emergencyminimumoperationoutput" xml:space="preserve">
+    <value>비상용 최소운전출력</value>
+  </data>
+  <data name="Enterdieselgeneratorparameters" xml:space="preserve">
+    <value>디젤발전기 파라미터 입력</value>
+  </data>
+  <data name="Entereconomicanalysisparameter" xml:space="preserve">
+    <value>경제성 분석 실행</value>
+  </data>
+  <data name="EnterESSparameters" xml:space="preserve">
+    <value>ESS 파라미터 입력</value>
+  </data>
+  <data name="EnterFCparameters" xml:space="preserve">
+    <value>FC파라미터 입력</value>
+  </data>
+  <data name="ESSCapacityRangeSelection" xml:space="preserve">
+    <value>ESS용량범위 선택</value>
+  </data>
+  <data name="ESSoutputreductionrate" xml:space="preserve">
+    <value>ESS 용량감소율</value>
+  </data>
+  <data name="ESSparameterlookup" xml:space="preserve">
+    <value>ESS파라미터 조회</value>
+  </data>
+  <data name="ESSPVconnection" xml:space="preserve">
+    <value>분산자원 용량 후보 입력</value>
+  </data>
+  <data name="ESSPVlinkagemodel" xml:space="preserve">
+    <value>ESS-PV 연계모델</value>
+  </data>
+  <data name="ESSRECweight" xml:space="preserve">
+    <value>ESS REC 가중치</value>
+  </data>
+  <data name="Estimatedinvestmentcost" xml:space="preserve">
+    <value>예상투자비</value>
+  </data>
+  <data name="FacilityCost" xml:space="preserve">
+    <value>설비비</value>
+  </data>
+  <data name="FailedToSave" xml:space="preserve">
+    <value>저장하지 못하였습니다. 입력 값들을 확인하십시오.​</value>
+  </data>
+  <data name="FCparameter" xml:space="preserve">
+    <value>FC매개변수</value>
+  </data>
+  <data name="FCparameterinquiry" xml:space="preserve">
+    <value>FC파라미터 조회</value>
+  </data>
+  <data name="FCparameterselection" xml:space="preserve">
+    <value>FC모델 선택</value>
+  </data>
+  <data name="Fuelconsumption" xml:space="preserve">
+    <value>연료소비량</value>
+  </data>
+  <data name="Fuelinput1" xml:space="preserve">
+    <value>연료입력[MMBtu]</value>
+  </data>
+  <data name="Heat1" xml:space="preserve">
+    <value>열[MMBtu]</value>
+  </data>
+  <data name="HolidaysName" xml:space="preserve">
+    <value>공휴일 명칭</value>
+  </data>
+  <data name="Inclinationangle" xml:space="preserve">
+    <value>경사각 (degrees)</value>
+  </data>
+  <data name="InstallCost" xml:space="preserve">
+    <value>설치비</value>
+  </data>
+  <data name="Interval" xml:space="preserve">
+    <value>간격</value>
+  </data>
+  <data name="InvestmentLimit" xml:space="preserve">
+    <value>투자비 제한</value>
+  </data>
+  <data name="ISMARTInformation" xml:space="preserve">
+    <value>iSMART 정보</value>
+  </data>
+  <data name="Loaddata" xml:space="preserve">
+    <value>부하데이터</value>
+  </data>
+  <data name="Lookup" xml:space="preserve">
+    <value>조회</value>
+  </data>
+  <data name="Management" xml:space="preserve">
+    <value>관리</value>
+  </data>
+  <data name="Maximumcapacity" xml:space="preserve">
+    <value>최대</value>
+  </data>
+  <data name="Meridianaltitude" xml:space="preserve">
+    <value>PV 설치지역</value>
+  </data>
+  <data name="MessageFileNotFound" xml:space="preserve">
+    <value> 를 찾을 수 없습니다.</value>
+  </data>
+  <data name="MessageFileNotFound2" xml:space="preserve">
+    <value>results20.exe를 찾을 수 없습니다.</value>
+  </data>
+  <data name="MessageFileNotFound3" xml:space="preserve">
+    <value>opt_pg20.exe를 찾을 수 없습니다.</value>
+  </data>
+  <data name="Minimumcapacity" xml:space="preserve">
+    <value>최소</value>
+  </data>
+  <data name="Onethousandwon" xml:space="preserve">
+    <value>천원</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Operatingtime1" xml:space="preserve">
+    <value>사용시간(상용)</value>
+  </data>
+  <data name="Operatingtime2" xml:space="preserve">
+    <value>사용시간(비상용)</value>
+  </data>
+  <data name="Optimizationbasedscheduler" xml:space="preserve">
+    <value>TOU요금반영 전기요금 최소화</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>출력(kW)</value>
+  </data>
+  <data name="PCSefficiency" xml:space="preserve">
+    <value>PCS효율 (%)</value>
+  </data>
+  <data name="PCSratedoutput" xml:space="preserve">
+    <value>PCS 정격용량 후보</value>
+  </data>
+  <data name="Plan" xml:space="preserve">
+    <value>요금제:</value>
+  </data>
+  <data name="Pleasecheckyourdataagain" xml:space="preserve">
+    <value>데이터를 다시 확인하십시오</value>
+  </data>
+  <data name="Pleaseenteravaluegreaterthanthepreviousvalue" xml:space="preserve">
+    <value>이전 값보다 큰 값을 입력 하십시오.</value>
+  </data>
+  <data name="Pleasefillfulltheinfomation" xml:space="preserve">
+    <value>모든 정보를 기입하십시오.</value>
+  </data>
+  <data name="PowerPrice" xml:space="preserve">
+    <value>전력요금 단가 조회</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>인쇄</value>
+  </data>
+  <data name="PVgenerationinputmanually" xml:space="preserve">
+    <value>PV 발전 패턴 수동 입력</value>
+  </data>
+  <data name="PVgenerationinquiry" xml:space="preserve">
+    <value>PV이용률 조회</value>
+  </data>
+  <data name="PVlinkedESSdiscounts" xml:space="preserve">
+    <value>PV연계 ESS할인</value>
+  </data>
+  <data name="PVoutputreductionrate" xml:space="preserve">
+    <value>PV출력저감률</value>
+  </data>
+  <data name="PVRECweight" xml:space="preserve">
+    <value>PV-REC 가중치</value>
+  </data>
+  <data name="Radiationmanualinput" xml:space="preserve">
+    <value>일사량 수동입력</value>
+  </data>
+  <data name="Ratedoutput1" xml:space="preserve">
+    <value>정격출력(상용)</value>
+  </data>
+  <data name="Ratedoutput2" xml:space="preserve">
+    <value>정격출력(비상용)</value>
+  </data>
+  <data name="Ratio" xml:space="preserve">
+    <value>비율</value>
+  </data>
+  <data name="RECsalesrevenue" xml:space="preserve">
+    <value>REC판매 수익</value>
+  </data>
+  <data name="RECunitpriceinquiry" xml:space="preserve">
+    <value>REC단가 조회</value>
+  </data>
+  <data name="Rulebasedscheduler" xml:space="preserve">
+    <value>Rule 기반 스케줄러</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>운영</value>
+  </data>
+  <data name="Runeconomicanalysis" xml:space="preserve">
+    <value>경제성분석 실행</value>
+  </data>
+  <data name="RunMessage1" xml:space="preserve">
+    <value>경제성분석은 약 10초가 소요됩니다.</value>
+  </data>
+  <data name="RunMessage2" xml:space="preserve">
+    <value>중단하거나 브라우저를 닫지 마십시오.</value>
+  </data>
+  <data name="Salesrevenue" xml:space="preserve">
+    <value>판매 수익 종류 선택</value>
+  </data>
+  <data name="Salesrevenuetype" xml:space="preserve">
+    <value>판매 수익 종류</value>
+  </data>
+  <data name="SalesunitpriceSelecttheyear" xml:space="preserve">
+    <value>판매 단가 내려받기</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>선택</value>
+  </data>
+  <data name="SelectApplicablePlan" xml:space="preserve">
+    <value>전력수요 데이터 입력</value>
+  </data>
+  <data name="Selectdieselgeneratorparameters" xml:space="preserve">
+    <value>디젤발전기 파라미터 선택</value>
+  </data>
+  <data name="SelectFCcapacityrange" xml:space="preserve">
+    <value>FC(연료진지) 용량 범위 선택</value>
+  </data>
+  <data name="SelectingthePVcapacityrange" xml:space="preserve">
+    <value>PV 용량 범위 선택</value>
+  </data>
+  <data name="SelectRECpriceYear" xml:space="preserve">
+    <value>REC단가 연도 선택</value>
+  </data>
+  <data name="Selectregion" xml:space="preserve">
+    <value>지역 선택</value>
+  </data>
+  <data name="SelectSMPpriceYear" xml:space="preserve">
+    <value>SMP단가 연도 선택</value>
+  </data>
+  <data name="SelectWTCapacityRange" xml:space="preserve">
+    <value>WT용량범위 선택</value>
+  </data>
+  <data name="SelectYear" xml:space="preserve">
+    <value>연도선택</value>
+  </data>
+  <data name="Selectyearmonthday" xml:space="preserve">
+    <value>연/월/일 선택</value>
+  </data>
+  <data name="Selectyourregion" xml:space="preserve">
+    <value>설치지역선택</value>
+  </data>
+  <data name="SMPsalesrevenue" xml:space="preserve">
+    <value>SMP 판매 수익</value>
+  </data>
+  <data name="SMPunitpriceinquiry" xml:space="preserve">
+    <value>SMP단가 조회</value>
+  </data>
+  <data name="SOCrange" xml:space="preserve">
+    <value>SOC범위</value>
+  </data>
+  <data name="Thousandwon" xml:space="preserve">
+    <value>천원/kW</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>시간</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>종류​</value>
+  </data>
+  <data name="Viewdieselgeneratorparameters" xml:space="preserve">
+    <value>디젤발전기 파라미터 조회</value>
+  </data>
+  <data name="ViewInputInformation" xml:space="preserve">
+    <value>입력정보 조회</value>
+  </data>
+  <data name="won" xml:space="preserve">
+    <value>원</value>
+  </data>
+  <data name="WTgenerationautomaticcalculation" xml:space="preserve">
+    <value>WT발전량 자동계산</value>
+  </data>
+  <data name="WToutputreductionrate" xml:space="preserve">
+    <value>WT출력저감률</value>
+  </data>
+  <data name="WTparameterselection" xml:space="preserve">
+    <value>풍속 정보입력</value>
+  </data>
+  <data name="WTPowerGeneration" xml:space="preserve">
+    <value>WT이용률 조회</value>
+  </data>
+  <data name="WTPowerGenerationManualInput" xml:space="preserve">
+    <value>WT발전량 수동입력</value>
+  </data>
+  <data name="Yearprofit" xml:space="preserve">
+    <value>1년 수익</value>
+  </data>
+  <data name="CaseId" xml:space="preserve">
+    <value>Case ID</value>
+  </data>
+  <data name="CaseManagement" xml:space="preserve">
+    <value>모형관리</value>
+  </data>
+  <data name="CHPParameterManagement" xml:space="preserve">
+    <value>CHP매개변수 관리</value>
+  </data>
+  <data name="CommonCodeManagement" xml:space="preserve">
+    <value>공통코드관리</value>
+  </data>
+  <data name="CommonSelection" xml:space="preserve">
+    <value>분산자원 선택</value>
+  </data>
+  <data name="CommunityManagement" xml:space="preserve">
+    <value>커뮤니티관리</value>
+  </data>
+  <data name="CulminationAltitudeManagement" xml:space="preserve">
+    <value>남중고도 관리</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>세부</value>
+  </data>
+  <data name="DieselGenParameterManagement" xml:space="preserve">
+    <value>디젤매개변수 관리</value>
+  </data>
+  <data name="Downloadtheform" xml:space="preserve">
+    <value>양식다운로드</value>
+  </data>
+  <data name="ElectricChargesManagement" xml:space="preserve">
+    <value>전기요금관리</value>
+  </data>
+  <data name="Electricityrateclassification" xml:space="preserve">
+    <value>지역 :</value>
+  </data>
+  <data name="EntityManagement" xml:space="preserve">
+    <value>Entities 관리</value>
+  </data>
+  <data name="EssParameterManagement" xml:space="preserve">
+    <value>ESS매개변수관리</value>
+  </data>
+  <data name="Excelbatchregistration" xml:space="preserve">
+    <value>엑셀일괄등록</value>
+  </data>
+  <data name="Executable" xml:space="preserve">
+    <value>실행파일</value>
+  </data>
+  <data name="FCParameterManagement" xml:space="preserve">
+    <value>FC매개변수관리</value>
+  </data>
+  <data name="HolidayInfomationManagement" xml:space="preserve">
+    <value>휴일정보관리</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="InsolationManagement" xml:space="preserve">
+    <value>일사량관리</value>
+  </data>
+  <data name="Itemmanagement" xml:space="preserve">
+    <value>Item Management</value>
+  </data>
+  <data name="ModelManagement" xml:space="preserve">
+    <value>모델관리</value>
+  </data>
+  <data name="Periodofassessment" xml:space="preserve">
+    <value>기간(생성일기준)</value>
+  </data>
+  <data name="PvEssSchedulerManagement" xml:space="preserve">
+    <value>최적화 프로그램 관리</value>
+  </data>
+  <data name="RECChargeManagement" xml:space="preserve">
+    <value>REC요금관리</value>
+  </data>
+  <data name="Releasedate" xml:space="preserve">
+    <value>등록일자</value>
+  </data>
+  <data name="SMPChargeManagement" xml:space="preserve">
+    <value>SMP요금 관리</value>
+  </data>
+  <data name="Stopusingselection" xml:space="preserve">
+    <value>선택영역 사용중지</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>업로드</value>
+  </data>
+  <data name="UserManagement" xml:space="preserve">
+    <value>사용자관리</value>
+  </data>
+  <data name="UseSelected" xml:space="preserve">
+    <value>선택항목사용</value>
+  </data>
+  <data name="WindSpeed1" xml:space="preserve">
+    <value>풍속관리</value>
+  </data>
+  <data name="WTParameterManagement" xml:space="preserve">
+    <value>WT매개변수 관리</value>
+  </data>
+  <data name="Case" xml:space="preserve">
+    <value>모형테스트</value>
+  </data>
+  <data name="CommonCode" xml:space="preserve">
+    <value>공통코드</value>
+  </data>
+  <data name="Entity" xml:space="preserve">
+    <value>엔티티관리</value>
+  </data>
+  <data name="ESSParameter" xml:space="preserve">
+    <value>ESS매개변수</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>아이템관리</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>모델관리</value>
+  </data>
+  <data name="WTParameter" xml:space="preserve">
+    <value>WT매개변수</value>
+  </data>
+  <data name="FcParamVolumn" xml:space="preserve">
+    <value>용량(kW)</value>
+  </data>
+  <data name="ChpParamVolumn" xml:space="preserve">
+    <value>용량(kW)</value>
+  </data>
+  <data name="RecPriceInGrid" xml:space="preserve">
+    <value>REC 요금</value>
+  </data>
+  <data name="RecTypeInGrid" xml:space="preserve">
+    <value>REC 구분</value>
+  </data>
+  <data name="WindSpeedTextInGrid" xml:space="preserve">
+    <value>풍속(m/s)</value>
+  </data>
+  <data name="SmpPriceInGrid" xml:space="preserve">
+    <value>SMP요금</value>
+  </data>
+  <data name="ValueCA" xml:space="preserve">
+    <value>남중고도</value>
+  </data>
+  <data name="Message3" xml:space="preserve">
+    <value>선택되지 않은 구성요소입니다.</value>
+  </data>
+  <data name="Enterfacilitycosts" xml:space="preserve">
+    <value>설비 투자 비용 입력</value>
+  </data>
+  <data name="LoadDataViews" xml:space="preserve">
+    <value>전력수요 데이터 조회</value>
+  </data>
+  <data name="HolidayName" xml:space="preserve">
+    <value>휴일 이름</value>
+  </data>
+  <data name="UserRegist" xml:space="preserve">
+    <value>사용자등록</value>
+  </data>
+  <data name="YearDay" xml:space="preserve">
+    <value>연중 무휴</value>
+  </data>
+  <data name="Getpublicdataholidayinformation" xml:space="preserve">
+    <value>공공데이터 휴일정보 가져오기</value>
+  </data>
+  <data name="Wrongaccountorpassword" xml:space="preserve">
+    <value>잘못된 계정 또는 암호</value>
+  </data>
+  <data name="MessagePopupWindow" xml:space="preserve">
+    <value>진행 중이거나 브라우저에서 팝업이 차단이 되었습니다.</value>
+  </data>
+  <data name="SysInfo" xml:space="preserve">
+    <value>모형소개관리</value>
+  </data>
+  <data name="ErrorSaveFile" xml:space="preserve">
+    <value>파일을 저장할 수 없습니다.</value>
+  </data>
+  <data name="CaseStatus" xml:space="preserve">
+    <value>모형 상태</value>
+  </data>
+  <data name="OptimumCapacitySelection" xml:space="preserve">
+    <value>최적용량 선택</value>
+  </data>
+  <data name="TotalBenefit" xml:space="preserve">
+    <value>수익</value>
+  </data>
+  <data name="Pleaseselectdieselgeneratorparameters" xml:space="preserve">
+    <value>디젤 발전기 매개 변수를 선택하십시오.</value>
+  </data>
+  <data name="ErrorMessg" xml:space="preserve">
+    <value>현재 많은 사용자가 사용 중입니다. &lt;br /&gt;10분에 15분 후 다시 시도하십시오. &lt;br /&gt;같은 메세지가 나오면 다시 저장 버튼을 클릭 하십시오.</value>
+  </data>
+  <data name="MsgE00017" xml:space="preserve">
+    <value>10자리 숫자 기준입니다</value>
+  </data>
+  <data name="MsgE000172" xml:space="preserve">
+    <value>간격값의 마지막 숫자는 0이어야합니다.</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>완료</value>
+  </data>
+  <data name="Inprogress" xml:space="preserve">
+    <value>진행 중</value>
+  </data>
+  <data name="MyCase" xml:space="preserve">
+    <value>나의 결과모형</value>
+  </data>
+  <data name="MesageE19" xml:space="preserve">
+    <value>계산 과정이 잘못되었습니다. 입력 데이터를 확인하십시오.</value>
+  </data>
+  <data name="MessageE000171" xml:space="preserve">
+    <value>최대값이 최소값 보다 크거나 같아야 합니다.</value>
+  </data>
+  <data name="MessageE000172" xml:space="preserve">
+    <value>간격은 (최대값-최소값)보다 작거나 같아야 합니다.</value>
+  </data>
+  <data name="MessageE000173" xml:space="preserve">
+    <value>케이스는 총 3개 이하만 입력됩니다.</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>전체</value>
+  </data>
+  <data name="Proceeding" xml:space="preserve">
+    <value>진행 중</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>진행상태</value>
+  </data>
+  <data name="OptimalCapacity" xml:space="preserve">
+    <value>최적용량</value>
+  </data>
+  <data name="MessageE00013" xml:space="preserve">
+    <value>저장되었습니다. Cycle 횟수 A회 운전 시 가용용량 B%까지 감소됩니다.</value>
+  </data>
+  <data name="Userinput" xml:space="preserve">
+    <value>사용자 입력</value>
+  </data>
+  <data name="CaseQA" xml:space="preserve">
+    <value>모형 Q&amp;A</value>
+  </data>
+  <data name="Comunity" xml:space="preserve">
+    <value>커뮤니티</value>
+  </data>
+  <data name="ServiceIntroduction" xml:space="preserve">
+    <value>서비스소개</value>
+  </data>
+  <data name="MessageE00005" xml:space="preserve">
+    <value>모형 폴더를 찾을 수 없습니다.</value>
+  </data>
+  <data name="Changeexecutablefile" xml:space="preserve">
+    <value>솔버 신규 등록</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>파일이름</value>
+  </data>
+  <data name="Registrant" xml:space="preserve">
+    <value>등록자</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>순서</value>
+  </data>
+  <data name="MessageE000174" xml:space="preserve">
+    <value>최대용량과 최소용량이 같지 않습니다.</value>
+  </data>
+  <data name="ComSelection" xml:space="preserve">
+    <value>구성요소 선택</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>시간</value>
+  </data>
+  <data name="PVESSSchedulerTitle" xml:space="preserve">
+    <value>내장스케줄러 실행 파일을 등록 합니다.</value>
+  </data>
+  <data name="RegDate" xml:space="preserve">
+    <value>등록일</value>
+  </data>
+  <data name="SchedulerType" xml:space="preserve">
+    <value>스케줄러 유형</value>
+  </data>
+  <data name="WrongName" xml:space="preserve">
+    <value>잘못된 파일 이름 형식</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>확인</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>계속하기</value>
+  </data>
+  <data name="ViewResult" xml:space="preserve">
+    <value>레포트 조회</value>
+  </data>
+  <data name="MessDeleteCase" xml:space="preserve">
+    <value>삭제할 사례를 선택하십시오.</value>
+  </data>
+  <data name="MessErrorE21" xml:space="preserve">
+    <value>인수가 유효하지 않습니다. 입력 내용을 확인하십시오.</value>
+  </data>
+  <data name="MessCaseReferences" xml:space="preserve">
+    <value>이전 단계의 정보를 입력하십시오.</value>
+  </data>
+  <data name="MessMyCase" xml:space="preserve">
+    <value>선택한 모델을 정말로 삭제 하시겠습니까?</value>
+  </data>
+  <data name="RemoveSuccess" xml:space="preserve">
+    <value>삭제되었습니다.</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>모두 선택</value>
+  </data>
+  <data name="E00015Title" xml:space="preserve">
+    <value>수요관리 방안 선택</value>
+  </data>
+  <data name="MessCreateModel" xml:space="preserve">
+    <value>이 작업을 수행하려면 로그인 하시겠습니까?</value>
+  </data>
+  <data name="TitleE00036" xml:space="preserve">
+    <value>용량조합 산정조회</value>
+  </data>
+  <data name="RECweightinput" xml:space="preserve">
+    <value>REC 가중치 입력</value>
+  </data>
+  <data name="TitleE00019" xml:space="preserve">
+    <value>용량 조합 산정</value>
+  </data>
+  <data name="PriceList" xml:space="preserve">
+    <value>판매 단가 조회</value>
+  </data>
+  <data name="PVparameterselection" xml:space="preserve">
+    <value>PV 발전 패턴 입력</value>
+  </data>
+  <data name="Selectmodel" xml:space="preserve">
+    <value>모델선택</value>
+  </data>
+  <data name="SelectWTarea" xml:space="preserve">
+    <value>WT 지역 선택</value>
+  </data>
+  <data name="Thousandwonh" xml:space="preserve">
+    <value>천원/kWh</value>
+  </data>
+  <data name="Vieweconomicanalysisresult" xml:space="preserve">
+    <value>경제성분석 결과조회</value>
+  </data>
+  <data name="Distributedresourcecapacityrangeselection" xml:space="preserve">
+    <value />
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Korean" xml:space="preserve">
+    <value>한국어</value>
+  </data>
+  <data name="MessE000151" xml:space="preserve">
+    <value>충전시간이 겹치지 않도록 설정해주세요.</value>
+  </data>
+  <data name="MessE000152" xml:space="preserve">
+    <value>방전시간이 겹치지 않도록 설정해주세요.</value>
+  </data>
+  <data name="MessE000153" xml:space="preserve">
+    <value>충전시간과 방전시간이 겹치지 않도록 해주세요.</value>
+  </data>
+  <data name="Apr" xml:space="preserve">
+    <value>4월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="Aug" xml:space="preserve">
+    <value>8월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="Axis25" xml:space="preserve">
+    <value>SMP단가[원/kWh]</value>
+  </data>
+  <data name="Axis25REC" xml:space="preserve">
+    <value>REC단가[원/REC]</value>
+  </data>
+  <data name="AxisE28" xml:space="preserve">
+    <value>WT이용률[%]</value>
+  </data>
+  <data name="AxisE6" xml:space="preserve">
+    <value>충방전량[kWh]</value>
+  </data>
+  <data name="AxisE9" xml:space="preserve">
+    <value>전력수요[kWh]</value>
+  </data>
+  <data name="Axix10" xml:space="preserve">
+    <value>PV이용률[%]</value>
+  </data>
+  <data name="BAT" xml:space="preserve">
+    <value>Battery</value>
+  </data>
+  <data name="CheckId" xml:space="preserve">
+    <value>접속 안됨, ID/Password를 확인 하십시오.</value>
+  </data>
+  <data name="CHPratedpower" xml:space="preserve">
+    <value>CHP 정격 후보</value>
+  </data>
+  <data name="CHPRevenue" xml:space="preserve">
+    <value>CHP수익</value>
+  </data>
+  <data name="Connectable" xml:space="preserve">
+    <value>접속 가능</value>
+  </data>
+  <data name="ConnectedYear" xml:space="preserve">
+    <value>연결된 연도</value>
+  </data>
+  <data name="CustomerName" xml:space="preserve">
+    <value>수용가명:</value>
+  </data>
+  <data name="Cycles" xml:space="preserve">
+    <value>회 운전시</value>
+  </data>
+  <data name="Dec" xml:space="preserve">
+    <value>12월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="Discount1" xml:space="preserve">
+    <value>기본요금 할인</value>
+  </data>
+  <data name="Discount2" xml:space="preserve">
+    <value>충전요금 할인</value>
+  </data>
+  <data name="Discount3" xml:space="preserve">
+    <value>할인3</value>
+  </data>
+  <data name="E131" xml:space="preserve">
+    <value>배터리의 가용 용량은 </value>
+  </data>
+  <data name="E132" xml:space="preserve">
+    <value>회 운전 후 </value>
+  </data>
+  <data name="E133" xml:space="preserve">
+    <value>%로 감소합니다.</value>
+  </data>
+  <data name="ElectIncrease" xml:space="preserve">
+    <value>전기요금 인상률</value>
+  </data>
+  <data name="EMS" xml:space="preserve">
+    <value>EMS</value>
+  </data>
+  <data name="Enter" xml:space="preserve">
+    <value>입력</value>
+  </data>
+  <data name="ESSRevenue" xml:space="preserve">
+    <value>ESS수익</value>
+  </data>
+  <data name="FCratedpower" xml:space="preserve">
+    <value>FC 정격 후보</value>
+  </data>
+  <data name="FCRevenue" xml:space="preserve">
+    <value>FC수익</value>
+  </data>
+  <data name="Feb" xml:space="preserve">
+    <value>2월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="Ismart1" xml:space="preserve">
+    <value>* iSmart 정보를 가져 올 때 많은 시간이 소요 됩니다.</value>
+  </data>
+  <data name="Ismart2" xml:space="preserve">
+    <value>* 최소 10분 최대 15분 이상의 시간이 소요될 수 있으며, 브라우저를 닫거나 취소 하지 마십시오. &lt;br /&gt;  저장 메세지 이외 메세지를 받으시면 저장버튼을 다시 클릭하여 주십시오.</value>
+  </data>
+  <data name="Jan" xml:space="preserve">
+    <value>1월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="Jul" xml:space="preserve">
+    <value>7월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="Jun" xml:space="preserve">
+    <value>6월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="LApr" xml:space="preserve">
+    <value>4월</value>
+  </data>
+  <data name="LAug" xml:space="preserve">
+    <value>8월</value>
+  </data>
+  <data name="LDec" xml:space="preserve">
+    <value>12월</value>
+  </data>
+  <data name="LFeb" xml:space="preserve">
+    <value>2월</value>
+  </data>
+  <data name="Line1" xml:space="preserve">
+    <value>3월, 4월, 5월, 9월, 10월</value>
+  </data>
+  <data name="Line2" xml:space="preserve">
+    <value>6월, 7월, 8월</value>
+  </data>
+  <data name="Line3" xml:space="preserve">
+    <value>1월, 2월, 11월, 12월</value>
+  </data>
+  <data name="LJan" xml:space="preserve">
+    <value>1월</value>
+  </data>
+  <data name="LJul" xml:space="preserve">
+    <value>7월</value>
+  </data>
+  <data name="LJun" xml:space="preserve">
+    <value>6월</value>
+  </data>
+  <data name="LMar" xml:space="preserve">
+    <value>3월</value>
+  </data>
+  <data name="LMay" xml:space="preserve">
+    <value>5월</value>
+  </data>
+  <data name="LNov" xml:space="preserve">
+    <value>11월</value>
+  </data>
+  <data name="LOct" xml:space="preserve">
+    <value>10월</value>
+  </data>
+  <data name="LSep" xml:space="preserve">
+    <value>9월</value>
+  </data>
+  <data name="Mar" xml:space="preserve">
+    <value>3월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>5월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="Nolimit" xml:space="preserve">
+    <value>투자비제한없음</value>
+  </data>
+  <data name="Nov" xml:space="preserve">
+    <value>11월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="Oct" xml:space="preserve">
+    <value>10월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="PCS" xml:space="preserve">
+    <value>PCS</value>
+  </data>
+  <data name="Profitrange" xml:space="preserve">
+    <value>수익 순위</value>
+  </data>
+  <data name="PVratedpower" xml:space="preserve">
+    <value>PV 정격용량 후보</value>
+  </data>
+  <data name="PVRevenue" xml:space="preserve">
+    <value>PV수익</value>
+  </data>
+  <data name="RECgrowthrate" xml:space="preserve">
+    <value>REC 단가 인상률</value>
+  </data>
+  <data name="Savetheresults" xml:space="preserve">
+    <value>엑셀로 저장</value>
+  </data>
+  <data name="Sep" xml:space="preserve">
+    <value>9월&lt;br/&gt;[원/kW]</value>
+  </data>
+  <data name="SMPgrowthrate" xml:space="preserve">
+    <value>SMP 단가 인상률</value>
+  </data>
+  <data name="Times" xml:space="preserve">
+    <value>배</value>
+  </data>
+  <data name="TitleE00006" xml:space="preserve">
+    <value>전력요금 단가 조회</value>
+  </data>
+  <data name="WTratedpower" xml:space="preserve">
+    <value>WT 정격용량 후보</value>
+  </data>
+  <data name="WTRevenue" xml:space="preserve">
+    <value>WT수익</value>
+  </data>
+  <data name="CustomerInfo" xml:space="preserve">
+    <value>수용가정보</value>
+  </data>
+  <data name="DERSconnection" xml:space="preserve">
+    <value>분산자원 용량 후보 입력</value>
+  </data>
+  <data name="Diesel" xml:space="preserve">
+    <value>디젤&lt;br/&gt;발전기</value>
+  </data>
+  <data name="DistributedSoft" xml:space="preserve">
+    <value>분산자원 설계 프로그램</value>
+  </data>
+  <data name="ISMARTInfo" xml:space="preserve">
+    <value>iSMART 정보</value>
+  </data>
+  <data name="LandIsland" xml:space="preserve">
+    <value>육지/제주</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>공지사항</value>
+  </data>
+  <data name="PVRated" xml:space="preserve">
+    <value>용량</value>
+  </data>
+  <data name="Revenue" xml:space="preserve">
+    <value>수익</value>
+  </data>
+  <data name="CaseMess1" xml:space="preserve">
+    <value>설계하고자 하는 비즈니스 모형을 선택하여 주십시오.</value>
+  </data>
+  <data name="CaseMess2" xml:space="preserve">
+    <value>*검정색 모형만 실행이 가능하며, 회색 버튼은 현재 구현 중인 모형입니다.</value>
+  </data>
+  <data name="CaseMess3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>날짜</value>
+  </data>
+  <data name="TargetModel" xml:space="preserve">
+    <value>대상 모델</value>
+  </data>
+  <data name="CasereferenceNotice" xml:space="preserve">
+    <value>아래의 번호 순서대로 정보를 등록 후 Next 버튼을 클릭하여 주십시오.</value>
+  </data>
+  <data name="ComSubName3" xml:space="preserve">
+    <value>지역명3</value>
+  </data>
+  <data name="E00029Title" xml:space="preserve">
+    <value>FC 파라미터 입력</value>
+  </data>
+  <data name="E00031Title" xml:space="preserve">
+    <value>CHP 파라미터 입력</value>
+  </data>
+  <data name="E00034Title" xml:space="preserve">
+    <value>디젤발전기 특성 정보 입력</value>
+  </data>
+  <data name="WTPowerCurve" xml:space="preserve">
+    <value>WT 출력 곡선</value>
+  </data>
+  <data name="DGPratedpower" xml:space="preserve">
+    <value>디젤발전기 정격용량 후보</value>
+  </data>
+  <data name="EnergyChargingSaving" xml:space="preserve">
+    <value>전력량요금 절감</value>
+  </data>
+  <data name="MessLogin" xml:space="preserve">
+    <value>잘못된 사용자 이름 또는 비밀번호</value>
+  </data>
+  <data name="Useyouracc" xml:space="preserve">
+    <value>로그인 정보</value>
+  </data>
+  <data name="Apr1" xml:space="preserve">
+    <value>4월</value>
+  </data>
+  <data name="Aug1" xml:space="preserve">
+    <value>8월</value>
+  </data>
+  <data name="Dec1" xml:space="preserve">
+    <value>12월</value>
+  </data>
+  <data name="E27Desc1" xml:space="preserve">
+    <value>* 선택한 지역의 풍속을 다운로드합니다.</value>
+  </data>
+  <data name="E27Desc2" xml:space="preserve">
+    <value>* 풍속을 저장하는데 약 1분 소요됩니다.</value>
+  </data>
+  <data name="E27Desc3" xml:space="preserve">
+    <value>* 브라우저를 닫거나 취소하지 마십시오.</value>
+  </data>
+  <data name="Feb1" xml:space="preserve">
+    <value>2월</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>양식파일</value>
+  </data>
+  <data name="Jan1" xml:space="preserve">
+    <value>1월</value>
+  </data>
+  <data name="Jul1" xml:space="preserve">
+    <value>7월</value>
+  </data>
+  <data name="Jun1" xml:space="preserve">
+    <value>6월</value>
+  </data>
+  <data name="Mar1" xml:space="preserve">
+    <value>3월</value>
+  </data>
+  <data name="May1" xml:space="preserve">
+    <value>5월</value>
+  </data>
+  <data name="Nov1" xml:space="preserve">
+    <value>11월</value>
+  </data>
+  <data name="Oct1" xml:space="preserve">
+    <value>10월</value>
+  </data>
+  <data name="Sep1" xml:space="preserve">
+    <value>9월</value>
+  </data>
+  <data name="Cost" xml:space="preserve">
+    <value>비용</value>
+  </data>
+  <data name="MessE19" xml:space="preserve">
+    <value>대상 케이스를 확인하십시오.</value>
+  </data>
+  <data name="HelpRECContent" xml:space="preserve">
+    <value>proof that energy has been generated from renewable sources such as solar or wind power. Each REC represents the environmental benefits of 1MWh of renewable energy generation. When you purchase RECs, renewable energy is generated on your behalf</value>
+  </data>
+  <data name="HelpRECTitle" xml:space="preserve">
+    <value>REC (Remewable Energy Certificate):</value>
+  </data>
+  <data name="HelpSMPContent" xml:space="preserve">
+    <value>cost of the most expensive generating unit included in the Price Setting Schedule (PSS). PSS is  set up by a computer program that can minimize th total production cost of generating units including the startup cost and incremental fuel cost</value>
+  </data>
+  <data name="HelpSMPTitle" xml:space="preserve">
+    <value>SMP (System Marginal Price):</value>
+  </data>
+  <data name="YearBase" xml:space="preserve">
+    <value>기준연도</value>
+  </data>
+  <data name="E20Title1" xml:space="preserve">
+    <value>- 연간 할인율 및 판매단가 인상률</value>
+  </data>
+  <data name="E20Title2" xml:space="preserve">
+    <value>- 분산전원별 연간 출력저감률</value>
+  </data>
+  <data name="PVPara" xml:space="preserve">
+    <value>PV 발전량 패턴 조회</value>
+  </data>
+  <data name="E20Title11" xml:space="preserve">
+    <value>- 경제성 분석 파라미터</value>
+  </data>
+  <data name="Mess19" xml:space="preserve">
+    <value>대상 케이스를 선택하십시오.</value>
+  </data>
+  <data name="MessEntity24" xml:space="preserve">
+    <value>REC를 선택하지 않았습니다.</value>
+  </data>
+  <data name="Above3000kW" xml:space="preserve">
+    <value>3,000kW초과부터</value>
+  </data>
+  <data name="Detailedcriteria" xml:space="preserve">
+    <value>세부기준</value>
+  </data>
+  <data name="Division" xml:space="preserve">
+    <value>구분</value>
+  </data>
+  <data name="ESSfacility" xml:space="preserve">
+    <value>ESS설비(태양광설비 연계)</value>
+  </data>
+  <data name="From100kW" xml:space="preserve">
+    <value>100kW부터</value>
+  </data>
+  <data name="Ifyouinstallitfloating" xml:space="preserve">
+    <value>유지 등의 수면에 부유하여 설치하는 경우</value>
+  </data>
+  <data name="InstallationType" xml:space="preserve">
+    <value>설치유형</value>
+  </data>
+  <data name="IsmartMess1" xml:space="preserve">
+    <value>iSMART는 고압수용가를 대상으로 스마트한 전력 관리를 위하여 전기사용량 및 요금 정보를 제공하는 한국전력회사 사이트입니다.</value>
+  </data>
+  <data name="IsmartMess2" xml:space="preserve">
+    <value>iSMART 주소: https://pccs.kepco.co.kr/iSmart/</value>
+  </data>
+  <data name="IsmartMess3" xml:space="preserve">
+    <value>위 사이트의 아이디와 비밀번호를 입력하시면 365일 시간별 사용량을 다운받으며, 시간이 최소 10분~15분 소요됩니다. 만약 실패할 경우 5분~10분 후 다시 시도하십시오.</value>
+  </data>
+  <data name="IsmartMess4" xml:space="preserve">
+    <value>다운받는 동안 화면이 흐리게 변하며, 브라우저를 닫거나 취소하지 마십시오.</value>
+  </data>
+  <data name="Lessthan100kw" xml:space="preserve">
+    <value>100kW미만</value>
+  </data>
+  <data name="orless" xml:space="preserve">
+    <value>3,000kW이하</value>
+  </data>
+  <data name="Reduce" xml:space="preserve">
+    <value>로 감소</value>
+  </data>
+  <data name="RenewableEnergySupplyCertificateWeight" xml:space="preserve">
+    <value>신재생에너지 공급인증서 가중치</value>
+  </data>
+  <data name="Solarconnection" xml:space="preserve">
+    <value>태양광연계</value>
+  </data>
+  <data name="Solarenergy" xml:space="preserve">
+    <value>태양광&lt;br&gt;에너지</value>
+  </data>
+  <data name="SupplyCertificateWeights" xml:space="preserve">
+    <value>공급인증서 가중치</value>
+  </data>
+  <data name="Targetenergyandreference" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Wheninstallingintheforest" xml:space="preserve">
+    <value>임야에 설치하는 경우</value>
+  </data>
+  <data name="Wheninstallingonaregularsite" xml:space="preserve">
+    <value>일반부지에 설치하는 경우</value>
+  </data>
+  <data name="Whentrading" xml:space="preserve">
+    <value>자가용 발전설비를 통해 전력을 거래하는 경우</value>
+  </data>
+  <data name="Whenusingexistingfacilitiessuchasbuildings" xml:space="preserve">
+    <value>건축물 등 기존 시설물을 이용하는 경우</value>
+  </data>
+  <data name="Windconnection" xml:space="preserve">
+    <value>풍력연계</value>
+  </data>
+  <data name="years" xml:space="preserve">
+    <value>년</value>
+  </data>
+  <data name="PowercurveofWT" xml:space="preserve">
+    <value>WT의 전력 곡선</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>출처: https://www.knrec.or.kr/business/rps_guide.aspx</value>
+  </data>
+  <data name="yearss" xml:space="preserve">
+    <value>년</value>
+  </data>
+  <data name="ViewsCount" xml:space="preserve">
+    <value>조회수</value>
+  </data>
+  <data name="CaseCreate" xml:space="preserve">
+    <value>Case 생성하기</value>
+  </data>
+  <data name="Introduc" xml:space="preserve">
+    <value>프로그램 소개</value>
+  </data>
+  <data name="TitleMenu" xml:space="preserve">
+    <value>신재생 발전사업 모형</value>
+  </data>
+  <data name="Grid26" xml:space="preserve">
+    <value>풍속(m/s)</value>
+  </data>
+  <data name="HelpE102" xml:space="preserve">
+    <value>*PV 발전 패턴의 수동 입력이 가능합니다. &lt;/br&gt;
+1.양식파일 버튼을 클릭하여 입력 파일을 여세요.&lt;/br&gt;
+2.PV 정격용량 대비 발전량을 월별 24시간 패턴으로 입력해주세요.&lt;/br&gt;
+3.입력한 파일을 저장하세요.&lt;/br&gt;
+4.찾아보기 버튼을 클릭하여 저장한 파일을 불러옵니다.&lt;/br&gt;</value>
+  </data>
+  <data name="E20Messs" xml:space="preserve">
+    <value>경제성 분석을 다시 하시겠습니까?</value>
+  </data>
+  <data name="E20Descr1" xml:space="preserve">
+    <value>저장완료 시까지 1분 이상 시간이 소요될 수 있습니다.</value>
+  </data>
+  <data name="E20Descr2" xml:space="preserve">
+    <value>실행 중 브라우저를 닫거나 강제 종료하지 마십시오.</value>
+  </data>
+  <data name="NewAddress1" xml:space="preserve">
+    <value>(51543) 경상남도 창원시 성산구 불모산로10번길 12 (성주동), 한국전기연구원 / TEL. 055-280-1365</value>
+  </data>
+  <data name="NewAddressCopy" xml:space="preserve">
+    <value>Copyright ⓒ 2018, KERI. All Rights Reserved.</value>
+  </data>
+  <data name="moderstitle" xml:space="preserve">
+    <value>분산전원 설계 프로그램</value>
+  </data>
+  <data name="E00015ErrorCharge" xml:space="preserve">
+    <value>충전 시간은 10:00 ~ 16:00까지 입니다.</value>
+  </data>
+  <data name="E00015ErrorDisCharge" xml:space="preserve">
+    <value>방전 시간은 16:00 ~ 24:00까지 입니다.</value>
+  </data>
+  <data name="ManualError1" xml:space="preserve">
+    <value>데이터에 결함이 있습니다. 파일의 </value>
+  </data>
+  <data name="ManualError2" xml:space="preserve">
+    <value>행을 확인하십시오.</value>
+  </data>
+  <data name="ModelDesign" xml:space="preserve">
+    <value>모형설계</value>
+  </data>
+  <data name="HolidayMess1" xml:space="preserve">
+    <value>정말 삭제 하시겠습니까?</value>
+  </data>
+  <data name="HolidayMess2" xml:space="preserve">
+    <value>삭제 대상을 선택하십시오</value>
+  </data>
+  <data name="AllSelect" xml:space="preserve">
+    <value>- 전체 -</value>
+  </data>
+  <data name="DeleteAll" xml:space="preserve">
+    <value>선택삭제</value>
+  </data>
+  <data name="CheckDataMess" xml:space="preserve">
+    <value>해당 지역의 일사량 또는 남중고도 데이터가 없습니다. 설치 지역과 가까운 다른 지역을 선택하거나 수동으로 발전량을 입력하십시오.</value>
+  </data>
+  <data name="CheckDataMess1" xml:space="preserve">
+    <value>해당 지역과 선택하신 연도의 풍속 데이터가 없습니다. 다른 지역을 선택하십시오.</value>
+  </data>
+  <data name="MsgE000173" xml:space="preserve">
+    <value>모든 값을 입력하십시오.</value>
+  </data>
+  <data name="keriFooter" xml:space="preserve">
+    <value>한국전기연구원</value>
+  </data>
+  <data name="E37Mess" xml:space="preserve">
+    <value>수정 테스트를 원하실 경우 좌측 메뉴를 이용하시기 바랍니다.&lt;br/&gt; 상단의 다른 메뉴를 선택할 경우 해당 모형 설계는 완전히 종료가 됩니다.</value>
+  </data>
+  <data name="RangeTime1" xml:space="preserve">
+    <value>(10시 ~ 16시)</value>
+  </data>
+  <data name="RangeTime2" xml:space="preserve">
+    <value>(17시 ~ 24시)</value>
+  </data>
+  <data name="Btnen1" xml:space="preserve">
+    <value>background:url(/img/han1.png) no-repeat center;background-size:200px 50px;height:50px;width:200px;border:none</value>
+  </data>
+  <data name="Btnen2" xml:space="preserve">
+    <value>background:url(/img/han2.png) no-repeat center;background-size:200px 50px;height:50px;width:200px;border:none</value>
+  </data>
+  <data name="NullDataSearch" xml:space="preserve">
+    <value>Null Data 조회</value>
+  </data>
+  <data name="MessageE000175" xml:space="preserve">
+    <value>최소용량을 0 kW이상 입력하여주십시오.</value>
+  </data>
+  <data name="iSmartErrorMesg" xml:space="preserve">
+    <value>현재 많은 사용자가 사용 중입니다. &lt;br /&gt;
+10분에 15분 후 다시 시도하십시오. &lt;br /&gt;
+같은 메세지가 나오면 다시 저장 버튼을 클릭 하십시오.</value>
+  </data>
+  <data name="NoId" xml:space="preserve">
+    <value>iSmart 계정 없음</value>
+  </data>
+  <data name="DeleteUser" xml:space="preserve">
+    <value>이 사용자를 삭제 하시겠습니까?</value>
+  </data>
+  <data name="Economics" xml:space="preserve">
+    <value>경제성</value>
+  </data>
+  <data name="Investment" xml:space="preserve">
+    <value>투자비용</value>
+  </data>
+  <data name="RECSale" xml:space="preserve">
+    <value>REC 판매수익[천원]</value>
+  </data>
+  <data name="SMPSale" xml:space="preserve">
+    <value>SMP 판매수익[천원]</value>
+  </data>
+  <data name="String" xml:space="preserve">
+    <value>유지보수비[원]</value>
+  </data>
+  <data name="ReferenceBoard" xml:space="preserve">
+    <value>자료실</value>
+  </data>
+  <data name="SaveReport" xml:space="preserve">
+    <value>엑셀로 저장</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>레포트 조회</value>
+  </data>
+  <data name="ReportFaild" xml:space="preserve">
+    <value>보고서 생성에 실패했습니다.</value>
+  </data>
+  <data name="HolidayNull" xml:space="preserve">
+    <value>제공 받는 데이터가 없어 가져오지 못하였습니다. 수동으로 등록하십시오.</value>
+  </data>
+  <data name="FindingFiles" xml:space="preserve">
+    <value>파일찾기</value>
+  </data>
+  <data name="GetForm" xml:space="preserve">
+    <value>양식받기</value>
+  </data>
+  <data name="MessHol" xml:space="preserve">
+    <value>* 반드시 아래 양식을 다운로드 받아 사용하십시오.</value>
+  </data>
+  <data name="Registering" xml:space="preserve">
+    <value>연도별 일괄등록하기</value>
+  </data>
+  <data name="MessErrorHoliday1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessErrorHoliday2" xml:space="preserve">
+    <value>줄에 오류가 있습니다. 다시 확인하십시오.</value>
+  </data>
+  <data name="BasicDataManagement" xml:space="preserve">
+    <value>기초데이터관리</value>
+  </data>
+  <data name="ParameterManagement" xml:space="preserve">
+    <value>매개변수관리</value>
+  </data>
+  <data name="SystemAdministration" xml:space="preserve">
+    <value>시스템 관리</value>
+  </data>
+  <data name="AnnualPeakLoad" xml:space="preserve">
+    <value>연간 최대 피크부하:</value>
+  </data>
+  <data name="LoadType" xml:space="preserve">
+    <value>부하종류:</value>
+  </data>
+  <data name="WorkLoad" xml:space="preserve">
+    <value>근무일 평균부하:</value>
+  </data>
+  <data name="MessE3" xml:space="preserve">
+    <value>저장하지 못했습니다. 입력 값을 확인하십시오.</value>
+  </data>
+  <data name="SatDri" xml:space="preserve">
+    <value>토요일 운전 여부</value>
+  </data>
+  <data name="NoPermission" xml:space="preserve">
+    <value>계정에이 페이지에 액세스 할 수있는 권한이 없습니다.</value>
+  </data>
+  <data name="PVESSTitle1" xml:space="preserve">
+    <value>* 내장스케줄러 실행 파일을 등록 합니다. 신규 등록 시 같은 파일이 있으면 기 존 파일은 삭제 후 등록이 됩니다.</value>
+  </data>
+  <data name="PVESSTitle2" xml:space="preserve">
+    <value>* 가능하면 등록 전 해당 솔버프로그램을 삭제 후 등록 하여 주십시오.</value>
+  </data>
+  <data name="ModelPV" xml:space="preserve">
+    <value>모형</value>
+  </data>
+  <data name="PVESSModal1" xml:space="preserve">
+    <value>* 새로운 파일을 업로드 할 경우</value>
+  </data>
+  <data name="PVESSModal2" xml:space="preserve">
+    <value>* 이미 기존 파일이 있으면 삭제 후 추가 됩니다.</value>
+  </data>
+  <data name="E18Mess1" xml:space="preserve">
+    <value>* ESS의 EMS 가격은 단위용량이 아닌 전체 EMS 비용을 의미합니다.</value>
+  </data>
+  <data name="E18Mess2" xml:space="preserve">
+    <value>** ESS의 설치비는 PCS 정격용량당 단가를 의미합니다.</value>
+  </data>
+  <data name="TWon" xml:space="preserve">
+    <value>천원</value>
+  </data>
+  <data name="ConfirmEmailMess" xml:space="preserve">
+    <value>입력하셨던 Email로 확인 메일을 발송 하였습니다. Email를 확인 하여 주십시오.</value>
+  </data>
+  <data name="Holiday" xml:space="preserve">
+    <value>공휴일</value>
+  </data>
+  <data name="MaximumLoadDay" xml:space="preserve">
+    <value>최대부하일</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>토요일</value>
+  </data>
+  <data name="SearchOption" xml:space="preserve">
+    <value>조회 항목</value>
+  </data>
+  <data name="WorkingDay" xml:space="preserve">
+    <value>근무일</value>
+  </data>
+  <data name="ComponentManagement" xml:space="preserve">
+    <value>구성요소관리</value>
+  </data>
+  <data name="ManualInput" xml:space="preserve">
+    <value>전기요금단가 수동입력</value>
+  </data>
+  <data name="SelectKEPCO" xml:space="preserve">
+    <value>한국전력공사 요금제 선택</value>
+  </data>
+  <data name="E00003Tiltle1" xml:space="preserve">
+    <value>전력수요 데이터 자동 입력(iSmart 연동)</value>
+  </data>
+  <data name="E00003Tiltle2" xml:space="preserve">
+    <value>전력수요 데이터 수동입력</value>
+  </data>
+  <data name="Fuelcostinput" xml:space="preserve">
+    <value>연료비 입력</value>
+  </data>
+  <data name="SelectCityGasCompany" xml:space="preserve">
+    <value>도시가스사</value>
+  </data>
+  <data name="SelectLoc" xml:space="preserve">
+    <value>지역 선택</value>
+  </data>
+  <data name="Fuelcostmanagement" xml:space="preserve">
+    <value>연료비단가 관리</value>
+  </data>
+  <data name="BaseRate" xml:space="preserve">
+    <value>기본요금</value>
+  </data>
+  <data name="FormatFileWrong" xml:space="preserve">
+    <value>아래의 다운받은 양식과 그에 맞는 형식의 데이터를 입력하고 사용하십시오.</value>
+  </data>
+  <data name="FuelbialCrease" xml:space="preserve">
+    <value>연료비 단가 인상률</value>
+  </data>
+  <data name="ZoneCrease" xml:space="preserve">
+    <value>공급구역 부하 인상률</value>
+  </data>
+  <data name="Aids" xml:space="preserve">
+    <value>조력(방조제 無), 지열</value>
+  </data>
+  <data name="Bio" xml:space="preserve">
+    <value>Bio-SRF, IGCC, 부생가스, 폐기물에너지</value>
+  </data>
+  <data name="FixedType" xml:space="preserve">
+    <value>고정형</value>
+  </data>
+  <data name="Landfill" xml:space="preserve">
+    <value>매립지가스, 목재팰릿, 목재칩</value>
+  </data>
+  <data name="Linkdistance" xml:space="preserve">
+    <value>연계거리 5km이하</value>
+  </data>
+  <data name="Linkdistanceexceeded" xml:space="preserve">
+    <value>연계거리 15km초과</value>
+  </data>
+  <data name="Linkdistanceexceeding" xml:space="preserve">
+    <value>연계거리 5km초과 10km이하</value>
+  </data>
+  <data name="Linkdistanceexceeding1" xml:space="preserve">
+    <value>연계거리 10km초과 15km이하</value>
+  </data>
+  <data name="Misuse" xml:space="preserve">
+    <value>미이용산림바이오매스혼소설비, 수열</value>
+  </data>
+  <data name="NonUser" xml:space="preserve">
+    <value>미이용산림바이오매스(바이오에너지 전소설 만 적용), 연료전지, 조력(방조제 無), 지열, 조류</value>
+  </data>
+  <data name="Offshore" xml:space="preserve">
+    <value>해상풍력</value>
+  </data>
+  <data name="OtherBio" xml:space="preserve">
+    <value>기타바이오에너지, 육상풍력, 수력, 조력(방조제 有)</value>
+  </data>
+  <data name="OtherNewandRenewableEnergy" xml:space="preserve">
+    <value>기타신·재생에너지</value>
+  </data>
+  <data name="Variable" xml:space="preserve">
+    <value>변동형</value>
+  </data>
+  <data name="Annualinterestrate" xml:space="preserve">
+    <value>연이자율:</value>
+  </data>
+  <data name="Enterloaninformation" xml:space="preserve">
+    <value>대출 정보 입력</value>
+  </data>
+  <data name="Loanamount" xml:space="preserve">
+    <value>대출금액:</value>
+  </data>
+  <data name="Loanperiod" xml:space="preserve">
+    <value>대출기간:</value>
+  </data>
+  <data name="Maintenancerate" xml:space="preserve">
+    <value>유지관리비율:</value>
+  </data>
+  <data name="NoLoan" xml:space="preserve">
+    <value>대출 없음</value>
+  </data>
+  <data name="Priceincreaserate" xml:space="preserve">
+    <value>가격상승률</value>
+  </data>
+  <data name="Repaymentmethod" xml:space="preserve">
+    <value>상환방법:</value>
+  </data>
+  <data name="SelectLoanInformation" xml:space="preserve">
+    <value>대출 정보 선택</value>
+  </data>
+  <data name="AddFC" xml:space="preserve">
+    <value>연료비 추가</value>
+  </data>
+  <data name="Citygascompany" xml:space="preserve">
+    <value>도시가스사</value>
+  </data>
+  <data name="ContactAminAnalysis" xml:space="preserve">
+    <value>분석 중 오류가 발견되었습니다. 관리자에게 문의 하십시오.</value>
+  </data>
+  <data name="PricePrice" xml:space="preserve">
+    <value>가격</value>
+  </data>
+  <data name="Coefficient" xml:space="preserve">
+    <value>1차항 계수 (a)</value>
+  </data>
+  <data name="ConstWaterPort" xml:space="preserve">
+    <value>상수항 (b)</value>
+  </data>
+  <data name="Minimumdieseloperationcost" xml:space="preserve">
+    <value>디젤 가동비용 최소화</value>
+  </data>
+  <data name="Minimumfuelcostsimplifiedsupplytype" xml:space="preserve">
+    <value>단순수급균형</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>가격</value>
+  </data>
+  <data name="RunningCost" xml:space="preserve">
+    <value>기동비용</value>
+  </data>
+  <data name="E20Title112" xml:space="preserve">
+    <value>- 연간 할인율 및 연료비 인상률</value>
+  </data>
+  <data name="FuelbialCrease2" xml:space="preserve">
+    <value>연료비 인상률</value>
+  </data>
+  <data name="Fuelcostsavings" xml:space="preserve">
+    <value>연료비절감수익</value>
+  </data>
+  <data name="ViewData" xml:space="preserve">
+    <value>충방전패턴 조회</value>
+  </data>
+  <data name="E00003Tiltle11" xml:space="preserve">
+    <value>전력수요 데이터 자동입력</value>
+  </data>
+  <data name="Loaddatainput" xml:space="preserve">
+    <value>전력수요 데이터 입력</value>
+  </data>
+  <data name="Apr2" xml:space="preserve">
+    <value>4월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="Aug2" xml:space="preserve">
+    <value>8월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="Dec2" xml:space="preserve">
+    <value>12월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="E32T1" xml:space="preserve">
+    <value>해당 도시가스사 선택</value>
+  </data>
+  <data name="E32T2" xml:space="preserve">
+    <value>연료비 단가 수동 입력</value>
+  </data>
+  <data name="Feb2" xml:space="preserve">
+    <value>2월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="Jan2" xml:space="preserve">
+    <value>1월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="Jul2" xml:space="preserve">
+    <value>7월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="Jun2" xml:space="preserve">
+    <value>6월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="Mar2" xml:space="preserve">
+    <value>3월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="May2" xml:space="preserve">
+    <value>5월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="Nov2" xml:space="preserve">
+    <value>11월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="Oct2" xml:space="preserve">
+    <value>10월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="Sep2" xml:space="preserve">
+    <value>9월&lt;br/&gt;[원/kWh]</value>
+  </data>
+  <data name="BM1" xml:space="preserve">
+    <value>수요 관리 모형</value>
+  </data>
+  <data name="BM2" xml:space="preserve">
+    <value>신재생 발전사업 모형</value>
+  </data>
+  <data name="BM3" xml:space="preserve">
+    <value>구역전기사업 모형</value>
+  </data>
+  <data name="BM4" xml:space="preserve">
+    <value>도서지역 모형</value>
+  </data>
+  <data name="BM5" xml:space="preserve">
+    <value>프로슈머 모형</value>
+  </data>
+  <data name="GotoHome" xml:space="preserve">
+    <value>홈으로 이동</value>
+  </data>
+  <data name="Keri1" xml:space="preserve">
+    <value>한국전기연구원</value>
+  </data>
+  <data name="ManCostRte" xml:space="preserve">
+    <value>유지관리비 비율</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>리스트 숨기기</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>전력요금 단가 표 보기</value>
+  </data>
+  <data name="ESSCharge" xml:space="preserve">
+    <value>ESS 충방전 패턴</value>
+  </data>
+  <data name="FCReductionRate" xml:space="preserve">
+    <value>FC출력저감률</value>
+  </data>
+  <data name="E3Alert" xml:space="preserve">
+    <value>계약용량이 부하의 최대값보다 작거나 같습니다.</value>
+  </data>
+  <data name="ISShow" xml:space="preserve">
+    <value>부하패턴 표 보기</value>
+  </data>
+  <data name="PVShow" xml:space="preserve">
+    <value>PV 발전패턴 표 보기</value>
+  </data>
+  <data name="Mess151" xml:space="preserve">
+    <value>계시별요금제를 선택한 경우 적용되는 운전방법으로, 경부하시간대에 전력을 \n 충전하였다가 최대부하시간대에 방전하여 전기요금을 최소화하도록 운전하는 방법</value>
+  </data>
+  <data name="Mess152" xml:space="preserve">
+    <value>TOU요금반영 전기요금 최소화 방법에서 충방전 시간을 사용자가 선택가능한 방법, \n 하루에 충전 및 방전구간을 각각 두 구간씩 선택 가능</value>
+  </data>
+  <data name="Mess153" xml:space="preserve">
+    <value>토요일 전기요금단가는 경부하요금과 중부하요금으로 이루어져 있어 \n  충방전하여도 요금차액이 적으므로 사용자가 옵션으로 선택 가능</value>
+  </data>
+  <data name="ReferenceCapacity" xml:space="preserve">
+    <value>용량</value>
+  </data>
+  <data name="E0171" xml:space="preserve">
+    <value>※  분산자원별로 설치하고자 하는 정격용량 후보를 입력해 주십시오.</value>
+  </data>
+  <data name="E0172" xml:space="preserve">
+    <value>※  각각의 용량 후보는 3가지 이하로 입력 가능합니다.</value>
+  </data>
+  <data name="Mess1511" xml:space="preserve">
+    <value>신재생발전사업 운영규칙과 ESS 운전 제약조건에 맞추어 간단한 로직을 이용하여 \n 운전계획하는 방법</value>
+  </data>
+  <data name="Mess1521" xml:space="preserve">
+    <value>Rule기반 운전 방법에서 충방전 시간을 사용자가 선택가능한 방법, 하루에 충전 및 \n 방전구간을 각각 두 구간씩 선택 가능</value>
+  </data>
+  <data name="Dieselgeneratorparameters" xml:space="preserve">
+    <value>디젤발전기 특성 정보</value>
+  </data>
+  <data name="Monthlyfuelcostinformation" xml:space="preserve">
+    <value>월별 연료비 정보 (운송비용 포함) </value>
+  </data>
+  <data name="ChargePattern" xml:space="preserve">
+    <value>ESS 충방전 패턴</value>
+  </data>
+  <data name="SalePattern" xml:space="preserve">
+    <value>PV 발전판매 패턴</value>
+  </data>
+  <data name="E01711" xml:space="preserve">
+    <value>※  각각의 분산자원은 최소용량보다 최대용량이 크거나 같아야한다. 간격은 (최대-최소)값보다 작아야한다.</value>
+  </data>
+  <data name="E01721" xml:space="preserve">
+    <value>※  각각의 용량후보는 3개이상 넣을수 없습니다. 용량후보가 3개를 넘을 경우 작은 용량부터 3개만 시뮬레이션 됩니다.</value>
+  </data>
+  <data name="E15BM4" xml:space="preserve">
+    <value>프로슈머 운영방법 선택</value>
+  </data>
+  <data name="Maximizeprosumer" xml:space="preserve">
+    <value>프로슈머 이익 최대화 (최적화 기반)</value>
+  </data>
+  <data name="FCFuelCost" xml:space="preserve">
+    <value>FC 연료비</value>
+  </data>
+  <data name="E7Mess" xml:space="preserve">
+    <value>분산자원을 설치하고자 하는 연도를 선택합니다.</value>
+  </data>
+  <data name="Hide1" xml:space="preserve">
+    <value>표 숨기기</value>
+  </data>
+  <data name="Show1" xml:space="preserve">
+    <value>표 보기</value>
+  </data>
+  <data name="Automaticwindspeedinput" xml:space="preserve">
+    <value>풍속 자동입력</value>
+  </data>
+  <data name="SelectReagon" xml:space="preserve">
+    <value>지역선택</value>
+  </data>
+  <data name="Windspeedmanualinput" xml:space="preserve">
+    <value>풍속 수동입력</value>
+  </data>
+  <data name="E13Info" xml:space="preserve">
+    <value>충전 100%하여 방전 100%하는 것을 Cycle 1회로 가정하였을 때, Cycle효율이란 Cycle 횟수에 따라 정격용량대비 가용 용량이 얼마나 줄어드는지를 의미함</value>
+  </data>
+  <data name="E5Manual" xml:space="preserve">
+    <value>양식파일은 전기요금 단가를 근무일, 토요일, 공휴일, 최대부하일 Sheet로 구성되어있으며, 12개월 24시간 전기요금 단가를 수동으로 입력할 수 있습니다. 엑셀파일을 다운받아 단가를 입력하고, 찾아보기에서 불러와서 저장할 수 있습니다.</value>
+  </data>
+  <data name="HelpMaximumDayPattern" xml:space="preserve">
+    <value>연간 피크부하를 입력하여 근무일 상대계수에 곱하여 최대부하일 패턴을 산정합니다. 연간 피크부하는 근무일패턴의 최대부하보다 높아야 합니다.</value>
+  </data>
+  <data name="HelpWorkingDayPattern" xml:space="preserve">
+    <value>위의 부하종류에 따른 상대계수에 근무일의 평균부하를 입력하여 근무일 패턴을 산정합니다.</value>
+  </data>
+  <data name="E3Max1" xml:space="preserve">
+    <value>입력하신 근무일 패턴의 최대값은</value>
+  </data>
+  <data name="E3Max2" xml:space="preserve">
+    <value> [kWh]입니다. 연간 최대피크부하는 이보다 큰 값을 입력해주세요.</value>
+  </data>
+  <data name="ReducedEnergyCharges" xml:space="preserve">
+    <value>전력량요금절감</value>
+  </data>
+  <data name="E12" xml:space="preserve">
+    <value>이용률이란?</value>
+  </data>
+  <data name="E121" xml:space="preserve">
+    <value>정격용량에 대비하여 낼 수 있는 PV의 예상 출력을 의미하며, 앞서 선택한 PV 설치 지역의 일사량을 이용하여 PV 정격용량대비 발전설비가 낼 수 있는 발전예상량을 백분율로 나타냄</value>
+  </data>
+  <data name="E25" xml:space="preserve">
+    <value>정격용량에 대비하여 낼 수 있는 WT의 예상 출력을 의미하며, 앞서 선택한 WT 설치 지역의 풍속데이터를 이용하여 WT 정격용량대비 발전설비가 낼 수 있는 발전예상량을 백분율로 나타냄</value>
+  </data>
+  <data name="CashFlow" xml:space="preserve">
+    <value>현금흐름</value>
+  </data>
+  <data name="E13MesTi" xml:space="preserve">
+    <value>Cycle 효율이란?</value>
+  </data>
+  <data name="Pattern" xml:space="preserve">
+    <value>분산자원 운영계획</value>
+  </data>
+  <data name="BaseRateUnitPrice" xml:space="preserve">
+    <value>기본요금 단가</value>
+  </data>
+  <data name="CycleNum" xml:space="preserve">
+    <value>Cycle 횟수</value>
+  </data>
+  <data name="Distributedresource" xml:space="preserve">
+    <value>분산자원</value>
+  </data>
+  <data name="E10Title" xml:space="preserve">
+    <value>PV 발전 패턴 입력</value>
+  </data>
+  <data name="E26Title" xml:space="preserve">
+    <value>WT 특성정보 입력</value>
+  </data>
+  <data name="E29Tilte" xml:space="preserve">
+    <value>FC 특성정보 입력</value>
+  </data>
+  <data name="E29Title" xml:space="preserve">
+    <value>FC 특성정보 입력</value>
+  </data>
+  <data name="Electricitybill" xml:space="preserve">
+    <value>전기요금 입력</value>
+  </data>
+  <data name="EnterESSattributeinformation" xml:space="preserve">
+    <value>ESS 특성 정보 입력</value>
+  </data>
+  <data name="Fuelcostautoinput" xml:space="preserve">
+    <value>연료비 단가 자동 입력</value>
+  </data>
+  <data name="Inputpowerdemanddata" xml:space="preserve">
+    <value>전력수요 데이터 입력</value>
+  </data>
+  <data name="SelectDistributedResources" xml:space="preserve">
+    <value>분산자원 선택</value>
+  </data>
+  <data name="Selectwindspeedinformation" xml:space="preserve">
+    <value>풍속 정보 선택</value>
+  </data>
+  <data name="ESSOperationsPlan" xml:space="preserve">
+    <value>ESS 운영계획</value>
+  </data>
+  <data name="FCOperationsPlan" xml:space="preserve">
+    <value>FC 운영계획</value>
+  </data>
+  <data name="PatternAxis1" xml:space="preserve">
+    <value>충방전량[kWh]</value>
+  </data>
+  <data name="PatternAxis2" xml:space="preserve">
+    <value>발전량[kWh]</value>
+  </data>
+  <data name="PatternDes" xml:space="preserve">
+    <value>* 양수는 충전량, 음수는 방전량</value>
+  </data>
+  <data name="PVpowergeneration" xml:space="preserve">
+    <value>PV 발전량</value>
+  </data>
+  <data name="Electricitybill1" xml:space="preserve">
+    <value>전기요금 조회</value>
+  </data>
+  <data name="Bookareaname" xml:space="preserve">
+    <value>도서지역명</value>
+  </data>
+  <data name="LocalInformation" xml:space="preserve">
+    <value>지역 정보</value>
+  </data>
+  <data name="constfunction" xml:space="preserve">
+    <value>비용함수&lt;br/&gt; (=a*P+b)</value>
+  </data>
+  <data name="E0173" xml:space="preserve">
+    <value>※  입력된 용량 후보들은 모든 경우에 수에 대하여 경제성 분석합니다.</value>
+  </data>
+  <data name="E261Title" xml:space="preserve">
+    <value>WT 특성정보 입력</value>
+  </data>
+  <data name="Enterwindspeedinformation" xml:space="preserve">
+    <value>풍속 정보 입력</value>
+  </data>
+  <data name="Fuelcost" xml:space="preserve">
+    <value>연료비</value>
+  </data>
+  <data name="E00015Title1" xml:space="preserve">
+    <value>운전 방안 선택</value>
+  </data>
+  <data name="Businessname" xml:space="preserve">
+    <value>사업자명</value>
+  </data>
+  <data name="Distributedresource1" xml:space="preserve">
+    <value>분산자원</value>
+  </data>
+  <data name="E101" xml:space="preserve">
+    <value>PV 발전 패턴 입력</value>
+  </data>
+  <data name="E13M3" xml:space="preserve">
+    <value>ESS 특성정보 입력</value>
+  </data>
+  <data name="E1TitleM3" xml:space="preserve">
+    <value>사업자 정보</value>
+  </data>
+  <data name="SalePattern1" xml:space="preserve">
+    <value>PV 운영계획</value>
+  </data>
+  <data name="UnitE25" xml:space="preserve">
+    <value>[원/REC]</value>
+  </data>
+  <data name="DieselOperationPlan" xml:space="preserve">
+    <value>Diesel 운영계획</value>
+  </data>
+  <data name="E0174" xml:space="preserve">
+    <value>※  각각의 분산자원은 최소용량보다 최대용량이 크거나 같아야한다.&lt;br/&gt;간격은 (최대-최소) 값보다 작아야한다.</value>
+  </data>
+  <data name="E0175" xml:space="preserve">
+    <value>※  각각의 용량후보는 3개이상 넣을수 없습니다.&lt;br/&gt;용량후보가 3개를 넘을 경우 작은 용량부터 3개만 시뮬레이션 됩니다.</value>
+  </data>
+  <data name="Powergeneration" xml:space="preserve">
+    <value>발전량[kWh]</value>
+  </data>
+  <data name="Preexistingprice" xml:space="preserve">
+    <value>(현가화 전)</value>
+  </data>
+  <data name="E6Axis" xml:space="preserve">
+    <value>요금단가[원/kWh]</value>
+  </data>
+  <data name="PVOperationPlan" xml:space="preserve">
+    <value>PV 운영계획</value>
+  </data>
+  <data name="WTOperationPlan" xml:space="preserve">
+    <value>WT 운영계획</value>
+  </data>
+  <data name="CInformation" xml:space="preserve">
+    <value>수용가 정보</value>
+  </data>
+  <data name="Energysavings" xml:space="preserve">
+    <value>전력량 절감</value>
+  </data>
+  <data name="Salesrevenue1" xml:space="preserve">
+    <value>판매 수익</value>
+  </data>
+  <data name="Totalrevenue" xml:space="preserve">
+    <value>수익 합계</value>
+  </data>
+  <data name="Prosumeroperationplan" xml:space="preserve">
+    <value>프로슈머 운영계획</value>
+  </data>
+  <data name="Purchasedpower" xml:space="preserve">
+    <value>구매전력</value>
+  </data>
+  <data name="Salespower" xml:space="preserve">
+    <value>판매전력</value>
+  </data>
+  <data name="HelpE52" xml:space="preserve">
+    <value>*    근무일 전력량요금단가는 아래의 양식을 다운받아 월별 24시간 패턴으로 수동으로 입력할 수 있습니다.
+&lt;br/&gt;*    근무일 전력량요금단가를 이용하여 토요일 전력량요금단가는 9시부터 11시까지 중간부하요금단가가 적용되고 공휴일 전력량요금단가는 24시간 내내 경부하요금단가가 적용됩니다.
+&lt;br/&gt;*    기본요금은 월 최대부하에 기본요금단가를 곱하여 산정되므로, 기본요금이 있을 경우 아래의 칸에 직접 입력하여 주세요.</value>
+  </data>
+  <data name="E15M5" xml:space="preserve">
+    <value>구역전기사업모형은 구역내 전력을 공급한 후 남은 잉여전력을 전력거래소에서 &lt;br/&gt;
+    판매하여 수익을 얻는 모형으로, 분산자원을 이용하여 구역전기사업자의 이익을 &lt;br/&gt;
+    최대화하도록 운전 계획을 최적화한다.</value>
+  </data>
+  <data name="Negativenumbers" xml:space="preserve">
+    <value>* 양수는 충전량, 음수는 방전량</value>
+  </data>
+  <data name="Decreaseto" xml:space="preserve">
+    <value>%로 감소</value>
+  </data>
+  <data name="E12AxMo" xml:space="preserve">
+    <value>PV이용률 표 보기</value>
+  </data>
+  <data name="E28ShoMo" xml:space="preserve">
+    <value>WT이용률 표 보기</value>
+  </data>
+  <data name="E5Mo" xml:space="preserve">
+    <value>전기요금제 입력</value>
+  </data>
+  <data name="E6AxisMo" xml:space="preserve">
+    <value>전력요금 단가[원/kWh]</value>
+  </data>
+  <data name="ViewPowerDemandDataTable" xml:space="preserve">
+    <value>전력수요 데이터 표 보기</value>
+  </data>
+  <data name="Optimizationbasedscheduler5" xml:space="preserve">
+    <value>구역전기사업 이익 최대화(최적화 기반)</value>
+  </data>
+  <data name="E15Ax" xml:space="preserve">
+    <value>SMP단가 표 보기</value>
+  </data>
+  <data name="ViewPVutilizationtable" xml:space="preserve">
+    <value>PV이용률 표 보기</value>
+  </data>
+  <data name="EstimatedWTtoratedcapacity" xml:space="preserve">
+    <value>정격용량 대비 WT 예상출력</value>
+  </data>
+  <data name="PVexpectedoutput" xml:space="preserve">
+    <value>PV 예상출력[%]</value>
+  </data>
+  <data name="PVexpectedoutputrelativetoratedcapacity" xml:space="preserve">
+    <value>정격용량 대비 PV 예상출력</value>
+  </data>
+  <data name="WTEstimatedOutput" xml:space="preserve">
+    <value>WT 예상출력[%]</value>
+  </data>
+  <data name="E20Btn" xml:space="preserve">
+    <value>실행</value>
+  </data>
+  <data name="Negativenumbers1" xml:space="preserve">
+    <value>* 음수는 발전판매량</value>
+  </data>
+  <data name="PositiveAmount" xml:space="preserve">
+    <value>* 양수는충전량, 음수는 방전량</value>
+  </data>
+  <data name="reducepercent" xml:space="preserve">
+    <value>% 로 감소</value>
+  </data>
+  <data name="resultrun" xml:space="preserve">
+    <value>실행</value>
+  </data>
+  <data name="resultsearch" xml:space="preserve">
+    <value>조회</value>
+  </data>
+  <data name="E18Orther1" xml:space="preserve">
+    <value>기타비용 추가</value>
+  </data>
+  <data name="E18Orther2" xml:space="preserve">
+    <value>분산자원</value>
+  </data>
+  <data name="E18Orther3" xml:space="preserve">
+    <value>추가</value>
+  </data>
+</root>

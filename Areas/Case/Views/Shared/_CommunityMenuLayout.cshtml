@@ -1,0 +1,515 @@
+﻿@using Microsoft.AspNet.Identity
+@using System.Security.Claims
+@using DPDSP.Models
+@using DPDSP.Services
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using DPDSP.Models
+@using DPDSP.Services
+@using System.Configuration;
+@using BotDetect.Web.Mvc;
+@{
+    ViewBag.Title = "Community";
+}
+
+@section styles{
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - @Resources.Langues.KERI</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script>
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+                window.location.href = '@Url.Action("Index", "Home", new { area = "Mobile" })'
+            }
+            else {
+            }
+    </script>
+
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.common-bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.1.223/kendo.dataviz.bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/case_site_css/case_site_styles.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/case_site_css/style.css" rel="stylesheet" />
+    <link href="~/Content/case_site_css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/case_site_css/bootstrap.min.css" rel="stylesheet" />
+    <link href="@Url.Content(BotDetect.Web.CaptchaUrls.Absolute.LayoutStyleSheetUrl)" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/angular.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.aspnetmvc.min.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/cultures/kendo.culture.ko-KR.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.1.223/cultures/kendo.culture.en-US.min.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+    <script src="~/Scripts/CheckCaptcha.js"></script>
+    <script type="text/javascript">
+        var baseUrl = '@Url.Content("~/")';
+    </script>
+
+    <script type="text/javascript" src="http://wcs.naver.net/wcslog.js"></script>
+    <script type="text/javascript">
+        if (!wcs_add) var wcs_add = {};
+        wcs_add["wa"] = "830a41f791bde";
+        wcs_do();
+    </script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="~/Scripts/BEN.js"></script>
+    <style>
+        .sidebar {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+            width: 200px !important;
+            margin-top: 0px
+        }
+
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase
+        }
+
+        .navbar .nav {
+            font-family: 'Open Sans', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 1.2rem
+        }
+
+        .navbar-inverse {
+            background-color: unset
+        }
+
+            .navbar-inverse .navbar-nav > .active > a:hover,
+            .navbar-inverse .navbar-nav > li > a:hover,
+            .navbar-inverse .navbar-nav > li > a:focus {
+                background-color: #ffffff
+            }
+
+            .navbar-inverse .navbar-nav > .active > a,
+            .navbar-inverse .navbar-nav > .open > a,
+            .navbar-inverse .navbar-nav > .open > a,
+            .navbar-inverse .navbar-nav > .open > a:hover,
+            .navbar-inverse .navbar-nav > .open > a,
+            .navbar-inverse .navbar-nav > .open > a:hover,
+            .navbar-inverse .navbar-nav > .open > a:focus {
+                background-color: unset
+            }
+
+        .dropdown-menu {
+            background-color: #FFFFFF
+        }
+
+            .dropdown-menu > li > a:hover,
+            .dropdown-menu > li > a:focus {
+                background-color: #ffffff
+            }
+
+        .navbar-inverse {
+            background-image: none;
+        }
+
+        .dropdown-menu > li > a:hover,
+        .dropdown-menu > li > a:focus {
+            background-image: none;
+        }
+
+        .navbar-inverse {
+            border-color: unset
+        }
+
+            .navbar-inverse .navbar-brand {
+                color: #000000
+            }
+
+                .navbar-inverse .navbar-brand:hover {
+                    color: #6b98ff
+                }
+
+            .navbar-inverse .navbar-nav > li > a {
+                color: #000000
+            }
+
+                .navbar-inverse .navbar-nav > li > a:hover,
+                .navbar-inverse .navbar-nav > li > a:focus {
+                    color: #6b98ff
+                }
+
+            .navbar-inverse .navbar-nav > .active > a,
+            .navbar-inverse .navbar-nav > .open > a,
+            .navbar-inverse .navbar-nav > .open > a:hover,
+            .navbar-inverse .navbar-nav > .open > a:focus {
+                color: #6b98ff
+            }
+
+                .navbar-inverse .navbar-nav > .active > a:hover,
+                .navbar-inverse .navbar-nav > .active > a:focus {
+                    color: #6b98ff
+                }
+
+        .dropdown-menu > li > a {
+            color: #000000
+        }
+
+            .dropdown-menu > li > a:hover,
+            .dropdown-menu > li > a:focus {
+                color: #6b98ff
+            }
+
+        .navbar-inverse .navbar-nav > .dropdown > a .caret {
+            border-top-color: #000000
+        }
+
+        .navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
+            border-top-color: #000000
+        }
+
+        .navbar-inverse .navbar-nav > .dropdown > a .caret {
+            border-bottom-color: #000000
+        }
+
+        .navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
+            border-bottom-color: #000000
+        }
+
+        .navbar-brand {
+            padding-left: 20px;
+            font-size: 30px;
+            font-weight: bolder;
+        }
+    </style>
+    @*<link href="@Url.Content("~/Content/left_menu.css")" rel="stylesheet" />*@
+
+    @RenderSection("styles", required: false)
+    @*<style>
+            .bootbox.modal {
+                z-index: 99999999 !important;
+            }
+
+            .logo_margin > a {
+                color: #000000 !important;
+                font-size: 25px;
+                font-weight: bold;
+                padding-left: 50px;
+            }
+
+            .modal {
+                z-index: 1000000
+            }
+
+            #footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                margin: 0;
+                margin-bottom: 0px;
+                z-index: 999
+            }
+
+            .classYes {
+                margin-right: 10px;
+            }
+
+            .k-textbox {
+                direction: ltr;
+            }
+        </style>*@
+    <style>
+        header {
+            background-color: unset !important;
+            border-bottom: unset !important;
+        }
+
+        .navbar-fixed-top {
+            position: initial;
+        }
+
+        .modal {
+            z-index: 1000000
+        }
+
+        .sidebar ul li a, .sidebar ul li .am {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        .sidebar ul li .am {
+            color: #6b98ff !important;
+        }
+
+        .sidebar {
+            background-color: #ffffff !important;
+        }
+
+            .sidebar ul li {
+                border-bottom: unset
+            }
+    </style>
+</head>
+<body @*style="margin-bottom:200px;"*@>
+    @using (Html.BeginForm("LogOff", "Account", new { area = "Case" }, FormMethod.Post, new { id = "logoutForm", }))
+    {
+        @Html.AntiForgeryToken()
+        <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+            <div class="@*container*@">
+                <div class="navbar-header" style="width: 15%;text-align: center;">
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/" class="navbar-brand">MODDER    </a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="@Html.isNavMenuActive("Index", "Home")"><a href="@Url.Action("Index", "Home")">@Resources.Langues.Home</a></li>
+                        <li class="@Html.isNavMenuActive("ServiceIntroduction", "Community")"><a href="@Url.Action("ServiceIntroduction", "Community")">@Resources.Langues.ServiceIntroduction</a></li>
+                        <li class="@Html.isNavMenuActive("Index", "Case")"><a href="@Url.Action("Index", "Case")">@Resources.Langues.ModelDesign</a></li>
+                        <li class="@Html.isNavMenuActive("Notice", "Community")"><a href="@Url.Action("Notice", "Community")">@Resources.Langues.Notice</a></li>
+                        <li class="@Html.isNavMenuActive("CaseQA", "Community")"> <a href="@Url.Action("CaseQA", "Community")" class="dropdown-toggle">@Resources.Langues.QnA </a> </li>
+
+                        @*<li>
+                                <a href="#">Home</a>
+                            </li>*@
+                        @*<li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Mission</a></li>
+                                    <li><a href="#">Vision</a></li>
+                                    <li><a href="#">Careers</a></li>
+                                </ul>
+                            </li>*@
+                        @*<li>
+                                <a href="#">Products</a>
+                            </li>
+                            <li>
+                                <a href="#">Services</a>
+                            </li>
+                            <li class="active">
+                                <a href="#">Contact</a>
+                            </li>*@
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                        @if (Request.IsAuthenticated)
+                        {
+                            var userStore = new UserStore<ApplicationUser>(new DPDSPDbContext());
+                            var userManager = new UserManager<ApplicationUser>(userStore);
+                            var user = userManager.FindById(User.Identity.GetUserId());
+                            try
+                            {
+                                user.FirstName = StringCipher.Decrypt(user.FirstName, ConfigurationManager.AppSettings["passEncrytp"]);
+                                user.LastName = StringCipher.Decrypt(user.LastName, ConfigurationManager.AppSettings["passEncrytp"]);
+                                user.UserExtend.UserTel = StringCipher.Decrypt(user.UserExtend.UserTel, ConfigurationManager.AppSettings["passEncrytp"]);
+                            }
+                            catch
+                            {
+                                user.FirstName = "Unknown";
+                                user.LastName = "Unknown";
+                                user.UserExtend.UserTel = "Unknown";
+                            }
+
+                            ViewBag.CurrentUser = user;
+
+                            var FullName = ((ClaimsIdentity)User.Identity).FindFirst("FullName");
+                            <li class="dropdown">
+                                <a class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fa fa-user"></span> <span class="user-name">@ViewBag.CurrentUser.LastName @ViewBag.CurrentUser.FirstName</span> <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu" style="font-size:12px;">
+                                    <li><a role="button" data-toggle="modal" data-target="#change-password-modal">@Resources.Langues.ChangePassword</a></li>
+                                    <li><a role="button" onclick="javascript:document.getElementById('logoutForm').submit();">@Resources.Langues.Logout</a></li>
+                                </ul>
+                            </li>
+                            <li class="@Html.isNavMenuActive("Index", "MyCase")"><a href="@Url.Action("Index", "MyCase")"> @Resources.Langues.MyCase </a> </li>
+                        }
+                        else
+                        {
+                            <li><a id="loginTag" data-toggle="modal" href="#login"> @Resources.Langues.Login </a> </li>
+                            <li><a id="registerTag" data-toggle="modal" href="#member"> @Resources.Langues.SignUp </a> </li>
+                        }
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="fa"></span> <span class="user-name" id="langName">@Resources.Langues.Language</span> <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" style="font-size:12px;">
+                                <li><a role="button" onclick="changeLanguage('ko')">@Resources.Langues.Korean</a></li>
+                                <li><a role="button" onclick="changeLanguage('en')">@Resources.Langues.English</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+    }
+    <div class="" @*style="margin-top:-25px;"*@>
+        @*<nav style="margin-bottom: 0">
+
+                <div class="sidebar" style="margin-top: -3px;height: 100%;">
+                    <div style="background-color:white ">
+                        <label class="text-center hide-end-text" style="width:100%;line-height:40px;color:#fff;background:#1996e4;font-size:20px;margin-bottom:0px;">
+                        Community
+                    </label>
+                    </div>
+                    <div class="sidebar-nav navbar-collapse ">
+                        <ul class="nav" id="side-menu">
+                            <li> <a href="@Url.Action("ServiceIntroduction","Community")" class="@Html.isLeftMenuActive("ServiceIntroduction","Community")"><i class="glyphicon glyphicon-chevron-right"></i> @Resources.Langues.ServiceIntroduction</a> </li>
+                            <li> <a href="@Url.Action("Notice","Community")" class="@Html.isLeftMenuActive("Notice","Community")"><i class="glyphicon glyphicon-chevron-right"></i> @Resources.Langues.Notice</a> </li>
+                            <li> <a href="@Url.Action("CaseQA","Community")" class="@Html.isLeftMenuActive("CaseQA","Community")"><i class="glyphicon glyphicon-chevron-right"></i> @Resources.Langues.QnA</a> </li>
+                            <li> <a href="@Url.Action("ReferenceBoard","Community")" class="@Html.isLeftMenuActive("ReferenceBoard","Community")"><i class="glyphicon glyphicon-chevron-right"></i> @Resources.Langues.ReferenceBoard</a> </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>*@
+        <div style="width:15px">
+            <nav style="margin-bottom: 0">
+                <div class="sidebar" style="padding-left: 20px;margin-top: -3px;height: 100%;">
+                    <div style="background-color:white ">
+                        <label class="hide-end-text" style="padding-left: 10px;width:100%;line-height:40px;color:#fff;background:#1996e4;font-size:20px;margin-bottom:0px;">
+                            Community
+                        </label>
+                    </div>
+                    <div class="sidebar-nav navbar-collapse ">
+                        <ul class="nav" id="side-menu">
+                            <li> <a href="@Url.Action("ServiceIntroduction","Community")" class="@Html.isLeftMenuActive("ServiceIntroduction","Community")">@*<i class="glyphicon glyphicon-chevron-right"></i>*@ @Resources.Langues.ServiceIntroduction</a> </li>
+                            <li> <a href="@Url.Action("Notice","Community")" class="@Html.isLeftMenuActive("Notice","Community")">@*<i class="glyphicon glyphicon-chevron-right"></i>*@ @Resources.Langues.Notice</a> </li>
+                            <li> <a href="@Url.Action("CaseQA","Community")" class="@Html.isLeftMenuActive("CaseQA","Community")">@*<i class="glyphicon glyphicon-chevron-right"></i>*@ @Resources.Langues.QnA</a> </li>
+                            <li> <a href="@Url.Action("ReferenceBoard","Community")" class="@Html.isLeftMenuActive("ReferenceBoard","Community")">@*<i class="glyphicon glyphicon-chevron-right"></i>*@ @Resources.Langues.ReferenceBoard</a> </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div id="page-wrapper" style="width:85%;margin-left: 15%;">
+            @RenderBody()
+        </div>
+    </div>
+    @Html.Partial("~/Areas/Case/Views/Shared/Login.cshtml")
+    @*<div class="row">
+            <div class="col-md-3 col-lg-2" id="left-menu">
+                <div class="form-group">
+                    @(Html.Kendo().Menu()
+                    .Name("CommunityMenu")
+                    .Orientation(MenuOrientation.Vertical)
+                    .Items(items =>
+                    {
+                        items.Add().Text("Service Introduction").Action("ServiceIntroduceView", "Community");
+                        items.Add().Text("Notice").Action("NoticeView", "Community");
+                    })
+                    )
+                </div>
+            </div>
+            <div class="col-md-9 col-lg-10">
+                <div class="form-group">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>*@
+
+    @RenderSection("scripts", required: false)
+    <script>
+    $(document).ready(function () {
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+            window.location.href = '@Url.Action("Index", "Home", new { area = "Mobile" })'
+        }
+        else {
+        }
+    });
+
+        var langBase = "ko"
+        $(document).ready(function () {
+
+            var url = window.location.href;
+            var res = url.split('/');
+            var a = res[3].toLowerCase()
+            if (res[3].toLowerCase() == 'en') {
+                //$('.title-hiden').addClass("hidden")
+                $('#langName').html('');
+                $('#langName').html('@Resources.Langues.English');
+            } else {
+               // $('.title-hiden').removeClass("hidden")
+                $('#langName').html('');
+                $('#langName').html('@Resources.Langues.Korean');
+            }
+        });
+        //language calendar
+        var current = $(location).attr('pathname');
+        if (current.search("ko") == true) {
+            kendo.culture("ko-KR");
+        } else {
+            kendo.culture("en-AU");
+        }
+
+        function modalShow() {
+            $('#login').appendTo("body").modal("show");
+        }
+
+        function changeLanguage(lang) {
+            langBase = lang;
+            var url = window.location.href;
+            var res = url.split('/');
+            var a = res[3].toLowerCase()
+            if (res[3].toLowerCase() == 'ko' || res[3].toLowerCase() == 'en') {
+                res[3] = lang;
+            } else {
+                res.splice(3, 0, lang);
+            }
+            var newUrl = "";
+            res.forEach(function (entry) {
+                newUrl = newUrl + entry + "/";
+            });
+            newUrl = newUrl.slice(0, -1);
+            window.location.href = newUrl
+        }
+
+        function commuClick() {
+            var isAuth = '@Request.IsAuthenticated';
+
+            if (isAuth == 'True') {
+                window.location.href = '@Url.Action("Notice", "Community")';
+            } else {
+                bootbox.confirm({
+                        message: '@Resources.Langues.MessCreateModel',
+                        className: 'my-custom-class',
+                        buttons: {
+                            cancel: {
+                                label: '@Resources.Langues.No',
+                                className: 'btn-danger pull-right'
+                           },confirm: {
+                                label: '@Resources.Langues.Yes',
+                               className: 'btn-success classYes'
+                           }
+                        },
+                    callback: function (result) {
+                            if (result) {
+                                $('#loginTag').click()
+                            } else {
+                                window.location.href = '@Url.Action("Notice", "Community")';
+                            }
+                        }
+                    });
+            }
+        }
+
+        $(document).on('keyup', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            $('.save-class').click();
+            e.preventDefault();
+            return false;
+        }
+    });
+    </script>
+</body>
+</html>

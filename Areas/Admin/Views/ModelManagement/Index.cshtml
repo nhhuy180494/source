@@ -1,0 +1,508 @@
+﻿
+@{
+    ViewBag.Title = Resources.Langues.ModelManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+    <style>
+        /*.k-grid .k-state-selected {
+            background-color: #66ccff;
+            color: black;
+        }
+
+        .k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td {
+            background-color: #66ccff;
+        }*/
+
+        input[type="checkbox"][readonly] {
+            pointer-events: none;
+        }
+
+        .displayModelCode {
+            font-size: 20px;
+        }
+
+        #showAddItem {
+            float: right;
+        }
+
+        #addItem {
+            float: right;
+        }
+
+        .k-state-disabled {
+            pointer-events: none;
+        }
+
+        #ModelMapGrid .decrease, .increase, .orderNumber{
+            cursor:pointer;
+            color:black;
+        }
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid adminSiteContent">
+    <div class="form-group">
+        <div class="col-md-12 col-lg-6">
+            <div class="form-group">
+                @(Html.Kendo().Grid<DPDSP.Models.ModelViewModel>()
+    .Name("ModelGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(model => model.ModelName).HtmlAttributes(new { style = "text-align:center;"}).Title(Resources.Langues.ModelName + "(ko)");
+        columns.Bound(model => model.ModelName2).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ModelName + "(en)");
+        columns.Bound(model => model.ModelCode).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ModelCode);
+        columns.Bound(model => model.Status).ClientTemplate("<input type=\"checkbox\" readonly  #=Status ? checked='checked' :  '' # />")
+        .HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Status);
+        columns.Command(command =>
+        {
+            command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+            command.Custom(Resources.Langues.Delete).Click("DeleteModel");
+        }).Title(Resources.Langues.Management).HtmlAttributes(new { style = "text-align:center;" });
+    })
+    .ToolBar(toolbar => toolbar.Create().Text(@Resources.Langues.AddNewRecord))
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:650px;" })
+    .Selectable(selectable => selectable
+          .Mode(GridSelectionMode.Multiple)
+          .Type(GridSelectionType.Row))
+    .Events(ev =>
+    {
+        ev.Change("onChange");
+        ev.Edit("onEdit");
+        ev.DataBound("onDataBound");
+    })
+    //.PersistSelection(true)
+    //.Navigatable()
+    .Resizable(rz => rz.Columns(true))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+        .Model(model => { model.Id(p => p.ModelCode); })
+    .Read(read => read.Action("EditingInline_ReadModel", "ModelManagement"))
+     .Create(update => update.Action("EditingInline_CreateModel", "ModelManagement"))
+        .Update(update => update.Action("EditingInline_UpdateModel", "ModelManagement"))
+    //.Destroy(update => update.Action("EditingInline_DestroyModel", "ModelManagement"))
+    )
+                )
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-6">
+            <div class="form-group">
+                <div class="form-inline" style="padding:20px;">
+                    <label class="form-group displayModelCode">@Resources.Langues.ModelSelection</label>
+                    <p class="form-group displayModelCode" id="ModelSelected"></p>
+                </div>
+                <div class="row">
+                    @(Html.Kendo().Grid<DPDSP.Models.ModelMapItemViewModel>()
+.Name("ModelMapGrid")
+.Columns(columns =>
+{
+    columns.Bound(item => item.OrderNumber).ClientTemplate("<div class=\"btn-group\"><a class=\"orderNumber\">#=OrderNumber  #</a> <a class=\"decrease\"><span class=\"glyphicon glyphicon-triangle-top\"></a> <a class=\"increase\"><span class=\"glyphicon glyphicon-triangle-bottom\"></a></div>").HtmlAttributes(new { style = "text-align:center;" });
+    //columns.Bound(item => item.OrderNumber).HtmlAttributes(new { style = "text-align:center;" })/*.Title(Resources.Langues.FirstName)*/;
+    columns.Bound(item => item.ItemName).HtmlAttributes(new { style = "text-align:center;"}).Title(Resources.Langues.ItemName + "(ko)");
+    columns.Bound(item => item.ItemName2).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ItemName + "(en)");
+    columns.Bound(item => item.ItemCode).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ItemCode);
+    columns.Bound(item => item.Status).ClientTemplate("<input type=\"checkbox\" readonly  #=Status ? checked='checked' :  '' # />")
+    .HtmlAttributes(new
+    {
+        style = "text-align:center;"
+    }).Title(Resources.Langues.Status);
+    columns.Command(command =>
+    {
+        command.Custom(Resources.Langues.Delete).Click("DeleteModelMap");
+    }).Title(Resources.Langues.Management).HtmlAttributes(new { style = "text-align:center;" });
+})
+.ToolBar(toolbar =>
+{
+    toolbar.Custom().Text(@Resources.Langues.AddNewRecord).HtmlAttributes(new { id = "showAddItem", style = "margin-right:10px;" });
+})
+//.Editable(editable => editable.Mode(GridEditMode.InLine))
+.Pageable()
+.Sortable()
+.Scrollable()
+.HtmlAttributes(new { style = "height:600px;" })
+    //.Selectable(selectable => selectable
+    //      .Mode(GridSelectionMode.Multiple)
+    //      .Type(GridSelectionType.Row))
+    //.Events(ev => ev.Change("onChange"))
+    //.PersistSelection(true)
+    //.Navigatable()
+    .Resizable(rz => rz.Columns(true))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(20)
+                .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                .Model(model => { model.Id(p => p.ItemCode); })
+                .Read(read => read.Action("ReadModelMap", "ModelManagement"/*, new { ModelCode = string.Empty }*/).Data("dataModelCode"))
+                //.Destroy(update => update.Action("DestroyModelMap", "ModelManagement"))
+                )
+                    )
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" style="overflow-y:scroll;" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @(Html.Kendo().Grid<DPDSP.Models.ItemViewModel>()
+.Name("ItemGrid")
+.Columns(columns =>
+{
+    columns.Bound(item => item.Selection).ClientTemplate("<input type=\"checkbox\" #=Selection ? checked='checked' :  '' # class=\"chkbox\" id=\"#=ItemCode#\" /> ")
+    .HtmlAttributes(new { style = "text-align:center;" });
+    columns.Bound(item => item.ItemName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ItemName + "(ko)");
+    columns.Bound(item => item.ItemName2).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ItemName + "(en)");
+    columns.Bound(item => item.ItemCode).HtmlAttributes(new { style = "text-align:center;" }).Width(150).Title(Resources.Langues.ItemCode);
+    columns.Bound(item => item.Status).ClientTemplate("<input type=\"checkbox\" readonly  #=Status ? checked='checked' :  '' # />")
+    .HtmlAttributes(new
+    {
+        style = "text-align:center;"
+    }).Width(120).Title(Resources.Langues.Status);
+})
+.ToolBar(toolbar =>
+{
+//toolbar.Custom().Text("Add Item").HtmlAttributes(new { id = "addItem", @class = "k-state-disabled" });
+                        @*toolbar.Template(@<text>
+                                                <div class="row">
+                                                    <button class="btn btn-default k-state-disabled" id="addItem" type="button">Add Item</button>
+                                                </div>
+                            </text>);*@
+                    toolbar.Template(@<text>
+                        <div class="toolbar">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-addon btn-opal"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                                        <input type="text" class="form-control boder-opal" id='itemFilter' placeholder="Enter ItemName...">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-opal" id="resetItemGrid" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="co-md-3">
+                                    <button style="margin-right:10px;" class="btn btn-default k-state-disabled btn-opal" id="addItem" type="button">@Resources.Langues.Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </text>);
+})
+//.Events(ev => ev.DataBound("onDataBound"))
+//.Editable(editable => editable.Mode(GridEditMode.InLine))
+.Pageable()
+.Sortable()
+.Scrollable()
+.HtmlAttributes(new { style = "height:550px;" })
+    //.Selectable(selectable => selectable
+    //      .Mode(GridSelectionMode.Multiple)
+    //      .Type(GridSelectionType.Row))
+    //.Events(ev => ev.Change("onChange"))
+    //.PersistSelection(true)
+    //.Navigatable()
+    .Resizable(rz => rz.Columns(true))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(20)
+                .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                .Model(model => { model.Id(p => p.ItemCode); })
+                .Read(read => read.Action("ReadItem", "ModelManagement").Data("dataModelCode"))
+                //.Destroy(update => update.Action("DestroyModelMap", "ModelManagement"))
+                )
+                    )
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        //var modelGrid = $("#ModelGrid").data("kendoGrid");
+        //modelGrid.select(e.sender.tbody.find("tr:first"));
+
+        $(document).ready(function () {
+            var itemGrid = $("#ItemGrid").data("kendoGrid");
+            var modelMapGrid = $("#ModelMapGrid").data("kendoGrid");
+            var modelGrid = $('#ModelGrid').data('kendoGrid');
+            var checkedItems = [];
+
+            $('#ModelMapGrid').on('click', '.increase', function (e) {
+                var row = $(this).closest('tr');
+                var dataItem = modelMapGrid.dataItem(row);
+                var modelCode = $('#ModelSelected').text();
+                var orderNumber = dataItem.OrderNumber;
+                $.blockUI();
+                $.post('@Url.Action("IncreaseOrderNumber", "ModelManagement")', { modelCode: modelCode, orderNumber: orderNumber },
+                function (result) {
+                    if (result) {
+                        modelMapGrid.dataSource.read({ modelCode: modelCode });
+                    }
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    $.unblockUI();
+                })
+            });
+
+            $('#ModelMapGrid').on('click', '.decrease', function (e) {
+                var row = $(this).closest('tr');
+                var dataItem = modelMapGrid.dataItem(row);
+                var modelCode = $('#ModelSelected').text();
+                var orderNumber = dataItem.OrderNumber;
+                $.blockUI();
+                $.post('@Url.Action("DecreaseOrderNumber", "ModelManagement")', { modelCode: modelCode, orderNumber: orderNumber },
+                function (result) {
+                    if (result) {
+                        modelMapGrid.dataSource.read({ modelCode: modelCode });
+                    }
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    $.unblockUI();
+                })
+            });
+
+            $("#showAddItem").click(function (e) {
+                e.preventDefault();
+                var modelCode = $('#ModelSelected').text();
+                if (modelCode == "") {
+                    bootbox.alert('@Resources.Langues.SelectModelToAddItem')
+                } else {
+                    //$.blockUI();
+                    $("#myModal").modal("show");
+                    var ItemGrid = $('#ItemGrid').data('kendoGrid');
+                    ItemGrid.dataSource.read({ modelCode: modelCode });
+                }
+            });
+
+            $('#myModal').on('hidden.bs.modal', function () {
+                // do something…
+                checkedItems = [];
+                $('#itemFilter').val('');
+                itemGrid.dataSource.filter({});
+                $('#addItem').addClass('k-state-disabled');
+                $.unblockUI();
+            });
+
+            $('#addItem').click(function (e) {
+                e.preventDefault();
+                var modelCode = $("#ModelSelected").text();
+                $.blockUI();
+                $.post('@Url.Action("AddModelMap", "ModelManagement")', { listItemCode: checkedItems, modelCode: modelCode },
+                function (result) {
+                    if (result) {
+                        modelMapGrid.dataSource.read({ modelCode: modelCode });
+                        checkedItems = [];
+                        closeModal();
+                    }
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    $.unblockUI();
+                })
+            });
+
+            itemGrid.table.on('click', '.chkbox', function (e) {
+                var checked = this.checked,
+                row = $(this).closest("tr")
+                var itemCode = $(this).attr('id');
+                
+                if (checked) {
+                    //-select the row
+                    row.addClass("k-state-selected");
+                    checkedItems.push(itemCode);
+                } else {
+                    //-remove selection
+                    row.removeClass("k-state-selected");
+                    var index = checkedItems.indexOf(itemCode);
+                    checkedItems.splice(index, 1);
+                }
+
+                if (checkedItems.length > 0) {
+                    $('#addItem').removeClass('k-state-disabled');
+                } else {
+                    $('#addItem').addClass('k-state-disabled');
+                }
+            });
+
+            $("#itemFilter").keyup(function () {
+                var value = $("#itemFilter").val();
+                if (value) {
+                    itemGrid.dataSource.filter({ field: "ItemName", operator: "contains", value: value });
+                } else {
+                    itemGrid.dataSource.filter({});
+                }
+            });
+
+            $('#resetItemGrid').click(function () {
+                $('#itemFilter').val('');
+                itemGrid.dataSource.filter({});
+            });
+
+            function callback(e) {
+                // PLACE CALLBACK CODE HERE
+                onItemGridDataBound(itemGrid, checkedItems);
+            }
+
+            itemGrid.dataSource.bind('change', callback);
+            itemGrid.dataSource.fetch();
+
+        });
+
+        function onItemGridDataBound(itemGrid, checkedItems) {
+            if (itemGrid != null && checkedItems != null) {
+                for (var i = 0; i < checkedItems.length; i++) {
+                    var checkbox = itemGrid.table.find('input[type="checkbox"][id=' + checkedItems[i] + ']');
+                    checkbox.prop('checked', 'checked')
+                    var row = checkbox.closest("tr[role=row]");
+                    row.addClass('k-state-selected');
+                }
+            }
+        }
+
+        function closeModal() {
+            $('#myModal').modal("hide");
+            $.unblockUI();
+        }
+
+        function dataModelCode() {
+            var modelCode = $("#ModelSelected").text();
+            return {
+                modelCode: modelCode
+            };
+        }
+
+        //function dataModelAndItemCode() {
+        //    var modelCode = $('#ModelSelected').text();
+        //    return {
+        //        modelCode: modelCode
+        //    }
+        //}
+
+        function DeleteModelMap(e) {
+            var modelMapGrid = $("#ModelMapGrid").data("kendoGrid");
+            var dataItem = modelMapGrid.dataItem($(e.currentTarget).closest("tr"));
+            var modelCode = $("#ModelSelected").text();
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("DestroyModelMap", "ModelManagement")', { modelCode: modelCode, itemCode: dataItem.ItemCode },
+                        function (result) {
+                            if (result) {
+                                modelMapGrid.dataSource.read({ modelCode: modelCode });
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function DeleteModel(e) {
+            var modelGrid = $("#ModelGrid").data("kendoGrid");
+            var modelMapGrid = $("#ModelMapGrid").data("kendoGrid");
+            var dataItem = modelGrid.dataItem($(e.currentTarget).closest("tr"));
+            bootbox.confirm({
+                message: '@Resources.Langues.AreYouSure',
+                buttons: {
+                    cancel: {
+                        label: '@Resources.Langues.No',
+                    }, confirm: {
+                        label: '@Resources.Langues.Yes',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (callback) {
+                    if (callback) {
+                        $.blockUI();
+                        $.post('@Url.Action("EditingInline_DestroyModel", "ModelManagement")', { modelCode: dataItem.ModelCode },
+                        function (result) {
+                            if (result) {
+                                modelGrid.dataSource.read();
+                                modelMapGrid.dataSource.read(dataModelCode());
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    }
+                }
+            });
+        }
+
+        function onEdit(e) {
+            if (e.model.isNew() == false) {
+                $(e.container).find('input[name=ModelCode]').prop("readonly", true);
+            }
+        }
+
+        function onDataBound(e) {
+            var modelGrid = $("#ModelGrid").data("kendoGrid");
+            var row = modelGrid.tbody.find("tr[role='row']:first");
+            if (row != null) {
+                modelGrid.select(e.sender.tbody.find("tr:first"));
+            }
+        }
+
+        function onChange(e) {
+            var modelGrid = $("#ModelGrid").data("kendoGrid");
+            var modelMapGrid = $("#ModelMapGrid").data("kendoGrid");
+            var modelSelected = modelGrid.dataItem(modelGrid.select());
+            var modelCode = modelSelected.ModelCode;
+            $('#ModelSelected').text(modelCode);
+            modelMapGrid.dataSource.read({ ModelCode: modelCode });
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                             message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+    </script>
+}

@@ -1,0 +1,16 @@
+﻿@model DPDSP.Models.ItemMapEntityViewModel
+
+@if (Model.entityStatus)
+{
+    <div class="progress-bar progress-bar-bg-info count-@Model.count" id="btn_@Model.EntityCode" role="progressbar" style="text-align:center;border-right: 1px solid white">
+        @Model.OrderNumber <br /> @Model.EntityName
+    </div>
+}
+else
+{
+    <div class="progress-bar progress-bar-warning count-@Model.count" id="btn_@Model.EntityCode" role="progressbar" style="text-align:center;border-right: 1px solid white">
+        @Model.OrderNumber <br /> @Model.EntityName
+    </div>
+}
+
+

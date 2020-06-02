@@ -1,0 +1,343 @@
+﻿<style>
+    .E00030 {
+        top: 5%;
+    }
+
+    .lbWT {
+        font-weight: 400;
+    }
+
+    .tblMultiRow th, td {
+        text-align: center;
+    }
+
+    .text {
+        padding-top: 7px;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .k-list-optionlabel {
+        text-align: center;
+    }
+
+    .formFCPara label {
+        font-weight: 400;
+    }
+
+    .formFCPara input {
+        border: none;
+        box-shadow: none;
+        pointer-events: none;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    @@media print {
+        body.modal-open {
+            visibility: hidden;
+        }
+        body.modal-open .modal .modal-body {
+            visibility: visible; /* make visible modal body and header */
+        }
+    }
+</style>
+<link href="@Url.Content("~/Content/case_site_css/entity_popup_styles.css")" rel="stylesheet" type="text/css" />
+
+@using (Html.BeginForm("PrintEntityE00030PopupData", "EntityE00030Popup", FormMethod.Post, new { @role = "form", @id = "EntityE00030Form" }))
+{
+    <div class="modal fade E00030" id="" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">@Resources.Langues.FCparameterinquiry</h4>
+                </div>
+                <div class="modal-body" id="printDiv">
+                    <br />
+                        @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                        {
+                           @data_val = "true",
+                           @data_val_required = "The CaseId field is required."
+                        })
+                    <div class="row">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-md-4 lbWT">@Resources.Langues.FCparameter</label>
+                                <div class="col-md-6">
+                                    @(Html.Kendo().DropDownList()
+                                      .Name("E00030FCParameter")
+                                      .DataTextField("Text")
+                                      .DataValueField("Value")
+                                      .HtmlAttributes(new { style = "width: 100%" })
+                                    )
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal formFCPara">
+                        <div class="form-group">
+                            <label class="control-label col-xs-3">@Resources.Langues.Company</label>
+                            <div class="col-xs-10 col-md-6">
+                                @Html.TextBox("Company", "", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3">@Resources.Langues.ModelName</label>
+                            <div class="col-xs-10 col-md-6">
+                                @Html.TextBox("ModelName", "", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3">@Resources.Langues.Volume</label>
+                            <div class="col-xs-10 col-md-6">
+                                @Html.TextBox("Volume", "", new { @class = "form-control", @style = "text-align:right;" })
+                            </div>
+                            <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                <span class="">kW</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-md-3">@Resources.Langues.FuelPrice</label>
+                            <div class="col-xs-10 col-md-6">
+                                @Html.TextBox("FuelPrice", "", new { @class = "form-control", @style = "text-align:right;" })
+                            </div>
+                            <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                <span>원/ℓ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row scroll-style-7" style="max-height:254px;overflow-y:scroll;">
+                        <table class="table table-bordered tblMultiRow">
+                            <thead>
+                                <tr>
+                                    <th class="active">@Resources.Langues.Load</th>
+                                    <th class="active">@Resources.Langues.Electricaloutput</th>
+                                    <th class="active">@Resources.Langues.Heat1</th>
+                                    <th class="active">@Resources.Langues.Fuelinput1</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="list-inline pull-right">
+                            @*<button onclick="PrintModal()" type="button" class="btn btn-primary">@Resources.Langues.Print</button>*@
+                            <button type="button" class="btn btn-gray save-class" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/printThis/printThis.js"></script>
+<script>
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+        var fcDropdown = $("#E00030FCParameter").data("kendoDropDownList");
+
+        $('.E00030').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+        $('.E00030').on('shown.bs.modal', function () {
+            $(document).off('focusin.modal');
+        });
+
+        $('.E00030').on('show.bs.modal',function(){
+            clearModal();
+            $.blockUI();
+            $("#E00030FCParameter").kendoDropDownList({
+                index: 0,
+                dataValueField: "Value",
+                dataTextField: "Text",
+                serverFiltering: true,
+                change: onFCChange,
+                dataSource: {
+                    transport: {
+                        read: {
+                            dataType: "json",
+                            url: "@Url.Action("Read_FCParameter", "EntityE00030Popup", new { area = "Case" })"
+                        }
+                    }
+                },
+                filter:"contains",
+                optionLabel: "– Select –",
+            });
+            $.unblockUI();
+
+            $.blockUI();
+            $.post("@Url.Action("GetFcParameterByCaseId", "EntityE00029Popup", new { area="Case" })", { caseId:caseId }, function (result) {
+                if(result.success){
+                    var id = result.id;
+                    var tbody = $('.tblMultiRow').find('tbody');
+
+                    clearModal();
+                    $('.tblRow').find('input').removeAttr("readonly");
+                    $('.paraSubRow').removeClass('hidden');
+                    $('.paraSubRow').find('input').removeAttr('disabled');
+
+                    $.blockUI();
+                    $.post("@Url.Action("GetFCParameterSubList", "EntityE00030Popup", new { area="Case" })", { fcparameterId:id }, function (result) {
+                        if(result.success){
+                            clearModal();
+                            var list = result.listFCParaSub;
+                            var fcParameter = result.fcParameter;
+                            $('#Company').val(fcParameter.Company);
+                            $('#ModelName').val(fcParameter.ModelName);
+                            $('#Volume').val(fcParameter.Volume);
+                            $('#FuelPrice').val(fcParameter.FuelPrice);
+                            $("#E00030FCParameter").data("kendoDropDownList").value(id);
+                            var order = 0;
+                            list.forEach(function( item ) {
+                                var html = createCustomHtmlParaSub(order,item);
+                                tbody.append(html);
+                                order++;
+                            });
+                        }
+                    }).fail(function(){
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function(){
+                        $.unblockUI();
+                    });
+                }
+            }).fail(function(){
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function(){
+                $.unblockUI();
+            });
+        });
+
+        $('#EntityE00030Form').submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                    $.blockUI();
+                    $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName:"E00030",modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                        $('.E00030').modal('hide');
+                        $("#btn_E00030").addClass("democlass");
+                        bootbox.alert('@Resources.Langues.Successful');
+                        $.unblockUI();
+                        result.list.forEach(function(item) {
+                            $("#btn_" + item).removeClass("democlass");
+                        });
+                    }).fail(function () {
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                }
+            });
+            e.preventDefault();
+        });
+
+        $('#E00030FormPrint').click(function(){
+            if(fcDropdown.value()){
+                $('#EntityE00030Form').submit();
+            }
+        });
+
+        $('#EntityE00030Form').on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+
+    function PrintModal() {
+        $("#printDiv").printThis();
+    }
+
+    function onFCChange(){
+        var tbody = $('.tblMultiRow').find('tbody');
+        var value = this.value();
+
+        if(value === ""){
+            clearModal();
+        }
+        else {
+            $.blockUI();
+            $.post("@Url.Action("GetFCParameterSubList", "EntityE00030Popup", new { area="Case" })", { fcparameterId:value }, function (result) {
+                if(result.success){
+                    clearModal();
+                    var list = result.listFCParaSub;
+                    var fcParameter = result.fcParameter;
+                    $('#Company').val(fcParameter.Company);
+                    $('#ModelName').val(fcParameter.ModelName);
+                    $('#Volume').val(fcParameter.Volume);
+                    $('#FuelPrice').val(fcParameter.FuelPrice);
+                    var order = 0;
+                    list.forEach(function( item ) {
+                        var html = createCustomHtmlParaSub(order,item);
+                        tbody.append(html);
+                        order++;
+                    });
+                }
+            }).fail(function(){
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function(){
+                $.unblockUI();
+            });
+        }
+    };
+
+    function createCustomHtmlParaSub(order,item){
+        return '<tr><td><input type="text" data-val="true" data-val-number="The field Load must be a number." '+
+            ' data-val-range="Invalid Target Price; Max 4 digits" data-val-range-max="999.9" data-val-range-min="0"'+
+            ' data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$"'+
+            ' data-val-required="The Load field is required." name = "ListParameterSubs['+order+'].Load" value= "'+item.Load+'" '+
+            'style="text-align:center;" readonly="readonly" /></td>'+
+            '<td><input type="text" data-val="true" data-val-number="The field ElectricOutput must be a number." '+
+            ' data-val-range="Invalid Target Price; Max 5 digits" data-val-range-max="9999.9" data-val-range-min="0" '+
+            'data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" '+
+            'data-val-required="The ElectricOutput field is required." name = "ListParameterSubs['+order+'].ElectricOutput" value= "'+item.ElectricOutput+'" '+
+            'style="text-align:center;" readonly="readonly"/></td>'+
+            '<td><input data-val="true" data-val-number="The field Heat must be a number." data-val-range="Invalid Target Price; Max 6 digits" '+
+            ' data-val-range-max="999.999" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum Three Decimal Points." '+
+            ' data-val-regex-pattern="^\d+(\.\d{1,3})?$" data-val-required="The Heat field is required." '+
+            ' type="text" name = "ListParameterSubs['+order+'].Heat" value= "'+item.Heat+'" '+
+            'style="text-align:center;" readonly="readonly"/></td>'+
+            '<td><input data-val="true" data-val-number="The field FuelInput must be a number." data-val-range="Invalid Target Price; Max 5 digits"'+
+            ' data-val-range-max="999.99" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum Two Decimal Points."'+
+            ' data-val-regex-pattern="^\d+(\.\d{1,2})?$" data-val-required="The FuelInput field is required." type="text" '+
+            ' name = "ListParameterSubs['+order+'].FuelInput" value= "'+item.FuelInput+'" '+
+            'style="text-align:center;" readonly="readonly"/></td></tr>';
+    }
+
+    function clearModal(){
+        $('.tblRow').find('input').not('.loadInput').val("");
+        $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+        $('.tblRow').find('input').prop("readonly","readonly");
+        $('.tblRow').find('input').removeClass("input-validation-error");
+        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+        $('.paraSubRow').find('input').not('.loadInput').val("");
+        $('.paraSubRow').addClass('hidden');
+        $('.paraSubRow').find('input').attr('disabled','disabled');
+        $('.formFCPara').find('input').val('');
+    };
+</script>

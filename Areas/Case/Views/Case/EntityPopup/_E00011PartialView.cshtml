@@ -1,0 +1,120 @@
+﻿<!-- Modal -->
+<style>
+    .E00011 {
+        top: 5%;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+</style>
+
+<div class="modal fade E00011" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="radio">
+                            <label><input type="checkbox" id="OpenHiddenIdE00011" name="optradio" onclick="openHiddenFieldE00011()"> @Resources.Langues.Downloadingsolarradiation</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 lbWT">@Resources.Langues.Selectyourregion</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("SelectList1", new List<SelectListItem>(), "-Select-", new { @class = "form-control", style = "text-align:left;width: 60%" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="pull-right" style="padding:0px 10px 0px 10px;">
+                            <button type="button" class="btn btn-primary">@Resources.Langues.Save</button>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="hidden" id="HiddleFieldE00011">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="radio">
+                                <label><input type="checkbox" name="optradio">@Resources.Langues.Radiationmanualinput</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 lbWT">@Resources.Langues.Selectregion</label>
+                            <div class="col-md-8">
+                                @Html.DropDownList("SelectList2", new List<SelectListItem>(), "-Select-", new { @class = "form-control", style = "text-align:left;width: 60%" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search for...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary" type="button">@Resources.Langues.Open</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-primary" onclick="Download()">@Resources.Langues.DownloadForm</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        <button type="button" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('.E00011').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+
+    function openHiddenFieldE00011() {
+        if ($('#OpenHiddenIdE00011')[0].checked) {
+            $('#HiddleFieldE00011').removeClass('hidden');
+        } else {
+            $('#HiddleFieldE00011').addClass('hidden');
+        }
+    }
+</script>

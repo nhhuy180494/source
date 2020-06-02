@@ -1,0 +1,1691 @@
+﻿@model DPDSP.Models.I00012LoanViewModel
+
+<style>
+    .E00037 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .modal-dialog1 {
+        width: 98%;
+    }
+
+
+    /*@@font-face {
+        font-family: 'Korean Font';
+        src: url('../../../../fonts/h2mjre.ttf') format('truetype');
+    }*/
+
+    .k-grid-header th.k-header {
+        vertical-align: middle;
+    }
+
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    th.k-header {
+        white-space: normal !important;
+        vertical-align: middle !important;
+    }
+
+    /*.k-widget {
+        font-family: "Korean Font";
+    }*/
+
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    .modal-content1 {
+        height: auto;
+        min-height: 100%;
+        border-radius: 0;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    @@media print {
+        body.modal-open {
+            visibility: hidden;
+        }
+
+            body.modal-open .modal .modal-body {
+                visibility: visible; /* make visible modal body and header */
+            }
+    }
+
+    .page-template {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+
+        .page-template .header {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            right: 30px;
+            border-bottom: 1px solid #888;
+            color: #888;
+        }
+
+        .page-template .footer {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            border-top: 1px solid #888;
+            text-align: center;
+            color: #888;
+        }
+
+        .page-template .watermark {
+            font-weight: bold;
+            font-size: 400%;
+            text-align: center;
+            margin-top: 30%;
+            color: #aaaaaa;
+            opacity: 0.1;
+            transform: rotate(-35deg) scale(1.7, 1.5);
+        }
+
+    .classButton {
+        background-color: white;
+        border-color: #ea6b48;
+        color: #ea6b48;
+    }
+</style>
+
+<script>
+    var caseId =  @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]';
+    var grid = $("#PopupGrid").data("kendoGrid");
+    var $modal = $('.E00037');
+
+    $(document).ready(function () {
+        $("#btn_E00037").addClass("democlass");
+        $modal.on('show.bs.modal', function () {
+            if (modelCode == "M00003") {
+                showM00003();
+                Load(caseId);
+            } else if (modelCode == "M00002") {
+                showM00002();
+                Load(caseId);
+                $('#PopupGrid table tr th[data-field="PeakReduce"] a').html('@Resources.Langues.Fuelcostsavings' + '[' + '@Resources.Langues.TWon' + ']<br/>' + '@Resources.Langues.Preexistingprice')
+            } else if (modelCode == "M00005") {
+                showM00005();
+                Load(caseId);
+            } else if (modelCode == "M00004") {
+                showM00004();
+                Load(caseId);
+                $('.header-title').html('<span class="k-link">' + '@Resources.Langues.Prosumeroperationplan' + '</span>')
+                $('#PopupGrid table tr th[data-field="Incentive2"] a').html('@Resources.Langues.Energysavings')
+                $('#PopupGrid table tr th[data-field="Incentive1"] a').html('@Resources.Langues.Salesrevenue1')
+                $('#PopupGrid table tr th[data-field="TotalBenefit"] a').html('@Resources.Langues.Totalrevenue' + '[' + '@Resources.Langues.TWon' + ']')
+            } else {
+                showM00001();
+                Load(caseId);
+            }
+        });
+    
+
+        $('.view-data').on('shown.bs.modal', function () {
+            $.blockUI();
+            setTimeout(function () {
+                $("#chart").data("kendoChart").refresh();
+                $.unblockUI();
+            }, 2000);
+        });
+
+        $('.view-data-bm3').on('shown.bs.modal', function () {
+            $.blockUI();
+            setTimeout(function () {
+                $("#chartBM3").data("kendoChart").refresh();
+                $.unblockUI();
+            }, 1000);
+        });
+    });
+
+    function PrintModal() {
+        $("#PopupGrid").getKendoGrid().saveAsPDF();
+    };
+
+    function onExportDetail() {
+        window.location = '@Url.Action("CaseDetail", "CaseManagement", new { area = "Admin"})?caseId=' + caseId + "&modelCode=" + modelCode;
+    };
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            bootbox.alert({message: message,
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+        }
+    };
+
+    function sync_handler(e) {
+        this.read();
+    };
+
+   function showM00005() {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4])
+        grid.showColumn(grid.columns[1].columns[5])
+        grid.showColumn(grid.columns[1].columns[6])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[7])
+        grid.showColumn(grid.columns[8].columns[0])
+        grid.showColumn(grid.columns[8].columns[1])
+        grid.showColumn(grid.columns[8].columns[2])
+        grid.showColumn(grid.columns[9].columns[0])
+        grid.showColumn(grid.columns[9].columns[1])
+        grid.showColumn(grid.columns[9].columns[5])
+
+       grid.hideColumn(grid.columns[2].columns[2])
+        grid.hideColumn(grid.columns[3])
+        grid.hideColumn(grid.columns[4].columns[0])
+        grid.hideColumn(grid.columns[4].columns[1])
+        grid.hideColumn(grid.columns[4].columns[2])
+        grid.hideColumn(grid.columns[4].columns[3])
+        grid.hideColumn(grid.columns[5].columns[0])
+        grid.hideColumn(grid.columns[5].columns[1])
+        grid.hideColumn(grid.columns[5].columns[2])
+        grid.hideColumn(grid.columns[6].columns[0])
+        grid.hideColumn(grid.columns[6].columns[1])
+        grid.hideColumn(grid.columns[6].columns[2])
+        grid.hideColumn(grid.columns[9].columns[2])
+        grid.hideColumn(grid.columns[9].columns[6])
+        grid.hideColumn(grid.columns[9].columns[3])
+        grid.hideColumn(grid.columns[9].columns[4])
+       grid.hideColumn(grid.columns[9].columns[7])
+       grid.hideColumn(grid.columns[9].columns[8])
+    }
+
+    function showM00001() {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4])
+        grid.showColumn(grid.columns[1].columns[5])
+        grid.showColumn(grid.columns[1].columns[6])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[4].columns[0])
+        grid.showColumn(grid.columns[4].columns[1])
+        grid.showColumn(grid.columns[4].columns[2])
+        grid.showColumn(grid.columns[4].columns[3])
+        grid.showColumn(grid.columns[8].columns[0])
+        grid.showColumn(grid.columns[8].columns[1])
+        grid.showColumn(grid.columns[8].columns[2])
+        grid.showColumn(grid.columns[9].columns[0])
+        grid.showColumn(grid.columns[9].columns[4])
+
+        grid.hideColumn(grid.columns[2].columns[2])
+        grid.hideColumn(grid.columns[3])
+        grid.hideColumn(grid.columns[5].columns[0])
+        grid.hideColumn(grid.columns[5].columns[1])
+        grid.hideColumn(grid.columns[5].columns[2])
+        grid.hideColumn(grid.columns[6].columns[0])
+        grid.hideColumn(grid.columns[6].columns[1])
+        grid.hideColumn(grid.columns[6].columns[2])
+        grid.hideColumn(grid.columns[7])
+        grid.hideColumn(grid.columns[9].columns[2])
+        grid.hideColumn(grid.columns[9].columns[3])
+        grid.hideColumn(grid.columns[9].columns[6])
+        grid.hideColumn(grid.columns[9].columns[5])
+        grid.hideColumn(grid.columns[9].columns[1])
+        grid.hideColumn(grid.columns[9].columns[7])
+        grid.hideColumn(grid.columns[9].columns[8])
+    }
+
+    function showM00002() {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4])
+        grid.showColumn(grid.columns[1].columns[5])
+        grid.showColumn(grid.columns[1].columns[6])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[2].columns[2])
+        grid.showColumn(grid.columns[3])
+        grid.showColumn(grid.columns[8].columns[0])
+        grid.showColumn(grid.columns[8].columns[1])
+        grid.showColumn(grid.columns[8].columns[2])
+        grid.showColumn(grid.columns[9].columns[0])
+        grid.showColumn(grid.columns[9].columns[7])
+
+        grid.hideColumn(grid.columns[2].columns[2])
+        grid.hideColumn(grid.columns[4].columns[0])
+        grid.hideColumn(grid.columns[4].columns[1])
+        grid.hideColumn(grid.columns[4].columns[2])
+        grid.hideColumn(grid.columns[4].columns[3])
+        grid.hideColumn(grid.columns[5].columns[0])
+        grid.hideColumn(grid.columns[5].columns[1])
+        grid.hideColumn(grid.columns[5].columns[2])
+        grid.hideColumn(grid.columns[6].columns[0])
+        grid.hideColumn(grid.columns[6].columns[1])
+        grid.hideColumn(grid.columns[6].columns[2])
+        grid.hideColumn(grid.columns[7])
+        grid.hideColumn(grid.columns[9].columns[1])
+        grid.hideColumn(grid.columns[9].columns[2])
+        grid.hideColumn(grid.columns[9].columns[3])
+        grid.hideColumn(grid.columns[9].columns[4])
+        grid.hideColumn(grid.columns[9].columns[5])
+        grid.hideColumn(grid.columns[9].columns[6])
+        grid.hideColumn(grid.columns[9].columns[8])
+    }
+
+    function showM00004() {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4])
+        grid.showColumn(grid.columns[1].columns[5])
+        grid.showColumn(grid.columns[1].columns[6])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[4].columns[1])
+        grid.showColumn(grid.columns[4].columns[2])
+        grid.showColumn(grid.columns[4].columns[3])
+        grid.showColumn(grid.columns[7])
+        grid.showColumn(grid.columns[8].columns[0])
+        grid.showColumn(grid.columns[8].columns[1])
+        grid.showColumn(grid.columns[8].columns[2])
+        grid.showColumn(grid.columns[9].columns[0])
+        grid.showColumn(grid.columns[9].columns[1])
+        grid.showColumn(grid.columns[9].columns[5])
+        grid.showColumn(grid.columns[9].columns[6])
+
+        grid.hideColumn(grid.columns[2].columns[2])
+        grid.hideColumn(grid.columns[3])
+        grid.hideColumn(grid.columns[4].columns[0])
+        grid.hideColumn(grid.columns[5].columns[0])
+        grid.hideColumn(grid.columns[5].columns[1])
+        grid.hideColumn(grid.columns[5].columns[2])
+        grid.hideColumn(grid.columns[6].columns[0])
+        grid.hideColumn(grid.columns[6].columns[1])
+        grid.hideColumn(grid.columns[6].columns[2])
+        grid.hideColumn(grid.columns[9].columns[2])
+        grid.hideColumn(grid.columns[9].columns[3])
+        grid.hideColumn(grid.columns[9].columns[4])
+        grid.hideColumn(grid.columns[9].columns[7])
+        grid.hideColumn(grid.columns[9].columns[8])
+    }
+
+    function showM00003() {
+        var grid = $('#PopupGrid').data('kendoGrid');
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4])
+        grid.showColumn(grid.columns[1].columns[5])
+        grid.showColumn(grid.columns[1].columns[6])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[5].columns[1])
+        grid.showColumn(grid.columns[5].columns[2])
+        grid.showColumn(grid.columns[5].columns[0])
+        grid.showColumn(grid.columns[6].columns[1])
+        grid.showColumn(grid.columns[6].columns[2])
+        grid.showColumn(grid.columns[6].columns[0])
+        grid.showColumn(grid.columns[8].columns[0])
+        grid.showColumn(grid.columns[8].columns[1])
+        grid.showColumn(grid.columns[8].columns[2])
+        grid.showColumn(grid.columns[9].columns[2])
+        grid.showColumn(grid.columns[9].columns[3])
+        grid.showColumn(grid.columns[9].columns[8])
+
+        grid.hideColumn(grid.columns[2].columns[2])
+        grid.hideColumn(grid.columns[3])
+        grid.hideColumn(grid.columns[4].columns[0])
+        grid.hideColumn(grid.columns[4].columns[3])
+        grid.hideColumn(grid.columns[4].columns[1])
+        grid.hideColumn(grid.columns[4].columns[2])
+        grid.hideColumn(grid.columns[7])
+        grid.hideColumn(grid.columns[9].columns[1])
+        grid.hideColumn(grid.columns[9].columns[0])
+        grid.hideColumn(grid.columns[9].columns[5])
+        grid.hideColumn(grid.columns[9].columns[4])
+        grid.hideColumn(grid.columns[9].columns[6])
+        grid.hideColumn(grid.columns[9].columns[7])
+    }
+
+    function Load(caseId) {
+        $.blockUI();
+        $.post("@Url.Action("LoadDataByCaseId", "EntityE00002Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                var grid = $('#PopupGrid').data('kendoGrid');
+                debugger
+                if (result.CP0001) {
+                    grid.showColumn(grid.columns[1].columns[0])
+
+                    if (modelCode == "M00003") {
+                        grid.showColumn(grid.columns[5].columns[0])
+                        grid.showColumn(grid.columns[6].columns[0])
+                        grid.showColumn(grid.columns[9].columns[3])
+                    }
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[0])
+                    if (modelCode == "M00003") {
+                        grid.hideColumn(grid.columns[5].columns[0])
+                        grid.hideColumn(grid.columns[6].columns[0])
+                        grid.hideColumn(grid.columns[9].columns[3])
+                    }
+
+                }
+                if (result.CP0002) {
+                    grid.showColumn(grid.columns[1].columns[1])
+                    if (modelCode == "M00003") {
+                        grid.showColumn(grid.columns[5].columns[1])
+                        grid.showColumn(grid.columns[6].columns[1])
+                        grid.showColumn(grid.columns[9].columns[8])
+                    }
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[1])
+                    if (modelCode == "M00003") {
+                        grid.hideColumn(grid.columns[5].columns[1])
+                        grid.hideColumn(grid.columns[6].columns[1])
+                        grid.hideColumn(grid.columns[9].columns[8])
+                    }
+
+                }
+
+                if (result.CP0003) {
+                    grid.showColumn(grid.columns[1].columns[4])
+                    grid.showColumn(grid.columns[1].columns[5])
+                    if (modelCode == "M00003") {
+                        grid.showColumn(grid.columns[5].columns[2])
+                        grid.showColumn(grid.columns[6].columns[2])
+                    }
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[4])
+                    grid.hideColumn(grid.columns[1].columns[5])
+                    if (modelCode == "M00003") {
+                        grid.hideColumn(grid.columns[5].columns[2])
+                        grid.hideColumn(grid.columns[6].columns[2])
+                    }
+                }
+
+                if (result.CP0004) {
+                    grid.showColumn(grid.columns[1].columns[2])
+                    grid.showColumn(grid.columns[9].columns[1])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[2])
+                    grid.hideColumn(grid.columns[9].columns[1])
+                }
+
+                if (result.CP0005) {
+                    grid.showColumn(grid.columns[1].columns[3])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[3])
+                }
+
+                if (result.CP0006) {
+                    grid.showColumn(grid.columns[1].columns[6])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[6])
+                }
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+    function viewData(id, type) {
+        $('#selectId').val(id)
+        $('#selectType').val(type)
+        var cate = $('input:radio[name="optradio"]').val();
+        var originChartURL = '@Url.Action("GetI00010EssPattern", "MyCase", new { area = "Case"})';
+        var changedChartUrl = originChartURL + "?id=" + id + "&cate=" + cate + "&type=" + type;
+
+        $('#chart').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+        $('#chart').data('kendoChart').dataSource.read();
+
+        var originGridURL = '@Url.Action("GetGrid", "MyCase", new { area = "Case"})';
+        var changedGridUrl = originGridURL + "?id=" + id + "&cate=" + cate + "&type=" + type;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+
+        $('.view-data').modal('show')
+        setTimeout(function () {
+           if (type == "ess") {
+                $('#pattern-title').html('@Resources.Langues.ESSOperationsPlan')
+                $('#des-patt').removeClass('hidden')
+                $('#chart').data('kendoChart').setOptions({
+                    valueAxis: [
+                        {
+                            title: {
+                                text: "@Resources.Langues.PatternAxis1"
+                            },
+                            axisCrossingValue: -10000
+                        }
+                    ]
+                });
+            } else if (type == "fc") {
+                $('#pattern-title').html('@Resources.Langues.FCOperationsPlan')
+                $('#des-patt').addClass('hidden')
+                $('#chart').data('kendoChart').setOptions({
+                    valueAxis: [
+                        {
+                            title: {
+                                text: "@Resources.Langues.PatternAxis2"
+                            },
+                            axisCrossingValue: -10000
+                        }
+                    ]
+                });
+            } else if (type == "pv") {
+                $('#pattern-title').html('@Resources.Langues.PVpowergeneration')
+                $('#des-patt').addClass('hidden')
+                $('#chart').data('kendoChart').setOptions({
+                    valueAxis: [
+                        {
+                            title: {
+                                text: "@Resources.Langues.PatternAxis2"
+                            },
+                            axisCrossingValue: -10000
+                        }
+                    ]
+                });
+            } else if (type == "dg") {
+                $('#pattern-title').html('@Resources.Langues.DieselOperationPlan')
+                $('#des-patt').addClass('hidden')
+                $('#chart').data('kendoChart').setOptions({
+                    valueAxis: [
+                        {
+                            title: {
+                                text: "@Resources.Langues.Powergeneration"
+                            }
+                        }
+                    ],
+                    axisCrossingValue: -10000
+                });
+            } else if (type == "sp") {
+                $('#pattern-title').html('@Resources.Langues.Salespower')
+                $('#des-patt').addClass('hidden')
+                $('#chart').data('kendoChart').setOptions({
+                    valueAxis: [
+                        {
+                            title: {
+                                text: "@Resources.Langues.Salespower" + "[kWh]"
+                            }
+                        }
+                    ],
+                    axisCrossingValue: -10000
+                });
+            }else if (type == "pp") {
+                $('#pattern-title').html('@Resources.Langues.Purchasedpower')
+                $('#des-patt').addClass('hidden')
+                $('#chart').data('kendoChart').setOptions({
+                    valueAxis: [
+                        {
+                            title: {
+                                text: "@Resources.Langues.Purchasedpower" + "[kWh]"
+                            }
+                        }
+                    ],
+                    axisCrossingValue: -10000
+                });
+            }
+        }, 2000);
+
+    }
+
+    $('input:radio[name="optradio"]').change(function () {
+        var cate = $(this).val()
+        var originChartURL = '@Url.Action("GetI00010EssPattern", "MyCase", new { area = "Case"})';
+        var changedChartUrl = originChartURL + "?id=" + $('#selectId').val() + "&cate=" + cate + "&type=" + $('#selectType').val();
+
+        $('#chart').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+        $('#chart').data('kendoChart').dataSource.read();
+
+        var originGridURL = '@Url.Action("GetGrid", "MyCase", new { area = "Case"})';
+        var changedGridUrl = originGridURL + "?id=" + $('#selectId').val() + "&cate=" + cate + "&type=" + $('#selectType').val();
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    })
+
+    function viewDataBM3(id, sts) {
+        $('#selectId').val(id)
+        var cate = $('input:radio[name="optradio2"]').val();
+        var originChartURL = '@Url.Action("GetI00010EssPatternBM3", "MyCase", new { area = "Case"})';
+        var changedChartUrl = originChartURL + "?id=" + id + "&cate=" + cate + "&sts=" + sts;
+
+        $('#chartBM3').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+        $('#chartBM3').data('kendoChart').dataSource.read();
+
+        var originGridURL = '@Url.Action("GetGridBM3", "MyCase", new { area = "Case"})';
+        var changedGridUrl = originGridURL + "?id=" + id + "&cate=" + cate + "&sts=" + sts;
+
+        $('#GridBM3').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#GridBM3').data('kendoGrid').dataSource.read();
+
+        $('.view-data-bm3').modal('show')
+        $('input:radio[name=optradio2][value=w]').click();
+
+        if (sts == 'ess') {
+            $('#title-chart').html('@Resources.Langues.ESSOperationsPlan')
+            $('#des-patt-bm3').removeClass('hidden')
+            $('#des-patt-bm3').html('@Resources.Langues.PositiveAmount')
+            $('#chartBM3').data('kendoChart').setOptions({
+                valueAxis: [
+                    {
+                        title: {
+                            text: "@Resources.Langues.AxisE6"
+                        },
+                        axisCrossingValue: -10000
+                    }
+                ]
+            });
+        } else if(sts == 'wt') {
+            $('#title-chart').html('@Resources.Langues.WTOperationPlan')
+            $('#des-patt-bm3').removeClass('hidden')
+            $('#des-patt-bm3').html('@Resources.Langues.Negativenumbers1')
+            $('#chartBM3').data('kendoChart').setOptions({
+                valueAxis: [
+                    {
+                        title: {
+                            text: "@Resources.Langues.PatternAxis2"
+                        },
+                        axisCrossingValue: -10000
+                    }
+                ]
+            });
+        }
+        else {
+            $('#title-chart').html('@Resources.Langues.PVOperationPlan')
+            $('#des-patt-bm3').removeClass('hidden')
+            $('#des-patt-bm3').html('@Resources.Langues.Negativenumbers1')
+            $('#chartBM3').data('kendoChart').setOptions({
+                valueAxis: [
+                    {
+                        title: {
+                            text: "@Resources.Langues.PatternAxis2"
+                        },
+                        axisCrossingValue: -10000
+                    }
+                ]
+            });
+        }
+    }
+
+    $('input:radio[name="optradio2"]').change(function () {
+        var cate = $(this).val()
+        var originChartURL = '@Url.Action("GetI00010EssPatternBM3", "MyCase", new { area = "Case"})';
+         var changedChartUrl = originChartURL + "?id=" + $('#selectId').val() + "&cate=" + cate + "&sts=" + $('#sts').val();
+
+        $('#chartBM3').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+        $('#chartBM3').data('kendoChart').dataSource.read();
+
+        var originGridURL = '@Url.Action("GetGridBM3", "MyCase", new { area = "Case"})';
+         var changedGridUrl = originGridURL + "?id=" + $('#selectId').val() + "&cate=" + cate + "&sts=" + $('#sts').val();
+
+        $('#GridBM3').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#GridBM3').data('kendoGrid').dataSource.read();
+    })
+
+    function viewCashFlow(id) {
+        debugger;
+        $('#I00012Id').val(id)
+        $('.cash-flow').modal('show')
+    }
+</script>
+
+<div class="modal fade E00037" id="popup" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog1">
+        <div class="modal-content modal-content1">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.Vieweconomicanalysisresult</h4>
+                @*<h4 class="modal-title" id="myModalLabel01" style="color:#1e5687"><i class="fa fa-check-circle"></i> @Resources.Langues.MyCase</h4>*@
+            </div>
+            <div id="printDiv">
+                <input id="selectId" hidden />
+                <input id="selectType" hidden />
+                @(Html.Kendo().Grid<DPDSP.Models.I00012DetailViewModel>()
+                                                        .Name("PopupGrid")
+                                                        .Pdf(pdf => pdf
+                                                            .AllPages()
+                                                            .AvoidLinks()
+                                                            .PaperSize("A3")
+                                                            .Scale(0.7)
+                                                            .Landscape()
+                                                            .RepeatHeaders()
+                                                            .TemplateId("page-template")
+                                                            .FileName("CaseResult.pdf")
+                                                            .ProxyURL(Url.Action("Pdf_Export_Save", "MyCase"))
+                                                        )
+                                                        .Columns(columns =>
+                                                        {
+                                                            columns.Bound(cas => cas.Order).Title(Resources.Langues.Order).HtmlAttributes(new { @style = "text-align:center;background-color:white" }).Format("{0:#,##}");
+                                                            columns.Group(group => group
+                                                                .Title(Resources.Langues.Capacity)
+                                                                .Columns(info =>
+                                                                {
+                                                                    info.Bound(cas => cas.PvValue).Title("PV[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.WtValue).Title("WT[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.FCValue).Title("FC[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.CHPValue).Title("CHP[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.PcsValue).Title("PCS[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.EssValue).Title("Battery[kWh]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.DieselValue).Title("Diesel[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                })
+                                                            );
+
+                                                            columns.Group(group => group
+                                                                .Title(Resources.Langues.Cost + " [" + Resources.Langues.TWon + "]")
+                                                                .Columns(info =>
+                                                                {
+                                                                    info.Bound(cas => cas.InitialCost).Title(Resources.Langues.InvestmentCost).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.MaintananceCost).Title(Resources.Langues.MaintananceCost).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.Fcbenefit).Title(Resources.Langues.FCFuelCost).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                })
+                                                            );
+                                                            columns.Bound(cas => cas.PeakReduce).Title(Resources.Langues.PeakReduce + " [" + Resources.Langues.won + "]<br/>" + Resources.Langues.Preexistingprice).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            columns.Group(group => group
+                                                                .Title(Resources.Langues.Revenue + " [" + Resources.Langues.TWon + "]")
+                                                                .Columns(info =>
+                                                                {
+                                                                    info.Bound(cas => cas.ReducedEnergyCharges).Title(Resources.Langues.ReducedEnergyCharges).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.PeakReduce).Title(Resources.Langues.PeakReduce).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.Incentive2).Title(Resources.Langues.Discount2).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.Incentive1).Title(Resources.Langues.Discount1).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                })
+                                                            );
+                                                            columns.Group(group => group
+                                                                .Title(Resources.Langues.SMPSale)
+                                                                    .Columns(info =>
+                                                                    {
+                                                                        info.Bound(cas => cas.PVSMP).Title("PV").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                        info.Bound(cas => cas.WTSMP).Title("WT").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                        info.Bound(cas => cas.ESSSMP).Title("ESS").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    })
+                                                                );
+
+                                                            columns.Group(group => group
+                                                                .Title(Resources.Langues.RECSale)
+                                                                .Columns(info =>
+                                                                {
+                                                                    info.Bound(cas => cas.PVRec).Title("PV").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.WTRec).Title("WT").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.ESSRec).Title("ESS").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                })
+                                                            );
+                                                            columns.Bound(cas => cas.TotalBenefit).Title(Resources.Langues.TotalBenefit + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+
+                                                            columns.Group(group => group
+                                                                .Title(Resources.Langues.Economics)
+                                                                .Columns(info =>
+                                                                {
+                                                                    info.Bound(cas => cas.PaybackPeriod).Title(Resources.Langues.PaybackPeriod).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(cas => cas.IRR).Title(Resources.Langues.IRR).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                                    info.Bound(m => m.I00012DetailId).ClientTemplate("<button class=\"btn-info\" onclick='viewCashFlow(#=I00012DetailId#)'>" + Resources.Langues.resultrun + "</ button> ").Title(Resources.Langues.CashFlow).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                })
+                                                            );
+                                                            columns.Group(group => group
+                                                                .Title(Resources.Langues.Pattern)
+                                                                .Columns(info =>
+                                                                {
+                                                                    info.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"ess#=I00010Id#\" onclick='loadData(#=I00010Id#, \"ess\")'>"+Resources.Langues.resultsearch+"</button> ").Title("ESS").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                    info.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"fc#=I00010Id#\" onclick='loadData(#=I00010Id#, \"fc\")'>"+Resources.Langues.resultsearch+"</button> ").Title("FC").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                    info.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"ess#=I00010Id#\" onclick='loadDataBM3(#=I00010Id#, \"ess\")'>"+Resources.Langues.resultsearch+"</button> ").Title("ESS").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                    info.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"sale#=I00010Id#\" onclick='loadDataBM3(#=I00010Id#,\"sale\")'>"+Resources.Langues.resultsearch+"</button> ").Title("PV").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                    info.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"pv#=I00010Id#\" onclick='loadData(#=I00010Id#, \"pv\")'>"+Resources.Langues.resultsearch+"</button> ").Title("PV").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                    info.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"sp#=I00010Id#\" onclick='loadData(#=I00010Id#, \"sp\")'>"+Resources.Langues.resultsearch+"</button> ").Title(Resources.Langues.Salespower).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                    info.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"pp#=I00010Id#\" onclick='loadData(#=I00010Id#, \"pp\")'>"+Resources.Langues.resultsearch+"</button> ").Title(Resources.Langues.Purchasedpower).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                    info.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"dg#=I00010Id#\" onclick='loadData(#=I00010Id#, \"dg\")'>"+Resources.Langues.resultsearch+"</button> ").Title("Diesel").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                    info.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"wt#=I00010Id#\" onclick='loadDataBM3(#=I00010Id#, \"wt\")'>"+Resources.Langues.resultsearch+"</button> ").Title("WT").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                                })
+                                                                .HeaderHtmlAttributes(new { @class = "header-title" })
+                                                            );
+
+                                                        })
+                                                        .Pageable(p => p.Enabled(false))
+                                                        .Sortable()
+                                                        .Scrollable(rz => rz.Enabled(false))
+                                                        .DataSource(dataSource => dataSource
+                                                            .Ajax()
+                                                            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                                            .Model(cas => { cas.Id(p => p.CaseId); })
+                                                            .Read(read => read.Action("GetI00012DetailByCaseId", "MyCase", new { caseId = @Request.Params["caseId"] }))
+                                                        )
+                                                        .HtmlAttributes(new { style = "height: auto" })
+                )
+                <div>
+                    @*@if (Request.Params["modelCode"] != "M00001")
+                                        {
+                                            @(Html.Kendo().Grid<DPDSP.Models.I00012DetailViewModel>()
+                                        .Name("PopupGrid")
+                                        .Pdf(pdf => pdf
+                                            .AllPages()
+                                            .AvoidLinks()
+                                            .PaperSize("A3")
+                                            .Scale(0.7)
+                                            .Landscape()
+                                            .RepeatHeaders()
+                                            .TemplateId("page-template")
+                                            .FileName("CaseResult.pdf")
+                                            .ProxyURL(Url.Action("Pdf_Export_Save", "MyCase"))
+                                        )
+                                        .Columns(columns =>
+                                        {
+                                            columns.Bound(cas => cas.Order).Title(Resources.Langues.Order).HtmlAttributes(new { @style = "text-align:center;background-color:white" }).Format("{0:#,##}");
+                                            columns.Group(group => group
+                                                .Title(Resources.Langues.Capacity)
+                                                .Columns(info =>
+                                                {
+                                                    info.Bound(cas => cas.PvValue).Title("PV[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.WtValue).Title("WT[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.FCValue).Title("FC[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.CHPValue).Title("CHP[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.PcsValue).Title("PCS[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.EssValue).Title("Battery[kWh]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.DieselValue).Title("Diesel[kWh]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                })
+                                            );
+
+                                            columns.Group(group => group
+                                                .Title(Resources.Langues.Cost + " [" + Resources.Langues.TWon + "]")
+                                                .Columns(info =>
+                                                {
+                                                    info.Bound(cas => cas.InitialCost).Title(Resources.Langues.InvestmentCost).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.MaintananceCost).Title(Resources.Langues.MaintananceCost).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                })
+                                            );
+                                            columns.Bound(cas => cas.Fcbenefit).Title(Resources.Langues.FCFuelCost + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                            columns.Group(group => group
+                                                .Title(Resources.Langues.EnergyChargingSaving)
+                                                .Columns(info =>
+                                                {
+                                                    info.Bound(cas => cas.PVBenefit).Title("PV" + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.Wtbenefit).Title("WT" + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.Fcbenefit).Title("FC" + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.Chpbenefit).Title("CHP" + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.ESSOperation).Title("ESS" + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                })
+                                            );
+                                            columns.Bound(cas => cas.PeakReduce).Title(Resources.Langues.PeakReduce + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                            columns.Bound(cas => cas.Incentive2).Title(Resources.Langues.Discount2 + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                            columns.Bound(cas => cas.Incentive1).Title(Resources.Langues.Discount1 + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                            columns.Bound(cas => cas.Incentive3).Title(Resources.Langues.Discount3 + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}").Hidden();
+
+                                            columns.Group(group => group
+                                                .Title(Resources.Langues.SMPSale)
+                                                .Columns(info =>
+                                                {
+                                                    info.Bound(cas => cas.PVSMP).Title("PV").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.WTSMP).Title("WT").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.ESSSMP).Title("ESS").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                })
+                                            );
+
+                                            columns.Group(group => group
+                                                .Title(Resources.Langues.RECSale)
+                                                .Columns(info =>
+                                                {
+                                                    info.Bound(cas => cas.PVRec).Title("PV").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.WTRec).Title("WT").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.ESSRec).Title("ESS").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                })
+                                            );
+
+                                            columns.Bound(cas => cas.TotalBenefit).Title(Resources.Langues.TotalBenefit + " [" + Resources.Langues.TWon + "]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+
+                                            columns.Group(group => group
+                                                .Title(Resources.Langues.Economics)
+                                                .Columns(info =>
+                                                {
+                                                    info.Bound(cas => cas.PaybackPeriod).Title(Resources.Langues.PaybackPeriod).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                    info.Bound(cas => cas.IRR).Title(Resources.Langues.IRR).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                })
+                                            );
+                                            columns.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"#=I00010Id#\" onclick='loadData(#=I00010Id#)'>" + Resources.Langues.Proceeding + "</button> ").Title(Resources.Langues.ESSCharge).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                            columns.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"ess#=I00010Id#\" onclick='loadDataBM3(#=I00010Id#, \"ess\")'>조회</button> ").Title(Resources.Langues.ChargePattern).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                            columns.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"sale#=I00010Id#\" onclick='loadDataBM3(#=I00010Id#,\"sale\")'>조회</button> ").Title(Resources.Langues.SalePattern).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                            columns.Bound(m => m.I00012DetailId).ClientTemplate("<button class=\"btn-info\" onclick='viewCashFlow(#=I00012DetailId#)'>실행</ button> ").Title("Cash flow").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                        })
+                                        .Pageable(p => p.Enabled(false))
+                                        .Sortable()
+                                        .Scrollable(rz => rz.Enabled(false))
+                                        .DataSource(dataSource => dataSource
+                                            .Ajax()
+                                            .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                            .Model(cas => { cas.Id(p => p.CaseId); })
+                                            .Read(read => read.Action("GetI00012DetailByCaseId", "MyCase", new { caseId = @Request.Params["caseId"] }))
+                                        )
+                                        .HtmlAttributes(new { style = "height: auto" })
+                        )
+                                        }
+                                        else
+                                        {
+                                            @(Html.Kendo().Grid<DPDSP.Models.I00012DetailViewModel>()
+                                                .Name("PopupGrid")
+                                                .Pdf(pdf => pdf
+                                                    .AllPages()
+                                                    .AvoidLinks()
+                                                    .PaperSize("A3")
+                                                    .Scale(0.7)
+                                                    .Landscape()
+                                                    .RepeatHeaders()
+                                                    .TemplateId("page-template")
+                                                    .FileName("CaseResult.pdf")
+                                                    .ProxyURL(Url.Action("Pdf_Export_Save", "MyCase"))
+                                                )
+                                                .Columns(columns =>
+                                                {
+                                                    columns.Bound(cas => cas.Order).Title(Resources.Langues.Order).HtmlAttributes(new { @style = "text-align:center;background-color:white" }).Format("{0:#,##}");
+                                                    columns.Group(group => group
+                                                        .Title(Resources.Langues.Capacity)
+                                                        .Columns(info =>
+                                                        {
+                                                            info.Bound(cas => cas.PvValue).Title("PV[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.WtValue).Title("WT[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.FCValue).Title("FC[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.CHPValue).Title("CHP[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.PcsValue).Title("PCS[kW]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.EssValue).Title("Battery[kWh]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.DieselValue).Title("Diesel[kWh]").HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                        })
+                                                    );
+
+                                                    columns.Group(group => group
+                                                        .Title(Resources.Langues.Cost + " [" + Resources.Langues.TWon + "]")
+                                                        .Columns(info =>
+                                                        {
+                                                            info.Bound(cas => cas.InitialCost).Title(Resources.Langues.InvestmentCost).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.MaintananceCost).Title(Resources.Langues.MaintananceCost).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                        })
+                                                    );
+                                                    columns.Group(group => group
+                                                        .Title(Resources.Langues.Revenue + " [" + Resources.Langues.TWon + "]")
+                                                        .Columns(info =>
+                                                        {
+                                                            info.Bound(cas => cas.ReducedEnergyCharges).Title(Resources.Langues.ReducedEnergyCharges).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.PeakReduce).Title(Resources.Langues.PeakReduce).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.Incentive2).Title(Resources.Langues.Discount2).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.Incentive1).Title(Resources.Langues.Discount1).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                        })
+                                                    );
+
+
+                                                    columns.Group(group => group
+                                                        .Title(Resources.Langues.Economics)
+                                                        .Columns(info =>
+                                                        {
+                                                            info.Bound(cas => cas.PaybackPeriod).Title(Resources.Langues.PaybackPeriod).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                            info.Bound(cas => cas.IRR).Title(Resources.Langues.IRR).HtmlAttributes(new { @style = "text-align:right;background-color:white" }).Format("{0:#,##}");
+                                                        })
+                                                    );
+                                                    columns.Bound(m => m.I00012DetailId).ClientTemplate("<button class=\"btn-info\" onclick='viewCashFlow(#=I00012DetailId#)'>실행</ button> ").Title("Cash flow").HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+                                                    columns.Bound(m => m.I00010Id).ClientTemplate("<button class=\"btn-info\" id=\"#=I00010Id#\" onclick='loadData(#=I00010Id#)'>" + Resources.Langues.Proceeding + "</button> ").Title(Resources.Langues.ESSCharge).HtmlAttributes(new { @style = "text-align:center;" }).HeaderHtmlAttributes(new { @class = "headerClass" });
+
+                                                })
+                                                .Pageable(p => p.Enabled(false))
+                                                .Sortable()
+                                                .Scrollable(rz => rz.Enabled(false))
+                                                .DataSource(dataSource => dataSource
+                                                    .Ajax()
+                                                    .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                                    .Model(cas => { cas.Id(p => p.CaseId); })
+                                                    .Read(read => read.Action("GetI00012DetailByCaseId", "MyCase", new { caseId = @Request.Params["caseId"] }))
+                                                )
+                                                .HtmlAttributes(new { style = "height: auto" })
+                                            )
+                                        }*@
+                </div>
+            </div>
+            <hr />
+            <div class="modal-footer" style="border-top:none;">
+                <button type="button" onclick="onExportReport()" class="btn btn-primary classButton">@Resources.Langues.ViewReport</button>
+                <button type="button" onclick="onExportDetail()" class="btn btn-primary classButton">@Resources.Langues.SaveReport</button>
+                @*<button type="reset" class="btn btn-danger" onclick="PrintModal()" data-dismiss="modal">@Resources.Langues.Print</button>*@
+                <button type="submit" class="btn btn-default" onclick="OkClick()" data-dismiss="modal">@Resources.Langues.OK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade view-data" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 80%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="pattern-title">@Resources.Langues.LoadDataViews</h4>
+            </div>
+            <div class="modal-body" id="printDiv">
+                <div class="row">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-sm-1 active" style="text-align:left"> @Resources.Langues.SearchOption </label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="w" checked>@Resources.Langues.WorkingDay</label>
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="sat">@Resources.Langues.Saturday</label>
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio" value="sun">@Resources.Langues.Holiday</label>
+                            </div>
+                            <label class="control-label col-sm-3 active" style="text-align:right" id="des-patt"> @Resources.Langues.PatternDes </label>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    @(Html.Kendo().Chart<DPDSP.Models.I00010EssPatternViewModel>()
+                        .Name("chart")
+                        .Title("")
+                        .DataSource(dataSource => dataSource
+                            .Read(read => read.Action("GetI00010EssPattern", "MyCase", new { area = "Case", id = 0, cate = "w" }))
+                            .Group(group => group.Add(model => model.EssPattMonth))
+                            .Sort(sort => sort.Add(model => model.EssPattHour).Ascending())
+                        )
+                        .ChartArea(chartArea => chartArea
+                            //.Width(1288)
+                            .Background("transparent")
+                        )
+                        .SeriesDefaults(seriesDefaults =>
+                            seriesDefaults.Line()
+                        )
+                        .Series(series =>
+                        {
+                            series.Line(model => model.PcsValue).Name("#= group.items[0].MonthString # ").CategoryField("EssPattHour").Markers(x => x.Visible(false));
+                        })
+                        .SeriesColors("#e8a1a2", "#264d7e", "#bbc9a5", "#698b47", "#3e4630", "#428b64", "#6e4a75", "#feec04", "#9e7339", "#4c4a3c", "#dd7b00", "#dd3420")
+                        .ValueAxis(axis => axis.Numeric()
+                            .Title(title => title.Text(Resources.Langues.PatternAxis1))
+                            .Line(line => line.Visible(false))
+                            .Labels(label => label.Format("{0:#,###}"))
+                            .AxisCrossingValue(0, int.MinValue)
+                        )
+                        .CategoryAxis(axis => axis
+                            .Labels(false)
+                            .Line(line => line.Visible(false))
+                        )
+                        .CategoryAxis(axis => axis
+                            .Title(title => title.Text(Resources.Langues.Time + " [hour]"))
+                            .Line(line => line.Visible(true))
+                            .MinorGridLines(mi => mi.Visible(true))
+                            .MajorGridLines(ma => ma.Visible(false))
+                            .Categories(model => model.EssPattHour)
+                            .Line(line => line.Visible(false))
+                        )
+                        .Legend(legend => legend
+                            .Position(ChartLegendPosition.Right)
+                        )
+                        .Tooltip(tooltip => tooltip
+                            .Visible(true)
+                            .Format("{0:#,###}")
+                        )
+                    )
+                </div>
+                <br />
+                <div>
+                    @(Html.Kendo().Grid<DPDSP.Models.I00001iSmartGridModel>()
+                        .Name("Grid")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(member => member.Hour).Title(Resources.Langues.Time).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.Jan).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Jan1 + "<br/>[kWh]").Format("{0:n1}");
+                            columns.Bound(member => member.Feb).Title(Resources.Langues.Feb1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Mar).Title(Resources.Langues.Mar1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Apr).Title(Resources.Langues.Apr1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.May).Title(Resources.Langues.May1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Jun).Title(Resources.Langues.Jun1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Jul).Title(Resources.Langues.Jul1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Aug).Title(Resources.Langues.Aug1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Sep).Title(Resources.Langues.Sep1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Oct).Title(Resources.Langues.Oct1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Nov).Title(Resources.Langues.Nov1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Dec).Title(Resources.Langues.Dec1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        })
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Model(model => model.Id(i00001iSmartGridModel => i00001iSmartGridModel.Hour))
+                            .Read(read => read.Action("GetGrid", "MyCase", new { area = "Case", id = 0, cate = "w" }))
+                        )
+                        .HtmlAttributes(new { style = "width:100%;" })
+                    )
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade view-data-bm3" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 80%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="title-chart">@Resources.Langues.ViewData</h4>
+            </div>
+            <div class="modal-body" id="printDiv">
+                <div class="row">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-sm-1 active" style="text-align:left"> @Resources.Langues.SearchOption </label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio2" value="w" checked>@Resources.Langues.WorkingDay</label>
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio2" value="sat">@Resources.Langues.Saturday</label>
+                                <label class="radio-inline" style="margin-right:9%"><input type="radio" name="optradio2" value="sun">@Resources.Langues.Holiday</label>
+                            </div>
+                            <label class="control-label col-sm-3 active" style="text-align:right" id="des-patt-bm3"> @Resources.Langues.Negativenumbers1 </label>
+                        </div>
+                    </div>
+                </div>
+                @Html.Hidden("sts", "ess")
+                <br />
+                <div class="row">
+                    @(Html.Kendo().Chart<DPDSP.Models.I00010EssPatternBM3ViewModel>()
+                                                                .Name("chartBM3")
+                                                                .Title("")
+                                                                .DataSource(dataSource => dataSource
+                                                                .Read(read => read.Action("GetI00010EssPatternBM3", "MyCase", new { area = "Case", id = 0, cate = "w", sts = "ess" }))
+                                                                .Group(group => group.Add(model => model.Month))
+                                                                .Sort(sort => sort.Add(model => model.Hour).Ascending())
+                                                                )
+                                                                .ChartArea(chartArea => chartArea
+                                                                //.Width(1288)
+                                                                .Background("transparent")
+                                                                )
+                                                                .SeriesDefaults(seriesDefaults =>
+                                                                seriesDefaults.Line()
+                                                                )
+                                                                .Series(series =>
+                                                                {
+                                                                    series.Line(model => model.Value).Name("#= group.items[0].MonthString # ").CategoryField("Hour").Markers(x => x.Visible(false));
+                                                                })
+                                                                .SeriesColors("#e8a1a2", "#264d7e", "#bbc9a5", "#698b47", "#3e4630", "#428b64", "#6e4a75", "#feec04", "#9e7339", "#4c4a3c", "#dd7b00", "#dd3420")
+                                                                .ValueAxis(axis => axis.Numeric()
+                                                                .Line(line => line.Visible(false))
+                                                                .Labels(label => label.Format("{0:#,###}"))
+                                                                .AxisCrossingValue(0, int.MinValue)
+                                                                .Title(title => title.Text(@Resources.Langues.AxisE6))
+                                                                )
+                                                                .CategoryAxis(axis => axis
+                            .Labels(false)
+                            .Line(line => line.Visible(false))
+                        )
+                        .CategoryAxis(axis => axis
+                            .Title(title => title.Text(Resources.Langues.Time + " [hour]"))
+                            .Line(line => line.Visible(true))
+                            .MinorGridLines(mi => mi.Visible(true))
+                            .MajorGridLines(ma => ma.Visible(false))
+                            .Categories(model => model.Hour)
+                            .Line(line => line.Visible(false))
+                        )
+                                                                .Legend(legend => legend
+                                                                .Position(ChartLegendPosition.Right)
+                                                                )
+                                                                .Tooltip(tooltip => tooltip
+                                                                .Visible(true)
+                                                                .Format("{0:#,###}")
+                                                                )
+                            //.HtmlAttributes(new { style = "width: 100%; " })
+                    )
+                </div>
+                <br />
+                <div>
+                    @(Html.Kendo().Grid<DPDSP.Models.I00001iSmartGridModel>()
+                                                                .Name("GridBM3")
+                                                                .Columns(columns =>
+                                                                {
+                                                                    columns.Bound(member => member.Hour).Title(Resources.Langues.Time).HtmlAttributes(new { style = "text-align:center;" });
+                                                                    columns.Bound(member => member.Jan).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Jan1 + "<br/>[kWh]").Format("{0:n1}");
+                                                                    columns.Bound(member => member.Feb).Title(Resources.Langues.Feb1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.Mar).Title(Resources.Langues.Mar1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.Apr).Title(Resources.Langues.Apr1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.May).Title(Resources.Langues.May1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.Jun).Title(Resources.Langues.Jun1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.Jul).Title(Resources.Langues.Jul1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.Aug).Title(Resources.Langues.Aug1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.Sep).Title(Resources.Langues.Sep1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.Oct).Title(Resources.Langues.Oct1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.Nov).Title(Resources.Langues.Nov1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                    columns.Bound(member => member.Dec).Title(Resources.Langues.Dec1 + "<br/>[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                                                })
+                                                                .DataSource(dataSource => dataSource
+                                                                    .Ajax()
+                                                                    .Model(model => model.Id(i00001iSmartGridModel => i00001iSmartGridModel.Hour))
+                                                                    .Read(read => read.Action("GetGridBM3", "MyCase", new { area = "Case", id = 0, cate = "w", sts = "ess" }))
+                                                                )
+                                                                .HtmlAttributes(new { style = "width:100%;" })
+                    )
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("SaveCashFlow", "MyCase", FormMethod.Post, new { @role = "form", @id = "cash-flow-form", area = "Case" }))
+{
+    <div class="modal fade cash-flow" role="dialog">
+        <div class="modal-dialog" style="width:30%">
+            <!-- Modal content-->
+            @Html.HiddenFor(m => m.I00012Id)
+            @Html.HiddenFor(m => m.CaseId, Request.Params["caseId"])
+            @Html.HiddenFor(m => m.ModelCode, Request.Params["modelCode"])
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">@Resources.Langues.SelectLoanInformation </h4>
+                </div>
+                <div class="modal-body" style="padding:40px">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="radio">
+                                <input type="radio" name="optradio1" value="option1" checked="checked">  <h4>@Resources.Langues.NoLoan</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="form-option-1">
+                        <div class="form-horizontal">
+                            <div class="form-group hidden">
+                                <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Maintenancerate</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.MangeRate1, "", new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val_number = "The field MangeRate1 must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 5 digits",
+                                   @data_val_range_max = "9999.9",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                   @style = "text-align:right;",
+                               })
+                                </div>
+                                <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                    <span>%</span>
+                                </div>
+                            </div>
+                            <div class="form-group hidden">
+                                <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Priceincreaserate</label>
+                                <div class="col-xs-6 col-md-6">
+                                    @Html.TextBoxFor(m => m.PriceUpRate1, "", new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val_number = "The field PriceUpRate1 must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 5 digits",
+                                   @data_val_range_max = "9999.9",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                   @style = "text-align:right;",
+                               })
+                                </div>
+                                <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                    <span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="radio">
+                                <input type="radio" name="optradio1" value="option2">  <h4>@Resources.Langues.Enterloaninformation</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="form-option-2" class="hidden">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Loanamount</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.LoanCost, "", new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val = "true",
+                                   @style = "text-align:right;",
+                               })
+                                </div>
+                                <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                    <span>@Resources.Langues.Thousandwon</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Loanperiod</label>
+                                <div class="col-xs-6 col-md-6">
+                                    @Html.TextBoxFor(m => m.LoanPeriod, "", new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val = "true",
+                                   @data_val_number = "The field LoanPeriod must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 3 digits",
+                                   @data_val_range_max = "99.9",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                   @style = "text-align:right;",
+                               })
+                                </div>
+                                <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                    <span>@Resources.Langues.years</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Annualinterestrate</label>
+                                <div class="col-xs-6 col-md-6">
+                                    @Html.TextBoxFor(m => m.LoanRate, "", new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val = "true",
+                                   @data_val_number = "The field LoanRate must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 5 digits",
+                                   @data_val_range_max = "9999.9",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                   @style = "text-align:right;",
+                               })
+                                </div>
+                                <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                    <span>%</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Repaymentmethod</label>
+                                <div class="col-md-6">
+                                    @(Html.Kendo().DropDownList()
+                                                                                                 .Name("ReturnMethod")
+                                                                                                 .DataTextField("Text")
+                                                                                                 .DataValueField("Value")
+                                                                                                 .DataSource(source =>
+                                                                                                 {
+                                                                                                     source.Read(read =>
+                                                                                                     {
+                                                                                                         read.Action("GetRepayment", "EntityE00001Popup", new { area = "Case" });
+                                                                                                     });
+                                                                                                 })
+                                                                                                 .HtmlAttributes(new { style = "width: 100%;text-align:center" })
+                                    )
+                                </div>
+                                <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                    <span></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group hidden">
+                                <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Maintenancerate</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.MangeRate, "", new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val_number = "The field MangeRate must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 5 digits",
+                                   @data_val_range_max = "9999.9",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                   @style = "text-align:right;",
+                               })
+                                </div>
+                                <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                    <span>%</span>
+                                </div>
+                            </div>
+                            <div class="form-group hidden">
+                                <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.Priceincreaserate</label>
+                                <div class="col-xs-6 col-md-6">
+                                    @Html.TextBoxFor(m => m.PriceUpRate, "", new
+                               {
+                                   @class = "form-control input-md",
+                                   @data_val_number = "The field PriceUpRate must be a number.",
+                                   @data_val_range = "Invalid Target Price; Max 5 digits",
+                                   @data_val_range_max = "9999.9",
+                                   @data_val_range_min = "0",
+                                   @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                   @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                   @style = "text-align:right;",
+                               })
+                                </div>
+                                <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                                    <span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="form-group pull-right">
+                                <button type="button" id="submitCashFlow" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade cash-flow-view" role="dialog">
+    <div class="modal-dialog" style="width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.CashFlow </h4>
+            </div>
+            <div class="modal-body">
+                <div id="cash-content">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group pull-right">
+                    <a type="button" class="btn btn-primary" id="downloadCashFlow">@Resources.Langues.Print</a>
+                    <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var $modal = $('.E00037');
+    var modelCode = '@Request.Params["modelCode"]';
+    var grid = $("#PopupGrid").data("kendoGrid");
+    var option = "option1";
+    @*$(document).ready(function () {
+        if (modelCode != "M00003"/* && modelCode != "M00002"*/) {
+            $.post("@Url.Action("GetListFile", "MyCase", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    var array = result.list;
+                    array.forEach(function (item) {
+                        var name = item.FileName.replace(',',''),
+                            id = item.I00010Id;
+
+                        $.post("@Url.Action("ReadFolder", "MyCase", new { area = "Case" })", { caseId: caseId, name: name, id: id, modelCode: modelCode, }, function (result) {
+                            $('#' + item.I00010Id).text('조회')
+                            $('#' + item.I00010Id).attr('onclick', 'viewData(' + item.I00010Id + ')')
+                        }).fail(function () {
+                        }).always(function () {
+                            $.unblockUI();
+                        });
+                    });
+                }
+                else {
+
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+            });
+        }
+    });*@
+
+
+    function OkClick() {
+        bootbox.alert({ message:'@Html.Raw(Resources.Langues.E37Mess)',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+    }
+
+    function onExportReport() {
+        $.blockUI();
+        $.post("@Url.Action("ExportReport", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+            if (result.success) {
+                location.href = result.path;
+            } else {
+                bootbox.alert({ message:'@Resources.Langues.ReportFaild',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+    $('input[type=radio][name=optradio1]').change(function () {
+        option = this.value;
+        if (this.value == 'option1') {
+            $("#MangeRate").val('');
+            $("#PriceUpRate").val('');
+            $("#LoanCost").val('');
+            $("#LoanPeriod").val('');
+            $("#LoanRate").val('');
+
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+        }
+        else if (this.value == 'option2') {
+            $("#MangeRate1").val('');
+            $("#PriceUpRate1").val('');
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+        }
+    });
+
+    $('#submitCashFlow').click(function () {
+            var valid = $('#cash-flow-form').valid();
+            if (valid) {
+                $('#cash-flow-form').submit();
+            }
+    });
+
+    $('#cash-flow-form').submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                cache: false,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    $.unblockUI();
+                    bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                    if (result.path == "") {
+                        bootbox.alert({ message:'@Resources.Langues.Error',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                    } else {
+                        var path = result.path + ".pdf"
+                        $('.cash-flow').modal('hide')
+                        $("#cash-content").load(result.path + ".html")
+                        $('.cash-flow-view').modal('show')
+                        $('#downloadCashFlow').attr('onclick', 'dowload("' + path + '")')
+
+                        setTimeout(function () {
+                            $('td').css("border-width", "thin")
+                            $('#cash-content table').css('margin', 'auto')
+
+                            if (option == "option1") {
+                                var i;
+    
+                                for (i = 0; i < 5; i++) {
+                                    $('#cash-content table tbody tr:first').remove()
+                                }
+                            } else {
+    $('#cash-content table tbody tr:first').remove()
+                            }
+                        }, 1000);
+                    }
+                    $.unblockUI();
+                } else {
+                    $.unblockUI();
+                    bootbox.alert({message:'@Resources.Langues.Error',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                }
+            });
+            e.preventDefault();
+    });
+
+    function dowload(path) {
+        window.open(path, target = '_blank', '', replace = true);
+    }
+
+    $('.cash-flow-view').on('hidden.bs.modal', function () {
+        $("#cash-content").html('')
+    })
+
+    function loadData(e, type) {
+        $.blockUI();
+        $.post("@Url.Action("GetDataSelect", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode, id: e, type: type }, function (result) {
+            if (result.success) {
+                $('#' + type + e).removeAttr('onclick')
+                $('#' + type + e).attr('onclick', 'viewData(' + e + ',"' + type +'")')
+                $('input:radio[name=optradio][value=w]').click();
+                $('#' + type + e).click()
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+    function loadDataBM3(id, sts) {
+        $('#sts').val(sts);
+        $.blockUI();
+        $.post("@Url.Action("ReadDebugBM3", "MyCase", new { area="Case" })", { caseId: caseId, modelCode: modelCode, id: id, sts:sts }, function (result) {
+            if (result.success) {
+                debugger
+                $('#' + sts + id).removeAttr('onclick')
+                $('#' + sts + id).attr('onclick', 'viewDataBM3(' + id + ',\"' + sts + '\")')
+                $('input:radio[name=optradio2][value=w]').click();
+                $('#' + sts + id).click()
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+        }).always(function () {
+            $.unblockUI();
+        });
+    }
+
+    $("#LoanCost").on('keyup', function (evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8) {
+            var a = $("#valueFilter").val()
+            if (a == 'NaN' || a == '') {
+                $("#LoanCost").val('')
+            } else {
+                var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                if (isNaN(n)) {
+                    $("#LoanCost").val('')
+                } else {
+                    $(this).val(n.toLocaleString());
+                }
+            }
+        }
+    });
+</script>

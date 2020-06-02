@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewBag.Title = "Insolation";
+    Layout = "~/Views/Shared/_AdminSiteMenuLayout.cshtml";
+}
+
+@section styles{
+    <style>
+        .toolbarInput {
+            height: 80%;
+        }
+
+        #myModal {
+            top: 20%;
+        }
+
+        #formYearCopy .form-control {
+            width: 70%;
+        }
+
+        select {
+            text-align: center !important;
+        }
+    </style>
+    <link href="~/Content/KendoGrid.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="form-group adminSiteHeader">
+    <div class="text-right">
+        <h4>@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="container-fluid adminSiteContent onlyOneGrid">
+    <div class="form-group">
+        @(Html.Kendo().Grid<DPDSP.Models.SolarAmountManageViewModel>()
+        .Name("InsolationGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.SolarAmountId).Hidden();
+            columns.Bound(p => p.ComSubName).HtmlAttributes(new { style = "text-align:center;" }).Title("1"); ;
+            columns.Bound(p => p.LocationCode).HtmlAttributes(new { style = "text-align:center;" }).Title("2"); ;
+            columns.Bound(p => p.YearOfDate).HtmlAttributes(new { style = "text-align:center;" }).Title("3"); ;
+            columns.Bound(p => p.AmountSolar).HtmlAttributes(new { style = "text-align:right;" }).Title("4"); ;
+            columns.Bound(p => p.AmountSolarkWh).HtmlAttributes(new { style = "text-align:right;" }).Title("5"); ;
+            columns.Command(command =>
+            {
+                command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+            }).HtmlAttributes(new { style = "text-align:center;" });
+        })
+        //.ToolBar(toolbar => toolbar.Create())
+        .ToolBar(toolbar =>
+        {
+        toolbar.Template(@<text>
+            <div id="PowerRateGridToolbar">
+                <div class="row" style="padding:10px 0 10px 0;">
+                    <div class="col-lg-9">
+                        <div class="row">
+                            <div class="col-lg-5" id="selectComSubCode">
+                                <div class="form-group">
+                                    <label class="control-label">Electricity rate classification:</label>
+                                    <div class="row">
+                                        <div class="col-lg-11">
+                                            <select class="form-control toolbarInput" id="ComSubCode" name="ComSubCode">
+                                                <option value="">@Resources.Langues.PleaseSelect</option>
+                                                @foreach (var itemList in ViewBag.ListCommSub)
+                                                {
+                                                    <option value="@itemList.Value">@itemList.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-lg-offset-1" id="selectYear">
+                                <label class="control-label">Year:</label>
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <select class="form-control toolbarInput" disabled id="Year " name="Year">
+                                            <option value="-1">@Resources.Langues.PleaseSelect</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <button type="button" style="display:none;" disabled class="btn btn-default" id="search">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group" style="float:right;margin-top:6px;">
+                            <br />
+                            <button type="button" data-toggle="modal" id="yearCopy" disabled data-target="#myModal" class="btn btn-default">@Resources.Langues.YearCopy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </text>);
+        })
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Pageable()
+        .Sortable()
+        .Scrollable()
+        .Resizable(rs => rs.Columns(true))
+        .HtmlAttributes(new { style = "height:650px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(24)
+            .Events(events => events.Error("error_handler"))
+            .Model(model =>
+            {
+                model.Id(p => p.SolarAmountId);
+                model.Field(a => a.SolarAmountId).Editable(false);
+            })
+            //.Create(update => update.Action("EditingInline_Create", "Grid"))
+            .Read(read => read.Action("EditingInline_ReadSolarAmount", "Insolation").Data("onDataReadSolarAmount"))
+            .Update(update => update.Action("EditingInline_UpdateSolarAmount", "Insolation"))
+        //.Destroy(update => update.Action("EditingInline_Destroy", "Grid"))
+        )
+        )
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.YearCopy</h4>
+            </div>
+            <div class="modal-body">
+                <div id="formYearCopy" class="col-lg-offset-2 col-md-offset-2 col-xs-offset-2">
+                    <div class="form-group">
+                        <label class="control-label">@Resources.Langues.SourceYear </label>
+                        <select class="form-control toolbarInput" id="sourceYear" name="sourceYear"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">@Resources.Langues.TargetYear </label>
+                        <select class="form-control toolbarInput" id="targetYear" name="targetYear"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="list-inline">
+                    <button type="button" id="runCopy" class="btn btn-default">Run</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function onDataReadSolarAmount() {
+            var comSubCodeSelected = $('#selectComSubCode select').val();
+            var yearSelected = $('#selectYear select').val();
+            return { comSubCode: comSubCodeSelected, year: yearSelected };
+        }
+    </script>
+}
+

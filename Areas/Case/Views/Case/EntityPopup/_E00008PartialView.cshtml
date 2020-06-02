@@ -1,0 +1,253 @@
+﻿
+<style>
+    .E00008 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+</style>
+<link href="@Url.Content("~/Content/KendoGrid.css")" rel="stylesheet" type="text/css" />
+
+<script>
+    var caseId = @Request.Params["caseId"]
+    $(document).ready(function () {
+        var yearDayGrid = $("#YearDayGrid").data("kendoGrid");
+
+        $('.E00008').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+    });
+
+    function deleteYearDay(e) {
+        var yearDayGrid = $("#YearDayGrid").data("kendoGrid");
+        var dataItem = yearDayGrid.dataItem($(e.currentTarget).closest("tr"));
+        var id = dataItem.YearDayId;
+        bootbox.confirm({
+            message: '@Resources.Langues.AreYouSure',
+             title: " ",buttons: {
+                cancel: {
+                    label: '@Resources.Langues.No',
+                }, confirm: {
+                    label: '@Resources.Langues.Yes',
+                    className: 'btn-success'
+                }
+            },
+            callback: function (callback) {
+                if (callback) {
+                    $.blockUI();
+                    $.post('@Url.Action("Destroy_YearDay", "EntityE00008Popup")', { yearDayId: id },
+                    function (result) {
+                        if (result) {
+                            yearDayGrid.dataSource.read();
+                        }
+                    }).fail(function () {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function () {
+                        $.unblockUI();
+                    })
+                }
+            }
+        });
+    };
+
+    function FormE00008Save() {
+        var yearDayGrid = $("#YearDayGrid").data("kendoGrid");
+        if (($('#HolidayName').val() == "")) {
+            bootbox.alert('@Resources.Langues.FailedToSave');
+            return false;
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: '@Url.Action("Create_YearDay", "EntityE00008Popup")',
+            cache: false,
+            type: 'POST',
+            data: {
+                YearDay: $('#datepicker').val(),
+                caseId: getUrlParameter('caseId'),
+                Holiday: true,
+                HolidayName: $('#HolidayName').val()
+            },
+            success: function (result) {
+                if (result.success) {
+                    yearDayGrid.dataSource.read();
+                    $.blockUI();
+                    $.post("@Url.Action("UpdateEntityList", "Case", new { area="Case" })", { caseId: caseId, entityName: "E00008", modelCode: '@Request.Params["modelCode"]' }, function (result) {
+                        $("#btn_E00008").addClass("democlass");
+                        bootbox.alert('@Resources.Langues.Successful');
+                        $.unblockUI();
+                        result.list.forEach(function (item) {
+                            $("#btn_" + item).removeClass("democlass");
+                        });
+                    }).fail(function () {
+                    }).always(function () {
+                        $.unblockUI();
+                    });
+                } else {
+                    bootbox.alert('@Resources.Langues.Error');
+                }
+            },
+            error: function (response) {
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)), sURLVariables = sPageURL.split('&'), sParameterName, i;
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
+    function onDataBound(e) {
+        var yearDayGrid = $("#YearDayGrid").data("kendoGrid");
+        var row = yearDayGrid.tbody.find("tr[role='row']:first");
+        if (row != null) {
+            yearDayGrid.select(e.sender.tbody.find("tr:first"));
+        }
+    }
+
+    function sync_handler(e) {
+        $(this).read();
+    };
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            bootbox.alert(message);
+        }
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        return { comCode: comCode }
+    };
+</script>
+
+<div class="modal fade E00008" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> @Resources.Langues.AddAdditionalHolidays</h4>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 lbWT">@Resources.Langues.Selectyearmonthday </label>
+                        <div class="col-md-6">
+                            @(Html.Kendo().DatePicker()
+                                        .Name("datepicker")
+                                        .Value(DateTime.Now)
+                                        .HtmlAttributes(new { style = "width: 100%", title = "datepicker" })
+                            )
+                        </div>
+                        <div><button class="btn btn-primary" onclick="FormE00008Save()">@Resources.Langues.Save</button></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 lbWT">@Resources.Langues.HolidaysName</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("HolidayName", "", new { @class = "form-control input-md" })
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="form-group">
+                        @(Html.Kendo().Grid<DPDSP.Models.YearDayViewModel>()
+                                    .Name("YearDayGrid")
+                                    .Columns(columns =>
+                                    {
+                                        columns.Bound(p => p.YearDay).Format("{0:yyyy/MM/dd}").HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.AddedHolidays);
+                                        columns.Bound(p => p.HolidayName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.HolidaysName);
+                                        columns.Bound(p => p.YearDayId).Hidden();
+                                        columns.Command(command =>
+                                        {
+                                            command.Custom(Resources.Langues.Delete).Click("deleteYearDay").HtmlAttributes(new { @class = "btn-danger" });
+                                        })
+                                        .Title(Resources.Langues.Management).HtmlAttributes(new { style = "text-align:center;" });
+
+                                    })
+                                    .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                    .Pageable()
+                                    .Sortable()
+                                    .Scrollable()
+                                    .HtmlAttributes(new { style = "height:300px;" })
+                                    .Selectable(selectable => selectable
+                                        .Mode(GridSelectionMode.Multiple)
+                                        .Type(GridSelectionType.Row)
+                                    )
+                                    .Events(ev =>
+                                    {
+                                        ev.DataBound("onDataBound");
+                                    })
+                                    .Resizable(rz => rz.Columns(true))
+                                    .DataSource(dataSource => dataSource
+                                        .Ajax()
+                                        .PageSize(20)
+                                        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+                                        .Model(model => { model.Id(p => p.YearDayId); })
+                                        .Read(read => read.Action("Read_YearDay", "EntityE00008Popup", new { caseId = @Request.Params["caseId"] }))
+                                        .Create(update => update.Action("Create_YearDay", "EntityE00008Popup"))
+                                     )
+                        )
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            @*<button type="button" onclick="onSave()" class="btn btn-primary">Save</button>*@
+                            <button type="button" class="btn btn-gray save-class" data-dismiss="modal">@Resources.Langues.Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,143 @@
+﻿
+<style>
+    .E00004 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .promo {
+        background: #ccc;
+        padding: 3px;
+    }
+    .bootbox.modal {
+        z-index: 999999999999999999 !important;
+    }
+</style>
+
+<div align="center" class="container">
+    <h4><strong>@Resources.Langues.ViewInputInformation</strong></h4>
+    <div id="printDiv">
+        <div class="row text-left">
+            <p>
+                @if (Request.Params["modelCode"] == "M00001")
+                {
+                    @Resources.Langues.AcceptedName
+                }
+                else
+                {
+                    @Resources.Langues.Businessname
+                } <span class="promo"><label id="Consumer">@*한국전기연구원*@</label></span>  <br />
+                @Resources.Langues.Area <span class="promo"><label id="ComSubName">@*창원*@</label></span>
+            </p>
+        </div>
+        <hr />
+        <div class="row text-left hidden Ismart">
+            <p>
+                @Resources.Langues.ISMARTInfo <br />
+                ID: <label id="iSmartId">@*0912345678*@</label>
+                @Resources.Langues.ConnectionStatus <label id="iSmartStatus" @*style="color:deepskyblue"*@>@*접속 가능*@</label>
+            </p>
+        </div>
+        <hr class="hidden Ismart" />
+        <div class="row text-left">
+            <p>
+                <h5 style="text-align:center">
+                    @if (Request.Params["modelCode"] == "M00001" || Request.Params["modelCode"] == "M00003")
+                    {
+                        @Resources.Langues.Distributedresource
+                    }
+                    else
+                    {
+                        @Resources.Langues.Component
+                    }
+                </h5>
+                <span class="promo"><label id="Component" @*style="color:deepskyblue"*@>@*PV<br /> ESS*@</label></span>
+            </p>
+        </div>
+        <hr />
+        @if (Request.Params["modelCode"] != "M00003")
+        {
+            <div class="row text-left">
+                <p>
+                    <h5 class="modal-title">@Resources.Langues.ContractPower</h5> <br />
+                    <span class="promo"><label id="contractPow"></label> kW</span>
+                </p>
+            </div>
+        }
+
+
+        <div class="form-group" style="text-align:center">
+            @*<button type="button" onclick="PrintModal()" class="btn btn-primary">@Resources.Langues.Print</button>*@
+            <button type="button" class="button button-gray" onclick="nextEntity()">@Resources.Langues.OK</button>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/printThis/printThis.js"></script>
+<script>
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+        var modelCode = '@Request.Params["modelCode"]';
+        $('#btn_E00004').removeClass('progress-bar-warning');
+        $('#btn_E00004').removeClass('progress-bar-bg-info');
+        var $modal = $('.E00004');
+            
+
+            if (modelCode == "M00001") {
+                $('.Ismart').addClass('hidden');
+            } else {
+                $('.Ismart').addClass('hidden');
+            }
+            $.blockUI();
+            $.post("@Url.Action("GetComSubNameByLocationCode", "EntityE00004Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                if (result.success) {
+                    if(result.comSubName){
+                        $('#ComSubName').text("" + result.comSubName);
+                    }
+
+                    $.post("@Url.Action("GetComSubNameByComCode", "EntityE00004Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                        if (result.success) {
+                            if(result.listComSubName){
+                                $('#Component').text("" + result.listComSubName);
+                            }
+
+                            $.post("@Url.Action("GetI00001", "EntityE00004Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+                                if (result.success) {
+                                    if(result.i00001){
+                                        $('#Consumer').text("" + result.i00001.Consumer);
+                                        $('#iSmartId').text("" + result.i00001.IsmartId);
+                                        $('#contractPow').text("" + result.contractPow.toLocaleString('en'));
+                                        if(result.i00001.IsmartStatus == true){
+                                            $('#iSmartStatus').text('@Resources.Langues.Connectable');
+                                        } else {
+                                            $('#iSmartStatus').text('@Resources.Langues.CheckId');
+                                        }
+                                    }
+                                }else {
+                                    bootbox.alert("Data not found");
+                                }
+                            })
+                        }else {
+                            bootbox.alert("Data not found");
+                        }
+                    })
+                } else {
+                    bootbox.alert("Data not found");
+                }
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+        });
+    function PrintModal() {
+        $("#printDiv").printThis();
+    }
+</script>

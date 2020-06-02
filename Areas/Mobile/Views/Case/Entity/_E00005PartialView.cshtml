@@ -1,0 +1,413 @@
+﻿<style>
+    .bootbox.modal {
+        z-index: 1000000000000000 !important;
+    }
+
+    .lbWT {
+        text-align: center;
+        vertical-align: middle;
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .k-list-scroller > ul > li {
+        font-size: 12px;
+        text-align: center
+    }
+
+    .k-list-optionlabel {
+        font-size: 12px;
+        text-align: center
+    }
+
+    .form-horizontal .form-group {
+        margin-right: 0px;
+    }
+
+    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+        padding-left: 0px;
+    }
+</style>
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+        var modelCode = '@Request.Params["modelCode"]';
+        var $E00005Form = $('#E00005Form');
+
+        $('#btn_E00005').removeClass('progress-bar-warning');
+
+        $('#submitE00005Form').click(function () {
+            var valid = $E00005Form.valid();
+            if (valid) {
+                $E00005Form.submit();
+            }
+        });
+            $E00005Form.submit(function (e) {
+                $.blockUI();
+                var data = new FormData(this);
+                var $fromObj = $(this);
+                var urlAction = $fromObj.attr('action');
+                $.ajax({
+                    url: urlAction,
+                    type: 'POST',
+                    dataType: "Json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: data,
+                    fail: function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }
+                }).always(function () {
+                }).success(function (result) {
+                    if (result.success) {
+                        $.unblockUI();
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    if (lstEntityNextStep.length != 0) {
+                        nextStepEntity(lstEntityNextStep[0]);
+                        lstEntityNextStep.shift();
+                        console.log(lstEntityNextStep)
+                    } else {
+                        
+                        nextEntity()
+                    }
+                    } else {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.MessageE00005');
+                    }
+                });
+                e.preventDefault();
+            });
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetI00002", "EntityE00005Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#E00005ComSubName').data('kendoDropDownList').value(result.PaymentCode);
+                $("#PaymentCode").val(result.PaymentCode);
+            }else {
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+
+    function onChange() {
+        $("#PaymentCode").val($('#E00005ComSubName').val());
+    }
+
+    function dataComCode() {
+        var comCode = "PY0000"; //Requirement
+        var filter = $('.k-textbox[aria-owns="E00005ComSubName_listbox"]').val();
+        return { comCode: comCode, filter: filter }
+    };
+
+    $('input[type=radio][name=optradio]').change(function () {
+        if (this.value == 'option1') {
+            $("#file").val('');
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+        }
+        else if (this.value == 'option2') {
+            $("#PaymentCode").val('');
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+        }
+    });
+
+    $('#option1').change(function () {
+        if ($('#option1').is(":checked")) {
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#form-option-2').addClass('hidden', 'hidden');
+            $('#option2').prop("checked", false);
+            $("#file").val('');
+        }
+        else {
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+            $('#option2').prop("checked", true);
+        }
+    });
+
+    $('#option2').change(function () {
+        if ($('#option2').is(":checked")) {
+            $("#PaymentCode").val('');
+            $('#form-option-2').removeClass('hidden', 'hidden');
+            $('#form-option-1').addClass('hidden', 'hidden');
+            $('#option1').prop("checked", false);
+        }
+        else {
+            $('#form-option-2').addClass('hidden', 'hidden');
+            $('#form-option-1').removeClass('hidden', 'hidden');
+            $('#option1').prop("checked", true);
+        }
+    });
+</script>
+<h4 style="text-align:center">
+    @if (Request.Params["modelCode"] == "M00001")
+    {
+        @Resources.Langues.E5Mo
+    }
+    else
+    {
+        @Resources.Langues.SelectApplicablePlan
+    }
+</h4>
+@using (Html.BeginForm("SaveEntityE00005PopupData", "EntityE00005Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "E00005Form", @enctype = "multipart/form-data" }))
+{
+    if (Request.Params["modelCode"] == "M00005" || Request.Params["modelCode"] == "M00001")
+    {
+        <div class="E00005" role="dialog" style="margin-left: 30px;">
+            @Html.Hidden("CaseId", @Request.Params["caseId"], new
+       {
+           @data_val = "true",
+           @data_val_required = "The CaseId field is required."
+       })
+            @Html.Hidden("modelCode", @Request.Params["modelCode"], new
+       {
+           @data_val = "true",
+           @data_val_required = "The CaseId field is required."
+       })
+            @Html.Hidden("PaymentCode", "", new
+       {
+           @data_val = "true",
+           @data_val_required = "The PaymentCode field is required.",
+           @data_val_length = "The field PaymentCode must be a string with a maximum length of 6.",
+           @data_val_length_max = "6",
+       })
+            <div class="form-group hidden">
+                <div class="radio">
+                    @* <input type="radio" name="optradio" value="option1" checked="checked">  <h4>@Resources.Langues.SelectKEPCO</h4>*@
+                    <h4><input type="checkbox" id="option1" name="optcheckbox" checked> @Resources.Langues.SelectKEPCO</h4>
+                </div>
+            </div>
+            <div id="form-option-1">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-xs-3 col-xs-3 lbWT">@Resources.Langues.ApplicablePlan</label>
+                        <div class="col-xs-8">
+                            @(Html.Kendo().DropDownList()
+                                                                        .Name("E00005ComSubName")
+                                                                        .DataTextField("Text")
+                                                                        .DataValueField("Value")
+                                                                        .Filter(FilterType.Contains)
+                                                                        .DataSource(source =>
+                                                                        {
+                                                                            source.Read(read =>
+                                                                            {
+                                                                                read.Action("Read_ComSub", "EntityE00005Popup", new { area = "Case" }).Data("dataComCode");
+                                                                            });
+                                                                        })
+                                                                        .OptionLabel("– Select –").HtmlAttributes(new { style = "text-align:left;" })
+                                                                        .HtmlAttributes(new { style = "width: 100%;font-size:12px;text-align:center" })
+                                                                        .Events(e => e.Change("onChange"))
+                            )
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        <label class="control-label col-xs-3 col-xs-3 lbWT">@Resources.Langues.ContractPower</label>
+                        <div class="col-xs-8 col-xs-8">
+                            @Html.TextBox("ContractPower", "", new
+                       {
+                           @class = "form-control input-md",
+                           @data_val = "true",
+                           @data_val_number = "The field ContractPower must be a number.",
+                           @data_val_range = "Invalid Target Price; Max 13 digits",
+                           @data_val_range_max = "999999999999.9",
+                           @data_val_range_min = "0",
+                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                           @data_val_required = "The ContractPower field is required.",
+                           @style = "text-align:right;font-size:12px",
+                           @type = "tel"
+                       })
+                        </div>
+                        <div class="col-xs-1 col-xs-1 text" style="padding-left:0px;">
+                            <span>kW</span>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+            <div class="form-group hidden">
+                <div class="radio">
+                    @*<input type="radio" name="optradio" value="option2">  <h4>@Resources.Langues.ManualInput</h4>*@
+                    <h4><input type="checkbox" id="option2" name="optcheckbox"> @Resources.Langues.ManualInput</h4>
+                </div>
+            </div>
+            <div id="form-option-2" class="hidden">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-xs-8">
+                            @*<label class="file">
+                    <input type="file" id="file" aria-label="File browser example">
+                    <span class="file-custom">  </span>
+                </label>*@
+                            @Html.TextBox("file", "", new
+                       {
+                           @data_val = "true",
+                           @data_val_required = "The Excel File field is required.",
+                           @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                           @class = "form-control",
+                           @placeholder = "Excel File...",
+                           @type = "file"
+                       })
+                        </div>
+
+                        <div class="col-xs-4">
+                            <a type="button" class="btn btn-sm btn-primary" href="@Url.Content("~/Content/TemplateForm/rates_form.xlsx")">@Resources.Langues.Format</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.BaseRate</label>
+                        <div class="col-xs-6 col-md-6">
+                            @Html.TextBox("BaseRate", "0", new
+                       {
+                           @class = "form-control input-md",
+                           @data_val = "true",
+                           @data_val_number = "The field BaseRate must be a number.",
+                           @data_val_range = "Invalid Target Price; Max 13 digits",
+                           @data_val_range_max = "999999999999.9",
+                           @data_val_range_min = "0",
+                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                           @style = "text-align:right;font-size:12px;",
+                           @type = "tel"
+                       })
+                        </div>
+                        <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                            <span>원/kW</span>
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        <label class="control-label col-xs-4 col-md-4 lbWT">@Resources.Langues.ContractPower</label>
+                        <div class="col-xs-6 col-md-6">
+                            @Html.TextBox("ContractPower2", "0", new
+                       {
+                           @class = "form-control input-md",
+                           @data_val = "true",
+                           @data_val_number = "The field ContractPower2 must be a number.",
+                           @data_val_range = "Invalid Target Price; Max 13 digits",
+                           @data_val_range_max = "999999999999.9",
+                           @data_val_range_min = "0",
+                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                           @style = "text-align:right;font-size:12px;",
+                           @type = "tel"
+                       })
+                        </div>
+                        <div class="col-xs-2 col-md-2 text" style="padding-left:0px;">
+                            <span>kW</span>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+
+            @*@Html.TextBox("File", "", new
+                {
+                    @data_val = "true",
+                    @data_val_required = "The Excel File field is required.",
+                    @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                    @class = "form-control",
+                    @placeholder = "Excel File...",
+                    @type = "file"
+                })*@
+        </div>
+
+        <br />
+        <div class="form-group" style="text-align:center">
+            <button type="button" id="submitE00005Form" class="button button-gray">@Resources.Langues.Save</button>
+            @*<button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>*@
+        </div>
+
+    }
+    else
+    {
+
+
+        <div class="modal-body">
+            @Html.Hidden("CaseId", @Request.Params["caseId"], new
+       {
+           @data_val = "true",
+           @data_val_required = "The CaseId field is required."
+       })
+            @Html.Hidden("modelCode", @Request.Params["modelCode"], new
+       {
+           @data_val = "true",
+           @data_val_required = "The CaseId field is required."
+       })
+            @Html.Hidden("PaymentCode", "", new
+       {
+           @data_val = "true",
+           @data_val_required = "The PaymentCode field is required.",
+           @data_val_length = "The field PaymentCode must be a string with a maximum length of 6.",
+           @data_val_length_max = "6",
+       })
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-xs-3 col-xs-3 lbWT">@Resources.Langues.ApplicablePlan</label>
+                    <div class="col-xs-8">
+                        @(Html.Kendo().DropDownList()
+                                                                        .Name("E00005ComSubName")
+                                                                        .DataTextField("Text")
+                                                                        .DataValueField("Value")
+                                                                        .Filter(FilterType.Contains)
+                                                                        .DataSource(source =>
+                                                                        {
+                                                                            source.Read(read =>
+                                                                            {
+                                                                                read.Action("Read_ComSub", "EntityE00005Popup", new { area = "Case" }).Data("dataComCode");
+                                                                            });
+                                                                        })
+                                                                        .OptionLabel("– Select –").HtmlAttributes(new { style = "text-align:left;" })
+                                                                        .HtmlAttributes(new { style = "width: 100%" })
+                                                                        .Events(e => e.Change("onChange"))
+                        )
+                    </div>
+                </div>
+                @*<div class="form-group">
+                    <label class="control-label col-xs-3 col-xs-3 lbWT">@Resources.Langues.ContractPower</label>
+                    <div class="col-xs-8 col-xs-8">
+                        @Html.TextBox("ContractPower", "", new
+                   {
+                       @class = "form-control input-md",
+                       @data_val = "true",
+                       @data_val_number = "The field ContractPower must be a number.",
+                       @data_val_range = "Invalid Target Price; Max 13 digits",
+                       @data_val_range_max = "999999999999.9",
+                       @data_val_range_min = "0",
+                       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                       @data_val_required = "The ContractPower field is required.",
+                       @style = "text-align:right;",
+                       @type = "tel"
+                   })
+                    </div>
+                    <div class="col-xs-1 col-xs-1 text" style="padding-left:0px;">
+                        <span>kW</span>
+                    </div>
+                </div>*@
+            </div>
+            <br />
+
+            <div class="form-group" style="text-align:center">
+                <button type="button" id="submitE00005Form" class="btn btn-sm btn-primary">@Resources.Langues.Save</button>
+                @*<button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>*@
+            </div>
+        </div>
+
+    }
+
+}
+<script>
+    $('.k-textbox[aria-owns="E00005ComSubName_listbox"]').unbind();
+    $(".k-textbox").on('keyup', function (evt) {
+        $('#E00005ComSubName').data('kendoDropDownList').dataSource.read();
+    });
+</script>

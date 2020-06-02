@@ -1,0 +1,124 @@
+﻿<style>
+    .bootbox.modal {
+        z-index: 999999999999999999 !important;
+    }
+</style>
+<script>
+    var locationCode = $("#E00027ComSubName").val();
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]';
+    $(document).ready(function () {
+        $('#btn_E00027').removeClass('progress-bar-warning');
+        $.blockUI();
+        $.post("@Url.Action("GetI00001", "EntityE00001Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#E00027ComSubName').data('kendoDropDownList').value(result.LocationCode);
+            }else {
+            }
+        }).fail(function () {
+            $.unblockUI();
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+        });
+
+        $("#E00027ComSubName").change(function () {
+            var caseId =  @Request.Params["caseId"];
+            var locationCode = $('#E00027ComSubName').val();
+            $.blockUI();
+            $.post("@Url.Action("CheckDataLocationSelected", "EntityE00027Popup", new { area="Case" })", { caseId: caseId, locationCode: locationCode }, function (result) {
+                if (result.success) {
+                    $.unblockUI();
+                }else {
+                    $.unblockUI();
+                    $('#E00027ComSubName').data('kendoDropDownList').value('');
+                    bootbox.alert('@Resources.Langues.CheckDataMess1');
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                //$.unblockUI();
+            });
+        });
+    });
+
+    function onSave() {
+        if ($('#E00027ComSubName').val() == "") {
+            bootbox.alert('Please select dropdownList');
+            return false;
+        }
+
+        $.blockUI();
+        $.post("@Url.Action("SaveI00005Data", "EntityE00027Popup", new { area="Case" })", { caseId: caseId, locationCode: $('#E00027ComSubName').val(), modelCode: modelCode }, function (result) {
+            if (result.success) {
+                 $.unblockUI();
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                            if (lstEntityNextStep.length != 0) {
+                                nextStepEntity(lstEntityNextStep[0]);
+                                lstEntityNextStep.shift();
+                                console.log(lstEntityNextStep)
+                            } else {
+                                nextEntity()
+                            }
+            }
+        }).fail(function () {
+            $.unblockUI();
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        var filter = $('.k-textbox[aria-owns="E00027ComSubName_listbox"]').val();
+        return { comCode: comCode, filter: filter }
+    };
+
+</script>
+<h4 style="text-align:center">@Resources.Langues.SelectWTarea</h4>
+<div class="col-xs-12">
+    <label class="control-label col-xs-5 lbWT" style="text-align:right">설치지역선택</label>
+    <div class="col-xs-6">
+        @(Html.Kendo().DropDownList()
+                                                                                                  .Name("E00027ComSubName")
+                                                                                                  .DataTextField("Text")
+                                                                                                  .DataValueField("Value")
+                                                                                                  .Filter(FilterType.Contains)
+                                                                                                  .DataSource(source =>
+                                                                                                  {
+                                                                                                      source.Read(read =>
+                                                                                                      {
+                                                                                                          read.Action("GetCommonSubByComCode", "EntityE00001Popup", new { area = "Case" }).Data("dataComCode");
+                                                                                                      });
+                                                                                                  })
+                                                                                                  .HtmlAttributes(new { style = "width: 100%;font-size:12px;text-align:center" })
+                                                                                                  
+        )
+    </div>
+</div>
+<br />
+<br />
+<br />
+<div class="col-xs-12" style="text-align:center">
+    @Resources.Langues.E27Desc1
+</div>
+<div class="col-xs-12" style="text-align:center">
+    @Resources.Langues.E27Desc2
+</div>
+<br>
+<div class="col-xs-12" style="text-align:center">
+    @Resources.Langues.E27Desc3
+</div>
+<br />
+<br />
+
+<div class="form-group">
+    <div class="form-group" style="text-align:center; margin-top:10px">
+        <button type="button" onclick="onSave()" class="button button-gray">@Resources.Langues.Save</button>
+        @*<button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>*@
+    </div>
+</div>
+<br />
+<br />

@@ -1,0 +1,135 @@
+﻿@{
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+
+<style>
+    .k-header .k-link {
+        text-align: center;
+    }
+
+    .k-grid-header th.k-header {
+        vertical-align: middle;
+    }
+</style>
+<div class="row" style="padding:0 5px 0 5px">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-1 active" style="text-align:left"> @Resources.Langues.SearchOption </label>
+            <div class="col-sm-12">
+                <label class="radio-inline"><input type="radio" name="optradio" value="w" checked>@Resources.Langues.WorkingDay</label>
+                <label class="radio-inline"><input type="radio" name="optradio" value="sat">@Resources.Langues.Saturday</label>
+                <label class="radio-inline"><input type="radio" name="optradio" value="sun">@Resources.Langues.Holiday</label>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="outer" @*style="width:800px;padding-right:10px"*@>
+    @(Html.Kendo().Chart<DPDSP.Models.I00010EssPatternViewModel>
+                        ()
+                        .Name("chart")
+                        .Title("")
+                        .DataSource(dataSource => dataSource
+                        .Read(read => read.Action("GetI00010EssPattern", "MyCase", new { area = "Case", id = @Request.Params["id"], cate = "w" }))
+                        .Group(group => group.Add(model => model.EssPattMonth))
+                        .Sort(sort => sort.Add(model => model.EssPattHour).Ascending())
+                        )
+                        .ChartArea(chartArea => chartArea
+                        //.Width(1288)
+                        .Background("transparent")
+                        )
+                        .SeriesDefaults(seriesDefaults =>
+                        seriesDefaults.Line()
+                        )
+                        .Series(series =>
+                        {
+                            series.Line(model => model.PcsValue).Name("#= group.items[0].MonthString # ").CategoryField("EssPattHour").Markers(x => x.Visible(false));
+                        })
+                        .SeriesColors("#e8a1a2", "#264d7e", "#bbc9a5", "#698b47", "#3e4630", "#428b64", "#6e4a75", "#feec04", "#9e7339", "#4c4a3c", "#dd7b00", "#dd3420")
+                        .ValueAxis(axis => axis.Numeric()
+                        .Line(line => line.Visible(false))
+                        .Labels(label => label.Format("{0:#,###}"))
+                        .AxisCrossingValue(0, int.MinValue)
+                        )
+                        .CategoryAxis(axis => axis
+                        .Labels(false)
+                        .Line(line => line.Visible(false))
+                        )
+                        .CategoryAxis(axis => axis
+                        .Categories(model => model.EssPattHour)
+                        .Line(line => line.Visible(false))
+                        )
+                        .Legend(legend => legend
+                        .Position(ChartLegendPosition.Top)
+                        )
+                        .Tooltip(tooltip => tooltip
+                        .Visible(true)
+                        .Format("{0}")
+                        )
+                        .Pannable(pannable => pannable
+                                                    .Lock(ChartAxisLock.Y)
+                                                )
+                                                .Zoomable(zoomable => zoomable
+                                                    .Mousewheel(mousewheel => mousewheel.Lock(ChartAxisLock.Y))
+                                                    .Selection(selection => selection.Lock(ChartAxisLock.Y))
+                                                )
+            //.HtmlAttributes(new { style = "width: 100%; " })
+    )
+</div>
+<br />
+<div class="outer">
+    @(Html.Kendo().Grid<DPDSP.Models.I00001iSmartGridModel>
+                        ()
+                        .Name("Grid")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(member => member.Hour).Title(Resources.Langues.Time).HtmlAttributes(new { style = "text-align:center;" });
+                            columns.Bound(member => member.Jan).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.Jan1 + "<br />[kWh]").Format("{0:n1}");
+                            columns.Bound(member => member.Feb).Title(Resources.Langues.Feb1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Mar).Title(Resources.Langues.Mar1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Apr).Title(Resources.Langues.Apr1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.May).Title(Resources.Langues.May1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Jun).Title(Resources.Langues.Jun1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Jul).Title(Resources.Langues.Jul1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Aug).Title(Resources.Langues.Aug1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Sep).Title(Resources.Langues.Sep1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Oct).Title(Resources.Langues.Oct1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Nov).Title(Resources.Langues.Nov1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                            columns.Bound(member => member.Dec).Title(Resources.Langues.Dec1 + "<br />[kWh]").HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                        })
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model => model.Id(i00001iSmartGridModel => i00001iSmartGridModel.Hour))
+                        .Read(read => read.Action("GetGrid", "MyCase", new { area = "Case", id = @Request.Params["id"], cate = "w" }))
+                        )
+                        .HtmlAttributes(new { style = "width:100%;" })
+    )
+</div>
+<br />
+<div class="form-group" style="text-align:center">
+    @*<button type="button" onclick="PrintModal()" class="btn btn-primary">@Resources.Langues.Print</button>*@
+    <button type="button" class="button button-gray" onclick="closePage()">@Resources.Langues.OK</button>
+</div>
+
+<script>
+    $('.k-header').attr('style', 'border-top-width: 1px;padding:0 0 0 0')
+
+    $('input:radio[name="optradio"]').change(function () {
+        var cate = $(this).val()
+        var originChartURL = '@Url.Action("GetI00010EssPattern", "MyCase", new { area = "Case"})';
+        var changedChartUrl = originChartURL + "?id=" + @Request.Params["id"] + "&cate=" + cate;
+
+        $('#chart').data('kendoChart').dataSource.transport.options.read.url = changedChartUrl;
+        $('#chart').data('kendoChart').dataSource.read();
+
+        var originGridURL = '@Url.Action("GetGrid", "MyCase", new { area = "Case"})';
+        var changedGridUrl = originGridURL + "?id=" + @Request.Params["id"] + "&cate=" + cate;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    })
+
+    function closePage() {
+        window.close();
+    }
+</script>

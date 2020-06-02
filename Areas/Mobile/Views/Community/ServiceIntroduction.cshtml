@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "ServiceIntroduction";
+    Layout = "~/Areas/Mobile/Views/Shared/MobileLayout.cshtml";
+}
+
+<style>
+    #item-toggle > a {
+        color: #fff;
+        background-color: #ea6b48;
+        font-weight: bold;
+    }
+</style>
+
+<main>
+    <div class="container">
+        <h3 class="sub_tit" style="text-align:center"> @Resources.Langues.ServiceIntroduction</h3>
+        <p class="img-responsive" alt="KERI 분산자원 설계 프로그램">@Html.Raw(ViewBag.SystemInfor)</p>
+    </div>
+</main>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $(document).ready(function () {
+        $('img').addClass("img-responsive")
+        $('#logo-img').removeClass("img-responsive")
+    })
+</script>

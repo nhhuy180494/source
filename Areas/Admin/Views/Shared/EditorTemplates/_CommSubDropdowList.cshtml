@@ -1,0 +1,7 @@
+﻿@model DPDSP.Models.ItemCom
+
+@(Html.Kendo().DropDownListFor(m => m)
+            .DataValueField("Value")
+            .DataTextField("Text")
+            .BindTo((System.Collections.IEnumerable)ViewBag.ListCom)
+)

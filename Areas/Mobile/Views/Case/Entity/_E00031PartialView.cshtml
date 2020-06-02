@@ -1,0 +1,443 @@
+﻿<!-- Modal -->
+<style>
+    .E00031 {
+        top: 5%;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .k-list-optionlabel {
+        text-align: center;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRowNormal .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+
+
+    .democlass {
+        background-color: gray;
+    }
+</style>
+<link href="@Url.Content("~/Content/case_site_css/entity_popup_styles.css")" rel="stylesheet" type="text/css" />
+
+@using (Html.BeginForm("SaveEntityE00031PopupData", "EntityE00031Popup", new { area = "Case" }, FormMethod.Post, new { @role = "form", @id = "EntityE00031Form" }))
+{
+    <div align="center" class="container">
+        <h4 class="modal-title">@Resources.Langues.E00031Title</h4>
+
+        <div class="">
+            @Html.Hidden("CaseId", @Request.Params["caseId"], new
+            {
+               @data_val = "true",
+               @data_val_required = "The CaseId field is required."
+            })
+
+            @Html.Hidden("ModelCode", @Request.Params["modelId"], new
+            {
+                @data_val = "true",
+                @data_val_required = "The ModelCode field is required."
+            })
+            <br />
+            <div class="">
+                <div class="form-horizontal">
+                    <label class="control-label col-md-3 lbWT">@Resources.Langues.CHPparameterselection</label>
+                    <div class="col-md-6">
+                        @(Html.Kendo().DropDownList()
+                                                                                                                  .Name("E00031ModelName")
+                                                                                                                  .DataTextField("Text")
+                                                                                                                  .DataValueField("Value")
+                                                                                                                  .HtmlAttributes(new { style = "width: 100%" })
+                        )
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="">
+                <table class="table table-bordered tblRow">
+                    <tbody>
+                        <tr>
+                            <td class="active col-xs-3">@Resources.Langues.Company</td>
+                            <td>
+                                @Html.TextBox("Company", "", new
+                                {
+                                   @data_val = "true",
+                                   @data_val_length = "The field Company must be a string with a maximum length of 200.",
+                                   @data_val_length_max = "200",
+                                })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="">
+                <table class="table table-bordered tblRow">
+                    <tbody>
+                        <tr>
+                            <td class="active col-xs-3">@Resources.Langues.ModelName</td>
+                            <td>
+                                @Html.TextBox("ModelName", "", new
+                                {
+                                   @data_val = "true",
+                                   @data_val_length = "The field ModelName must be a string with a maximum length of 200.",
+                                   @data_val_length_max = "200",
+                                   @data_val_required = "The ModelName field is required."
+                                })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="">
+                <table class="table table-bordered tblMultiRowNormal">
+                    <tbody>
+                        <tr>
+                            <td class="active col-xs-3">@Resources.Langues.Volume</td>
+                            <td class="tblRow">
+                                @Html.TextBox("Volume", "", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field Volume must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "9999.9",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum one Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                               @data_val_required = "The Volume field is required.",
+                               @style = "text-align:right;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td class="active col-xs-1">kW</td>
+                        </tr>
+                        <tr>
+                            <td class="active col-xs-3">@Resources.Langues.ThemRatio</td>
+                            <td class="tblRow">
+                                @Html.TextBox("ThemRatio", "", new
+                           {
+                               @data_val = "true",
+                               data_val_number = "The field ThemRatio must be a number.",
+                               @data_val_range = "Invalid Target Price; Max 5 digits",
+                               @data_val_range_max = "999.99",
+                               @data_val_range_min = "0",
+                               @data_val_regex = "Invalid Target Price; Maximum Two Decimal Points.",
+                               @data_val_regex_pattern = @"^\d+(\.\d{1,2})?$",
+                               @data_val_required = "The ThemRatio field is required.",
+                               @style = "text-align:right;",
+                               @type = "tel"
+                           })
+                            </td>
+                            <td class="active col-xs-1"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class=" scroll-style-7" style="max-height:254px;overflow-y:scroll;">
+                <table class="table table-bordered tblMultiRow">
+                    <thead>
+                        <tr>
+                            <th class="active">@Resources.Langues.Load [%]</th>
+                            <th class="active">@Resources.Langues.Fuelconsumption [m³/h]</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tblRow">
+                        @{
+                            int totalRow = 5;
+                            double percen = 0.0;
+                            for (int i = 0; i < totalRow; i++)
+                            {
+                                string path = "~/Areas/Case/Views/Case/EntityPopupForm/_E00031/_E00031ParaSubForm.cshtml";
+                                double[] arrs = new double[] { percen, i };
+                                @Html.Partial(path, arrs);
+                                percen += 25;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="">
+                <div class="list-inline">
+                    <button id="FormE00031Save" type="button" class="button button-gray">@Resources.Langues.Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+        var caseId =  @Request.Params["caseId"];
+        var componentCode = "CP0005";
+        var dropdownE00031 = $("#E00031ModelName").data("kendoDropDownList");
+        $('#btn_E00031').removeClass('progress-bar-warning');
+            clearModal();
+            $.blockUI();
+            $.post("@Url.Action("Check_DropdownListAvailable", "EntityE00029Popup", new { area="Case" })", { caseId : caseId, componentCode : componentCode }, function (result) {
+                if(result.success){
+                    dropdownE00031.enable(true);
+                    $("#E00031ModelName").kendoDropDownList({
+                        index: 0,
+                        dataValueField: "Value",
+                        dataTextField: "Text",
+                        serverFiltering: true,
+                        change: onChange,
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    dataType: "json",
+                                    url: "@Url.Action("Read_CHPParameter", "EntityE00031Popup", new { area = "Case" })"
+                                }
+                            }
+                        },
+                        filter:"contains",
+                        optionLabel: "– Select –",
+                    });
+
+                    $("#E00031ModelName").data("kendoDropDownList").dataSource.read();
+                }else{
+                    dropdownE00031.enable(false);
+                }
+            }).fail(function(){
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function(){
+                $.unblockUI();
+            });
+
+        $('#EntityE00031Form').submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                     $.unblockUI();
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                            if (lstEntityNextStep.length != 0) {
+                                nextStepEntity(lstEntityNextStep[0]);
+                                lstEntityNextStep.shift();
+                                console.log(lstEntityNextStep)
+                            } else {
+                                nextEntity()
+                            }
+
+                }
+            });
+            e.preventDefault();
+        });
+
+        $('.E00031').on('hidden.bs.modal',function(){
+            dropdownE00031.text(""); // clears visible text
+            dropdownE00031.value(""); // clears invisible value
+            clearModal();
+        });
+
+        $('#FormE00031Save').click(function(){
+            var value = dropdownE00031.value();
+            if(value != ""){
+                var valid =  $('#EntityE00031Form').valid();
+                if(valid){
+                    $('#EntityE00031Form').submit();
+                }
+            }
+        });
+
+        $('#EntityE00031Form').on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetCHPParameterIdByCaseId", "EntityE00031Popup", new { area="Case" })", { caseId:caseId }, function (result) {
+            if (result.success) {
+                var id = result.id;
+                var tbody = $('.tblMultiRow').find('tbody');
+                clearModal();
+                $('.tblRow').find('input').removeAttr("readonly");
+                $('.paraSubRow').removeClass('hidden');
+                $('.paraSubRow').find('input').removeAttr('disabled');
+                $.blockUI();
+                $.post("@Url.Action("GetCHPParameterSubList", "EntityE00031Popup", new { area="Case" })", { chpParameterId: id }, function (result) {
+                    if (result.success) {
+                        $('.tblRow').find('input').not('.loadInput').val("");
+                        $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+                        $('.tblRow').find('input').removeClass("input-validation-error");
+                        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+                        $('.paraSubRow').find('input').not('.loadInput').val("");
+                        $('.paraSubRow').addClass('hidden');
+                        $('.paraSubRow').find('input').attr('disabled', 'disabled');
+                        var list = result.listCHPParaSub;
+                        var dem = 0
+                        list.forEach(function (item) {
+                            var html = createHtmlParaSub(item, dem);
+                            dem++
+                            tbody.append(html);
+                        });
+                    }
+                    else {
+                        $.unblockUI();
+                    }
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                    $.unblockUI();
+                }).always(function () {
+                    //$.unblockUI();
+                });
+
+                //$.blockUI();
+                $.post("@Url.Action("GetCHPParameter", "EntityE00031Popup", new { area="Case" })", { chpParameterId: id }, function (result) {
+                    if (result.success) {
+                        $('#Company').val(result.listCHPPara.Company);
+                        $('#ModelName').val(result.listCHPPara.ModelName);
+                        $('#Volume').val(result.listCHPPara.Volume);
+                        $('#ThemRatio').val(result.listCHPPara.ThemRatio);
+                        $("#E00031ModelName").data("kendoDropDownList").value(id);
+                        $.unblockUI();
+                    } else {
+                        $.unblockUI();
+                    }
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                    $.unblockUI();
+                }).always(function () {
+                    //$.unblockUI();
+                });
+            } else {
+                $.unblockUI();
+            }
+        }).fail(function(){
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+            $.unblockUI();
+        }).always(function(){
+            //$.unblockUI();
+        });
+    });
+
+    function onChange(e){
+        var value = $("#E00031ModelName").data("kendoDropDownList").value();
+        var tbody = $('.tblMultiRow').find('tbody');
+        if(value === ""){
+            clearModal();
+        }
+        else if(value ==="custom"){
+            clearModal();
+            $('.tblRow').find('input').removeAttr("readonly");
+            $('.paraSubRow').removeClass('hidden');
+            $('.paraSubRow').find('input').removeAttr('disabled');
+        }else {
+            clearModal();
+            $('.tblRow').find('input').removeAttr("readonly");
+            $('.paraSubRow').removeClass('hidden');
+            $('.paraSubRow').find('input').removeAttr('disabled');
+            $.blockUI();
+            $.post("@Url.Action("GetCHPParameterSubList", "EntityE00031Popup", new { area="Case" })", { chpParameterId:value }, function (result) {
+                if(result.success){
+                    $('.tblRow').find('input').not('.loadInput').val("");
+                    $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+                    $('.tblRow').find('input').removeClass("input-validation-error");
+                    $('.tblMultiRow').find('input').removeClass("input-validation-error");
+                    $('.paraSubRow').find('input').not('.loadInput').val("");
+                    $('.paraSubRow').addClass('hidden');
+                    $('.paraSubRow').find('input').attr('disabled','disabled');
+                    var list = result.listCHPParaSub;
+                    var dem = 0
+                    list.forEach(function( item ) {
+                        var html = createHtmlParaSub(item, dem);
+                        dem++
+                        tbody.append(html);
+                    });
+
+                    $.blockUI();
+                    $.post("@Url.Action("GetCHPParameter", "EntityE00031Popup", new { area="Case" })", { chpParameterId:value }, function (result) {
+                        if(result.success){
+                            $('#Company').val(result.listCHPPara.Company);
+                            $('#ModelName').val(result.listCHPPara.ModelName);
+                            $('#Volume').val(result.listCHPPara.Volume);
+                            $('#ThemRatio').val(result.listCHPPara.ThemRatio);
+                            $.unblockUI();
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                    }).always(function(){
+                        //$.unblockUI();
+                    });
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function(){
+                //$.unblockUI();
+            });
+        }
+    };
+
+    function createHtmlParaSub(item, order){
+        return '<tr><td><input type="tel" data-val="true" data-val-number="The field Load must be a number." '+
+    ' data-val-range="Invalid Target Price; Max 4 digits" data-val-range-max="999.9" data-val-range-min="0"'+
+    ' data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$"'+
+    ' data-val-required="The Load field is required." name = "ListCHPParameterSubs['+order+'].Load" value= "'+item.Load+'" '+
+    'style="text-align:center;" readonly="readonly" /></td>'+
+    '<td><input type="tel" data-val="true" data-val-number="The field FuelConsum must be a number." '+
+    ' data-val-range="Invalid Target Price; Max 5 digits" data-val-range-max="9999.9" data-val-range-min="0" '+
+    'data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" '+
+    'data-val-required="The FuelConsum field is required." name = "ListCHPParameterSubs['+order+'].FuelConsum" value= "'+item.FuelConsum+'" /></td></tr>';
+    }
+
+    function clearModal(){
+        $('.tblRow').find('input').not('.loadInput').val("");
+        $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+        $('.tblRow').find('input').prop("readonly","readonly");
+        $('.tblRow').find('input').removeClass("input-validation-error");
+        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+        $('.paraSubRow').find('input').not('.loadInput').val("");
+        $('.paraSubRow').addClass('hidden');
+        $('.paraSubRow').find('input').attr('disabled','disabled');
+    };
+</script>
+

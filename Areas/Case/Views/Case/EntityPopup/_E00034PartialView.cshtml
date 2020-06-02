@@ -1,0 +1,1043 @@
+﻿@model DPDSP.Areas.Case.Models.EntityE000341PopupViewModel
+
+<style>
+    .E00034 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .k-list-optionlabel {
+        text-align: center;
+    }
+
+    .tblRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th, td {
+        text-align: center;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .input-validation-error {
+        border: 1px solid red !important;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .modal-dialog {
+        width: 50%
+    }
+
+    .align-ver {
+        vertical-align:middle;
+    }
+</style>
+<link href="@Url.Content("~/Content/case_site_css/entity_popup_styles.css")" rel="stylesheet" type="text/css" />
+
+@using (Html.BeginForm("SaveEntityE00034PopupData", "EntityE00034Popup", FormMethod.Post, new { @role = "form", @id = "EntityE00034Form" }))
+{
+    <div class="modal fade E00034" id="" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">@Resources.Langues.E00034Title</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.Hidden("CaseId", @Request.Params["caseId"], new
+                    {
+                       @data_val = "true",
+                       @data_val_required = "The CaseId field is required."
+                    })
+
+                    @Html.HiddenFor(m => m.ModelCode, @Request.Params["modelCode"])
+                    <br />
+                    <div class="row">
+                        <div class="form-horizontal">
+                            <label class="control-label col-md-4 lbWT">@Resources.Langues.Selectmodel</label>
+                            <div class="col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                                  .Name("E00034ModelName")
+                                                  .DataTextField("Text")
+                                                  .DataValueField("Value")
+                                                  .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <table class="table table-bordered tblRow">
+                            <tbody>
+                                <tr>
+                                    <td class="active col-xs-3">@Resources.Langues.Company</td>
+                                    <td colspan="2">
+                                        @Html.TextBoxFor(m => m.Company, new { style = "text-align:center" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active col-xs-3">@Resources.Langues.ModelName</td>
+                                    <td colspan="2">
+                                        @Html.TextBoxFor(m => m.ModelName, new { style = "text-align:center" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active col-xs-3">@Resources.Langues.ReferenceCapacity</td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.ReferenceCapacity, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field ReferenceCapacity must be a number.",
+                                       @data_val_range = "Invalid Target Price; Max 11 digits",
+                                       @data_val_range_max = "99999999999999.9",
+                                       @data_val_range_min = "0",
+                                       @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                       @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                       @data_val_required = "The ReferenceCapacity field is required.",
+                                       @style = "text-align:right;"
+                                   })
+                                    </td>
+                                    <td width="5%" align="left">kW</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row" style="margin-top:5px;">
+                        @Resources.Langues.Monthlyfuelcostinformation [@Resources.Langues.won/L]
+                        <table class="table table-bordered tblRow">
+                            <tbody>
+                                <tr>
+                                    <td class="active">@Resources.Langues.Month</td>
+                                    <td class="active">1</td>
+                                    <td class="active">2</td>
+                                    <td class="active">3</td>
+                                    <td class="active">4</td>
+                                    <td class="active">5</td>
+                                    <td class="active">6</td>
+                                    <td class="active">7</td>
+                                    <td class="active">8</td>
+                                    <td class="active">9</td>
+                                    <td class="active">10</td>
+                                    <td class="active">11</td>
+                                    <td class="active">12</td>
+                                </tr>
+                                <tr class="paraSubRow ">
+                                    <td class="active">@Resources.Langues.Fuelcost </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM1, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM1 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM2, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM2 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM3, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM3 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM4, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM4 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM5, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM5 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM6, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM6 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM7, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM7 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM8, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM8 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM9, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM9 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM10, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM10 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM11, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM11 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        @Html.TextBoxFor(m => m.FuelCostM12, new
+                                   {
+                                       @data_val = "true",
+                                       @data_val_number = "The field FuelCostM12 must be a number.",
+                                       @style = "text-align:right;",
+                                       @class = "fuel-input"
+                                   })
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row scroll-style-7" style="max-height:374px; overflow-y:scroll;">
+                        @Resources.Langues.Dieselgeneratorparameters
+                        <table class="table table-bordered tblMultiRow">
+                            @if (Request.Params["modelCode"] != "M00002")
+                            {
+                                <tbody>
+                                    <tr class="paraSubRow">
+                                        <td class="col-xs-5 active">@Resources.Langues.Ratedoutput1</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.RatedOuputCom, new
+                                            {
+                                               @data_val = "true",
+                                               @data_val_number = "The field RatedOuputCom must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 6 digits",
+                                               @data_val_range_max = "99999.9",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                               @data_val_required = "The RatedOuputCom field is required.",
+                                               @style = "text-align:right;"
+                                            })
+                                        </td>
+                                        <td class="col-xs-1">kW</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td class="col-xs-5 active">@Resources.Langues.Commercialminimumoperationoutput</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.MinOperOutput, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field MinOperOutput must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 6 digits",
+                                           @data_val_range_max = "99999.9",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                           @data_val_required = "The MinOperOutput field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="col-xs-1">kW</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td class="col-xs-5 active">@Resources.Langues.Commercialmaximumoperationoutput</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.MaxOperOutput, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field MaxOperOutput must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 6 digits",
+                                           @data_val_range_max = "99999.9",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                           @data_val_required = "The MaxOperOutput field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="col-xs-1">kW</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td class="col-xs-5 active">@Resources.Langues.Ratedoutput2</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.RatedOyputEmr, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field RatedOyputEmr must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 6 digits",
+                                           @data_val_range_max = "99999.9",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                           @data_val_required = "The RatedOyputEmr field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="col-xs-1">kW</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td class="col-xs-5 active">@Resources.Langues.Emergencyminimumoperationoutput</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.MinOperEmr, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field MinOperEmr must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 6 digits",
+                                           @data_val_range_max = "99999.9",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                           @data_val_required = "The MinOperEmr field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="col-xs-1">kW</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td class="col-xs-5 active">@Resources.Langues.Emergencymaximumoperationoutput</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.MaxOperEmr, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field MaxOperEmr must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 6 digits",
+                                           @data_val_range_max = "99999.9",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                           @data_val_required = "The MaxOperEmr field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="col-xs-1">kW</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td class="col-xs-5 active">@Resources.Langues.Operatingtime1</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.OperTimeCom, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field OperTimeCom must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 6 digits",
+                                           @data_val_range_max = "99999.9",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                           @data_val_required = "The OperTimeCom field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="col-xs-1">@Resources.Langues.Hour</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td class="col-xs-5 active">@Resources.Langues.Operatingtime2</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.OperTimeEmr, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field OperTimeEmr must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 6 digits",
+                                           @data_val_range_max = "99999.9",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                           @data_val_required = "The OperTimeEmr field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="col-xs-1">@Resources.Langues.Hour</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td class="col-xs-5 active">@Resources.Langues.Co2Emiisions</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.Co2Emiisions, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field Co2Emiisions must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 6 digits",
+                                           @data_val_range_max = "99999.9",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                           @data_val_required = "The Co2Emiisions field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td class="col-xs-1">tCO2/L</td>
+                                    </tr>
+                                </tbody>
+                            }
+                            else
+                            {
+                                <tbody>
+                                    <tr class="paraSubRow ">
+                                        <th rowspan="2" class="active">@Html.Raw(Resources.Langues.constfunction)</th>
+                                        <td class="active">@Resources.Langues.Coefficient</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.Coefficient, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field Coefficient must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 11 digits",
+                                           @data_val_range_max = "99999.999999",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Six Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,6})?$",
+                                           @data_val_required = "The Coefficient field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td>L/h/kW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="active">@Resources.Langues.ConstWaterPort</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.ConstWaterPort, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field ConstWaterPort must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 11 digits",
+                                           @data_val_range_max = "99999.999999",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Six Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,6})?$",
+                                           @data_val_required = "The ConstWaterPort field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td>L/h</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td class="active">@Resources.Langues.ConstWaterPort</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.ConstWaterPort, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field ConstWaterPort must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 11 digits",
+                                           @data_val_range_max = "99999.999999",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum Six Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,6})?$",
+                                           @data_val_required = "The ConstWaterPort field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td>L/h</td>
+                                    </tr>
+                                    <tr class="paraSubRow ">
+                                        <td colspan="2" class="active">@Resources.Langues.RunningCost</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.RunningCost, new
+                                       {
+                                           @data_val = "true",
+                                           @data_val_number = "The field RunningCost must be a number.",
+                                           @data_val_range = "Invalid Target Price; Max 11 digits",
+                                           @data_val_range_max = "99999999999999.9",
+                                           @data_val_range_min = "0",
+                                           @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                           @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                           @data_val_required = "The RunningCost field is required.",
+                                           @style = "text-align:right;"
+                                       })
+                                        </td>
+                                        <td>@Resources.Langues.won</td>
+                                    </tr>
+
+
+
+                                    @*<tr class="tblMultiRow ">
+                                            <td width="20%" rowspan="2">@Resources.Langues.Coefficient</td>
+                                            <td width="20%">@Resources.Langues.Coefficient</td>
+                                            <td width="40%">
+                                                @Html.TextBoxFor(m => m.Coefficient, new
+                                           {
+                                               @data_val = "true",
+                                               @data_val_number = "The field Coefficient must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 11 digits",
+                                               @data_val_range_max = "99999.999999",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Six Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,6})?$",
+                                               @data_val_required = "The Coefficient field is required.",
+                                               @style = "text-align:right;"
+                                           })
+                                            </td>
+                                            <td width="10%">L/h/kW</td>
+                                        </tr>
+                                        <tr class="tblMultiRow ">
+                                            <td width="30%">@Resources.Langues.ConstWaterPort</td>
+                                            <td width="40%">
+                                                @Html.TextBoxFor(m => m.ConstWaterPort, new
+                                           {
+                                               @data_val = "true",
+                                               @data_val_number = "The field ConstWaterPort must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 11 digits",
+                                               @data_val_range_max = "99999.999999",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum Six Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,6})?$",
+                                               @data_val_required = "The ConstWaterPort field is required.",
+                                               @style = "text-align:right;"
+                                           })
+                                            </td>
+                                            <td width="10%">L/h</td>
+                                        </tr>
+                                        <tr class="paraSubRow ">
+                                            <td width="50%">@Resources.Langues.RunningCost</td>
+                                            <td width="40%">
+                                                @Html.TextBoxFor(m => m.RunningCost, new
+                                           {
+                                               @data_val = "true",
+                                               @data_val_number = "The field RunningCost must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 11 digits",
+                                               @data_val_range_max = "99999999999999.9",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                               @data_val_required = "The RunningCost field is required.",
+                                               @style = "text-align:right;"
+                                           })
+                                            </td>
+                                            <td width="10%">@Resources.Langues.won</td>
+                                        </tr>
+                                        <tr class="paraSubRow ">
+                                            <td width="50%">@Resources.Langues.ReferenceCapacity</td>
+                                            <td width="40%">
+                                                @Html.TextBoxFor(m => m.ReferenceCapacity, new
+                                           {
+                                               @data_val = "true",
+                                               @data_val_number = "The field ReferenceCapacity must be a number.",
+                                               @data_val_range = "Invalid Target Price; Max 11 digits",
+                                               @data_val_range_max = "99999999999999.9",
+                                               @data_val_range_min = "0",
+                                               @data_val_regex = "Invalid Target Price; Maximum One Decimal Points.",
+                                               @data_val_regex_pattern = @"^\d+(\.\d{1,1})?$",
+                                               @data_val_required = "The ReferenceCapacity field is required.",
+                                               @style = "text-align:right;"
+                                           })
+                                            </td>
+                                            <td width="10%">kW</td>
+                                        </tr>*@
+                                </tbody>
+                            }
+                        </table>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="list-inline pull-right">
+                            <button id="FormE00034Save" type="button" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+        var caseId =  @Request.Params["caseId"];
+        var componentCode = "CP0006";
+        var dropdown = $("#E00034ModelName").data("kendoDropDownList");
+    $(document).ready(function () {
+
+
+        $('.E00034').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $('.E00034').on('hide.bs.modal', function () {
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+
+        $('.E00034').on('shown.bs.modal', function () {
+            $(document).off('focusin.modal');
+        });
+
+        $('.E00034').on('show.bs.modal',function(){
+            clearModal();
+            $.blockUI();
+            $.post("@Url.Action("Check_DropdownListAvailable", "EntityE00029Popup", new { area="Case" })", { caseId : caseId, componentCode : componentCode }, function (result) {
+                if(result.success){
+                    dropdown.enable(true);
+                    $("#E00034ModelName").kendoDropDownList({
+                        index: 0,
+                        dataValueField: "Value",
+                        dataTextField: "Text",
+                        serverFiltering: true,
+                        change: onChange,
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    dataType: "json",
+                                    url: "@Url.Action("Read_DieselParameter", "EntityE00034Popup", new { area = "Case" })"
+                                }
+                            }
+                        },
+                        filter:"contains",
+                    });
+                    $("#E00034ModelName").data("kendoDropDownList").dataSource.read();
+                    $.unblockUI();
+                }else{
+                    dropdown.enable(false);
+                    $.unblockUI();
+                }
+            }).fail(function () {
+                bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                $.unblockUI();
+            }).always(function(){
+                //$.unblockUI();
+            });
+        });
+
+        $('#EntityE00034Form').submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                    $.unblockUI();
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                    updateHistory(result.html)
+                            if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00034').modal('hide');
+                    });
+                    $("#btn_E00034").addClass("democlass");
+                } else {
+                    bootbox.alert({ message:'@Resources.Langues.Error',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                    $.unblockUI();
+                }
+            });
+            e.preventDefault();
+        });
+
+        $('.E00031').on('hidden.bs.modal',function(){
+            dropdown.text(""); // clears visible text
+            dropdown.value(""); // clears invisible value
+            clearModal();
+        });
+
+        $('#FormE00034Save').click(function(){
+            var value = dropdown.value();
+            if(value != ""){
+                var valid =  $('#EntityE00034Form').valid();
+                if(valid){
+                    $('#EntityE00034Form').submit();
+                }
+            }
+            else {
+                bootbox.alert({ message:'@Resources.Langues.Pleaseselectdieselgeneratorparameters',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }
+        });
+
+        $('#EntityE00034Form').on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetDieselGenParameterByCaseId", "EntityE00034Popup", new { area="Case" })", { caseId:caseId }, function (result) {
+            if(result.success){
+                var id = result.id;
+                var tbody = $('.tblMultiRow').find('tbody');
+
+                $.blockUI();
+                $.post("@Url.Action("GetDieselGetParameterSub", "EntityE00034Popup", new { area="Case" })", { dgParameterId:id, caseId: caseId }, function (result) {
+                    if (result.success) {
+                        var item = result.dgParameter;
+                        var item2 = result.dgCost;
+
+                        $('#RatedOuputCom').val(item.RatedOuputCom)
+                        $('#MinOperOutput').val(item.MinOperOutput)
+                        $('#MaxOperOutput').val(item.MaxOperOutput)
+                        $('#RatedOyputEmr').val(item.RatedOyputEmr)
+                        $('#MinOperEmr').val(item.MinOperEmr)
+                        $('#MaxOperEmr').val(item.MaxOperEmr)
+                        $('#OperTimeCom').val(item.OperTimeCom)
+                        $('#OperTimeEmr').val(item.OperTimeEmr)
+                        $('#Co2Emiisions').val(item.Co2Emiisions)
+                        $('#Coefficient').val(item.Coefficient)
+                        $('#ConstWaterPort').val(item.ConstWaterPort)
+                        $('#ReferenceCapacity').val(item.ReferenceCapacity)
+                        var lang = window.location.pathname.split('/')[1];
+                        if (lang != "en") {
+                            $('#RunningCost').val(item.RunningCost)
+                            $('#FuelCostM1').val(parseFloat(item2.FuelCostM1.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM2').val(parseFloat(item2.FuelCostM2.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM3').val(parseFloat(item2.FuelCostM3.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM4').val(parseFloat(item2.FuelCostM4.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM5').val(parseFloat(item2.FuelCostM5.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM6').val(parseFloat(item2.FuelCostM6.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM7').val(parseFloat(item2.FuelCostM7.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM8').val(parseFloat(item2.FuelCostM8.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM9').val(parseFloat(item2.FuelCostM9.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM10').val(parseFloat(item2.FuelCostM10.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM11').val(parseFloat(item2.FuelCostM11.toString().replace(/\,/g, ''), 10).toLocaleString())
+                            $('#FuelCostM12').val(parseFloat(item2.FuelCostM12.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        } else {
+                            $.post("@Url.Action("GetExchangeRate", "Case", new { area="Case"})", { caseId: caseId }, function (result) {
+                                var ex = result.exchange;
+                                $('#RunningCost').val((item.RunningCost / ex).toFixed(1))
+                                $('#FuelCostM1').val((item2.FuelCostM1 / ex).toFixed(1))
+                                $('#FuelCostM2').val((item2.FuelCostM2 / ex).toFixed(1))
+                                $('#FuelCostM3').val((item2.FuelCostM3 / ex).toFixed(1))
+                                $('#FuelCostM4').val((item2.FuelCostM4 / ex).toFixed(1))
+                                $('#FuelCostM5').val((item2.FuelCostM5 / ex).toFixed(1))
+                                $('#FuelCostM6').val((item2.FuelCostM6 / ex).toFixed(1))
+                                $('#FuelCostM7').val((item2.FuelCostM7 / ex).toFixed(1))
+                                $('#FuelCostM8').val((item2.FuelCostM8 / ex).toFixed(1))
+                                $('#FuelCostM9').val((item2.FuelCostM9 / ex).toFixed(1))
+                                $('#FuelCostM10').val((item2.FuelCostM10 / ex).toFixed(1))
+                                $('#FuelCostM11').val((item2.FuelCostM11 / ex).toFixed(1))
+                                $('#FuelCostM12').val((item2.FuelCostM12 / ex).toFixed(1))
+                            }).fail(function () {
+                                $.unblockUI();
+                            }).always(function () {
+                                $.unblockUI();
+                            });
+                        }
+
+
+
+                        //var html = createHtmlParaSub(item)
+                        //tbody.append(html);
+                        $.unblockUI();
+                    } else {
+                        $.unblockUI();
+                    }
+                }).fail(function () {
+                    bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                    $.unblockUI();
+                }).always(function(){
+                    //$.unblockUI();
+                });
+
+                $.blockUI();
+                $.post("@Url.Action("GetDGParameter", "EntityE00034Popup", new { area="Case" })", { dgParameterId:id }, function (result) {
+                    if (result.success) {
+                        //$('.tblRow').find('input').removeAttr("readonly");
+                        $('#Company').val(result.DGParam.Company);
+                        $('#ModelName').val(result.DGParam.ModelName);
+                        $('#FuelPrice').val(result.DGParam.FuelPrice);
+                        $("#E00034ModelName").data("kendoDropDownList").value(id);
+                        $.unblockUI();
+                    } else {
+                        $.unblockUI();
+                    }
+                }).fail(function () {
+                    bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                    $.unblockUI();
+                }).always(function(){
+                    //$.unblockUI();
+                });
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            $.unblockUI();
+        }).always(function(){
+            //$.unblockUI();
+        });
+    });
+
+    function onChange(e){
+        var value = $("#E00034ModelName").data("kendoDropDownList").value();
+        var tbody = $('.tblMultiRow').find('tbody');
+        if(value ==="custom"){
+            clearModal();
+            //$('.tblRow').find('input').removeAttr("readonly");
+
+            //$('.paraSubRow').find('input').removeAttr('readonly');
+        }else {
+            $.blockUI();
+            $.post("@Url.Action("GetDieselGetParameterSub", "EntityE00034Popup", new { area="Case" })", { dgParameterId:value, caseId: caseId }, function (result) {
+                if (result.success) {
+                    $('.tblRow').find('input').not('.loadInput').val("");
+                    $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+                    $('.tblRow').find('input').removeClass("input-validation-error");
+                    $('.tblMultiRow').find('input').removeClass("input-validation-error");
+                    $('.paraSubRow').find('input').not('.loadInput').val("");
+                    //$('.tblRow').find('input').prop("readonly", true);
+                    //$('.paraSubRow').find('input').prop("readonly", true);
+
+                    var item = result.dgParameter;
+                    var item2 = result.dgCost;
+                    //var html = createHtmlParaSub(item)
+
+                    $('#RatedOuputCom').val(item.RatedOuputCom)
+                    $('#MinOperOutput').val(item.MinOperOutput)
+                    $('#MaxOperOutput').val(item.MaxOperOutput)
+                    $('#RatedOyputEmr').val(item.RatedOyputEmr)
+                    $('#MinOperEmr').val(item.MinOperEmr)
+                    $('#MaxOperEmr').val(item.MaxOperEmr)
+                    $('#OperTimeCom').val(item.OperTimeCom)
+                    $('#OperTimeEmr').val(item.OperTimeEmr)
+                    $('#Co2Emiisions').val(item.Co2Emiisions)
+                    $('#Coefficient').val(item.Coefficient)
+                    $('#ConstWaterPort').val(item.ConstWaterPort)
+                    $('#ReferenceCapacity').val(item.ReferenceCapacity)
+                    var lang = window.location.pathname.split('/')[1];
+                    if (lang != "en") {
+                        $('#RunningCost').val(item.RunningCost)
+                        $('#FuelCostM1').val(parseFloat(item2.FuelCostM1.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM2').val(parseFloat(item2.FuelCostM2.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM3').val(parseFloat(item2.FuelCostM3.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM4').val(parseFloat(item2.FuelCostM4.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM5').val(parseFloat(item2.FuelCostM5.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM6').val(parseFloat(item2.FuelCostM6.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM7').val(parseFloat(item2.FuelCostM7.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM8').val(parseFloat(item2.FuelCostM8.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM9').val(parseFloat(item2.FuelCostM9.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM10').val(parseFloat(item2.FuelCostM10.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM11').val(parseFloat(item2.FuelCostM11.toString().replace(/\,/g, ''), 10).toLocaleString())
+                        $('#FuelCostM12').val(parseFloat(item2.FuelCostM12.toString().replace(/\,/g, ''), 10).toLocaleString())
+                    } else {
+                        $.post("@Url.Action("GetExchangeRate", "Case", new { area="Case"})", { caseId: caseId }, function (result) {
+                            var ex = result.exchange;
+                            $('#RunningCost').val((item.RunningCost / ex).toFixed(1))
+                            $('#FuelCostM1').val((item2.FuelCostM1 / ex).toFixed(1))
+                            $('#FuelCostM2').val((item2.FuelCostM2 / ex).toFixed(1))
+                            $('#FuelCostM3').val((item2.FuelCostM3 / ex).toFixed(1))
+                            $('#FuelCostM4').val((item2.FuelCostM4 / ex).toFixed(1))
+                            $('#FuelCostM5').val((item2.FuelCostM5 / ex).toFixed(1))
+                            $('#FuelCostM6').val((item2.FuelCostM6 / ex).toFixed(1))
+                            $('#FuelCostM7').val((item2.FuelCostM7 / ex).toFixed(1))
+                            $('#FuelCostM8').val((item2.FuelCostM8 / ex).toFixed(1))
+                            $('#FuelCostM9').val((item2.FuelCostM9 / ex).toFixed(1))
+                            $('#FuelCostM10').val((item2.FuelCostM10 / ex).toFixed(1))
+                            $('#FuelCostM11').val((item2.FuelCostM11 / ex).toFixed(1))
+                            $('#FuelCostM12').val((item2.FuelCostM12 / ex).toFixed(1))
+                        }).fail(function () {
+                            $.unblockUI();
+                        }).always(function () {
+                            $.unblockUI();
+                        });
+                    }
+
+                    //tbody.append(html);
+
+                    $.blockUI();
+                    $.post("@Url.Action("GetDGParameter", "EntityE00034Popup", new { area="Case" })", { dgParameterId:value }, function (result) {
+                        if (result.success) {
+                            //$('.tblRow').find('input').removeAttr("readonly");
+                            $('#Company').val(result.DGParam.Company);
+                            $('#ModelName').val(result.DGParam.ModelName);
+                            $('#FuelPrice').val(result.DGParam.FuelPrice);
+                            $.unblockUI();
+                        } else {
+                            $.unblockUI();
+                        }
+                    }).fail(function () {
+                        $.unblockUI();
+                        bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+                    }).always(function(){
+                        //$.unblockUI();
+                    });
+                } else {
+                    $.unblockUI();
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            }).always(function(){
+                //$.unblockUI();
+            });
+        }
+    };
+
+    function createHtmlParaSub(item){
+        return '<tr><td class="col-xs-5">'+ '@Resources.Langues.Ratedoutput1' +'</td><td>'+
+            '<input data-val="true" data-val-number="The field RatedOuputCom must be a number." data-val-range="Invalid Target Price; Max 6 digits" style = "text-align:right;"'+
+            'data-val-range-max="99999.9" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum One Decimal Points."'+
+            ' data-val-regex-pattern="^\d+(\.\d{1,1})?$" data-val-required="The RatedOuputCom field is required." name="RatedOuputCom" '+
+            'type="text" value="'+item.RatedOuputCom+'"></td><td class="col-xs-1">kW</td></tr>'+
+            '<tr><td class="col-xs-5">'+ '@Resources.Langues.Commercialminimumoperationoutput' +'</td><td>'+
+            '<input data-val="true" data-val-number="The field MinOperOutput must be a number." data-val-range="Invalid Target Price; Max 6 digits" style = "text-align:right;" data-val-range-max'+
+            '="99999.9" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" '+
+            'data-val-required="The MinOperOutput field is required." name="MinOperOutput" type="text" value="'+item.MinOperOutput+'"></td><td class="col-xs-1">kW</td></tr>'+
+            '<tr><td class="col-xs-5">'+ '@Resources.Langues.Commercialmaximumoperationoutput' +'</td>'+
+            '<td><input data-val="true" data-val-number="The field MaxOperOutput must be a number." data-val-range="Invalid Target Price; Max 6 digits" '+
+            'data-val-range-max="99999.9" style = "text-align:right;" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern'+
+            '="^\d+(\.\d{1,1})?$" data-val-required="The MaxOperOutput field is required." name="MaxOperOutput" type="text" value="'+item.MaxOperOutput+'"></td><td class="col-xs-1">kW</td></tr>'+
+            '<tr><td class="col-xs-5">'+ '@Resources.Langues.Ratedoutput2' +'</td>'+'<td><input data-val="true" data-val-number="The field RatedOyputEmr must be a number." '+
+            'data-val-range="Invalid Target Price; Max 6 digits" style = "text-align:right;" data-val-range-max="99999.9" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum One Decimal '+
+            'Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" data-val-required="The RatedOyputEmr field is required." name="RatedOyputEmr" '+
+            'type="text" value="'+item.RatedOyputEmr+'"></td><td class="col-xs-1">kW</td></tr>'+
+            '<tr><td class="col-xs-5">'+ '@Resources.Langues.Emergencyminimumoperationoutput' +'</td>'+
+            '<td><input data-val="true" data-val-number="The field MinOperEmr must be a number." style = "text-align:right;" data-val-range="Invalid Target Price; Max 6 digits" data-val-range-max='+
+            '"99999.9" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" data-val-required'+
+            '="The MinOperEmr field is required." name="MinOperEmr" type="text" value="'+item.MinOperEmr+'"></td><td class="col-xs-1">kW</td></tr>'+
+            '<tr><td class="col-xs-5">'+ '@Resources.Langues.Emergencymaximumoperationoutput' +'</td>'+
+            '<td><input data-val="true" data-val-number="The field MaxOperEmr must be a number." style = "text-align:right;" data-val-range="Invalid Target Price; Max 6 digits" data-val-range-max='+
+            '"99999.9" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" data-val-required='+
+            '"The MaxOperEmr field is required." name="MaxOperEmr" type="text" value="'+item.MaxOperEmr+'"></td><td class="col-xs-1">kW</td></tr>'+
+            '<tr><td class="col-xs-5">'+ '@Resources.Langues.Operatingtime1' +'</td>'+
+            '<td><input data-val="true" data-val-number="The field OperTimeCom must be a number." style = "text-align:right;" data-val-range="Invalid Target Price; Max 6 digits" data-val-range-max='+
+            '"99999.9" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" data-val-required='+
+            '"The OperTimeCom field is required." name="OperTimeCom" type="text" value="'+item.OperTimeCom+'"></td><td class="col-xs-1">'+'@Resources.Langues.Hour'+'</td></tr>'+
+            '<tr><td class="col-xs-5">'+ '@Resources.Langues.Operatingtime2' +'</td>'+
+            '<td><input data-val="true" data-val-number="The field OperTimeEmr must be a number." style = "text-align:right;" data-val-range="Invalid Target Price; Max 6 digits" data-val-range-max='+
+            '"99999.9" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" data-val-required='+
+            '"The OperTimeEmr field is required." name="OperTimeEmr" type="text" value="'+item.OperTimeEmr+'"></td><td class="col-xs-1">'+'@Resources.Langues.Hour'+'</td></tr>'+
+            '<tr><td class="col-xs-5">'+ '@Resources.Langues.Co2Emiisions' +' (tCo2/L)</td>'+
+            '<td><input data-val="true" data-val-number="The field Co2Emiisions must be a number." style = "text-align:right;" data-val-range="Invalid Target Price; Max 6 digits" data-val-range-max='+
+            '"99999.9" data-val-range-min="0" data-val-regex="Invalid Target Price; Maximum One Decimal Points." data-val-regex-pattern="^\d+(\.\d{1,1})?$" data-val-required='+
+            '"The Co2Emiisions field is required." name="Co2Emiisions" type="text" value="'+item.Co2Emiisions+'"></td><td class="col-xs-1">tCO2/L</td></tr>';
+    }
+
+    function clearModal(){
+        $('.tblRow').find('input').not('.loadInput').val("");
+        $('.tblMultiRow').find('tbody').children().not('.paraSubRow').remove();
+        //$('.tblRow').find('input').prop("readonly","readonly");
+        //$('.tblMultiRow').find('input').prop("readonly","readonly");
+        $('.tblRow').find('input').removeClass("input-validation-error");
+        $('.tblMultiRow').find('input').removeClass("input-validation-error");
+        $('.paraSubRow').find('input').not('.loadInput').val("");
+        };
+
+        $(".fuel-input").on('keyup', function (evt) {
+            debugger
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8) {
+                var a = $(this).val()
+                if (a == 'NaN' || a == '') {
+                    $(this).val('')
+                } else {
+                    var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                    $(this).val(n.toLocaleString());
+                }
+            } else {
+                return false;
+            }
+        });
+</script>

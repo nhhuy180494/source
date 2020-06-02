@@ -1,0 +1,44 @@
+﻿@model DPDSP.Models.ItemMapEntityViewModel
+
+
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-5">
+    <div class="offer  offer-primary offer-color">
+        <div class="offer-content">
+            <h4 class="@*hide-end-text*@" style="padding-top:10px;" id="@Model.EntityCode">@Model.OrderNumber. @Model.EntityName</h4>
+            <br>
+            @if (Model.entityStatus)
+            {
+                <p>
+                    <a @*href="#"*@ id="btn_@Model.EntityCode" role="button" class="btn btn-md btn-primary btnSelect democlass">
+
+                        @if (Model.EntityCode == "E00004" || Model.EntityCode == "E00006" || Model.EntityCode == "E00012" || Model.EntityCode == "E00009" || Model.EntityCode == "E00014" || Model.EntityCode == "E00025" || Model.EntityCode == "E00028" ||
+                            Model.EntityCode == "E00030" || Model.EntityCode == "E00033" || Model.EntityCode == "E00035" || Model.EntityCode == "E00036" || Model.EntityCode == "E00037")
+                        {
+                            @Resources.Langues.Lookup
+                        }
+                        else
+                        {
+                            @Resources.Langues.Enter
+                        }
+                    </a>
+                </p>
+            }
+            else
+            {
+                <p>
+                    <a @*href="#"*@ id="btn_@Model.EntityCode" role="button" class="btn btn-md btn-primary btnSelect">
+                        @if (Model.EntityCode == "E00004" || Model.EntityCode == "E00006" || Model.EntityCode == "E00009" || Model.EntityCode == "E00012" || Model.EntityCode == "E00014" || Model.EntityCode == "E00025" || Model.EntityCode == "E00028" ||
+                       Model.EntityCode == "E00030" || Model.EntityCode == "E00033" || Model.EntityCode == "E00035" || Model.EntityCode == "E00036" || Model.EntityCode == "E00037")
+                        {
+                            @Resources.Langues.Lookup
+                        }
+                        else
+                        {
+                            @Resources.Langues.Enter
+                        }
+                    </a>
+                </p>
+            }
+        </div>
+    </div>
+</div>

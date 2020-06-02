@@ -1,0 +1,155 @@
+﻿
+<style>
+    .E00007 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .modal-dialog {
+        width: 20%;
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: inline-block;
+        font-size: 20px;
+        color: blue;
+        border: 1px solid blue;
+        text-align: center;
+    }
+</style>
+<!-- Modal -->
+<div class="modal fade E00007" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> @Resources.Langues.BaseYear <span onclick="helpOnclick()" class="dot">?</span>@*<button type="button" onclick="helpOnclick()" class="btn button-help"><img src="~/Content/images/question_icon.png" style="height:20px" /></button>*@</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-horizontal">
+                        <label class="control-label col-md-5 lbWT">@Resources.Langues.SelectYear</label>
+                        <div class="col-md-6">
+                            @(Html.Kendo().DropDownList()
+                                .Name("YearSelected")
+                                .HtmlAttributes(new { style = "width: 100%" })
+                            )
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="form-group pull-right">
+                            <button type="button" onclick="onSave()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                            <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $modal = $('.E00007');
+    var caseId = @Request.Params["caseId"];
+    var year = @DateTime.Now.Year;
+    $(document).ready(function () {
+        $('.E00007').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+
+        $('.E00007').on('shown.bs.modal', function () {
+            $(document).off('focusin.modal');
+        });
+
+        $('.E00007').on('hide.bs.modal', function () {
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+
+        var data = [];
+        for (var i = year; i >= 2017; i--) {
+            var item = { text: i.toString(), value: i }
+            data.push(item)
+        }
+
+        $("#YearSelected").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            filter:"contains",
+            dataSource: data,
+        });
+
+        $.blockUI();
+        $.post("@Url.Action("GetBaseYear", "EntityE00007Popup", new { area="Case" })", { caseId : @Request.Params["caseId"] }, function (result) {
+            if(result.success){
+                $('#YearSelected').data('kendoDropDownList').value(result.year);
+            }
+        }).fail(function () {
+            showMess('@Resources.Langues.ContactAdmin')
+        }).always(function(){
+            $.unblockUI();
+        });
+        });
+
+    function onSave() {
+        $.blockUI();
+        $.ajax({
+            url: '@Url.Action("UpdateCase", "EntityE00007Popup")',
+            cache: false,
+            type: 'POST',
+            data: {
+                caseId: @Request.Params["caseId"],
+                baseYear: $('#YearSelected').val()
+            },
+            success: function (result) {
+                if (result.success) {
+                    updateHistory(result.html)
+                    $("#btn_E00007").addClass("democlass");
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00007').modal('hide');
+                    });
+                } else {
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Error')
+                }
+            },
+            error: function (response) {
+            }
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        return { comCode: comCode }
+    };
+
+    function helpOnclick() {
+        showMess('@Resources.Langues.E7Mess')
+    }
+</script>

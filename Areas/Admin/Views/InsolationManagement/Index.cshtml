@@ -1,0 +1,571 @@
+﻿
+@{
+    ViewBag.Title = Resources.Langues.InsolationManagement;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section styles{
+    <link href="~/Content/KendoGrid.css" rel="stylesheet" type="text/css" />
+    <style>
+        .toolbarInput {
+            height: 80%;
+        }
+
+        #myModal {
+            top: 20%;
+        }
+
+        #formYearCopy .form-control {
+            width: 70%;
+        }
+
+        select {
+            text-align: center !important;
+        }
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+@*@using (Html.BeginForm("ExcelRegistInsolation", "InsolationManagement", FormMethod.Post, new { @role = "form", @id = "ManualForm", @enctype = "multipart/form-data" }))
+{*@
+    <div class="container-fluid adminSiteContent @*onlyOneGrid*@">
+        <div class="form-group">
+            @(Html.Kendo().Grid<DPDSP.Models.SolarAmountManageViewModel>()
+                    .Name("InsolationGrid")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.SolarAmountId).Hidden();
+                        columns.Bound(p => p.SolarAmountSubId).Hidden();
+                        columns.Bound(p => p.ComSubName).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.ComSubName); ;
+            //columns.Bound(p => p.LocationCode).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.LocationCode); ;
+            columns.Bound(p => p.YearOfDate).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.YearOfDate);
+                        columns.Bound(p => p.MonthDay).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.MonthDay);
+                        columns.Bound(p => p.Hour).HtmlAttributes(new { style = "text-align:center;" }).Title(Resources.Langues.Hour);
+                        columns.Bound(p => p.AmountSolar).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.AmountSolar).Format("{0:n2}"); ;
+                        columns.Bound(p => p.AmountSolarkWh).HtmlAttributes(new { style = "text-align:right;" }).Title(Resources.Langues.AmountSolarkWh).Format("{0:n2}"); ;
+                        columns.Command(command =>
+                        {
+                            command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel);
+                        }).HtmlAttributes(new { style = "text-align:center;" });
+                    })
+                    //.ToolBar(toolbar => toolbar.Create())
+                    .ToolBar(toolbar =>
+                    {
+                        toolbar.Template(@<text>
+                            <div id="InsolationGridToolbar">
+                                <div class="row" style="padding:10px 0 10px 0;">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-3" id="selectComSubCode">
+                                                <div class="form-group">
+                                                    <label class="control-label">@Resources.Langues.Area</label>
+                                                    <div class="row">
+                                                        <div class="col-lg-11">
+                                                            <select class="form-control toolbarInput input-opal" id="ComSubCode" name="ComSubCode">
+                                                                <option value="">@Resources.Langues.PleaseSelect</option>
+                                                                @foreach (var itemList in ViewBag.ListCommSub)
+                                                                            {
+                                                                    <option value="@itemList.Value">@itemList.Text</option>
+                                                                            }
+                                                                /**/
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-lg-offset-1" id="selectYear">
+                                                <label class="control-label">@Resources.Langues.Year :</label>
+                                                <div class="row">
+                                                    <div class="col-lg-10">
+                                                        <select class="form-control toolbarInput input-opal" disabled id="Year " name="Year">
+                                                            <option value="-1">@Resources.Langues.PleaseSelect</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <button type="button" style="display:none;" disabled class="btn btn-default" id="search">@Resources.Langues.Search</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-lg-offset-1" id="selectMonth">
+                                                <label class="control-label">@Resources.Langues.Month :</label>
+                                                <div class="row">
+                                                    <div class="col-lg-10">
+                                                        <select class="form-control toolbarInput input-opal" disabled id="Month " name="Month">
+                                                            <option value="-1">@Resources.Langues.PleaseSelect</option>
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                            <option value="7">7</option>
+                                                            <option value="8">8</option>
+                                                            <option value="9">9</option>
+                                                            <option value="10">10</option>
+                                                            <option value="11">11</option>
+                                                            <option value="12">12</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <button type="button" style="display:none;" disabled class="btn btn-default" id="search">@Resources.Langues.Search</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="form-group" style="float:right;margin-top:6px;">
+                                            <br />
+
+                                            @*@Html.TextBox("comCode", "93", new
+                                                {
+                                                    @data_val = "true",
+                                                    @data_val_required = "The CaseId field is required."
+                                                })
+
+                                                    @Html.TextBox("File", "", new
+                                                {
+                                                    @data_val = "true",
+                                                    @data_val_required = "The Excel File field is required.",
+                                                    @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                                                    @class = "form-control",
+                                                    @placeholder = "Excel File...",
+                                                    @type = "file"
+                                                })*@
+                                            @*<button type="button" data-toggle="modal" onclick="deleteClick()" class="btn btn-default btn-opal">@Resources.Langues.Delete</button>*@
+                                            <button data-target="#UploadFileForm" data-toggle="modal" class="k-button k-button-icontext pull-right"><span class="k-icon k-i-add"></span>@Resources.Langues.UploadForm</button>
+                                            <button type="button" data-toggle="modal" id="yearCopy" data-target="#YearCopyModal" class="k-button k-button-icontext pull-right">@Resources.Langues.YearCopy</button>
+                                            <button class="k-button k-button-icontext pull-right" onclick="NullDataLookup()">@Resources.Langues.NullDataSearch</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </text>);
+                            })
+                            //.Events(ev => ev.DataBound("onDataBound"))
+                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .Pageable()
+                            .Sortable()
+                            .Scrollable(rz => rz.Enabled(true))
+                            .Resizable(rs => rs.Columns(true))
+                            .HtmlAttributes(new { style = "height:700px;" })
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(50)
+                                .Events(events => events.Error("error_handler"))
+                                .Model(model =>
+                                {
+                                    model.Id(p => p.SolarAmountId);
+                                    model.Field(a => a.SolarAmountId).Editable(false);
+                                    model.Field(p => p.ComSubName).Editable(false);
+                                    model.Field(p => p.LocationCode).Editable(false);
+                                    model.Field(p => p.YearOfDate).Editable(false);
+                                    model.Field(p => p.MonthDay).Editable(false);
+                                    model.Field(p => p.Hour).Editable(false);
+                                })
+                                //.Create(update => update.Action("EditingInline_Create", "Grid"))
+                                .Read(read => read.Action("EditingInline_ReadSolarAmount", "InsolationManagement").Data("onDataReadSolarAmount"))
+                                .Update(update => update.Action("EditingInline_UpdateSolarAmount", "InsolationManagement"))
+                            //.Destroy(update => update.Action("EditingInline_Destroy", "Grid"))
+                            )
+            )
+        </div>
+    </div>
+@*}*@
+<!-- Modal -->
+<div class="modal fade" id="YearCopyModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.YearCopy</h4>
+            </div>
+            <div class="modal-body">
+                <div id="formYearCopy" class="col-lg-offset-2 col-md-offset-2 col-xs-offset-2">
+                    <div class="form-group">
+                        <label class="control-label">@Resources.Langues.SourceYear </label>
+                        <select class="form-control toolbarInput" id="sourceYear" name="sourceYear"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Target Year: </label>
+                        <select class="form-control toolbarInput" id="targetYear" name="targetYear"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="list-inline">
+                    <button type="button" id="runCopy" class="btn btn-default">@Resources.Langues.Run</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Resources.Langues.Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true" style="z-index:10000">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="printDiv">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div>
+                @(Html.Kendo().Grid<DPDSP.Models.SolarAmountSubNullData>().Name("GridNull")
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(m => m.SolarAmountId).Hidden();
+                                    columns.Bound(m => m.Year).Title(Resources.Langues.Year).HtmlAttributes(new { style = "text-align:center;" });
+                                    columns.Bound(m => m.Month).Title(Resources.Langues.Month).HtmlAttributes(new { style = "text-align:center;" });
+                                    columns.Bound(m => m.Day).Title(Resources.Langues.Date).HtmlAttributes(new { style = "text-align:center;" });
+                                    columns.Bound(m => m.Hour).Title(Resources.Langues.Hour).HtmlAttributes(new { style = "text-align:center;" });
+                                    columns.Bound(m => m.AmountSolar).Title(Resources.Langues.AmountSolar).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                    columns.Bound(m => m.AmountSolarkWh).Title(Resources.Langues.AmountSolarkWh).HtmlAttributes(new { style = "text-align:right;" }).Format("{0:n1}");
+                                    columns.Command(command =>
+                                    {
+                                        command.Edit().Text(Resources.Langues.Edit).UpdateText(Resources.Langues.Update).CancelText(Resources.Langues.Cancel).HtmlAttributes(new { style = "text-align:center;" });
+                                    }).HtmlAttributes(new { style = "text-align:center;" });
+                                })
+                                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                .Pageable()
+                                .Sortable()
+                                .Scrollable(rz => rz.Enabled(false))
+                                .Resizable(rz => rz.Columns(true))
+                                .HtmlAttributes(new { style = "height:auto;" })
+                                .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    .PageSize(20)
+                                    .Events(events => events.Error("error_handler"))
+                                    .Model(model => { model.Id(p => p.Id); })
+                                    .Read(read => read.Action("ReadNullData", "InsolationManagement", new { area = "Admin" }).Data("onDataReadSolarAmount"))
+                                    .Update(update => update.Action("UpdateListNull", "InsolationManagement", new { area = "Admin" }))
+                                )
+                )
+            </div>
+            <div class="modal-footer" style="border-top:none;">
+                <button class="btn btn-default " onclick="SaveDataNullChange()" data-dismiss="modal">@Resources.Langues.Save</button>
+                <button class="btn btn-default " data-dismiss="modal">@Resources.Langues.Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="UploadFileForm" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Import Excel Modal</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("ExcelRegistInsolation", "InsolationManagement", FormMethod.Post, new { @role = "form", @id = "ManualForm", @enctype = "multipart/form-data" }))
+                {
+                    @*<form method="post" action="@Url.Action("ImportIntoDb", "WindSpeedManagement", new { area = "Admin" })">*@
+                        <div class="demo-section k-content">
+                            @Html.Kendo().Upload().Name("File").HtmlAttributes(new { aria_label = "files" })
+                            <p style="padding-top: 1em; text-align: right">
+                                <a type="button" class="k-button k-primary" href="~/Content/AddExcelRegistForm/InsolationForm.csv">Sample Form</a>
+                                <button type="submit" class="k-button k-primary">Submit</button>
+                            </p>
+                        </div>
+                    @*</form>*@
+                }
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var $manualForm = $('#ManualForm');
+        $(document).ready(function () {
+
+            var insolationGrid = $('#InsolationGrid').data('kendoGrid');
+            var comSubCodeSelected;
+
+            $('#YearCopyModal').on('show.bs.modal', function (e) {
+                var $LocCode =  $('#selectComSubCode select').val();
+                $.ajax({
+                    url: '@Url.Action("GetYearsCopy", "InsolationManagement")',
+                    type: 'GET',
+                    data: {
+                        comSubCode: $LocCode,
+                    },
+                    success: function (result) {
+                        if (result != null) {
+                            for (var i = 0; i < result.length; i++) {
+                                $('<option/>', { value: result[i].Value, text: result[i].Text }).appendTo('#sourceYear');
+                            }
+
+                            var sourceYear = new Date().getFullYear() - 1;
+                            for (var i = 0; i < 5; i++) {
+                                var srcYear = parseInt(sourceYear);
+                                $('<option/>', { value: (srcYear + i + 1), text: (srcYear + i + 1) }).appendTo($('#targetYear'))
+                            }
+                        }
+                    },
+                    error: function (response) {
+                    }
+                });
+            });
+            $('#sourceYear').change(function () {
+                var sourceYear = $('#sourceYear').val();
+                $('#targetYear').empty();
+                for (var i = 0; i < 5; i++) {
+                    var srcYear = parseInt(sourceYear);
+                    $('<option/>', { value: (srcYear + i + 1), text: (srcYear + i + 1) }).appendTo($('#targetYear'))
+                }
+            });
+
+            $('#YearCopyModal').on('hidden.bs.modal', function (e) {
+                $('#sourceYear').empty();
+                $('#targetYear').empty();
+            });
+
+            $('#runCopy').click(function () {
+                $.blockUI();
+                $('#YearCopyModal').modal('hide');
+                var $fromYear = $('#sourceYear').val();
+                var $toYear = $('#targetYear').val();
+                var $LocCode = $('#selectComSubCode select').val();
+
+                $.ajax({
+                    url: "@Url.Action("RunCopyYear", "InsolationManagement", new { area = "Admin"})",
+                    type: "POST",
+                data: {
+                    fromYear: $fromYear, toYear: $toYear, comSubCode: $LocCode
+                },
+                success: function (result) {
+                    if (result.success) {
+                        bootbox.alert('@Resources.Langues.Successful');
+                        $("#InsolationGrid").data("kendoGrid").dataSource.read();
+
+                        $.blockUI();
+                        $.post('@Url.Action("GetYearByCommSubCode", "InsolationManagement")', { comSubCode: comSubCodeSelected },
+                        function (result) {
+                            if (result.success) {
+                                $('#selectYear select').empty();
+                                $.each(result.listYear, function () {
+                                    $("<option/>", {
+                                        value: this.Text,
+                                        text: this.Value
+                                    }).appendTo($('#selectYear select'));
+                                })
+                            }
+                        }).fail(function () {
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            $.unblockUI();
+                        })
+                    } else {
+                        if (result.message) {
+                            bootbox.alert(result.message);
+                        }
+                    }
+                }
+            }).error(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            })
+        });
+
+            $('#selectComSubCode select').change(function (e) {
+                $('#selectYear select').empty();
+                $("<option/>", {
+                    value: "-1",
+                    text: "@Resources.Langues.PleaseSelect"
+                }).appendTo($('#selectYear select'));
+
+                comSubCodeSelected = $('option:selected', this).val();
+                var yearSelected = $('#selectYear select').val();
+                var monthSelected = $('#selectMonth select').val();
+
+                $.blockUI();
+                $.post('@Url.Action("GetYearByCommSubCode", "InsolationManagement")', { comSubCode: comSubCodeSelected },
+                function (result) {
+                    if (result.success) {
+                        $('#selectYear select').empty();
+                        $.each(result.listYear, function () {
+                            $("<option/>", {
+                                value: this.Text,
+                                text: this.Value
+                            }).appendTo($('#selectYear select'));
+                        })
+                        $('#search').removeAttr('disabled');
+                        $('#selectYear select').removeAttr('disabled');
+                        $('#selectMonth select').removeAttr('disabled');
+
+                        comSubCodeSelected = $('option:selected', this).val();
+                        yearSelected = $('#selectYear select').val();
+                        monthSelected = $('#selectMonth select').val();
+                        insolationGrid.dataSource.read({ comSubCode: comSubCodeSelected, year: yearSelected, month: monthSelected });
+
+                        $('#yearCopy').removeAttr('disabled');
+                    } else {
+                        $('#search').prop('disabled', 'disabled');
+                        $('#selectYear select').prop('disabled', 'disabled');
+                        $('#selectMonth select').prop('disabled', 'disabled');
+                        $('#yearCopy').attr('disabled', 'disabled');
+
+                        comSubCodeSelected = $('option:selected', this).val();
+                        yearSelected = $('#selectYear select').val();
+                        monthSelected = $('#selectMonth select').val();
+                        insolationGrid.dataSource.read({ comSubCode: comSubCodeSelected, year: yearSelected, month: monthSelected });
+                    }
+                }).fail(function () {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    $.unblockUI();
+                })
+            });
+
+            $('#selectYear select').change(function (e) {
+
+                var comSubCodeSelected = $('option:selected', this).val();
+                var yearSelected = $('#selectYear select').val();
+                var monthSelected = $('#selectMonth select').val();
+
+                comSubCodeSelected = $('#selectComSubCode select').val();
+                insolationGrid.dataSource.read({ comSubCode: comSubCodeSelected, year: yearSelected, month: monthSelected });
+            });
+
+            $('#selectMonth select').change(function (e) {
+
+                var comSubCodeSelected = $('option:selected', this).val();
+                var yearSelected = $('#selectYear select').val();
+                var monthSelected = $('#selectMonth select').val();
+
+                comSubCodeSelected = $('#selectComSubCode select').val();
+                insolationGrid.dataSource.read({ comSubCode: comSubCodeSelected, year: yearSelected, month: monthSelected });
+            });
+
+            $manualForm.on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+
+        var counter = 1;
+
+        function renderNumber() {
+            return counter++;
+        };
+
+        function onDataBound() {
+            counter = 1;
+        };
+
+        function onDataReadSolarAmount() {
+            var comSubCodeSelected = $('#selectComSubCode select').val();
+            var yearSelected = $('#selectYear select').val();
+            var monthSelected = $('#selectMonth select').val();
+            return { comSubCode: comSubCodeSelected, year: yearSelected, month: monthSelected };
+        }
+
+        //show server errors if any
+        function error_handler(e) {
+            if (e.errors) {
+                var message = '@Resources.Langues.Error: ';
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                bootbox.alert(message);
+            }
+        }
+
+        function sync_handler(e) {
+            this.read();
+        }
+
+        function deleteClick() {
+            $manualForm.submit();
+        }
+
+        $manualForm.submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                cache: false,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                    $.unblockUI();
+                    $('#UploadFileForm').modal("hide")
+                    bootbox.alert("@Resources.Langues.Successful");
+                } else {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.Pleasecheckyourdataagain');
+                }
+            });
+            e.preventDefault();
+        });
+
+        function NullDataLookup() {
+            var $ComSubCode = $('#selectComSubCode select').val();
+            var $year = $('#selectYear select').val();
+            if ($ComSubCode != "" && $year != "") {
+                var originGridURL = '@Url.Action("ReadNullData", "InsolationManagement", new { area = "Admin"})'
+                var url = originGridURL + "?comSubCode=" + $ComSubCode + "&year=" + $year;
+                $('#GridNull').data('kendoGrid').dataSource.transport.options.read.url = url;
+                $('#GridNull').data('kendoGrid').dataSource.read();
+                $('#popup').modal("show")
+            } else {
+                bootbox.alert('please check comCode and year');
+            }
+        }
+
+        function SaveDataNullChange() {
+            var data = $("#GridNull").data("kendoGrid").dataSource.data();
+            var lst = [];
+            data.forEach(function (item) {
+                lst.push(item)
+            })
+            var abc = JSON.stringify(lst);
+            $.blockUI();
+            $.post('@Url.Action("UpdateListNull", "InsolationManagement")', { data: abc },
+                function (result) {
+                    console.log(result.success)
+                    $.unblockUI();
+                    if (result.success == true) {
+                        $('#InsolationGrid').data('kendoGrid').dataSource.read();
+                        bootbox.alert("@Resources.Langues.Successful");
+                    } else {
+                        bootbox.alert("@Resources.Langues.Error");
+                    }
+                }).fail(function () {
+                    $.unblockUI();
+                    bootbox.alert('Please contact to Administrator!');
+                }).always(function () {
+                    //$.unblockUI();
+                });
+        }
+    </script>
+}
+

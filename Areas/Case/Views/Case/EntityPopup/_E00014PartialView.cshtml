@@ -1,0 +1,166 @@
+﻿<!-- Modal -->
+<style>
+    .E00014 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .tab-left-label {
+        text-indent: 10%;
+    }
+
+    .text {
+        padding-top: 7px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    @@media print {
+        body.modal-open {
+            visibility: hidden;
+        }
+
+            body.modal-open .modal .modal-body {
+                visibility: visible; /* make visible modal body and header */
+            }
+    }
+</style>
+
+<div class="modal fade E00014 modal-open" id="E00014" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" id="printDiv">
+                <!--Popup Name -->
+                <br />
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">@Resources.Langues.ESSparameterlookup</h4>
+                </div>
+                <br />
+                <!--Input field -->
+                <div class="row">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-xs-4 lbWT">@Resources.Langues.Company </label>
+                            <div class="col-xs-6">
+                                <input id="E00014Company" class="form-control" type="text" style="text-align:center" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-4 lbWT">@Resources.Langues.ModelName </label>
+                            <div class="col-xs-6">
+                                <input id="E00014ModelName" class="form-control" type="text" style="text-align:right" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-4 lbWT">@Resources.Langues.SOCrange</label>
+                            <div class="col-xs-6">
+                                <input id="E00014ScoScope" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-4 lbWT">@Resources.Langues.CycleCount </label>
+                            <div class="col-xs-6">
+                                <input id="E00014CycleCount" class="form-control" type="text" style="text-align:right" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-4 lbWT">@Resources.Langues.DrivingDOD </label>
+                            <div class="col-xs-6">
+                                <input id="E00014OperDod" class="form-control" type="text" style="text-align:right" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-4 lbWT">@Resources.Langues.Batterychargedischargeefficiency </label>
+                            <div class="col-xs-6">
+                                <input id="E00014BatteryEff" class="form-control" type="text" style="text-align:center" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="row modal-footer">
+                <div class="list-inline pull-right">
+                    <button type="button" class="btn btn-gray save-class" data-dismiss="modal">@Resources.Langues.Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/printThis/printThis.js"></script>">
+<script>
+    $(document).ready(function () {
+        $("#btn_E00014").addClass("democlass");
+        var caseId = @Request.Params["caseId"]
+
+        $('.E00014').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        $(".E00014").on('shown.bs.modal', function () {
+            var essParamId = $("#E00014ModelsName").val();
+            var $Company = $("#E00014Company");
+            var $ModelName = $("#E00014ModelName");
+            var $ScoScope = $("#E00014ScoScope");
+            var $CycleCount = $("#E00014CycleCount");
+            var $OperDod = $("#E00014OperDod");
+            var $BatteryEff = $("#E00014BatteryEff");
+            $.ajax({
+                url: '@Url.Action("GetEssParamater", "EntityE00014Popup")',
+                cache: false,
+                method: "GET",
+                contentType: "application/json; charset=UTF8",
+                dataType: "json",
+                data: {
+                    caseId : @Request.QueryString["caseId"],
+                },
+                success: function (result) {
+                    if (result == null) {
+                        showMess('@Resources.Langues.ContactAdmin')
+                        return;
+                    }
+                    $Company.val(result.Company).prop("readonly", true) ;
+                    $CycleCount.val(result.CycleCount).prop("readonly", true)  ;
+                    $ModelName.val(result.ModelName).prop("readonly", true) ;
+                    $OperDod.val(result.OperDod).prop("readonly", true) ;
+                    $ScoScope.val(result.ScoScopeMin + " ~ " + result.ScoScopeMax).prop("readonly", true) ;
+                    $BatteryEff.val(result.BatteryEff).prop("readonly", true);
+                },
+                error: function (response) {
+                    showMess('@Resources.Langues.ContactAdmin')
+                }
+            });
+        });
+    });
+
+    function PrintModal() {
+        $("#printDiv").printThis();
+    }
+</script>
+

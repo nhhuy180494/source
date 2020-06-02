@@ -1,0 +1,228 @@
+﻿@model DPDSP.Models.MyInformationViewModel
+@*@using CaptchaMvc.HtmlHelpers*@
+@{
+    ViewBag.Title = Resources.Langues.MyInfor;
+    Layout = "~/Areas/Case/Views/Shared/_CaseLayout.cshtml";
+}
+
+@section styles{
+    <style>
+        .input-validation-error {
+            border: 1px solid red;
+        }
+
+        #CaptchaImage {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #CaptchaInputText {
+            width: 200px !important;
+        }
+
+        #change-password-modal {
+            top: 10%;
+        }
+    </style>
+}
+
+<div class="container">
+    @using (Html.BeginForm("MyInfors", "Account", FormMethod.Post, new { @role = "form", id = "myForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal" id="change-info-content">
+            <h2>My Information</h2>
+            @Html.HiddenFor(m => m.EditAccount.Email)
+            @Html.HiddenFor(m => m.IsEditing)
+            <h5>- Email: @Html.DisplayTextFor(m => m.EditAccount.Email)</h5>
+            <h5>- Password: <span class="text-primary"> <a role="button" onclick="getUserInfo()" data-toggle="modal" data-target="#change-password-modal">@Resources.Langues.ChangePassword</a></span></h5>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <hr />
+            <div class="form-group">
+                <label class="col-md-4 "><i class="fa fa-check"></i> 기본 필수 정보</label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_FirstName">@Resources.Langues.FirstName</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.FirstName, new { @class = "form-control input-md", placeholder = "First name" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_LastName">@Resources.Langues.LastName</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.LastName, new { @class = "form-control input-md", placeholder = "Last name" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_UserCompany">@Resources.Langues.Affiliation</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.UserCompany, new { @class = "form-control input-md", placeholder = "Company name" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_UserCountry">@Resources.Langues.Nationality</label>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(m => m.EditAccount.UserCountry, new SelectList(ViewBag.ListCountries, "Value", "Text"), Resources.Langues.PleaseSelect, new { @class = "form-control" })
+                </div>
+            </div>
+            <hr />
+            <div class="form-group ">
+                <label class="col-md-4"><i class="fa fa-check"></i> 추가정보</label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_UserJob">@Resources.Langues.Job</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.UserJob, new { @class = "form-control input-md", placeholder = "Job title" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_UserDepartmentName">@Resources.Langues.DepartmentName</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.UserDepartmentName, new { @class = "form-control input-md", placeholder = "Department Name" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_UserPositon">@Resources.Langues.Position</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.UserPositon, new { @class = "form-control input-md", placeholder = "Position" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_UserTel">@Resources.Langues.Tel</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.UserTel, new { @class = "form-control input-md", placeholder = "81-33-123-456-7890" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_UserCompanyAddress">@Resources.Langues.CompanyAddress</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.UserCompanyAddress, new { @class = "form-control input-md", placeholder = "Company Address" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_UserBusinessArea">@Resources.Langues.BusinessField</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.UserBusinessArea, new { @class = "form-control input-md", placeholder = "Business Field" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="EditAccount_UserWebsite">@Resources.Langues.CompanyOrPersonalHomepage</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.EditAccount.UserWebsite, new { @class = "form-control input-md", placeholder = "http://www.tempcorp.co.kr/" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8 ">
+                    <div class="pull-right">
+                        <button type="submit" id="update-info" class="btn btn-md btn-primary">@Resources.Langues.Update</button>
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-default">@Resources.Langues.Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="change-password-modal" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 role="button" class="modal-title text-primary" id="myModalLabel01"><i class="fa fa-lock"> </i> Change password</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal col-md-offset-1" style="padding-top:15px;">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="ChangePassword_OldPassword">@Resources.Langues.CurrentPassword</label>
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(m => m.ChangePassword.OldPassword, new { @class = "form-control input-md", placeholder = "Current Password" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="ChangePassword_Password">@Resources.Langues.NewPass</label>
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(m => m.ChangePassword.Password, new { @class = "form-control input-md", placeholder = "New Password" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="ChangePassword_ConfirmPassword">@Resources.Langues.ConfirmPass</label>
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(m => m.ChangePassword.ConfirmPassword, new { @class = "form-control input-md", placeholder = "Confirm Password" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <div class="pull-right">
+                                        <button type="submit" id="update-password" class="btn btn-primary">@Resources.Langues.Update</button>
+                                        <button type="button" class="btn btn-default " data-dismiss="modal">@Resources.Langues.Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        function getUserInfo() {
+            $.blockUI();
+            $.post('@Url.Action("GetUserInfor","Account")', function (model) {
+                $('#change-info-content').find('input').removeClass('input-validation-error');
+                $('#EditAccount_Email').val(model.Email);
+                $('#EditAccount_FirstName').val(model.FirstName);
+                $('#EditAccount_LastName').val(model.LastName);
+                $('#EditAccount_UserCompany').val(model.UserCompany);
+                $('#EditAccount_UserCountry').val(model.UserCountry);
+                $('#EditAccount_UserJob').val(model.UserJob);
+                $('#EditAccount_UserTel').val(model.UserTel);
+                $('#EditAccount_UserWebsite').val(model.UserWebsite);
+                $('#EditAccount_UserBusinessArea').val(model.UserBusinessArea);
+                $('#EditAccount_UserCompanyAddress').val(model.UserCompanyAddress);
+                $('#EditAccount_UserDepartmentName').val(model.UserDepartmentName);
+                $('#EditAccount_UserPositon').val(model.UserPositon);
+            }).fail(function () {
+                bootbox.alert('@Resources.Langues.ContactAdmin');
+            }).always(function () {
+                $.unblockUI();
+            });
+        };
+
+        function cleanModal(modal) {
+            $.unblockUI();
+            modal.find('input').val('');
+            modal.find('input').removeClass('input-validation-error');
+            modal.find('.form-group').removeClass('has-error');
+        };
+
+        $(document).ready(function () {
+            var modal = $('#change-password-modal');
+            $('#change-password-modal').on('hidden.bs.modal', function () {
+                cleanModal(modal);
+            });
+
+            $('#change-password-modal').on('show.bs.modal', function () {
+                cleanModal(modal);
+            });
+
+            $('#update-info').click(function () {
+                $('#IsEditing').val(true);
+            });
+
+            $('#update-password').click(function () {
+                $('#IsEditing').val(false);
+            });
+
+            $('#myForm').on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

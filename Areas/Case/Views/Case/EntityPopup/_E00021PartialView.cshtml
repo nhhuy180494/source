@@ -1,0 +1,184 @@
+﻿<!-- Modal -->
+<style>
+    .E00021 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .E17 td {
+        border-width: 1px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    .modal-dialog1 {
+        width: 98%;
+    }
+
+    .modal-content1 {
+        height: auto;
+        min-height: 100%;
+        border-radius: 0;
+    }
+
+    @@media print {
+        /* on modal open bootstrap adds class "modal-open" to body, so you can handle that case and hide body */
+        body.modal-open {
+            visibility: hidden;
+        }
+
+         body.modal-open .modal .modal-body {
+            visibility: visible; /* make visible modal body and header */
+        }
+    }
+</style>
+
+<script src="~/Scripts/printThis/printThis.js"></script>
+<script>
+    function PrintModal() {
+        $("#printDiv").printThis();
+    };
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = '@Resources.Langues.Error: ';
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            bootbox.alert(message);
+        }
+    };
+
+    function sync_handler(e) {
+        this.read();
+    };
+</script>
+
+<div class="modal fade E00021" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Resources.Langues.Runeconomicanalysis</h4>
+            </div>
+            <div class="modal-body">
+                <!--Popup Name -->
+                @*<br />
+                <div class="row">
+                    <div class="form-horizontal">
+                        <div class="active col-xs-6"><strong>@Resources.Langues.Runeconomicanalysis</strong></div>
+                    </div>
+                </div>
+                <br />
+                <br />*@
+                <div style="text-indent: 20%">@Resources.Langues.RunMessage1</div>
+                <div style="text-indent: 20%">@Resources.Langues.RunMessage2</div>
+                <hr />
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        <button type="button" onclick="RunClick()" class="btn btn-primary save-class">@Resources.Langues.Runeconomicanalysis</button>
+                        <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $modal = $('.E00021');
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]'
+
+    $('.E00021').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+
+    function RunClick() {
+        $.blockUI();
+        $.post("@Url.Action("RunProcess", "EntityE00021Popup", new { area="Case" })", { caseId: caseId, modelCode: modelCode }, function (result) {
+            if (result.success == false) {
+                $.unblockUI();
+                if (modelCode == "M00001"){
+                    bootbox.alert('@Resources.Langues.MessageFileNotFound2');
+                } else {
+                    bootbox.alert('@Resources.Langues.MessageFileNotFound3');
+                }
+
+                $.unblockUI();
+            } else {
+                $.blockUI();
+                $.post("@Url.Action("ReadResult20File", "EntityE00021Popup", new { area="Case" })", { caseId: @Request.Params["caseId"], modelCode: modelCode }, function (result) {
+                    if (result.success == false) {
+                        $.blockUI();
+                        $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: false, caseId: caseId }, function (result) {
+                            if (result.success) {
+                                $('.E00021').modal('hide');
+                                $.unblockUI();
+                                bootbox.alert('@Resources.Langues.Error');
+                            }
+                        }).fail(function () {
+                            $.unblockUI();
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            //$.unblockUI();
+                        });
+                    } else {
+                        $.blockUI();
+                        $.post("@Url.Action("SetCaseStatus", "EntityE00021Popup", new { area="Case" })", { caseStatus: true, caseId: caseId }, function (result) {
+                            if (result.success) {
+                                $('.E00021').modal('hide');
+                                    $("#btn_E00021").addClass("democlass");
+                                    $.unblockUI();
+                                    bootbox.alert('@Resources.Langues.Successful');
+                            }
+                        }).fail(function () {
+                            $.unblockUI();
+                            bootbox.alert('@Resources.Langues.ContactAdmin');
+                        }).always(function () {
+                            //$.unblockUI();
+                        });
+                    }
+                }).fail(function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    //$.unblockUI();
+                });
+            }
+        }).fail(function () {
+            $.unblockUI();
+            bootbox.alert('@Resources.Langues.MessErrorE21');
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+</script>

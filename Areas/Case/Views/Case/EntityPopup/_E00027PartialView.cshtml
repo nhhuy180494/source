@@ -1,0 +1,374 @@
+﻿<style>
+    .E00027 {
+        top: 5%;
+    }
+
+    span[class=k-input] {
+        text-align: center;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+</style>
+
+<script>
+    var locationCode = $("#E00027ComSubName").val();
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]';
+    var $modal = $('.E00027');
+    $(document).ready(function () {
+        $('.E00027').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+        
+        if ('@Request.Params["modelCode"]' == "M00001") {
+            $('#title-27').html('@Resources.Langues.Selectwindspeedinformation')
+        }
+        if ('@Request.Params["modelCode"]' == "M00002") {
+            $('#title-27').html('@Resources.Langues.Enterwindspeedinformation')
+        }
+        if ('@Request.Params["modelCode"]' == "M00003") {
+            $('#title-27').html('@Resources.Langues.Enterwindspeedinformation')
+        }
+
+        $.blockUI();
+        $.post("@Url.Action("GetI00001", "EntityE00001Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#E00027ComSubName').data('kendoDropDownList').value(result.LocationCode);
+            }else {
+            }
+        }).fail(function () {
+            $.unblockUI();
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK', className: 'btn-gray',
+                    className: 'btn-gray'
+                }
+            }
+        });
+        }).always(function () {
+            $.unblockUI();
+        });
+
+        $("#E00027ComSubName").change(function () {
+            var caseId =  @Request.Params["caseId"];
+            var locationCode = $('#E00027ComSubName').val();
+            $.blockUI();
+            $.post("@Url.Action("CheckDataLocationSelected", "EntityE00027Popup", new { area="Case" })", { caseId: caseId, locationCode: locationCode }, function (result) {
+                if (result.success) {
+                    $.unblockUI();
+                }else {
+                    $.unblockUI();
+                    $('#E00027ComSubName').data('kendoDropDownList').value('');
+                    bootbox.alert({ message:'@Resources.Langues.CheckDataMess1', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK', className: 'btn-gray',
+                    className: 'btn-gray'
+                }
+            }
+        });
+                }
+            }).fail(function () {
+                $.unblockUI();
+                bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK', className: 'btn-gray',
+                    className: 'btn-gray'
+                }
+            }
+        });
+            }).always(function () {
+                //$.unblockUI();
+            });
+        });
+    });
+
+    function onSave() {
+        if ($('#E00027ComSubName').val() == "") {
+            bootbox.alert({ message:'Please select dropdownList', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK', className: 'btn-gray',
+                    className: 'btn-gray'
+                }
+            }
+        });
+            return false;
+        }
+
+        $.blockUI();
+        $.post("@Url.Action("SaveI00005Data", "EntityE00027Popup", new { area="Case" })", { caseId: caseId, locationCode: $('#E00027ComSubName').val(), modelCode: modelCode }, function (result) {
+            if (result.success) {
+                updateHistory(result.html)
+                    $("#btn_E00027").addClass("democlass");
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00027').modal('hide');
+                    });
+            }
+        }).fail(function () {
+            $.unblockUI();
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK', className: 'btn-gray',
+                    className: 'btn-gray'
+                }
+            }
+        });
+        }).always(function () {
+            //$.unblockUI();
+        });
+    };
+
+    function dataComCode() {
+        var comCode = "LO0000"; //Requirement
+        var filter = $('.k-textbox[aria-owns="E00027ComSubName_listbox"]').val();
+        return { comCode: comCode, filter: filter, caseId: '@Request.Params["caseId"]' }
+    };
+
+</script>
+
+<!-- Modal -->
+<div class="modal fade E00027" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="title-27">@Resources.Langues.SelectWTarea</h4>
+            </div>
+            <div class="modal-body">
+                @*<br />
+        <div class="row">
+            <div class="form-group">
+                <label>@Resources.Langues.Downloadcustoms</label>
+            </div>
+        </div>*@
+                <div class="row">
+                    <div class="form-group">
+                        <div class="radio">
+                            <label> <input type="radio" name="optradio" value="automatic" checked="checked">  @Resources.Langues.Automaticwindspeedinput</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="form1">
+                    <div class="row">
+                        <div class="form-horizontal">
+                            <label class="control-label col-md-3 lbWT">@Resources.Langues.SelectReagon</label>
+                            <div class="col-md-6">
+                                @(Html.Kendo().DropDownList()
+                                                                                                              .Name("E00027ComSubName")
+                                                                                                              .DataTextField("Text")
+                                                                                                              .DataValueField("Value")
+                                                                                                              .Filter(FilterType.Contains)
+                                                                                                              .DataSource(source =>
+                                                                                                              {
+                                                                                                                  source.Read(read =>
+                                                                                                                  {
+                                                                                                                      read.Action("GetCommonSubByComCode", "EntityE00027Popup", new { area = "Case" }).Data("dataComCode");
+                                                                                                                  });
+                                                                                                              })
+                                                                                                              .OptionLabel("– Select –").HtmlAttributes(new { style = "text-align:center;" })
+                                                                                                              .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="pull-left row" style="margin-left:10%;margin-right:10%">
+                        @Resources.Langues.E27Desc1
+                    </div>
+                    <br />
+                    <div class="pull-left row" style="margin-left:10%;margin-right:10%">
+                        @Resources.Langues.E27Desc2
+                    </div>
+                    <br />
+                    <div class="pull-left row" style="margin-left:10%;margin-right:10%">
+                        @Resources.Langues.E27Desc3
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="form-group pull-right">
+                                <button type="button" onclick="onSave()" class="btn btn-primary save-class">@Resources.Langues.Save</button>
+                                <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="radio">
+                            <label><input type="radio" name="optradio" value="manual"> @Resources.Langues.Windspeedmanualinput</label>
+                        </div>
+                    </div>
+                </div>
+                @using (Html.BeginForm("SaveEntityE00027ManualData", "EntityE00027Popup", FormMethod.Post, new { @role = "form", @id = "ManualForm", @enctype = "multipart/form-data" }))
+                {
+                    <div id="form2" hidden="hidden">
+                        <div class="row">
+                            <div class="form-group col-md-9">
+                                <div class="input-group">
+                                    @Html.Hidden("CaseUploadId", @Request.Params["caseId"], new
+                                    {
+                                        @data_val = "true",
+                                        @data_val_required = "The CaseId field is required."
+                                    })
+                                    @Html.TextBox("File", "", new
+                                    {
+                                        @data_val = "true",
+                                        @data_val_required = "The Excel File field is required.",
+                                        @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+                                        @class = "form-control",
+                                        @placeholder = "Excel File...",
+                                        @type = "file"
+                                    })
+                                </div>
+                            </div>
+                            <div>
+                                @if (Request.Params["modelCode"] == "M00003")
+                                {
+                                    <a type="button" class="btn btn-primary" href="@Url.Content("~/Content/TemplateForm/WT_Speed_Manual_Form.xlsx")">@Resources.Langues.Format</a>
+                                }
+                                else
+                                {
+                                    <a type="button" class="btn btn-primary" href="@Url.Content("~/Content/TemplateForm/WT풍속수동입력(E00027)_Form.xlsx")">@Resources.Langues.Format</a>
+                                }
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="list-inline pull-right">
+                                @*<button onclick="onExport()" type="button" class="btn btn-primary">@Resources.Langues.ExportToExcel</button>*@
+                                <button id="submitManualForm" type="button" class="btn btn-primary">@Resources.Langues.Save</button>
+                                <button type="button" class="btn btn-gray" data-dismiss="modal">@Resources.Langues.Close</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $manualForm = $('#ManualForm');
+
+    $(document).ready(function () {
+        $('.k-textbox[aria-owns="E00027ComSubName_listbox"]').unbind();
+        $('.E00027').on('shown.bs.modal', function () {
+            $(document).off('focusin.modal');
+        });
+
+        $('.E00027').on('hide.bs.modal', function () {
+            $('.k-textbox[aria-owns="E00027ComSubName_listbox"]').remove();
+            if (lstEntityNextStep.length != 0) {
+                historyClick(lstEntityNextStep[0]);
+                lstEntityNextStep.shift();
+                console.log(lstEntityNextStep)
+            }
+        });
+    });
+
+    $('.k-textbox[aria-owns="E00027ComSubName_listbox"]').on('keyup', function (evt) {
+        //var charCode = (evt.which) ? evt.which : event.keyCode
+        //if (charCode == 13) {
+        //    $('#E00027ComSubName').data('kendoDropDownList').dataSource.read();
+        //}
+        $('#E00027ComSubName').data('kendoDropDownList').dataSource.read();
+    });
+
+    $('input[type=radio][name=optradio]').change(function () {
+        if (this.value == 'automatic') {
+            $('#form1').removeAttr('hidden', 'hidden');
+            $('#form2').attr('hidden', 'hidden');
+        }
+        else if (this.value == 'manual') {
+            $('#form1').attr('hidden', 'hidden');
+            $('#form2').removeAttr('hidden', 'hidden');
+        }
+    });
+
+    $('#submitManualForm').click(function () {
+        var valid = $manualForm.valid();
+        if (valid) {
+            $manualForm.submit();
+        }
+    });
+
+    $('#File').change(function () {
+        if ($(this).val()) {
+            $('#File').removeClass('input-validation-error');
+        }
+    });
+
+    $manualForm.on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $manualForm.submit(function (e) {
+            $.blockUI();
+            var data = new FormData(this);
+            var $fromObj = $(this);
+            var urlAction = $fromObj.attr('action');
+            $.ajax({
+                url: urlAction,
+                cache: false,
+                type: 'POST',
+                dataType: "Json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: data,
+                fail: function () {
+                    $.unblockUI();
+                    bootbox.alert({ message:'@Resources.Langues.ContactAdmin', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK', className: 'btn-gray',
+                    className: 'btn-gray'
+                }
+            }
+        });
+                }
+            }).always(function () {
+                //$.unblockUI();
+            }).success(function (result) {
+                if (result.success) {
+                    updateHistory(result.html)
+                    $("#btn_E00027").addClass("democlass");
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    $.unblockUI();
+                    showMess('@Resources.Langues.Successful', function () {
+                        $('.modal-backdrop').remove();
+                        $('.E00027').modal('hide');
+                    });
+                } else {
+                    $.unblockUI();
+                    $('#File').val('');
+                    bootbox.alert({ message:'@Resources.Langues.Pleasecheckyourdataagain', 
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK', className: 'btn-gray',
+                    className: 'btn-gray'
+                }
+            }
+        });
+                }
+            });
+            e.preventDefault();
+        });
+
+</script>

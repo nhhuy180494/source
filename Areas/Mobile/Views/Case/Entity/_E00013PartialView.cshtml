@@ -1,0 +1,294 @@
+﻿<style>
+    .form-horizontal .form-group {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+
+    .bootbox.modal {
+        z-index: 999999999999999999 !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        var caseId = @Request.Params["caseId"];
+        $('#btn_E00013').removeClass('progress-bar-warning');
+        $.blockUI();
+        $.post("@Url.Action("GetGetDataEssParameter", "EntityE00013Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                $('#E00013ScoScopeMin').val(result.ScoScopeMin);
+                $('#E00013Company').val(result.Company);
+                $('#E00013ScoScopeMax').val(result.ScoScopeMax);
+                $('#E00013CycleCount').val(result.CycleCount.toLocaleString());
+                $('#E00013ModelName').val(result.ModelName);
+                $('#E00013OperDod').val(result.OperDod);
+                $('#E00013BatteryEff').data('kendoDropDownList').value(result.BatteryEff);
+                $('#E00013ModelsName').data('kendoDropDownList').value(result.EssParameterId);
+            }else {
+            }
+        }).fail(function () {
+            bootbox.alert('@Resources.Langues.ContactAdmin');
+        }).always(function () {
+            $.unblockUI();
+            });
+
+        $("#E00013CycleCount").on('keyup', function (evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if ((charCode >= 96 && charCode <= 105) || (charCode >= 48 && charCode <= 57) || charCode == 8) {
+                var a = $("#E00013CycleCount").val()
+                if (a == 'NaN' || a == '') {
+                    $("#E00013CycleCount").val('')
+                } else {
+                    var n = parseFloat($(this).val().replace(/\,/g, ''), 10);
+                    $(this).val(n.toLocaleString());
+                }
+            } else {
+                return false;
+            }
+            });
+    });
+
+    function E00013ModelsNameChange(e) {
+        var essParamId = $("#E00013ModelsName").val();
+        var $Company = $("#E00013Company");
+        var $ModelName = $("#E00013ModelName");
+        var $ScoScopeMin = $("#E00013ScoScopeMin");
+        var $ScoScopeMax = $("#E00013ScoScopeMax");
+        var $CycleCount = $("#E00013CycleCount");
+        var $OperDod = $("#E00013OperDod");
+        var $BatteryEff = $("#E00013BatteryEff");
+        if (essParamId === "") {
+            $("#errors").html('');
+            $Company.val("").prop("readonly", false);
+            $CycleCount.val("").prop("readonly", false);
+            $ModelName.val("").prop("readonly", false);
+            $OperDod.val("").prop("readonly", false);
+            //$ScoScopeMax.val("").prop("readonly", false);
+            //$ScoScopeMin.val("").prop("readonly", false);
+            //$BatteryEff.data("kendoDropDownList").select(0);
+            $BatteryEff.data("kendoDropDownList").readonly(false);
+            return;
+        } else{
+            $.ajax({
+                url: '@Url.Action("GetEssParameter", "EntityE00013Popup", new { area ="Case"})',
+                cache: false,
+                method: "GET",
+                contentType: "application/json; charset=UTF8",
+                dataType: "json",
+                data: {
+                    essParamId : essParamId,
+                },
+                success: function (result) {
+                    if (result == null) {
+                        bootbox.alert('@Resources.Langues.ContactAdmin');
+                        return;
+                    }
+                    $("#errors").html('');
+                    $Company.val(result.Company).prop("readonly", true) ;
+                    $CycleCount.val(result.CycleCount.toLocaleString()).prop("readonly", true)  ;
+                    $ModelName.val(result.ModelName).prop("readonly", true) ;
+                    $OperDod.val(result.OperDod).prop("readonly", true);
+                    $ScoScopeMax.val(result.ScoScopeMax).prop("readonly", false);
+                    $ScoScopeMin.val(result.ScoScopeMin).prop("readonly", false);
+                    $BatteryEff.data("kendoDropDownList").select(function (dataItem) {
+                        return dataItem.Value == result.BatteryEff;
+                    });
+                    $BatteryEff.data("kendoDropDownList").readonly(true);
+                },
+                error: function (response) {
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }
+            });
+        }
+
+      ////  $('.form-control').attr('style', 'background-color:white;');
+      //  $('#E00013ScoScopeMin').attr('style', 'width:40%;text-align:center;background-color:white;');
+      //  $('#E00013ScoScopeMax').attr('style', 'width:40%;text-align:center;background-color:white;');
+      //  $('#maxmin').attr('style', 'text-align:center');
+      //  $('#E00013CycleCount').attr('style', 'width: 100%;text-align:right;background-color:white;');
+      //  $('#E00013OperDod').attr('style', 'width: 100%;text-align:right;background-color:white;');
+      //  $('#E00013Company').attr('style', 'text-align:center;;background-color:white;');
+    }
+
+    function E00013Save()
+    {
+        var essParamId = $("#E00013ModelsName").val();
+        var $Company = $("#E00013Company");
+        var $ModelName = $("#E00013ModelName");
+        var $ScoScopeMin = $("#E00013ScoScopeMin");
+        var $ScoScopeMax = $("#E00013ScoScopeMax");
+        var $CycleCount = $("#E00013CycleCount");
+        var $OperDod = $("#E00013OperDod");
+        var $BatteryEff = $("#E00013BatteryEff");
+        var caseId = @Request.Params["caseId"];
+        var modelCode = '@Request.Params["modelCode"]';
+
+        var url = window.location.href;
+        var res = url.split('/');
+        var a = res[3].toLowerCase()
+        var mess = "";
+        var value = $CycleCount.val();
+
+        if (res[3].toLowerCase() == 'en') {
+            mess = '@Resources.Langues.E131' + $OperDod.val() + '@Resources.Langues.E132' + value + '@Resources.Langues.E133'
+        } else {
+            mess = '@Resources.Langues.E131' + value + '@Resources.Langues.E132' + $OperDod.val() + '@Resources.Langues.E133'
+        }
+
+        bootbox.alert(mess, function(){
+                var EssParameter = {
+                    Company: $Company.val(),
+                    ModelName: $ModelName.val(),
+                    ScoScopeMin: $ScoScopeMin.val(),
+                    ScoScopeMax: $ScoScopeMax.val(),
+                    CycleCount: $CycleCount.val().split(',').join(''),
+                    OperDod: $OperDod.val(),
+                    BatteryEff: $BatteryEff.val(),
+                };
+
+                $.blockUI();
+                $.post("@Url.Action("SaveData", "EntityE00013Popup", new { area="Case" })", { model: EssParameter, caseId: caseId, modelCode: modelCode }, function (result) {
+                    if (result.success) {
+                        $.unblockUI();
+                    if (lstEntityNextStep.length == 0) lstEntityNextStep = result.listNextStep;
+                    if (lstEntityNextStep.length != 0) {
+                        nextStepEntity(lstEntityNextStep[0]);
+                        lstEntityNextStep.shift();
+                        console.log(lstEntityNextStep)
+                    } else {
+                        nextEntity()
+                    }
+                    } else {
+                        $.unblockUI();
+                        bootbox.alert(result.alert);
+                    }
+                }).fail(function () {
+                    $.unblockUI();
+                    bootbox.alert('@Resources.Langues.ContactAdmin');
+                }).always(function () {
+                    //$.unblockUI();
+                });
+            });
+    }
+
+    function onData() {
+        var filter =  $('.k-textbox[aria-owns="E00013ModelsName_listbox"]').val();
+        return { filter: filter};
+    }
+
+    function onData1() {
+        var filter =  $('.k-textbox[aria-owns="E00013BatteryEff_listbox"]').val();
+        return { filter: filter};
+    }
+
+</script>
+
+<h4 style="text-align:center">
+    @if (Request.Params["modelCode"] == "M00001" || Request.Params["modelCode"] == "M00003")
+    {
+        @Resources.Langues.E13M3
+    }
+    else
+    {
+        @Resources.Langues.EnterESSparameters
+    }
+</h4>
+<div class="text-danger" id="errors"></div>
+<div class="form-horizontal" style="font-size:12px !important">
+    <div class="form-group" style="margin-left:5px">
+        <label class="control-label col-xs-4 lbWT">@Resources.Langues.Selectmodel</label>
+        <div class="col-xs-6">
+            @(Html.Kendo().DropDownList()
+                                                                                        .Name("E00013ModelsName")
+                                                                                        .DataTextField("Text")
+                                                                                        .DataValueField("Value")
+                                                                                        .Filter(FilterType.Contains)
+                                                                                        .DataSource(ds =>
+                                                                                        {
+                                                                                            ds.Read(r => r.Action("GetModelsName", "EntityE00013Popup", new { area = "Case" }).Data("onData"));
+                                                                                        })
+                                                                                        .OptionLabel(Resources.Langues.Custom).HtmlAttributes(new { style = "text-align:center;" })
+                                                                                        .HtmlAttributes(new { style = "width: 100% ; text-align:center;" })
+                                                                                        .Events(e => e.Change("E00013ModelsNameChange"))
+            )
+        </div>
+    </div>
+    <div class="form-group" style="margin-left:5px">
+        <label class="control-label col-xs-4 lbWT">@Resources.Langues.Company</label>
+        <div class="col-xs-5">
+            <input id="E00013Company" class="form-control" value="" style="text-align:center">
+        </div>
+    </div>
+    <div class="form-group hidden" style="margin-left:5px">
+        <label class="control-label col-xs-4 lbWT">@Resources.Langues.ModelName</label>
+        <div class="col-xs-5">
+            <input id="E00013ModelName" class="form-control" value="">
+        </div>
+    </div>
+    <div class="form-group" style="margin-left:5px">
+        <div class="form-inline">
+            <label class="control-label col-xs-4 lbWT">@Resources.Langues.SOCrange</label>
+            <div class="col-xs-6">
+
+                <input id="E00013ScoScopeMin" class="form-control" value="" style="width:40%;text-align:right;float:left" type="tel">
+                <label id="maxmin" style="text-align:center;align-content:center;width:10%">~</label>
+                <input id="E00013ScoScopeMax" class="form-control" value="" style="width:40%;text-align:right;float:right" type="tel">
+
+            </div>
+            <label class="control-label" style="width:10px">%</label>
+        </div>
+    </div>
+    <div class="form-group" style="margin-left:5px">
+        <div class="form-inline">
+            <label class="control-label col-xs-4 lbWT">@Resources.Langues.CycleNum</label>
+            <div class="col-xs-5">
+                <input id="E00013CycleCount" class="form-control" value="" style="width: 100%;text-align:right" type="tel">
+            </div>
+            <label class="control-label" style="text-align:left">@Resources.Langues.Cycles</label>
+        </div>
+    </div>
+    <div class="form-group" style="margin-left:5px">
+        <div class="form-inline">
+            <label class="control-label col-xs-4 lbWT">@Resources.Langues.DrivingDOD</label>
+            <div class="col-xs-5">
+                <input id="E00013OperDod" class="form-control" value="" style="width: 100%;text-align:right" type="tel">
+            </div>
+            <label class="control-label" style="text-align:left">@Resources.Langues.Decreaseto</label>
+        </div>
+    </div>
+    <div class="form-group" style="margin-left:5px">
+        <label class="control-label col-xs-4 lbWT">전지종류</label>
+        <div class="col-xs-4">
+            @(Html.Kendo().DropDownList()
+                                                                          .Name("E00013BatteryEff")
+                                                                          .DataTextField("Text")
+                                                                          .DataValueField("Value")
+                                                                          .HtmlAttributes(new { style = "text-align:center" })
+                                                                          .Filter(FilterType.Contains)
+                                                                          .DataSource(ds =>
+                                                                          {
+                                                                              ds.Read(r => r.Action("GetBatteryEffs", "EntityE00013Popup", new { area = "Case" }).Data("onData1"));
+                                                                          })
+            )
+        </div>
+    </div>
+</div>
+<div style="text-align:center">
+    <label style="color:red;text-align:center">*저장을 하셔야 다음단계로 넘어 갑니다.</label>
+
+</div>
+<div class="col-xs-12">
+    <div class="list-inline" style="text-align:center">
+        <button type="button" onclick="E00013Save()" class="button button-gray">@Resources.Langues.Save</button>
+        @*<button type="button" class="btn btn-sm btn-gray" data-dismiss="modal">@Resources.Langues.Cancel</button>*@
+    </div>
+</div>
+
+<script>
+    $('.k-textbox[aria-owns="E00013ModelsName_listbox"]').on('keyup', function (evt) {
+        $("#E00013ModelsName").data('kendoDropDownList').dataSource.read();
+    });
+
+    $('.k-textbox[aria-owns="E00013BatteryEff_listbox"]').on('keyup', function (evt) {
+        $("#E00013BatteryEff").data('kendoDropDownList').dataSource.read();
+    });
+</script>

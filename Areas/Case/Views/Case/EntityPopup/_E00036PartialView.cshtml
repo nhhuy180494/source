@@ -1,0 +1,387 @@
+﻿<!-- Modal -->
+<style>
+    .E00036 {
+        top: 5%;
+    }
+
+    .radio label {
+        font-weight: 700 !important;
+    }
+
+    .lbWT {
+        padding-right: 0px;
+        font-weight: 400;
+    }
+
+    .tblMultiRow .active {
+        text-align: center;
+    }
+
+    .k-grid-header th.k-header {
+        vertical-align: middle;
+    }
+
+    th.k-header {
+        white-space: normal !important;
+        vertical-align: middle !important;
+    }
+
+    .text {
+        padding-top: 7px;
+    }
+
+    .k-header .k-link {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .modal-dialog {
+        width: 95%;
+    }
+
+    .tblMultiRow th {
+        text-align: center;
+    }
+
+    .tblMultiRow input {
+        border: 0px;
+    }
+
+    .democlass {
+        background-color: gray;
+    }
+
+    #Grid td {
+        word-wrap: inherit;
+    }
+
+    .modal-dialog {
+        overflow-y: initial !important
+    }
+
+    .modal-body1 {
+        height: 500px;
+        overflow-y: auto;
+    }
+
+    .my-custom-class .modal-dialog {
+        width: 30%;
+    }
+</style>
+
+<script>
+
+</script>
+
+<div class="modal fade E00036" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-9">
+                                <label class="radio-inline" style="margin-right:8%"><input type="radio" name="optradio" value="3">Top 3</label>
+                                <label class="radio-inline" style="margin-right:8%"><input type="radio" name="optradio" value="5">Top 5</label>
+                                <label class="radio-inline" style="margin-right:8%"><input type="radio" name="optradio" value="10">Top 10</label>
+                                <label class="radio-inline" style="margin-right:8%"><input type="radio" name="optradio" id="All" value="All" checked>All</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-3 active">@Resources.Langues.InvestmentLimit</label>
+                            <div class="col-xs-4 col-sm-3">
+                                <input class="form-control" id="valueFilter" value="" onkeypress="return isNumberKey(event)" onChange="toggle()">
+                            </div>
+                            <div class="col-xs-1 col-sm-1 active text" style="padding-left:0px;">
+                                <span>@Resources.Langues.won</span>
+                            </div>
+                            <button type="button" onclick="Reset()" class="btn btn-primary">투자비제한없음</button>
+                        </div>
+                    </div>*@
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="titleE15">@Resources.Langues.TitleE00036</h4>
+            </div>
+            <div class="modal-body1">
+                <div class="row">
+                    <div class="form-group">
+                        @(Html.Kendo().Grid<DPDSP.Models.I00010ResultViewModel>()
+                                    .Name("Grid")
+                                    .Columns(columns =>
+                                    {
+                                        columns.Bound(p => p.OrderNumber).HtmlAttributes(new { style = "text-align:center;width:3%;background-color:white" }).HeaderHtmlAttributes(new { style = "width:3%;" }).Title(Resources.Langues.Order);
+                                        columns.Group(group => group
+                                                                    .Title(Resources.Langues.Capacity)
+                                                                    .Columns(info =>
+                                                                    {
+                                                                        info.Bound(p => p.PvValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white", @class = "test" }).Title("PV<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+                                                                        info.Bound(p => p.WtValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white" }).Title("WT<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+                                                                        info.Bound(p => p.FCValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white" }).Title("FC<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+                                                                        info.Bound(p => p.CHPValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white" }).Title("CHP<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+
+                                                                        info.Group(group1 => group1
+                                                                            .Title(Resources.Langues.Revenue)
+                                                                            .Columns(info1 =>
+                                                                            {
+                                                                                info1.Bound(p => p.PcsValue).HtmlAttributes(new { style = "text-align:right;width:3%;background-color:white" }).Title("PCS<br/>[kW]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:3%;" });
+                                                                                info1.Bound(p => p.EssValue).HtmlAttributes(new { style = "text-align:right;width:5%;background-color:white" }).Title("Battery<br/>[kWh]").Format("{0:#,##}").HeaderHtmlAttributes(new { style = "width:5%;" });
+                                                                            })
+                                                                        );
+                                                                    })
+                                                                );
+
+                                        columns.Group(group => group
+                                                            .Title(Resources.Langues.Revenue)
+                                                            .Columns(info =>
+                                                            {
+                                                                info.Bound(p => p.ESSREC).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title("ESS REC<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                info.Bound(p => p.ESSSMP).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title("ESS SMP<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                info.Bound(p => p.PVREC).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title("PV REC<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                info.Bound(p => p.PVSMP).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title("PV SMP<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                            })
+                                                        );
+                                        columns.Group(group => group
+                                                            .Title(Resources.Langues.EnergyChargingSaving)
+                                                            .Columns(info =>
+                                                            {
+                                                                info.Bound(p => p.PVBenefit).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.PVRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                info.Bound(p => p.WTBenefit).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.WTRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                info.Bound(p => p.FCBenefit).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.FCRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                info.Bound(p => p.CHPBenefit).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.CHPRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                                info.Bound(p => p.ESSOperation).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.ESSRevenue + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                                            })
+                                                        );
+
+                                        columns.Bound(p => p.PeakReduce).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.PeakReduce + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                        columns.Bound(p => p.Incentive1).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.Discount1 + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                        columns.Bound(p => p.Incentive2).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.Discount2 + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                        columns.Bound(p => p.Incentive3).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.Discount3 + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}").Hidden();
+                                        columns.Bound(p => p.InvestmentCost).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.Estimatedinvestmentcost + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                        columns.Bound(p => p.OneYearRevenue).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(@Html.Raw(Resources.Langues.Yearprofit) + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                        columns.Bound(p => p.InvestmentCost).HtmlAttributes(new { style = "text-align:right;background-color:white" }).Title(Resources.Langues.Estimatedinvestmentcost + "<br/>[" + Resources.Langues.won + "]").Format("{0:#,##}");
+                                    })
+                                    .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                    .Pageable()
+                                    .Sortable()
+                                    .Scrollable(rz => rz.Enabled(false))
+                                    .Selectable(selectable => selectable
+                                        .Mode(GridSelectionMode.Multiple)
+                                        .Type(GridSelectionType.Row))
+                                    .Resizable(rz => rz.Columns(false))
+                                    .DataSource(dataSource => dataSource
+                                        .Ajax()
+                                        .PageSize(100000)
+                                        .Model(model => { model.Id(p => p.I00010ResultId); })
+                                        .Read(read => read.Action("GetTopI00010Result", "EntityE00019Popup", new { value = 0, top = "0", caseId = @Request.Params["caseId"], modelCode = @Request.Params["modelCode"] }))
+                                    )
+                        )
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="list-inline pull-right">
+                        <button type="button" class="btn btn-gray save-class" data-dismiss="modal">@Resources.Langues.OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $modal = $('.E00036');
+    var caseId = @Request.Params["caseId"];
+    var modelCode = '@Request.Params["modelCode"]'
+    var grid = $("#Grid").data("kendoGrid");
+    var checkedItems = [];
+
+    var topValue = "All"
+    var value = 0
+
+    $(document).ready(function () {
+        $('.k-floatwrap').addClass('hidden')
+
+        $('.E00036').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        if (modelCode == "M00003") {
+            showM00003();
+            Load(caseId);
+            } else {
+                showM00001();
+                Load(caseId);
+            }
+
+            var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+            var changedGridUrl = originGridURL + "?value=" + value + "&top=All" + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+            $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+            $('#Grid').data('kendoGrid').dataSource.read();
+            $("#btn_E00036").addClass("democlass");
+
+        $modal.on('show.bs.modal', function () {
+
+        });
+    });
+
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+    function toggle() {
+        value = $('#valueFilter').val()
+        if (value == '') { value = 0}
+
+        var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+        var changedGridUrl = originGridURL + "?value=" + value + "&top=" + topValue + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    }
+
+    $('input:radio[name="optradio"]').change(function(){
+        value = $('#valueFilter').val()
+        if (value == '') { value = 0}
+        var top = $(this).val()
+        topValue = top
+
+        var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+        var changedGridUrl = originGridURL + "?value=" + value + "&top=" + top + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    });
+
+    function Reset() {
+        $('input:radio[name="optradio"]').filter('[value=All]').prop('checked', true);
+        $('#valueFilter').val('')
+        var originGridURL = '@Url.Action("GetTopI00010Result", "EntityE00019Popup")';
+        var changedGridUrl = originGridURL + "?value=" + 0 + "&top=" + 0 + "&caseId=" + caseId + "&modelCode=" + modelCode;
+
+        $('#Grid').data('kendoGrid').dataSource.transport.options.read.url = changedGridUrl;
+        $('#Grid').data('kendoGrid').dataSource.read();
+    }
+
+    function showM00001() {
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[1])
+        grid.showColumn(grid.columns[1].columns[2])
+        grid.showColumn(grid.columns[1].columns[3])
+        grid.showColumn(grid.columns[1].columns[4].columns[0])
+        grid.showColumn(grid.columns[1].columns[4].columns[1])
+        grid.showColumn(grid.columns[3].columns[0])
+        grid.showColumn(grid.columns[3].columns[1])
+        grid.showColumn(grid.columns[3].columns[2])
+        grid.showColumn(grid.columns[3].columns[3])
+        grid.showColumn(grid.columns[4])
+        grid.showColumn(grid.columns[3].columns[4])
+        grid.showColumn(grid.columns[5])
+        grid.showColumn(grid.columns[6])
+        //grid.showColumn(grid.columns[20])
+        grid.showColumn(grid.columns[10])
+        grid.showColumn(grid.columns[9])
+
+        grid.hideColumn(grid.columns[2].columns[0])
+        grid.hideColumn(grid.columns[2].columns[1])
+        grid.hideColumn(grid.columns[2].columns[2])
+        grid.hideColumn(grid.columns[2].columns[3])
+        grid.hideColumn(grid.columns[8])
+    }
+
+    function showM00003() {
+        grid.hideColumn(grid.columns[1].columns[1])
+        grid.hideColumn(grid.columns[1].columns[2])
+        grid.hideColumn(grid.columns[1].columns[3])
+        grid.hideColumn(grid.columns[3].columns[0])
+        grid.hideColumn(grid.columns[3].columns[1])
+        grid.hideColumn(grid.columns[3].columns[2])
+        grid.hideColumn(grid.columns[3].columns[3])
+        grid.hideColumn(grid.columns[3].columns[4])
+        grid.hideColumn(grid.columns[4])
+        grid.hideColumn(grid.columns[5])
+        grid.hideColumn(grid.columns[6])
+        //grid.hideColumn(grid.columns[20])
+        grid.hideColumn(grid.columns[8])
+
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[0])
+        grid.showColumn(grid.columns[1].columns[0])
+        grid.showColumn(grid.columns[1].columns[4].columns[0])
+        grid.showColumn(grid.columns[1].columns[4].columns[1])
+        grid.showColumn(grid.columns[2].columns[0])
+        grid.showColumn(grid.columns[2].columns[1])
+        grid.showColumn(grid.columns[2].columns[2])
+        grid.showColumn(grid.columns[2].columns[3])
+        grid.showColumn(grid.columns[9])
+        grid.showColumn(grid.columns[10])
+    }
+
+    function Load(caseId) {
+        $.blockUI();
+        $.post("@Url.Action("LoadDataByCaseId", "EntityE00002Popup", new { area="Case" })", { caseId: caseId }, function (result) {
+            if (result.success) {
+                var grid = $('#Grid').data('kendoGrid');
+                if (modelCode == 'M00003') {
+                    if (result.CP0001) {
+                        grid.showColumn(grid.columns[1].columns[0])
+                        grid.showColumn(grid.columns[2].columns[2])
+                        grid.showColumn(grid.columns[2].columns[3])
+                    } else {
+                        grid.hideColumn(grid.columns[1].columns[0])
+                        grid.hideColumn(grid.columns[2].columns[2])
+                        grid.hideColumn(grid.columns[2].columns[3])
+                    }
+                    if (result.CP0002) {
+                        grid.showColumn(grid.columns[1].columns[1])
+                    } else {
+                        grid.hideColumn(grid.columns[1].columns[1])
+                    }
+                }
+
+                if (result.CP0004) {
+                    grid.showColumn(grid.columns[1].columns[2])
+                    grid.showColumn(grid.columns[3].columns[2])
+                } else {
+                    grid.hideColumn(grid.columns[3].columns[2])
+                    grid.hideColumn(grid.columns[1].columns[2])
+                }
+
+                if (result.CP0005) {
+                    grid.showColumn(grid.columns[1].columns[3])
+                    grid.showColumn(grid.columns[3].columns[3])
+                } else {
+                    grid.hideColumn(grid.columns[1].columns[3])
+                    grid.hideColumn(grid.columns[3].columns[3])
+                }
+
+                if (result.CP0006) {
+                    //grid.showColumn(grid.columns[2])
+                    //grid.showColumn(grid.columns[8])
+                } else {
+                    //grid.hideColumn(grid.columns[2])
+                    //grid.hideColumn(grid.columns[8])
+                }
+            }
+        }).fail(function () {
+            bootbox.alert({ message:'@Resources.Langues.ContactAdmin',
+             title: " ",buttons: {
+                ok: {
+                    label: '@Resources.Langues.OK',className: 'btn-gray',
+                }
+            }
+        });
+            $.unblockUI();
+        }).always(function(){
+            //$.unblockUI();
+        });
+    }
+</script>
